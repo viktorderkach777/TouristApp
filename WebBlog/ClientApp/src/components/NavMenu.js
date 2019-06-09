@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import PropTypes from 'prop-types';
 import { logout } from '../actions/authActions';
 import './NavMenu.css';
-import logo from './logo.svg';
+import logo from './calculation.png';
+
 import { withRouter } from 'react-router-dom';
 //import { LinkContainer } from "react-router-bootstrap";
 
@@ -65,7 +66,11 @@ class NavMenu extends React.Component {
           <Container>
           <NavbarBrand tag={Link} to="/">
           <img src={logo} className="App-logo" alt="logo" />
+          
           </NavbarBrand>
+            <h2> MyCalculation </h2>
+           
+         
           <NavbarToggler onClick={this.toggle} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
               <ul className="navbar-nav flex-grow">
