@@ -8,11 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import UserRoles from  './UserRoles';
 import IconButton from '@material-ui/core/IconButton';
-//import Dialog from '../../Dialog';
 import { connect } from 'react-redux';
 import { deleteUser } from "../../../actions/userActions";
-//import { Button } from "react-bootstrap";
 import ModalWindow from '../../modal/simplymodal';
+
 
 
 const styles = theme => ({
@@ -33,6 +32,7 @@ const styles = theme => ({
     display: 'block',
     maxWidth: '100%',
     maxHeight: '100%',
+     
   },
 });
 
@@ -72,7 +72,8 @@ const styles = theme => ({
         <Grid container spacing={16}>
           <Grid item>
             <ButtonBase className={classes.image}>
-              <img className={classes.img} alt="complex" src={user.userImage} />
+            <img className={classes.img} alt="complex" src={user.userImage} />
+                 
             </ButtonBase>
           </Grid>
           <Grid>
