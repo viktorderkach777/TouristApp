@@ -41,24 +41,3 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
         }
     }
 }
-
-/*
- 
-     public class EFContext : IdentityDbContext<DbUser>
-    {
-        public EFContext(DbContextOptions<EFContext> options)
-            : base(options)
-        {
-
-        }
-
-
-
-
-
-        public DbSet<UserProfile> UserProfiles { get; set; }
-        public DbSet<UserImage> UserImages { get; set; }
-    }
-     
-     
-     */
