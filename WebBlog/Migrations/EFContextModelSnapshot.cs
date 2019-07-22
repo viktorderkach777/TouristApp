@@ -2,11 +2,11 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebBlog.DAL.Entities;
 
-namespace WebBlog.Migrations
+namespace MyCalculation.Migrations
 {
     [DbContext(typeof(EFContext))]
     partial class EFContextModelSnapshot : ModelSnapshot
@@ -15,15 +15,14 @@ namespace WebBlog.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ClaimType");
 
@@ -42,8 +41,7 @@ namespace WebBlog.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ClaimType");
 
@@ -114,8 +112,7 @@ namespace WebBlog.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                        .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -165,8 +162,7 @@ namespace WebBlog.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -260,16 +256,16 @@ namespace WebBlog.Migrations
             modelBuilder.Entity("WebBlog.DAL.Entities.UserImage", b =>
                 {
                     b.HasOne("WebBlog.DAL.Entities.DbUser", "User")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                        .WithOne("UserImage")
+                        .HasForeignKey("WebBlog.DAL.Entities.UserImage", "Id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WebBlog.DAL.Entities.UserProfile", b =>
                 {
                     b.HasOne("WebBlog.DAL.Entities.DbUser", "User")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                        .WithOne("Profile")
+                        .HasForeignKey("WebBlog.DAL.Entities.UserProfile", "Id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
