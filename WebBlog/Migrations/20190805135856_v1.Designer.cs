@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebBlog.DAL.Entities;
+using MyCalculation.DAL.Entities;
 
 namespace MyCalculation.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20190804193130_initial")]
-    partial class initial
+    [Migration("20190805135856_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -98,7 +98,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("WebBlog.DAL.Entities.DbRole", b =>
+            modelBuilder.Entity("MyCalculation.DAL.Entities.DbRole", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -122,7 +122,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("WebBlog.DAL.Entities.DbUser", b =>
+            modelBuilder.Entity("MyCalculation.DAL.Entities.DbUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -132,14 +132,22 @@ namespace MyCalculation.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<DateTime>("DateOfBirth");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("MiddleName");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -154,6 +162,8 @@ namespace MyCalculation.Migrations
                     b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<DateTime>("SignUpTime");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -173,7 +183,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("WebBlog.DAL.Entities.DbUserRole", b =>
+            modelBuilder.Entity("MyCalculation.DAL.Entities.DbUserRole", b =>
                 {
                     b.Property<string>("UserId");
 
@@ -186,7 +196,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("WebBlog.DAL.Entities.UserImage", b =>
+            modelBuilder.Entity("MyCalculation.DAL.Entities.UserImage", b =>
                 {
                     b.Property<string>("Id");
 
@@ -197,26 +207,9 @@ namespace MyCalculation.Migrations
                     b.ToTable("tblUserImages");
                 });
 
-            modelBuilder.Entity("WebBlog.DAL.Entities.UserProfile", b =>
-                {
-                    b.Property<string>("Id");
-
-                    b.Property<DateTime>("DateOfBirth");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
-
-                    b.Property<string>("MiddleName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserProfiles");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("WebBlog.DAL.Entities.DbRole")
+                    b.HasOne("MyCalculation.DAL.Entities.DbRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -224,7 +217,7 @@ namespace MyCalculation.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WebBlog.DAL.Entities.DbUser")
+                    b.HasOne("MyCalculation.DAL.Entities.DbUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -232,7 +225,7 @@ namespace MyCalculation.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WebBlog.DAL.Entities.DbUser")
+                    b.HasOne("MyCalculation.DAL.Entities.DbUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -240,38 +233,30 @@ namespace MyCalculation.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("WebBlog.DAL.Entities.DbUser")
+                    b.HasOne("MyCalculation.DAL.Entities.DbUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WebBlog.DAL.Entities.DbUserRole", b =>
+            modelBuilder.Entity("MyCalculation.DAL.Entities.DbUserRole", b =>
                 {
-                    b.HasOne("WebBlog.DAL.Entities.DbRole", "Role")
+                    b.HasOne("MyCalculation.DAL.Entities.DbRole", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("WebBlog.DAL.Entities.DbUser", "User")
+                    b.HasOne("MyCalculation.DAL.Entities.DbUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("WebBlog.DAL.Entities.UserImage", b =>
+            modelBuilder.Entity("MyCalculation.DAL.Entities.UserImage", b =>
                 {
-                    b.HasOne("WebBlog.DAL.Entities.DbUser", "User")
+                    b.HasOne("MyCalculation.DAL.Entities.DbUser", "User")
                         .WithOne("UserImage")
-                        .HasForeignKey("WebBlog.DAL.Entities.UserImage", "Id")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("WebBlog.DAL.Entities.UserProfile", b =>
-                {
-                    b.HasOne("WebBlog.DAL.Entities.DbUser", "User")
-                        .WithOne("Profile")
-                        .HasForeignKey("WebBlog.DAL.Entities.UserProfile", "Id")
+                        .HasForeignKey("MyCalculation.DAL.Entities.UserImage", "Id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

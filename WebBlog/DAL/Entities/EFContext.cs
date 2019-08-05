@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebBlog.DAL.Entities
+namespace MyCalculation.DAL.Entities
 {
     public class EFContext : IdentityDbContext<DbUser, DbRole, string, IdentityUserClaim<string>,
 DbUserRole, IdentityUserLogin<string>,
@@ -19,7 +19,18 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
         }
 
         //public DbSet<UserProfile> UserProfiles { get; set; }
-        public DbSet<UserImage> UserImages { get; set; }
+        //public DbSet<UserImage> UserImages { get; set; }
+
+        public virtual DbSet<Comments> Comments { get; set; }
+        public virtual DbSet<Countries> Countries { get; set; }
+        public virtual DbSet<HotelImages> HotelImages { get; set; }
+        public virtual DbSet<HotelParameters> HotelParameters { get; set; }
+        public virtual DbSet<HotelSubParameters> HotelSubParameters { get; set; }
+        public virtual DbSet<Hotels> Hotels { get; set; }
+        public virtual DbSet<Orders> Orders { get; set; }
+        public virtual DbSet<Regions> Regions { get; set; }
+        public virtual DbSet<Tours> Tours { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

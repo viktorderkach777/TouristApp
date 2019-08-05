@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebBlog.DAL.Entities
+namespace MyCalculation.DAL.Entities
 {
     public class DbUserRole:IdentityUserRole<string> //Guid
     {

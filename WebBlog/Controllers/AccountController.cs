@@ -11,13 +11,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using WebBlog.DAL.Entities;
-using WebBlog.Domain.Interfaces;
-using WebBlog.Domain.Models;
-using WebBlog.Helpers;
-using WebBlog.ViewModels;
+using MyCalculation.DAL.Entities;
+using MyCalculation.Domain.Interfaces;
+using MyCalculation.Domain.Models;
+using MyCalculation.Helpers;
+using MyCalculation.ViewModels;
 
-namespace WebBlog.Controllers
+namespace MyCalculation.Controllers
 {
     [Produces("application/json")]
     [Route("api/Account")]
@@ -105,6 +105,8 @@ namespace WebBlog.Controllers
                 return BadRequest(errors);
             }
 
+            string path = _fileService.UploadImage(model.ImageBase64);
+
             var user = new DbUser
             {
                 UserName = model.Email,
@@ -113,7 +115,8 @@ namespace WebBlog.Controllers
                 FirstName = model.FirstName,
                 MiddleName = model.MiddleName,
                 LastName = model.LastName,
-                SignUpTime = DateTime.Now
+                SignUpTime = DateTime.Now,
+                AvatarUrl = path
             };
 
             var result = await _userManager
@@ -132,8 +135,7 @@ namespace WebBlog.Controllers
             }).Result;
 
             result = _userManager.AddToRoleAsync(user, roleName).Result;
-
-            _userService.AddUserProfile(user.Id, model);
+            
             await _signInManager.SignInAsync(user, isPersistent: false);
             return Ok(CreateToken(user)); 
         }

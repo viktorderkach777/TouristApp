@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace WebBlog.Helpers
+namespace MyCalculation.Helpers
 {
     public static class ImageHelper
     {

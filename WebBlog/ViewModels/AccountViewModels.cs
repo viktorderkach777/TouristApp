@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using WebBlog.Helpers;
+using MyCalculation.Helpers;
 
-namespace WebBlog.ViewModels
+namespace MyCalculation.ViewModels
 {
     public class Credentials
     {

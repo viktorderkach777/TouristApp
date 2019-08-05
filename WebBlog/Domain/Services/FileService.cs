@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using WebBlog.Domain.Interfaces;
+using MyCalculation.Domain.Interfaces;
 using System.Drawing;
-using WebBlog.Helpers;
+using MyCalculation.Helpers;
 using System.Drawing.Imaging;
 
-namespace WebBlog.Domain.Services
+namespace MyCalculation.Domain.Services
 {
     public class FileService : IFileService
     {

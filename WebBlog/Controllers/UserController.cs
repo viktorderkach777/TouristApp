@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using WebBlog.DAL.Entities;
-using WebBlog.Domain.Interfaces;
-using WebBlog.Domain.Models;
+using MyCalculation.DAL.Entities;
+using MyCalculation.Domain.Interfaces;
+using MyCalculation.Domain.Models;
 
-namespace WebBlog.Controllers
+namespace MyCalculation.Controllers
 {
     [Produces("application/json")]
     [Route("api/User")]
@@ -40,7 +40,7 @@ namespace WebBlog.Controllers
             var model = _context
                 .Users
                 //.Include(c => c.Profile)
-                .Include(c => c.UserImage)
+                //.Include(c => c.UserImage)
                 .OrderBy(c => c.Email)
                 .Select(u => new ApplicationUserListViewModel
                 {
@@ -53,9 +53,9 @@ namespace WebBlog.Controllers
                     }),
                     //FullName = u.Profile.FirstName + ' ' + u.Profile.MiddleName + ' ' + u.Profile.LastName,
                     FullName = u.FirstName + ' ' + u.MiddleName + ' ' + u.LastName,
-                    UserImage = _userService.GetPathImage(u.UserImage.Path)
-                    
-        })
+                    //UserImage = _userService.GetPathImage(u.UserImage.Path)
+                    UserImage = _userService.GetPathImage(u.AvatarUrl)
+                })
                 .ToList();
 
             return model;

@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebBlog.DAL.Entities;
-using WebBlog.Domain.Interfaces;
-using WebBlog.Domain.Models;
-using WebBlog.ViewModels;
+using MyCalculation.DAL.Entities;
+using MyCalculation.Domain.Interfaces;
+using MyCalculation.Domain.Models;
+using MyCalculation.ViewModels;
 
-namespace WebBlog.Domain.Services
+namespace MyCalculation.Domain.Services
 {
     public class UserService : IUserService
     {
@@ -20,16 +20,16 @@ namespace WebBlog.Domain.Services
             _fileService = fileService;
             _context = context;
         }
-        public void AddUserProfile(string id, CustomRegisterModel model)
-        {
-            string path = _fileService.UploadImage(model.ImageBase64);
-            var userImage = new UserImage
-            {
-                Id = id,
-                Path = path
-            };
-            _context.UserImages.Add(userImage);
-            _context.SaveChanges();
+        //public void AddUserProfile(string id, CustomRegisterModel model)
+       // {
+            //string path = _fileService.UploadImage(model.ImageBase64);
+            //var userImage = new UserImage
+            //{
+            //    Id = id,
+            //    Path = path
+            //};
+            //_context.UserImages.Add(userImage);
+            //_context.SaveChanges();
 
             //var userProfile = new UserProfile
             //{
@@ -40,8 +40,8 @@ namespace WebBlog.Domain.Services
             //    DateOfBirth = model.DateOfBirth
             //};
             //_context.UserProfiles.Add(userProfile);
-            _context.SaveChanges();
-        }
+           // _context.SaveChanges();
+        //}
         public UserProfileModel GetUserProfile(string id)
         {
            //var profile = _context.UserProfiles.Where(x => x.Id == id).Select(p => new UserProfileModel
@@ -59,10 +59,11 @@ namespace WebBlog.Domain.Services
         }
         public string GetImageUser(string id)
         {
-            var image = _context.UserImages.SingleOrDefault(p => p.Id == id);
+            // var image = _context.UserImages.SingleOrDefault(p => p.Id == id);
+            var image = _context.Users.SingleOrDefault(p => p.Id == id);
             var imageName = "";
             if (image != null)
-                imageName = image.Path;
+                imageName = image.AvatarUrl;
             HttpContextAccessor httpContext = new HttpContextAccessor();
             var Current = httpContext.HttpContext;
             var path = $"{Current.Request.Scheme}://{Current.Request.Host}{Current.Request.PathBase}" + "/UserImages/" + imageName;

@@ -4,17 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebBlog.DAL.Entities
+namespace MyCalculation.DAL.Entities
 {
     public class DbUser : IdentityUser
     {
+        public DbUser()
+        {
+            Comments = new HashSet<Comments>();
+            Orders = new HashSet<Orders>();
+        }
+
         public ICollection<DbUserRole> UserRoles { get; set;}
         //public virtual UserProfile Profile { get; set; }
-        public virtual UserImage UserImage { get; set; }
+        //public virtual UserImage UserImage { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public DateTime SignUpTime { get; set; }
+        public DateTime SignUpTime { get; set; } 
+        public string AvatarUrl { get; set; }
+        public virtual ICollection<Comments> Comments { get; set; }
+        public virtual ICollection<Orders> Orders { get; set; }
     }
 }

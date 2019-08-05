@@ -13,12 +13,12 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
 using System.Text;
-using WebBlog.DAL.Entities;
-using WebBlog.Domain.Interfaces;
-using WebBlog.Domain.Services;
+using MyCalculation.DAL.Entities;
+using MyCalculation.Domain.Interfaces;
+using MyCalculation.Domain.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
-namespace WebBlog
+namespace MyCalculation
 {
     public class Startup
     {

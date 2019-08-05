@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using WebBlog.DAL.Entities;
+using MyCalculation.DAL.Entities;
 
-namespace WebBlog.Helpers
+namespace MyCalculation.Helpers
 {
     public class CustomEmailAttribute : ValidationAttribute
     {

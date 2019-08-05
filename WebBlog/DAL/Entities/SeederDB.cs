@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebBlog.DAL.Entities
+namespace MyCalculation.DAL.Entities
 {
     public class SeederDB
     {
@@ -20,7 +20,8 @@ namespace WebBlog.DAL.Entities
                 var user = new DbUser
                 {
                     Email = email,
-                    UserName = email
+                    UserName = email,
+                    SignUpTime = DateTime.Now
                 };
                 var result = userManager.CreateAsync(user, "Qwerty1-").Result;
 

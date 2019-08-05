@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace WebBlog.Domain.Services
+namespace MyCalculation.Domain.Services
 {
     public class EmailSender : IEmailSender
     {
