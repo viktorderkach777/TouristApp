@@ -108,7 +108,11 @@ namespace WebBlog.Controllers
             var user = new DbUser
             {
                 UserName = model.Email,
-                Email = model.Email
+                Email = model.Email,
+                DateOfBirth=model.DateOfBirth,
+                FirstName=model.FirstName,
+                MiddleName=model.MiddleName,
+                LastName=model.LastName
             };
 
             var result = await _userManager
