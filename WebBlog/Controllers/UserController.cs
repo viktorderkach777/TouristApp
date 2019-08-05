@@ -39,7 +39,7 @@ namespace WebBlog.Controllers
 
             var model = _context
                 .Users
-                .Include(c => c.Profile)
+                //.Include(c => c.Profile)
                 .Include(c => c.UserImage)
                 .OrderBy(c => c.Email)
                 .Select(u => new ApplicationUserListViewModel
@@ -51,7 +51,8 @@ namespace WebBlog.Controllers
                         Id = r.Role.Id,
                         Name = r.Role.Name
                     }),
-                    FullName = u.Profile.FirstName + ' ' + u.Profile.MiddleName + ' ' + u.Profile.LastName,
+                    //FullName = u.Profile.FirstName + ' ' + u.Profile.MiddleName + ' ' + u.Profile.LastName,
+                    FullName = u.FirstName + ' ' + u.MiddleName + ' ' + u.LastName,
                     UserImage = _userService.GetPathImage(u.UserImage.Path)
                     
         })

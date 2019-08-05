@@ -18,7 +18,7 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
 
         }
 
-        public DbSet<UserProfile> UserProfiles { get; set; }
+        //public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<UserImage> UserImages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {

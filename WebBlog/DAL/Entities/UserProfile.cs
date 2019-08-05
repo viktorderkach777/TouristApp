@@ -8,12 +8,12 @@ namespace WebBlog.DAL.Entities
 {
     public class UserProfile
     {
-        [ForeignKey("User")]
-        public string Id { get; set; }
+        //[ForeignKey("User")]
+        //public string Id { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public virtual DbUser User { get; set; }
+        //public virtual DbUser User { get; set; }
     }
 }

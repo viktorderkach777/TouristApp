@@ -31,27 +31,29 @@ namespace WebBlog.Domain.Services
             _context.UserImages.Add(userImage);
             _context.SaveChanges();
 
-            var userProfile = new UserProfile
-            {
-                Id = id,
-                FirstName = model.FirstName,
-                MiddleName = model.MiddleName,
-                LastName = model.LastName,
-                DateOfBirth = model.DateOfBirth
-            };
-            _context.UserProfiles.Add(userProfile);
+            //var userProfile = new UserProfile
+            //{
+            //    Id = id,
+            //    FirstName = model.FirstName,
+            //    MiddleName = model.MiddleName,
+            //    LastName = model.LastName,
+            //    DateOfBirth = model.DateOfBirth
+            //};
+            //_context.UserProfiles.Add(userProfile);
             _context.SaveChanges();
         }
         public UserProfileModel GetUserProfile(string id)
         {
-            var profile = _context.UserProfiles.Where(x => x.Id == id).Select(p => new UserProfileModel
-            {
+           //var profile = _context.UserProfiles.Where(x => x.Id == id).Select(p => new UserProfileModel
+              var profile = _context.Users.Where(x => x.Id == id).Select(p => new UserProfileModel
+              {
                 DateOfBirth = p.DateOfBirth.ToShortDateString(),
                 FirstName = p.FirstName,
                 MiddleName = p.MiddleName,
                 LastName = p.LastName,
-                Email = p.User.Email
-            }).Single();
+                Email = p.Email
+                  //Email = p.User.Email
+              }).Single();
             profile.UserImage = GetImageUser(id);
             return profile;
         }

@@ -109,10 +109,11 @@ namespace WebBlog.Controllers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                DateOfBirth=model.DateOfBirth,
-                FirstName=model.FirstName,
-                MiddleName=model.MiddleName,
-                LastName=model.LastName
+                DateOfBirth = model.DateOfBirth,
+                FirstName = model.FirstName,
+                MiddleName = model.MiddleName,
+                LastName = model.LastName,
+                SignUpTime = DateTime.Now
             };
 
             var result = await _userManager
