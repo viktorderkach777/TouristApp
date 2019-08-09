@@ -68,7 +68,7 @@ class NavMenu extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
           
           </NavbarBrand>
-            <h2> MyCalculation </h2>
+                    <h2 style={{fontFamily:"cursive"}}> <sup>&copy;</sup>TouristApp </h2>
            
          
           <NavbarToggler onClick={this.toggle} className="mr-2" />

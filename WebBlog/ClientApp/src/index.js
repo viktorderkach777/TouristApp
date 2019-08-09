@@ -10,6 +10,7 @@ import registerServiceWorker from './registerServiceWorker';
 import setAuthorizationToken from './utils/setAuthorizationToken';
 import { setCurrentUser } from './actions/authActions';
 import jwt from 'jsonwebtoken';
+//<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 
 // Create browser history to use in the Redux store

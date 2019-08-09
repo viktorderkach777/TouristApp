@@ -29,6 +29,16 @@ export function login(data) {
 }
 
 
+export function facebook_enter(data) {
+  return dispatch => {
+    return axios.post('api/externalauth/facebook', data)
+      .then(res => {
+        loginByJWT(res.data, dispatch);
+      });
+  }
+}
+
+
 const loginByJWT = (token, dispatch) => {
   var user=jwt.decode(token);
   localStorage.setItem('jwtToken', token);

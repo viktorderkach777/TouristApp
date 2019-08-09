@@ -17,6 +17,7 @@ using MyCalculation.DAL.Entities;
 using MyCalculation.Domain.Interfaces;
 using MyCalculation.Domain.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using MyCalculation.Domain.Models.Facebook;
 
 namespace MyCalculation
 {
@@ -47,6 +48,7 @@ namespace MyCalculation
             services.AddScoped<IFileService, FileService>();
 
             services.AddTransient<IEmailSender, EmailSender>();
+            services.Configure<FacebookAuthSettings>(Configuration.GetSection(nameof(FacebookAuthSettings)));
 
             //services.AddIdentity<DbUser, IdentityRole>()
             //    .AddEntityFrameworkStores<EFContext>();

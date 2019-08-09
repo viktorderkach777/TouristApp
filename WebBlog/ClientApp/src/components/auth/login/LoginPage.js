@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import LoginForm from './LoginForm';
 import { LinkContainer } from "react-router-bootstrap";
+import Facebook from '../facebook'
 export default class LoginPage extends Component {
     render() {
         return (
@@ -19,6 +20,7 @@ export default class LoginPage extends Component {
                                 <a> Sign up here</a>
                             </LinkContainer>
                         </div>
+                        <Facebook/>
                 </Col>
             </Row>
         );
