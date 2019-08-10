@@ -8,5 +8,6 @@ namespace MyCalculation.Domain.Interfaces
     public interface IFileService
     {
         string UploadImage(string base64);
+        string UploadFacebookImage(string facebookPath);
     }
 }

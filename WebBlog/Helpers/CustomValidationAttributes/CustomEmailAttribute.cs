@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using MyCalculation.DAL.Entities;
+using System.ComponentModel.DataAnnotations;
 
-namespace MyCalculation.Helpers
+namespace MyCalculation.Helpers.CustomValidationAttributes
 {
     public class CustomEmailAttribute : ValidationAttribute
     {
@@ -27,22 +23,4 @@ namespace MyCalculation.Helpers
             return ValidationResult.Success;
         }
     }
-
-    public class CustomDateTimeAttribute
-    : ValidationAttribute
-    {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            value = (DateTime)value;
-            if (DateTime.Parse("1/1/1900").CompareTo(value) <= 0 && DateTime.Now.CompareTo(value) >= 0)
-            {
-                return ValidationResult.Success;
-            }
-            else
-            {
-                return new ValidationResult("Date is out of Range.");
-            }
-        }
-    }
-
 }

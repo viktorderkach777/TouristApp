@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using MyCalculation.DAL.Entities;
 using MyCalculation.Domain.Interfaces;
-using MyCalculation.Domain.Models;
+using MyCalculation.Domain.Models.ApplicationUserListViewModels;
+using MyCalculation.Domain.Models.UserProfileGetModels;
 
 namespace MyCalculation.Controllers
 {
@@ -18,13 +17,13 @@ namespace MyCalculation.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        readonly UserManager<DbUser> _userManager;
-        
+        readonly UserManager<DbUser> _userManager;        
         readonly IUserService _userService;
         readonly EFContext _context;
 
         public UserController(UserManager<DbUser> userManager,
-                IUserService userService, EFContext context)
+                              IUserService userService,
+                              EFContext context)
         {
             _userManager = userManager;
             
@@ -52,7 +51,7 @@ namespace MyCalculation.Controllers
                         Name = r.Role.Name
                     }),
                     //FullName = u.Profile.FirstName + ' ' + u.Profile.MiddleName + ' ' + u.Profile.LastName,
-                    FullName = u.FirstName + ' ' + u.MiddleName + ' ' + u.LastName,
+                    FullName = u.FirstName + ' '  + u.LastName,
                     //UserImage = _userService.GetPathImage(u.UserImage.Path)
                     UserImage = _userService.GetPathImage(u.AvatarUrl)
                 })

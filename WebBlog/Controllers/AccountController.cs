@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
 using MyCalculation.DAL.Entities;
 using MyCalculation.Domain.Interfaces;
-using MyCalculation.Domain.Models;
+using MyCalculation.Domain.Models.AccountModels;
 using MyCalculation.Helpers;
-using MyCalculation.ViewModels;
+using MyCalculation.ViewModels.AccountViewModels;
 
 namespace MyCalculation.Controllers
 {
@@ -26,33 +20,31 @@ namespace MyCalculation.Controllers
     {
         readonly UserManager<DbUser> _userManager;
         readonly RoleManager<DbRole> _roleManager;
-        readonly SignInManager<DbUser> _signInManager;
-        readonly IUserService _userService;
+        readonly SignInManager<DbUser> _signInManager;       
         readonly IEmailSender _emailSender;
         readonly IFileService _fileService;
-        readonly EFContext _context;
+        readonly IJWTTokenService _jWTTokenService;       
+        readonly IConfiguration _configuration;
 
         public AccountController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
             SignInManager<DbUser> signInManager,
-            IFileService fileService,
-            IUserService userService,
+            IFileService fileService,           
             IEmailSender emailSender,
-            EFContext context)
+            IJWTTokenService jWTTokenService,           
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _fileService = fileService;
-            _context = context;
-            _userService = userService;
+            _fileService = fileService;         
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _jWTTokenService = jWTTokenService;
+            _configuration = configuration;
         }
 
-
-
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody]Domain.Models.Credentials credentials)
+        public async Task<IActionResult> Login([FromBody]Domain.Models.AccountModels.Credentials credentials)
         {
             if (!ModelState.IsValid)
             {
@@ -63,39 +55,19 @@ namespace MyCalculation.Controllers
             var result = await _signInManager
                 .PasswordSignInAsync(credentials.Email, credentials.Password,
                 false, false);
+
             if (!result.Succeeded)
             {
                 return BadRequest(new { invalid = "Не правильно введені дані!" });
             }
+
             var user = await _userManager.FindByEmailAsync(credentials.Email);
             await _signInManager.SignInAsync(user, isPersistent: false);
-            return Ok(CreateToken(user));
+            //return Ok(CreateToken(user));
+
+            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
         }
-
-        private string CreateToken(DbUser user)
-        {
-            var roles = _userManager.GetRolesAsync(user).Result;
-
-
-            var claims = new List<Claim>()
-            {
-                //new Claim(JwtRegisteredClaimNames.Sub, user.Id)
-                new Claim("id", user.Id),
-                new Claim("name", user.UserName),
-            };
-
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim("roles", role));
-            }
-
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is the secret phrase"));
-            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-
-            var jwt = new JwtSecurityToken(signingCredentials: signingCredentials, claims: claims);
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
-        }
-
+       
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]CustomRegisterModel model)
         {
@@ -128,6 +100,7 @@ namespace MyCalculation.Controllers
                 return BadRequest(errors);
             }
             var roleName = "User";
+
             var roleresult = _roleManager.CreateAsync(new DbRole
             {
                 Name = roleName
@@ -137,7 +110,8 @@ namespace MyCalculation.Controllers
             result = _userManager.AddToRoleAsync(user, roleName).Result;
             
             await _signInManager.SignInAsync(user, isPersistent: false);
-            return Ok(CreateToken(user)); 
+
+            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
         }
 
         [HttpPost("ChangePassword")]
@@ -151,6 +125,7 @@ namespace MyCalculation.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(model.Id);
+
             if (user == null)
                 return BadRequest(new { invalid = "User is not found" });
 
@@ -177,6 +152,7 @@ namespace MyCalculation.Controllers
             }
 
             var user = await _userManager.FindByNameAsync(model.Email);
+
             if (user == null /*|| !(await _userManager.IsEmailConfirmedAsync(user))*/)
             {
                 return BadRequest(new { invalid = "User with this email was not found" });
@@ -188,7 +164,7 @@ namespace MyCalculation.Controllers
                 "",
                 "resetpassword",
                 //pageHandler: null,
-                values: new { userId = user.Id, code = code },
+                values: new { userId = user.Id, code },
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(model.Email, "Reset Password",
                $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
@@ -205,21 +181,23 @@ namespace MyCalculation.Controllers
                 var errrors = CustomValidator.GetErrorsByModel(ModelState);
                 return BadRequest(errrors);
             }
+
             var user = await _userManager.FindByIdAsync(model.UserId);
+
             if (user == null)
             {
                 return BadRequest(new { invalid = "User is not found" });
             }
+
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+
             if (!result.Succeeded)
             {
                 var errrors = CustomValidator.GetErrorsByIdentityResult(result);
                 return BadRequest(errrors);
             }
+
             return Ok();
         }
-
-
-
     }
 }

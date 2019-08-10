@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MyCalculation.DAL.Entities;
 using MyCalculation.Domain.Interfaces;
-using MyCalculation.Domain.Models;
-using MyCalculation.ViewModels;
+using MyCalculation.Domain.Models.UserProfileGetModels;
 
 namespace MyCalculation.Domain.Services
 {
@@ -14,12 +10,14 @@ namespace MyCalculation.Domain.Services
     {
         readonly EFContext _context;
         readonly IFileService _fileService;
+
         public UserService(IFileService fileService,
             EFContext context)
         {
             _fileService = fileService;
             _context = context;
         }
+
         //public void AddUserProfile(string id, CustomRegisterModel model)
        // {
             //string path = _fileService.UploadImage(model.ImageBase64);
@@ -42,6 +40,7 @@ namespace MyCalculation.Domain.Services
             //_context.UserProfiles.Add(userProfile);
            // _context.SaveChanges();
         //}
+
         public UserProfileModel GetUserProfile(string id)
         {
            //var profile = _context.UserProfiles.Where(x => x.Id == id).Select(p => new UserProfileModel

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MyCalculation.Controllers
@@ -18,6 +17,7 @@ namespace MyCalculation.Controllers
         public IEnumerable<WeatherForecast> WeatherForecasts(int startDateIndex)
         {
             var rng = new Random();
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 DateFormatted = DateTime.Now.AddDays(index + startDateIndex).ToString("d"),
@@ -29,7 +29,9 @@ namespace MyCalculation.Controllers
         public class WeatherForecast
         {
             public string DateFormatted { get; set; }
+
             public int TemperatureC { get; set; }
+
             public string Summary { get; set; }
 
             public int TemperatureF

@@ -9,6 +9,8 @@ import ForgotPasswordPage from './components/auth/ForgotPasswordPage';
 import ResestPasswordPage from './components/auth/ResetPasswordPage';
 import UserListPage from  './components/auth/userlist/UserListPage';
 import UserListUIPage from './components/auth/userlistUI/UserListUIPage';
+import Facebook from './components/auth/facebook'
+import Google from './components/auth/google';
 export default () => (
   <Layout>
     <Route exact path='/' component={Home} />
@@ -19,5 +21,7 @@ export default () => (
     <Route path="/user" component={UserPage} />
     <Route path="/users" component={UserListPage} /> 
     <Route path="/usersUI" component={UserListUIPage} /> 
+    <Route path="/facebook" component={Facebook} /> 
+    <Route path="/google" component={Google} /> 
   </Layout>
 );
