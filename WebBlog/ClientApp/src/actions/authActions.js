@@ -31,7 +31,17 @@ export function login(data) {
 
 export function facebook_enter(data) {
   return dispatch => {
-    return axios.post('api/externalauth/facebook', data)
+    return axios.post('api/facebookauth/facebook', data)
+      .then(res => {
+        loginByJWT(res.data, dispatch);
+      });
+  }
+}
+
+
+export function google_enter(data) {
+  return dispatch => {
+    return axios.post('api/googleauth/google', data)
       .then(res => {
         loginByJWT(res.data, dispatch);
       });

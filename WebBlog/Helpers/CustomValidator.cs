@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyCalculation.Helpers
 {
@@ -20,6 +18,7 @@ namespace MyCalculation.Helpers
                     kvp => kvp.Key,
                     kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).ToArray()[0]
                 );
+
             foreach (var item in errorList)
             {
                 string key = item.Key;
@@ -27,6 +26,7 @@ namespace MyCalculation.Helpers
                 key = char.ToLower(key[0]).ToString() + key.Substring(1);
                 errors.Add(key, item.Value);
             }
+
             return errors;
         }
 
@@ -40,7 +40,5 @@ namespace MyCalculation.Helpers
 
             return errors;
         }
-
-
     }
 }

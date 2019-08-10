@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import FacebookLogin from 'react-facebook-login';
-import GoogleLogin from 'react-google-login';
-//import {PostData} from '../../services/PostData';
 import { Redirect } from 'react-router-dom';
-import axios from 'axios';
 import { facebook_enter } from '../../../actions/authActions';
 import { connect } from "react-redux";
-
+import { REACT_APP_FACEBOOK_CLIENT_ID } from '../config.js';
 
 class Facebook extends Component {
     constructor(props) {
@@ -17,18 +14,13 @@ class Facebook extends Component {
             done: false,
             isLoading: false
         };
-        //this.signup = this.signup.bind(this);
     }
 
-
-
     render() {
-
 
         const responseFacebook = (response) => {
             console.log("facebook console");
             console.log(response);
-
 
             this.setState({ isLoading: true });
             this.props.facebook_enter({ accessToken: response.accessToken })
@@ -39,44 +31,18 @@ class Facebook extends Component {
         }
 
         const { errors, isLoading } = this.state;
-        console.log('---FormLogin state----', this.state);
+
         const form = (
             <React.Fragment>
-                
-                <div className="row body">
-                    <div className="medium-12 columns">
-                        <div className="medium-12 columns">
-
-                            
-                            <FacebookLogin
-                                //appId="728838114238593"
-                                appId="728838114238593"
-                                autoLoad={false}
-                                fields="name,email,picture,gender,locale,birthday,first_name,last_name"
-                                callback={responseFacebook} />
-
-                            <br /><br />
-                            {/* <GoogleLogin
-clientId="703221485807-04v3j6tfmjoc09ugqv20c1q555u1clrl.apps.googleusercontent.com"
-//clientId={goog}
-buttonText="Login with Google"
-onSuccess={responseGoogle}
-onFailure={responseGoogle}/>  */}
-
-                        </div>
-                    </div>
-
-                </div>
+                <FacebookLogin
+                    appId={REACT_APP_FACEBOOK_CLIENT_ID}
+                    autoLoad={false}
+                    fields="name,email,picture,first_name,last_name"
+                    callback={responseFacebook} />
             </React.Fragment>
         );
-        // const responseGoogle = (response) => {
-        //     console.log("google console");
-        //     console.log(response);
-        //     //this.signup(response, 'google');
-        // }
-        //const goog = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
         return (this.state.done ? <Redirect to="/" /> : form);
     }
 }
 export default connect(null, { facebook_enter })(Facebook);
-//export default Facebook;

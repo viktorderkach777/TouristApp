@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -17,7 +16,7 @@ using MyCalculation.DAL.Entities;
 using MyCalculation.Domain.Interfaces;
 using MyCalculation.Domain.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using MyCalculation.Domain.Models.Facebook;
+using MyCalculation.Domain.Models.FacebookModels;
 
 namespace MyCalculation
 {
@@ -40,14 +39,10 @@ namespace MyCalculation
             //services.AddDbContext<EFContext>(options =>
             //   options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-
-
-
-
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFileService, FileService>();
-
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IJWTTokenService, JWTTokenService>();
             services.Configure<FacebookAuthSettings>(Configuration.GetSection(nameof(FacebookAuthSettings)));
 
             //services.AddIdentity<DbUser, IdentityRole>()
@@ -57,7 +52,7 @@ namespace MyCalculation
                .AddEntityFrameworkStores<EFContext>()
                .AddDefaultTokenProviders();
 
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("this is the secret phrase"));
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("SecretPhrase")));
 
             services.AddAuthentication(options =>
             {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MyCalculation.Domain.Models;
-using MyCalculation.ViewModels;
+﻿using MyCalculation.Domain.Models.UserProfileGetModels;
 
 namespace MyCalculation.Domain.Interfaces
 {

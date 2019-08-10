@@ -1,0 +1,38 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using MyCalculation.DAL.Entities;
+using MyCalculation.Domain.Interfaces;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+namespace MyCalculation.Domain.Services
+{
+    public class JWTTokenService: IJWTTokenService
+    {
+        public string CreateToken(IConfiguration configuration, DbUser user, UserManager<DbUser> userManager)
+        {
+            var roles = userManager.GetRolesAsync(user).Result;
+
+            var claims = new List<Claim>()
+            {
+                //new Claim(JwtRegisteredClaimNames.Sub, user.Id)
+                new Claim("id", user.Id),
+                new Claim("name", user.UserName),
+            };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim("roles", role));
+            }
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("SecretPhrase")));
+            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+            var jwt = new JwtSecurityToken(signingCredentials: signingCredentials, claims: claims);
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+    }
+}

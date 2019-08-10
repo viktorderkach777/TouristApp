@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MyCalculation.ViewModels
+﻿namespace MyCalculation.ViewModels
 {
     public class FacebookAuthViewModel
     {       

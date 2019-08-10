@@ -1,22 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MyCalculation.Helpers.CustomValidationAttributes;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using MyCalculation.Helpers;
 
-namespace MyCalculation.ViewModels
+namespace MyCalculation.ViewModels.AccountViewModels
 {
-    public class Credentials
-    {
-        
-        [Required(ErrorMessage = "Поле є обов'язковим")]
-        [EmailAddress(ErrorMessage = "Не валідна пошта")]
-        public string Email { get; set; }
-        [Required(ErrorMessage = "Поле є обов'язковим")]
-        public string Password { get; set; }
-    }
-
     public class CustomRegisterModel
     {
         [CustomEmail(ErrorMessage = "Already exist")]
@@ -28,7 +15,6 @@ namespace MyCalculation.ViewModels
         [Required(ErrorMessage = "Cant't be empty")]
         [RegularExpression(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$", ErrorMessage = "Password must be at least 6 characters and contain digits, upper and lower case")]
         public string Password { get; set; }
-
 
         [Required(ErrorMessage = "Cant't be empty")]
         //[RegularExpression(@"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$", ErrorMessage = "Password must be at least 8 characters and contain digits, upper and lower case")]
@@ -45,6 +31,4 @@ namespace MyCalculation.ViewModels
         [CustomDateTime(ErrorMessage = "Date is out of Range")]
         public DateTime DateOfBirth { get; set; }
     }
-
-
 }
