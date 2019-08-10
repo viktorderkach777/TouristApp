@@ -68,5 +68,20 @@ namespace MyCalculation.Domain.Services
                 return name;
             }
         }
+
+        public bool DeleteImage(string fileName)
+        {
+            string webRootPath = _env.ContentRootPath;
+            string fileDestDir = webRootPath + _configuration.GetValue<string>("UserImagesPath");
+            string path = Path.Combine(fileDestDir, fileName);
+            FileInfo fileInf = new FileInfo(path);
+
+            if (fileInf.Exists)
+            {
+                fileInf.Delete();                
+            }
+
+            return fileInf.Exists;
+        }
     }
 }

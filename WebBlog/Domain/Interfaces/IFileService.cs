@@ -9,5 +9,6 @@ namespace MyCalculation.Domain.Interfaces
     {
         string UploadImage(string base64);
         string UploadFacebookImage(string facebookPath);
+        bool DeleteImage(string fileName);
     }
 }

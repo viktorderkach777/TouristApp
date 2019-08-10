@@ -6,7 +6,6 @@ using MyCalculation.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using MyCalculation.DAL.Entities;
 using MyCalculation.Domain.Interfaces;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Net.Http;
 using MyCalculation.Domain.Models.FacebookModels;
 using Microsoft.Extensions.Options;
@@ -42,7 +41,6 @@ namespace MyCalculation.Controllers
             _fbAuthSettings = fbAuthSettingsAccessor.Value;
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
-
         }
 
         // POST api/externalauth/facebook
