@@ -62,8 +62,7 @@ namespace MyCalculation.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(credentials.Email);
-            await _signInManager.SignInAsync(user, isPersistent: false);
-            //return Ok(CreateToken(user));
+            await _signInManager.SignInAsync(user, isPersistent: false);            
 
             return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
         }
