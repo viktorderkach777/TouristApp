@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace MyCalculation.Helpers
+namespace TouristApp.Helpers
 {
     public static class ImageHelper
     {

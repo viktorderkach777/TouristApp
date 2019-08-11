@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace MyCalculation.Migrations
+namespace TouristApp.Migrations
 {
     public partial class v1postgres : Migration
     {

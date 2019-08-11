@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MyCalculation.DAL.Entities;
+using TouristApp.DAL.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace MyCalculation.Helpers.CustomValidationAttributes
+namespace TouristApp.Helpers.CustomValidationAttributes
 {
     public class CustomEmailAttribute : ValidationAttribute
     {

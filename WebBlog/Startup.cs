@@ -12,13 +12,13 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
 using System.Text;
-using MyCalculation.DAL.Entities;
-using MyCalculation.Domain.Interfaces;
-using MyCalculation.Domain.Services;
+using TouristApp.DAL.Entities;
+using TouristApp.Domain.Interfaces;
+using TouristApp.Domain.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using MyCalculation.Domain.Models.FacebookModels;
+using TouristApp.Domain.Models.FacebookModels;
 
-namespace MyCalculation
+namespace TouristApp
 {
     public class Startup
     {

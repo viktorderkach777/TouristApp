@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyCalculation.ViewModels.AccountViewModels
+namespace TouristApp.ViewModels.AccountViewModels
 {
     public class Credentials
     {

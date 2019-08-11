@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MyCalculation.Helpers.CustomValidationAttributes
+namespace TouristApp.Helpers.CustomValidationAttributes
 {
     public class CustomDateTimeAttribute
      : ValidationAttribute

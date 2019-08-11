@@ -1,4 +1,4 @@
-﻿namespace MyCalculation.Domain.Models.ApplicationUserListViewModels
+﻿namespace TouristApp.Domain.Models.ApplicationUserListViewModels
 {
     public class RoleItemViewModel
     {

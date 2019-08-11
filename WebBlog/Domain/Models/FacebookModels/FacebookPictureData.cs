@@ -1,5 +1,5 @@
 ﻿
-namespace MyCalculation.Domain.Models.FacebookModels
+namespace TouristApp.Domain.Models.FacebookModels
 {
     internal class FacebookPictureData
     {

@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MyCalculation.DAL.Entities;
-using MyCalculation.Domain.Interfaces;
-using MyCalculation.Domain.Models.ApplicationUserListViewModels;
-using MyCalculation.Domain.Models.UserProfileGetModels;
+using TouristApp.DAL.Entities;
+using TouristApp.Domain.Interfaces;
+using TouristApp.Domain.Models.ApplicationUserListViewModels;
+using TouristApp.Domain.Models.UserProfileGetModels;
 
-namespace MyCalculation.Controllers
+namespace TouristApp.Controllers
 {
     [Produces("application/json")]
     [Route("api/User")]

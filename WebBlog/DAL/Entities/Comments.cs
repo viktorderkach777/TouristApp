@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace MyCalculation.DAL.Entities
+namespace TouristApp.DAL.Entities
 {
     public class Comments
     {

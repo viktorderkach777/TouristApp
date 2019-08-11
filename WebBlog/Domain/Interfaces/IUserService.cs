@@ -1,6 +1,6 @@
-﻿using MyCalculation.Domain.Models.UserProfileGetModels;
+﻿using TouristApp.Domain.Models.UserProfileGetModels;
 
-namespace MyCalculation.Domain.Interfaces
+namespace TouristApp.Domain.Interfaces
 {
     public interface IUserService
     {

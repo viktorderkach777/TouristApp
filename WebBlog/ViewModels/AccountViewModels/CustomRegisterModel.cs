@@ -1,8 +1,8 @@
-﻿using MyCalculation.Helpers.CustomValidationAttributes;
+﻿using TouristApp.Helpers.CustomValidationAttributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MyCalculation.ViewModels.AccountViewModels
+namespace TouristApp.ViewModels.AccountViewModels
 {
     public class CustomRegisterModel
     {

@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MyCalculation.DAL.Entities;
-using MyCalculation.Domain.Interfaces;
-using MyCalculation.Domain.Models.AccountModels;
-using MyCalculation.Helpers;
-using MyCalculation.ViewModels.AccountViewModels;
+using TouristApp.DAL.Entities;
+using TouristApp.Domain.Interfaces;
+using TouristApp.Domain.Models.AccountModels;
+using TouristApp.Helpers;
+using TouristApp.ViewModels.AccountViewModels;
 
-namespace MyCalculation.Controllers
+namespace TouristApp.Controllers
 {
     [Produces("application/json")]
     [Route("api/Account")]

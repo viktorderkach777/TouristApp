@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MyCalculation": {
+    "TouristApp": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

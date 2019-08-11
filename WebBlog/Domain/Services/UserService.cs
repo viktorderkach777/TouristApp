@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Linq;
-using MyCalculation.DAL.Entities;
-using MyCalculation.Domain.Interfaces;
-using MyCalculation.Domain.Models.UserProfileGetModels;
+using TouristApp.DAL.Entities;
+using TouristApp.Domain.Interfaces;
+using TouristApp.Domain.Models.UserProfileGetModels;
 
-namespace MyCalculation.Domain.Services
+namespace TouristApp.Domain.Services
 {
     public class UserService : IUserService
     {
