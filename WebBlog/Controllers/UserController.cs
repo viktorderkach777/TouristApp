@@ -19,14 +19,16 @@ namespace MyCalculation.Controllers
     {
         readonly UserManager<DbUser> _userManager;        
         readonly IUserService _userService;
+        readonly IFileService _fileService;
         readonly EFContext _context;
 
         public UserController(UserManager<DbUser> userManager,
                               IUserService userService,
+                               IFileService fileService,
                               EFContext context)
         {
             _userManager = userManager;
-            
+            _fileService = fileService;
             _userService = userService;
             _context = context;
         }
@@ -96,17 +98,20 @@ namespace MyCalculation.Controllers
                 var user = await _userManager.FindByIdAsync(id);
                 var rolesForUser = await _userManager.GetRolesAsync(user);
                 var logins = await _userManager.GetLoginsAsync(user);
-                
+                string path = user.AvatarUrl;
+
 
                 using (var transaction = _context.Database.BeginTransaction())
                 {
                     IdentityResult result = IdentityResult.Success;
+
                     foreach (var login in logins)
                     {
                         result = await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
                         if (result != IdentityResult.Success)
                             break;
                     }
+
                     if (result == IdentityResult.Success)
                     {
                         foreach (var item in rolesForUser)
@@ -116,21 +121,27 @@ namespace MyCalculation.Controllers
                                 break;
                         }
                     }
+
                     if (result == IdentityResult.Success)
                     {
                         result = await _userManager.DeleteAsync(user);
-                        if (result == IdentityResult.Success)
-                            transaction.Commit(); 
-                        //only commit if user and all his logins/roles have been deleted  
-                    }
 
+                        //only commit if user and all his logins/roles have been deleted  
+                        if (result == IdentityResult.Success)
+                        {
+                            transaction.Commit();
+                            _fileService.DeleteImage(path);
+                        }                       
+                    }
                 }
+
                 return Ok(user.Id); 
             }
 
-        return Ok();
-            
- }
+        return Ok();            
+        }
+
+
         [HttpPost("user")]
         [Authorize]
         public async Task<IActionResult> Get([FromBody]UserProfileGetModel model)

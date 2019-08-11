@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import FacebookLogin from 'react-facebook-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { Redirect } from 'react-router-dom';
 import { facebook_enter } from '../../../actions/authActions';
 import { connect } from "react-redux";
 import { REACT_APP_FACEBOOK_CLIENT_ID } from '../config.js';
+import { FacebookLoginButton } from "react-social-login-buttons";
 
 class Facebook extends Component {
     constructor(props) {
@@ -18,9 +19,7 @@ class Facebook extends Component {
 
     render() {
 
-        const responseFacebook = (response) => {
-            console.log("facebook console");
-            console.log(response);
+        const responseFacebook = (response) => {            
 
             this.setState({ isLoading: true });
             this.props.facebook_enter({ accessToken: response.accessToken })
@@ -30,15 +29,19 @@ class Facebook extends Component {
                 );
         }
 
-        const { errors, isLoading } = this.state;
-
+        //const { errors, isLoading } = this.state;        
         const form = (
             <React.Fragment>
                 <FacebookLogin
                     appId={REACT_APP_FACEBOOK_CLIENT_ID}
                     autoLoad={false}
                     fields="name,email,picture,first_name,last_name"
-                    callback={responseFacebook} />
+                    callback={responseFacebook}
+
+                    render={renderProps => (
+                        <FacebookLoginButton onClick={renderProps.onClick} />
+                    )}
+                />
             </React.Fragment>
         );
 
