@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MyCalculation.DAL.Configuration.InitialDataConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,14 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
+            builder.ApplyConfiguration(new CountryInitialConfig());
+            builder.ApplyConfiguration(new RegionInitialConfig());
+            builder.ApplyConfiguration(new HotelInitialConfig());
+            builder.ApplyConfiguration(new TourInitialConfig());
+
+
+
             base.OnModelCreating(builder);
 
             builder.Entity<DbUserRole>(userRole =>

@@ -80,6 +80,9 @@ class NavMenu extends React.Component {
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/usersUI"><i className="fas fa-users"></i> Users Ui</NavLink>
               </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/hotels"><i className="fas fa-bed"></i> Hotels</NavLink>
+              </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/"><i className="fas fa-home"></i> Home</NavLink>
                 </NavItem>

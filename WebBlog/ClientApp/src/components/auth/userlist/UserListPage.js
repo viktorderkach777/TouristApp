@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import UserList from "./UserList";
 import { getUsers } from "../../../actions/userActions";
 import { Redirect } from "react-router";
-import Spinner from  "../../spinner/spinner";
+import SpinnerWidget from  "../../spinnerStep";
 //import { Col, Row } from "react-bootstrap";
 
 class UserListPage extends Component {
@@ -27,7 +27,7 @@ class UserListPage extends Component {
     console.log("--props UserListPage---", this.props);
     const { loading } = this.state;
     const page = loading ? (
-      <Spinner/>
+        <SpinnerWidget/>
     ) : (
       <div>
         <h1>Users</h1>

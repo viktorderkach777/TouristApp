@@ -22,6 +22,7 @@ namespace MyCalculation.DAL.Entities
         public double? Rate { get; set; }
         public decimal? Price { get; set; }
         public int? RoomsCount { get; set; }
+        public int Class { get; set; }
 
         public virtual Regions Region { get; set; }
         public virtual ICollection<Comments> Comments { get; set; }

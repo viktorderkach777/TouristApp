@@ -8,8 +8,10 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "cropperjs": "^1.5.1",
+    "immutability-helper": "^3.0.1",
     "jquery": "^3.4.1",
     "jsonwebtoken": "^8.5.1",
+    "lodash.get": "^4.4.2",
     "octicons": "^8.5.0",
     "prop-types": "^15.7.2",
     "react": "^16.0.0",
@@ -27,6 +29,7 @@
     "react-social-login-buttons": "^3.0.0",
     "reactstrap": "^6.3.0",
     "redux": "^3.7.2",
+    "redux-starter-kit": "^0.6.3",
     "redux-thunk": "^2.2.0",
     "rimraf": "^2.6.2"
   },

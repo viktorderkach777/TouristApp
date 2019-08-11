@@ -11,6 +11,8 @@ import UserListPage from  './components/auth/userlist/UserListPage';
 import UserListUIPage from './components/auth/userlistUI/UserListUIPage';
 import Facebook from './components/auth/facebook'
 import Google from './components/auth/google';
+import Hotel from './components/hotel';
+
 export default () => (
   <Layout>
     <Route exact path='/' component={Home} />
@@ -23,5 +25,6 @@ export default () => (
     <Route path="/usersUI" component={UserListUIPage} /> 
     <Route path="/facebook" component={Facebook} /> 
     <Route path="/google" component={Google} /> 
+    <Route path="/hotels" component={Hotel} /> 
   </Layout>
 );

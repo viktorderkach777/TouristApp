@@ -3,11 +3,13 @@ import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import auth from "../reducers/auth";
 import user from "../reducers/user";
+import { hotel as hotelSlice } from "../components/hotel/hotelReducer";
 
 export default function configureStore (history, initialState) {
   const reducers = {
     auth,
-    userlist: user
+      userlist: user,
+      hotel: hotelSlice.reducer
   };
 
   const middleware = [

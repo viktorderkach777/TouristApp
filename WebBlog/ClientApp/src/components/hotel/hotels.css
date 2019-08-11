@@ -1,0 +1,16 @@
+﻿
+.tabStyle {
+    font-size: 1em;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #01b7f2;
+    background-color: #d9d9d9;
+}
+
+    .tabStyle .nav-link:hover {
+        background-color: #01b7f2;
+    }
