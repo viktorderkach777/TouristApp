@@ -22,6 +22,7 @@ export default class LoginPage extends Component {
                             <a> Sign up here</a>
                         </LinkContainer>
                     </div>
+                    <br/>
                     <Facebook />
                     <Google />
                 </Col>

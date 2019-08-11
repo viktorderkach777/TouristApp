@@ -14,7 +14,7 @@ export default function configureStore (history, initialState) {
     thunk,
     routerMiddleware(history)
   ];
-
+    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   // In development, use the browser's Redux dev tools extension if installed
   const enhancers = [];
   const isDevelopment = process.env.NODE_ENV === 'development';

@@ -14,9 +14,7 @@ namespace MyCalculation.DAL.Entities
             Orders = new HashSet<Orders>();
         }
 
-        public ICollection<DbUserRole> UserRoles { get; set;}
-        //public virtual UserProfile Profile { get; set; }
-        //public virtual UserImage UserImage { get; set; }
+        public ICollection<DbUserRole> UserRoles { get; set;}       
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
