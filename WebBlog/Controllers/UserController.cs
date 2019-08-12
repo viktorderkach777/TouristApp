@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -37,11 +38,8 @@ namespace MyCalculation.Controllers
        [HttpGet("list")]
         public  IEnumerable<ApplicationUserListViewModel> Get()
         {
-
             var model = _context
                 .Users
-                //.Include(c => c.Profile)
-                //.Include(c => c.UserImage)
                 .OrderBy(c => c.Email)
                 .Select(u => new ApplicationUserListViewModel
                 {
@@ -52,13 +50,11 @@ namespace MyCalculation.Controllers
                         Id = r.Role.Id,
                         Name = r.Role.Name
                     }),
-                    //FullName = u.Profile.FirstName + ' ' + u.Profile.MiddleName + ' ' + u.Profile.LastName,
                     FullName = u.FirstName + ' '  + u.LastName,
-                    //UserImage = _userService.GetPathImage(u.UserImage.Path)
                     UserImage = _userService.GetPathImage(u.AvatarUrl)
                 })
                 .ToList();
-
+            Thread.Sleep(1000);
             return model;
         }
 

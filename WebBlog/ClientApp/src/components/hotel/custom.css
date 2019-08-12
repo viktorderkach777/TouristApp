@@ -1454,7 +1454,6 @@ ul.check.facilities {
     background-position: center center;
     background-color: #f3f3f3;
     background-size: cover;
-    background-image: url(../img/no-image2.png);
     min-height: 395px;
     position: relative;
     overflow: hidden;
@@ -1848,16 +1847,16 @@ ul.page-type1 li {
 }
 
     .guest-review .review-service.th {
-        background-image: url(../img/rating/th.png);
+        
         min-height: 22px;
     }
 
     .guest-review .review-service.ta {
-        background-image: url(../img/rating/ta.png);
+        
     }
 
     .guest-review .review-service.tp {
-        background-image: url(../img/rating/tp.png);
+        
     }
 
 .guest-review .block-review-service .score {

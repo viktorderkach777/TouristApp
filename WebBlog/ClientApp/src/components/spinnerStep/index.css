@@ -7,21 +7,19 @@
     position: fixed;
     top: 0;
     width: 100%;
-}
-
+    }
     .spinnermodal.open {
-        display: block;
+    display: block;
     }
-
+    
     .spinnermodal .position-center {
-        position: fixed;
-        /* background-color: #fff; */
-        width: 175px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
+    position: fixed;
+    /* background-color: #fff; */ 
+    width: 175px; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
     }
-
-        .spinnermodal .position-center i {
-            font-size: 150px;
-        }
+    .spinnermodal .position-center i {
+    font-size: 150px;
+    }

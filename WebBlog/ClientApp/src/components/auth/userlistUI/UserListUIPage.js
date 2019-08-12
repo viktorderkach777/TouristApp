@@ -26,14 +26,14 @@ class UserListPage extends Component {
   render() {
     console.log("--props UserListPage---", this.props);
     const { loading } = this.state;
-    const page = loading ? (
-        <SpinnerWidget/>
-    ) : (
+    const page = 
+    <React.Fragment>
+    <SpinnerWidget loading={loading} />
       <div className="text-left">
         <h2>List of users</h2>
         <UserList users={this.props.users} />
       </div>
-    );
+      </React.Fragment>
     return this.state.redirect ? <Redirect to="/login" /> : page;
   }
 }
