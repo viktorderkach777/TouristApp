@@ -5,6 +5,7 @@ import { facebook_enter } from '../../../actions/authActions';
 import { connect } from "react-redux";
 import { REACT_APP_FACEBOOK_CLIENT_ID } from '../config.js';
 import { FacebookLoginButton } from "react-social-login-buttons";
+import CentrPageSpinner from "../../CentrPageSpinner";
 
 class Facebook extends Component {
     constructor(props) {
@@ -19,8 +20,7 @@ class Facebook extends Component {
 
     render() {
 
-        const responseFacebook = (response) => {            
-
+        const responseFacebook = (response) => {
             this.setState({ isLoading: true });
             this.props.facebook_enter({ accessToken: response.accessToken })
                 .then(
@@ -29,7 +29,7 @@ class Facebook extends Component {
                 );
         }
 
-        //const { errors, isLoading } = this.state;        
+        const { isLoading } = this.state;        
         const form = (
             <React.Fragment>
                 <FacebookLogin
@@ -42,6 +42,7 @@ class Facebook extends Component {
                         <FacebookLoginButton onClick={renderProps.onClick} />
                     )}
                 />
+                <CentrPageSpinner loading={isLoading} />
             </React.Fragment>
         );
 
