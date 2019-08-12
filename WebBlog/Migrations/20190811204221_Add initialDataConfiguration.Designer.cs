@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MyCalculation.DAL.Entities;
+using TouristApp.DAL.Entities;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace MyCalculation.Migrations
+namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
     [Migration("20190811204221_Add initialDataConfiguration")]
@@ -96,7 +96,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Comments", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Comments", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -120,7 +120,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Countries", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Countries", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -294,7 +294,7 @@ namespace MyCalculation.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.DbRole", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.DbRole", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -317,7 +317,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.DbUser", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.DbUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -379,7 +379,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.DbUserRole", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.DbUserRole", b =>
                 {
                     b.Property<string>("UserId");
 
@@ -392,7 +392,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.HotelImages", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelImages", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -408,7 +408,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("HotelImages");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.HotelParameters", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelParameters", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -426,7 +426,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("HotelParameters");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.HotelSubParameters", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameters", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -444,7 +444,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("HotelSubParameters");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Hotels", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Hotels", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -505,7 +505,7 @@ namespace MyCalculation.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Orders", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Orders", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -523,7 +523,7 @@ namespace MyCalculation.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Regions", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Regions", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -559,7 +559,7 @@ namespace MyCalculation.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Tours", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Tours", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -607,7 +607,7 @@ namespace MyCalculation.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.DbRole")
+                    b.HasOne("TouristApp.DAL.Entities.DbRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -615,7 +615,7 @@ namespace MyCalculation.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.DbUser")
+                    b.HasOne("TouristApp.DAL.Entities.DbUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -623,7 +623,7 @@ namespace MyCalculation.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.DbUser")
+                    b.HasOne("TouristApp.DAL.Entities.DbUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -631,85 +631,85 @@ namespace MyCalculation.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.DbUser")
+                    b.HasOne("TouristApp.DAL.Entities.DbUser")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Comments", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Comments", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.Hotels")
+                    b.HasOne("TouristApp.DAL.Entities.Hotels")
                         .WithMany("Comments")
                         .HasForeignKey("HotelsId");
 
-                    b.HasOne("MyCalculation.DAL.Entities.DbUser", "User")
+                    b.HasOne("TouristApp.DAL.Entities.DbUser", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.DbUserRole", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.DbUserRole", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.DbRole", "Role")
+                    b.HasOne("TouristApp.DAL.Entities.DbRole", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MyCalculation.DAL.Entities.DbUser", "User")
+                    b.HasOne("TouristApp.DAL.Entities.DbUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.HotelImages", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelImages", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.Hotels", "Hotel")
+                    b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
                         .WithMany("HotelImages")
                         .HasForeignKey("HotelId");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.HotelParameters", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelParameters", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.Hotels", "Hotel")
+                    b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
                         .WithMany("HotelParameters")
                         .HasForeignKey("HotelId");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.HotelSubParameters", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameters", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.HotelParameters", "HotelParameter")
+                    b.HasOne("TouristApp.DAL.Entities.HotelParameters", "HotelParameter")
                         .WithMany("HotelSubParameters")
                         .HasForeignKey("HotelParameterId");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Hotels", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Hotels", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.Regions", "Region")
+                    b.HasOne("TouristApp.DAL.Entities.Regions", "Region")
                         .WithMany("Hotels")
                         .HasForeignKey("RegionId");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Orders", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Orders", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.Tours", "Tour")
+                    b.HasOne("TouristApp.DAL.Entities.Tours", "Tour")
                         .WithMany("Orders")
                         .HasForeignKey("TourId");
 
-                    b.HasOne("MyCalculation.DAL.Entities.DbUser", "User")
+                    b.HasOne("TouristApp.DAL.Entities.DbUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Regions", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Regions", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.Countries", "Country")
+                    b.HasOne("TouristApp.DAL.Entities.Countries", "Country")
                         .WithMany("Regions")
                         .HasForeignKey("CountryId");
                 });
 
-            modelBuilder.Entity("MyCalculation.DAL.Entities.Tours", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Tours", b =>
                 {
-                    b.HasOne("MyCalculation.DAL.Entities.Hotels", "Hotel")
+                    b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
                         .WithMany("Tours")
                         .HasForeignKey("HotelId");
                 });

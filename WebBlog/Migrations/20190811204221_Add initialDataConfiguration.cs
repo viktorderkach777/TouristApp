@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MyCalculation.Migrations
+namespace TouristApp.Migrations
 {
     public partial class AddinitialDataConfiguration : Migration
     {

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyCalculation.DAL.Entities;
+using TouristApp.DAL.Entities;
 
 
-namespace MyCalculation.DAL.Configuration.InitialDataConfiguration
+namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
    
 

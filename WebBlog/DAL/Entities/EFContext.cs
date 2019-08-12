@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MyCalculation.DAL.Configuration.InitialDataConfiguration;
+using TouristApp.DAL.Configuration.InitialDataConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Linq;

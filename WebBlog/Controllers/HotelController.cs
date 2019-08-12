@@ -12,13 +12,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using MyCalculation.DAL.Entities;
-using MyCalculation.Domain.Interfaces;
-using MyCalculation.Domain.Models;
-using MyCalculation.ViewModels;
+using TouristApp.DAL.Entities;
+using TouristApp.Domain.Interfaces;
+using TouristApp.Domain.Models;
+using TouristApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebBlog.Controllers
+namespace TouristApp.Controllers
 {
     [Produces("application/json")]
     [Route("api/Hotel")]
