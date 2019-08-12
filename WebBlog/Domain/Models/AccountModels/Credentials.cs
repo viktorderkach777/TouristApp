@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyCalculation.Domain.Models.AccountModels
+namespace TouristApp.Domain.Models.AccountModels
 {
     public class Credentials
     {

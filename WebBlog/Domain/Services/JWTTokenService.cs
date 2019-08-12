@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MyCalculation.DAL.Entities;
-using MyCalculation.Domain.Interfaces;
+using TouristApp.DAL.Entities;
+using TouristApp.Domain.Interfaces;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace MyCalculation.Domain.Services
+namespace TouristApp.Domain.Services
 {
     public class JWTTokenService: IJWTTokenService
     {

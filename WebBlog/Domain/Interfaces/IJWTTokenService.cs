@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using MyCalculation.DAL.Entities;
+using TouristApp.DAL.Entities;
 
-namespace MyCalculation.Domain.Interfaces
+namespace TouristApp.Domain.Interfaces
 {
     public interface IJWTTokenService
     {

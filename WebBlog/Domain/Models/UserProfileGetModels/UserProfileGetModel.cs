@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyCalculation.Domain.Models.UserProfileGetModels
+namespace TouristApp.Domain.Models.UserProfileGetModels
 {
     public class UserProfileGetModel
     {

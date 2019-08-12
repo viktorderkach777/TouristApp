@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyCalculation.DAL.Entities
+namespace TouristApp.DAL.Entities
 {
     public class EFContext : IdentityDbContext<DbUser, DbRole, string, IdentityUserClaim<string>,
 DbUserRole, IdentityUserLogin<string>,

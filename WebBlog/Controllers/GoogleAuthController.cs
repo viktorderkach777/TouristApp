@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
-using MyCalculation.Helpers;
-using MyCalculation.ViewModels;
+using TouristApp.Helpers;
+using TouristApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
-using MyCalculation.DAL.Entities;
-using MyCalculation.Domain.Interfaces;
+using TouristApp.DAL.Entities;
+using TouristApp.Domain.Interfaces;
 using Google.Apis.Auth;
 using Microsoft.Extensions.Configuration;
 
-namespace MyCalculation.Controllers
+namespace TouristApp.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class GoogleAuthController : Controller

@@ -1,4 +1,4 @@
-﻿namespace MyCalculation.ViewModels
+﻿namespace TouristApp.ViewModels
 {
     public class GoogleAuthViewModel
     {

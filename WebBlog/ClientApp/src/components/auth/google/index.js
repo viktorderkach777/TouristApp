@@ -6,7 +6,7 @@ import { google_enter } from '../../../actions/authActions';
 import { connect } from "react-redux";
 import { REACT_APP_GOOGLE_CLIENT_ID } from '../config.js';
 import { GoogleLoginButton } from "react-social-login-buttons";
-
+import CentrPageSpinner from  "../../CentrPageSpinner";
 
 class Google extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class Google extends Component {
 
   render() {
 
-    const responseGoogle = (response) => {      
+    const responseGoogle = (response) => {
 
       // axios.post('https://localhost:44318/api/googleauth/google', { AccessToken: response.Zi.id_token })
       // .then(res => {
@@ -37,19 +37,20 @@ class Google extends Component {
         );
     }
 
-    //const { errors, isLoading } = this.state;    
+    const { isLoading } = this.state;    
     const form = (
       <React.Fragment>
-              <GoogleLogin
-                clientId={REACT_APP_GOOGLE_CLIENT_ID}                
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                render={renderProps => (                  
-                  <GoogleLoginButton onClick={renderProps.onClick} />
-                )}                                                                     
-        />                 
+        <GoogleLogin
+          clientId={REACT_APP_GOOGLE_CLIENT_ID}
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          render={renderProps => (
+            <GoogleLoginButton onClick={renderProps.onClick} />
+          )}
+        />
+        <CentrPageSpinner loading={isLoading} />
       </React.Fragment>
-    );    
+    );
     return (this.state.done ? <Redirect to="/" /> : form);
   }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyCalculation.Domain.Models.ApplicationUserListViewModels
+namespace TouristApp.Domain.Models.ApplicationUserListViewModels
 {
     public class ApplicationUserListViewModel
     {

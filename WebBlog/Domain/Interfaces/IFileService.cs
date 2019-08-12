@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MyCalculation.Domain.Interfaces
+namespace TouristApp.Domain.Interfaces
 {
     public interface IFileService
     {

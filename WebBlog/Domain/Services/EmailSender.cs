@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace MyCalculation.Domain.Services
+namespace TouristApp.Domain.Services
 {
     public class EmailSender : IEmailSender
     {

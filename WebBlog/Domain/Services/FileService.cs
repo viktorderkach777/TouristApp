@@ -2,13 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
-using MyCalculation.Domain.Interfaces;
+using TouristApp.Domain.Interfaces;
 using System.Drawing;
-using MyCalculation.Helpers;
+using TouristApp.Helpers;
 using System.Drawing.Imaging;
 using System.Net;
 
-namespace MyCalculation.Domain.Services
+namespace TouristApp.Domain.Services
 {
     public class FileService : IFileService
     {
