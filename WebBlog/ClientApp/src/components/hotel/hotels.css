@@ -14,3 +14,10 @@
     .tabStyle .nav-link:hover {
         background-color: #01b7f2;
     }
+
+
+    .imagediv
+    {
+        color: #01b7f2;
+        border: 5px;
+    }

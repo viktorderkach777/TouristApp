@@ -148,7 +148,7 @@ class HotelContainer extends Component {
                                 </div>
             </React.Fragment>
         );    
-        
+   
         const hotelList = (
 
             this.props.list.map(item => (
@@ -157,7 +157,10 @@ class HotelContainer extends Component {
                 <Card key={item.id} style={{marginBottom: '15px'}} >
                     <Row>
                         <Col sm="3">
-                            <CardImg width="100" src="https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg" alt="Card image cap" />
+                            <CardImg width="100" style={{borderRadius:'10px',margin:'20px 20px'}} src="https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg" alt="Card image cap" />
+                            <div style={{position:'absolute',top:'20px', right: '5px',color:'white'}}>
+                            <i className="fa fa-heart" aria-hidden="true"></i>
+                            </div>
                         </Col>
                         <Col sm="9">
                             <CardBody>
