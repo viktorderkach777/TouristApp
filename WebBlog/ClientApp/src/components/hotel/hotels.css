@@ -19,5 +19,90 @@
     .imagediv
     {
         color: #01b7f2;
-        border: 5px;
+        
     }
+
+    .skin-color
+    {
+        color: #01b7f2;
+    }
+    .date-capitalize {
+        text-transform: capitalize;
+    }
+
+     li {
+        list-style: none;
+        color:#838383;
+        margin-left: 10px;
+    }
+
+    .CardImg {
+        
+        border-radius:10px;
+        margin:5px;
+    }
+    .iconColor
+    {
+        color: black;
+    }
+
+    .CardTitle {
+        color: #4D4B7F;
+
+    }
+
+    .CardSubTitle {
+        margin:-10px 0px 10px 0px;
+        
+    }
+
+    .Heart{
+        position:absolute;
+        top:15px;
+        right: 20px;
+        color:#FFF
+    }
+
+    .discount {
+        position: absolute;
+        top: 10px;
+        left: 25px;
+        z-index: 10;
+        background: #E91E63;
+        padding: 3px 5px;
+        color: #fff;
+        border-radius: 3px;
+        font-size: 14px;
+    }
+
+    .buttonHotel{
+        background: #ff9000;
+        color:#FFF;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        width: 80% !important;
+        padding-left: 10;
+        padding-right: 10;
+        position: absolute;
+        bottom: 10px;
+    }
+    .price-block {
+        text-align:center;
+        margin-right: 30px;
+        margin-top: 15px;
+    }   
+
+    .price{
+        color: #7db921;
+        font-size: 1.6667em;
+        text-transform: uppercase;
+        float: center;
+        text-align: center;
+        line-height: 1;
+        display: block;
+    }
+
+
+
+   

@@ -55,21 +55,30 @@ namespace TouristApp.Controllers
         {
             var model = _context
                 .Tours
-                .Include(s=>s.Hotel)
+                .Include(s => s.Hotel)
+                .Include(d => d.Hotel.Region)
+                .Include(f => f.Hotel.Region.Country)
+                .Include(z => z.СityDeparture)
                 .OrderBy(c => c.Hotel.Class)
                 .Select(u => new HotelListViewModel
                 {
                     Id = u.Id,
+                    СityDeparture ="Київ",  //u.СityDeparture.Name,
                     Name = u.Hotel.Name,
+                    Region = u.Hotel.Region.Name,
+                    Country = u.Hotel.Region.Country.Name,
                     Description = u.Hotel.Description,
-                    Price = u.Price,
+                    Price = u.Price* u.DaysCount,
                     Rate = u.Hotel.Rate,
-                    Class = u.Hotel.Class
-
+                    Class = u.Hotel.Class,
+                    FromData=u.FromData,
+                    Date=u.FromData.ToString().Substring(0, 10),
+                    DaysCount =u.DaysCount
+                    
                 }).ToList();
 
             Thread.Sleep(1000);
-            
+
 
             return model;
         }

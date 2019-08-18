@@ -31,7 +31,8 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Regions> Regions { get; set; }
         public virtual DbSet<Tours> Tours { get; set; }
-
+        public virtual DbSet<СityDeparture> СityDepartures { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -39,7 +40,8 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
             builder.ApplyConfiguration(new RegionInitialConfig());
             builder.ApplyConfiguration(new HotelInitialConfig());
             builder.ApplyConfiguration(new TourInitialConfig());
-
+            builder.ApplyConfiguration(new СityDepartureConfig());
+            
 
 
             base.OnModelCreating(builder);

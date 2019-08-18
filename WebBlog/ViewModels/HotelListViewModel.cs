@@ -18,12 +18,20 @@ namespace TouristApp.ViewModels
     
         public int RoomsCount { get; set; }
                
-        public string RegionId { get; set; }
+        public string Region { get; set; }
+
+        public string Country { get; set; }
+
+        public string СityDeparture { get; set; }
 
         public double? Rate { get; set; }
 
         public decimal? Price { get; set; }
 
+        public DateTime? FromData { get; set; }
+        public string Date { get; set; }
+
+        public int? DaysCount { get; set; }
 
     }
 }
