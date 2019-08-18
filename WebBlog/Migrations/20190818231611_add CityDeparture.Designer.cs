@@ -10,7 +10,7 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20190818195006_add CityDeparture")]
+    [Migration("20190818231611_add CityDeparture")]
     partial class addCityDeparture
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -587,7 +587,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "1",
                             DaysCount = 6,
-                            FromData = new DateTime(2019, 8, 18, 22, 50, 5, 764, DateTimeKind.Local).AddTicks(2627),
+                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(259),
                             HotelId = "1",
                             Price = 3300m
                         },
@@ -595,7 +595,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "2",
                             DaysCount = 8,
-                            FromData = new DateTime(2019, 8, 18, 22, 50, 5, 764, DateTimeKind.Local).AddTicks(8839),
+                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(5324),
                             HotelId = "2",
                             Price = 4400m
                         },
@@ -603,7 +603,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "3",
                             DaysCount = 10,
-                            FromData = new DateTime(2019, 8, 18, 22, 50, 5, 764, DateTimeKind.Local).AddTicks(8844),
+                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(5329),
                             HotelId = "2",
                             Price = 5500m
                         });
@@ -618,7 +618,7 @@ namespace TouristApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("СityDepartures");
+                    b.ToTable("СityDeparture");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

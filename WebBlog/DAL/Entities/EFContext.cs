@@ -31,7 +31,7 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Regions> Regions { get; set; }
         public virtual DbSet<Tours> Tours { get; set; }
-        public virtual DbSet<СityDeparture> СityDepartures { get; set; }
+        public virtual DbSet<СityDeparture> СityDeparture { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
