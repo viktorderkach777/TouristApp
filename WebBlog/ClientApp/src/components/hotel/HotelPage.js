@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 //import { Col, Row } from 'react-bootstrap';
-import axios from 'axios';
+//import axios from 'axios';
 //import { LinkContainer } from "react-router-bootstrap";
 import classnames from 'classnames';
 //import styled from 'styled-components'
@@ -34,15 +34,7 @@ export default class Hotel extends Component {
         }
     }
     componentDidMount() {
-        axios.get('https://localhost:44318/api/Hotel/list').then(
-            resp => {
-                console.log('--success get--', resp.data);
-                // const { users } = resp.data;
-            },
-            err => {
-                console.log('--err problem---', err);
-            }
-        );
+
     }
 
     render() {
@@ -50,7 +42,7 @@ export default class Hotel extends Component {
 
             <Row className="justify-content-md-center">
                 <div className="text-center">
-                    My Hotels
+                    It is hotel
             <Nav tabs>
                         <NavItem>
                             <NavLink
@@ -101,7 +93,6 @@ export default class Hotel extends Component {
                             <Row>
                                 <Col sm="12">
                                     <h4>Tab 1 Contents</h4>
-
                                 </Col>
                             </Row>
                         </TabPane>
@@ -113,7 +104,7 @@ export default class Hotel extends Component {
                                         <CardTitle>Special Title Treatment</CardTitle>
                                         <CardText>
                                             With supporting text below as a natural lead-in to additional content.
-                      </CardText>
+                    </CardText>
                                         <Button>Go somewhere</Button>
                                     </Card>
                                 </Col>
@@ -122,7 +113,7 @@ export default class Hotel extends Component {
                                         <CardTitle>Special Title Treatment</CardTitle>
                                         <CardText>
                                             With supporting text below as a natural lead-in to additional content.
-                      </CardText>
+                    </CardText>
                                         <Button>Go somewhere</Button>
                                     </Card>
                                 </Col>

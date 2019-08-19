@@ -12,6 +12,7 @@ import UserListUIPage from './components/auth/userlistUI/UserListUIPage';
 import Facebook from './components/auth/facebook'
 import Google from './components/auth/google';
 import Hotel from './components/hotel';
+import HotelPage from './components/hotel/HotelPage';
 
 export default () => (
   <Layout>
@@ -26,5 +27,6 @@ export default () => (
     <Route path="/facebook" component={Facebook} /> 
     <Route path="/google" component={Google} /> 
     <Route path="/hotels" component={Hotel} /> 
+    <Route path="/hotelpage" component={HotelPage} /> 
   </Layout>
 );
