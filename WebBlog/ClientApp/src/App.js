@@ -27,6 +27,8 @@ export default () => (
     <Route path="/facebook" component={Facebook} /> 
     <Route path="/google" component={Google} /> 
     <Route path="/hotels" component={Hotel} /> 
-    <Route path="/hotelpage" component={HotelPage} /> 
+    {/* <Route path="/hotelpage" component={HotelPage} /> */}
+    <Route path="/views/:country/:id" component={HotelPage} /> 
+
   </Layout>
 );
