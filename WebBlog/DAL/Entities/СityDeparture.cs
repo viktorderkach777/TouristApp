@@ -9,7 +9,9 @@ namespace TouristApp.DAL.Entities
 {
     public class СityDeparture
     {
+
         public string Id { get; set; }
         public string Name { get; set; }
+
     }
 }

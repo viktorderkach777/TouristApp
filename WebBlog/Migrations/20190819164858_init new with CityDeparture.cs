@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace TouristApp.Migrations
 {
-    public partial class v1postgres : Migration
+    public partial class initnewwithCityDeparture : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -63,6 +63,18 @@ namespace TouristApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Countries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "СityDeparture",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_СityDeparture", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -200,7 +212,8 @@ namespace TouristApp.Migrations
                     RegionId = table.Column<string>(nullable: true),
                     Rate = table.Column<double>(nullable: true),
                     Price = table.Column<decimal>(nullable: true),
-                    RoomsCount = table.Column<int>(nullable: true)
+                    RoomsCount = table.Column<int>(nullable: true),
+                    Class = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -286,6 +299,7 @@ namespace TouristApp.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     HotelId = table.Column<string>(nullable: true),
+                    СityDepartureId = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: true),
                     DaysCount = table.Column<int>(nullable: true),
                     FromData = table.Column<DateTime>(nullable: true)
@@ -297,6 +311,12 @@ namespace TouristApp.Migrations
                         name: "FK_Tours_Hotels_HotelId",
                         column: x => x.HotelId,
                         principalTable: "Hotels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tours_СityDeparture_СityDepartureId",
+                        column: x => x.СityDepartureId,
+                        principalTable: "СityDeparture",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -344,6 +364,75 @@ namespace TouristApp.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { "1", "Poland" },
+                    { "30", "Slovakia" },
+                    { "29", "Netherlands" },
+                    { "28", "Moldova" },
+                    { "27", "Latvia" },
+                    { "26", "Kazakhstan" },
+                    { "25", "Japan" },
+                    { "24", "Italy" },
+                    { "23", "Israel" },
+                    { "22", "Ireland" },
+                    { "21", "Iceland" },
+                    { "20", "Greece" },
+                    { "19", "France" },
+                    { "18", "Finland" },
+                    { "17", "Estonia" },
+                    { "16", "Egypt" },
+                    { "15", "Denmark" },
+                    { "14", "Czech Republic" },
+                    { "13", "Croatia" },
+                    { "12", "China" },
+                    { "11", "Chile" },
+                    { "10", "Canada" },
+                    { "9", "Bosnia and Herzegovina" },
+                    { "8", "Belgium" },
+                    { "7", "Australia" },
+                    { "6", "UK" },
+                    { "5", "USA" },
+                    { "4", "Ukraine" },
+                    { "3", "Germany" },
+                    { "2", "Russia" },
+                    { "31", "Slovenia" },
+                    { "32", "Spain" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Regions",
+                columns: new[] { "Id", "CountryId", "Name" },
+                values: new object[,]
+                {
+                    { "2", "1", "Krakow" },
+                    { "3", "1", "Wroclaw" },
+                    { "1", "16", "Шарм Эль Шейх" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Hotels",
+                columns: new[] { "Id", "Class", "Description", "Name", "Price", "Rate", "RegionId", "RoomsCount" },
+                values: new object[,]
+                {
+                    { "1", 4, "Отель расположен в районе Хадаба курорта Шарм-Эль-Шейх на берегу Красного моря. Был открыт в 1996 году. Реновации в отеле не было, только косметический поточный ремонт. Состоит из основного 2-этажного здания (без номеров) и комплекса 2-этажных корпусов. Коралловый пляж отеля граничит с уникальными коралловыми рифами. Рядом возле отеля находится развлекательный центр Alf Leila Wa Leila, а торговые ряды Il Merkato и Old Market порадуют любителей шопинга и местного колорита. Отель расположен в 22 км от международного аэропорта Шарм-эль-Шейх в районе Hadaba | Ras Um El Sid. Расстояние до Naama Bay: 7 км; Расстояние до Old Market (Старый Город): 4 км; Расстояние до Soho Square: 20 км.", "Royal Paradise Resort", 550m, 5.0, "1", 286 },
+                    { "2", 3, "Отель находится в районе Рас Умм Элсид в Шарм-эль-Шейхе. В 8 км расположена набережная Наама-Бэй со множеством ресторанов и магазинов. Гостиница впервые распахнула свои двери гостям в 1999 году, последняя реновация проводилась в 2014 году. Отель подойдет для молодежного, романтического или индивидуального отдыха. В 18 км от аэропорта г. Шарм-эль-Шейх.", "Amar Sina", 572m, 3.6099999999999999, "1", 98 },
+                    { "3", 5, "Отель расположен в Хадабет Ом Эль Сид, в самом центре променада Эль Меркато, на курорте Шарм-эль-Шейх, рядом с побережьем Красного моря. Отель был открыт в 2010 году, последняя реновация проводилась в 2018 году (обновление мебели на территории отеля, обновление бассейнов и номеров категории Deluxe). Отель подойдет для семейного, романтического или молодежного отдыха. Отель расположен в 17 км от аэропорта города Шарм Эль Шейх.", "Il Mercato Hotel (ex.Iberotel Il Mercato)", 675m, 4.5199999999999996, "1", 318 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Tours",
+                columns: new[] { "Id", "DaysCount", "FromData", "HotelId", "Price", "СityDepartureId" },
+                values: new object[,]
+                {
+                    { "1", 6, new DateTime(2019, 8, 19, 19, 48, 57, 531, DateTimeKind.Local).AddTicks(3399), "1", 3300m, null },
+                    { "2", 8, new DateTime(2019, 8, 19, 19, 48, 57, 539, DateTimeKind.Local).AddTicks(3399), "2", 4400m, null },
+                    { "3", 10, new DateTime(2019, 8, 19, 19, 48, 57, 539, DateTimeKind.Local).AddTicks(3399), "2", 5500m, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -432,6 +521,11 @@ namespace TouristApp.Migrations
                 name: "IX_Tours_HotelId",
                 table: "Tours",
                 column: "HotelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tours_СityDepartureId",
+                table: "Tours",
+                column: "СityDepartureId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -477,6 +571,9 @@ namespace TouristApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Hotels");
+
+            migrationBuilder.DropTable(
+                name: "СityDeparture");
 
             migrationBuilder.DropTable(
                 name: "Regions");

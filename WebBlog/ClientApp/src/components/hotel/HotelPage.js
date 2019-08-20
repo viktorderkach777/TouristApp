@@ -42,7 +42,7 @@ export default class Hotel extends Component {
 
             <Row className="justify-content-md-center">
                 <div className="text-center">
-                    It is hotel
+                 <h1>Описание отеля</h1>
             <Nav tabs>
                         <NavItem>
                             <NavLink
@@ -90,9 +90,24 @@ export default class Hotel extends Component {
 
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
-                            <Row>
+                        <Row>
                                 <Col sm="12">
-                                    <h4>Tab 1 Contents</h4>
+                                    <Card body>
+                                        <CardTitle>Special Title Treatment</CardTitle>
+                                        <CardText>
+                                            With supporting text below as a natural lead-in to additional content.
+                    </CardText>
+                                        <Button>Go somewhere</Button>
+                                    </Card>
+                                </Col>
+                                <Col sm="12">
+                                    <Card body>
+                                        <CardTitle>Special Title Treatment</CardTitle>
+                                        <CardText>
+                                            With supporting text below as a natural lead-in to additional content.
+                    </CardText>
+                                        <Button>Go somewhere</Button>
+                                    </Card>
                                 </Col>
                             </Row>
                         </TabPane>
@@ -121,26 +136,71 @@ export default class Hotel extends Component {
                         </TabPane>
 
                         <TabPane tabId="3">
-                            <Row>
+                        <Row>
                                 <Col sm="12">
-                                    <h4>Tab 3 Contents</h4>
+                                    <Card body>
+                                        <CardTitle>Special Title Treatment</CardTitle>
+                                        <CardText>
+                                            With supporting text below as a natural lead-in to additional content.
+                    </CardText>
+                                        <Button>Go somewhere</Button>
+                                    </Card>
+                                </Col>
+                                <Col sm="12">
+                                    <Card body>
+                                        <CardTitle>Special Title Treatment</CardTitle>
+                                        <CardText>
+                                            With supporting text below as a natural lead-in to additional content.
+                    </CardText>
+                                        <Button>Go somewhere</Button>
+                                    </Card>
                                 </Col>
                             </Row>
                         </TabPane>
 
 
                         <TabPane tabId="4">
-                            <Row>
+                        <Row>
                                 <Col sm="12">
-                                    <h4>Tab 4 Contents</h4>
+                                    <Card body>
+                                        <CardTitle>Special Title Treatment</CardTitle>
+                                        <CardText>
+                                            With supporting text below as a natural lead-in to additional content.
+                    </CardText>
+                                        <Button>Go somewhere</Button>
+                                    </Card>
+                                </Col>
+                                <Col sm="12">
+                                    <Card body>
+                                        <CardTitle>Special Title Treatment</CardTitle>
+                                        <CardText>
+                                            With supporting text below as a natural lead-in to additional content.
+                    </CardText>
+                                        <Button>Go somewhere</Button>
+                                    </Card>
                                 </Col>
                             </Row>
                         </TabPane>
 
                         <TabPane tabId="5">
-                            <Row>
+                        <Row>
                                 <Col sm="12">
-                                    <h4>Tab 5 Contents</h4>
+                                    <Card body>
+                                        <CardTitle>Special Title Treatment</CardTitle>
+                                        <CardText>
+                                            With supporting text below as a natural lead-in to additional content.
+                    </CardText>
+                                        <Button>Go somewhere</Button>
+                                    </Card>
+                                </Col>
+                                <Col sm="12">
+                                    <Card body>
+                                        <CardTitle>Special Title Treatment</CardTitle>
+                                        <CardText>
+                                            With supporting text below as a natural lead-in to additional content.
+                    </CardText>
+                                        <Button>Go somewhere</Button>
+                                    </Card>
                                 </Col>
                             </Row>
                         </TabPane>

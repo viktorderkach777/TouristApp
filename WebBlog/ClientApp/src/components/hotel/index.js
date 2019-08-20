@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import get from 'lodash.get';
-import { withRouter } from 'react-router-dom';
+import { withRouter,Link } from 'react-router-dom';
 import propTypes from 'prop-types';
 //import { Col, Row } from 'react-bootstrap';
 //import axios from 'axios';
@@ -67,14 +67,14 @@ class HotelContainer extends Component {
                 <Card key={item.id} style={{ marginBottom: '15px', borderRadius: '10px' }} >
                     <Row>
                         <Col sm="3">
-                            <CardLink href="#">
+                        <Link to={`/views/${item.country}/${item.id}`}>
                                 <CardImg className="CardImg" src="https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg" alt="Card image cap" />
                                 <div className="discount">
                                     <span className="discount-title">
                                         знижка 15%
                                                 </span>
                                 </div>
-                            </CardLink>
+                        </Link> 
                             <CardLink href="#">
                                 <div className="Heart">
                                     <i className="fa fa-heart" aria-hidden="true"></i>
@@ -124,7 +124,9 @@ class HotelContainer extends Component {
                                 <div className="price">{item.price}<span className="currency"> ₴</span>
                                 </div>
                             </div>
-                            <Button size="sm" className="buttonHotel" onClick={e => this.operationTour(e, 'WATCH_TOUR', item.id)} >Дивитись тур</Button>
+                            <Link to={`/views/${item.country}/${item.id}`}>
+                            <Button size="sm" className="buttonHotel"  >Дивитись тур</Button>
+                            </Link>
                         </Col>
                     </Row>
                 </Card>
@@ -135,10 +137,11 @@ class HotelContainer extends Component {
         return (
 
             <React.Fragment>
-                <SpinnerWidget loading={isListLoading} />
+                
                 <Row>
                     <Col sm="12">
                         {hotelList}
+                        <SpinnerWidget loading={isListLoading} />
                     </Col>
                 </Row>
 

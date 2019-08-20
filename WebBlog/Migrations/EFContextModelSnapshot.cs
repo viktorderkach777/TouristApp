@@ -585,7 +585,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "1",
                             DaysCount = 6,
-                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(259),
+                            FromData = new DateTime(2019, 8, 19, 19, 48, 57, 531, DateTimeKind.Local).AddTicks(3399),
                             HotelId = "1",
                             Price = 3300m
                         },
@@ -593,7 +593,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "2",
                             DaysCount = 8,
-                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(5324),
+                            FromData = new DateTime(2019, 8, 19, 19, 48, 57, 539, DateTimeKind.Local).AddTicks(3399),
                             HotelId = "2",
                             Price = 4400m
                         },
@@ -601,7 +601,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "3",
                             DaysCount = 10,
-                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(5329),
+                            FromData = new DateTime(2019, 8, 19, 19, 48, 57, 539, DateTimeKind.Local).AddTicks(3399),
                             HotelId = "2",
                             Price = 5500m
                         });
