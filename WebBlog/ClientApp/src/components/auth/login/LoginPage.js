@@ -8,7 +8,7 @@ import Google from '../google';
 export default class LoginPage extends Component {
     render() {
         return (
-            <Row className="justify-content-md-center">
+            <Row className="center">
                 <Col md={4} offset={4}>
                     <LoginForm />
                     <div className="text-center">
