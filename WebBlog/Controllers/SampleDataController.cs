@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TouristApp.Controllers
@@ -14,6 +15,7 @@ namespace TouristApp.Controllers
         };
 
         [HttpGet("[action]")]
+        
         public IEnumerable<WeatherForecast> WeatherForecasts(int startDateIndex)
         {
             var rng = new Random();

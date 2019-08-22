@@ -72,9 +72,9 @@ export function google_enter(data) {
 
 
 const loginByJWT = (token, dispatch) => {
-  var user=jwt.decode(token);
-  localStorage.setItem('jwtToken', token);
-  setAuthorizationToken(token);
+  var user=jwt.decode(token.token);
+  localStorage.setItem('jwtToken', token.token);
+  setAuthorizationToken(token.token);
   dispatch(userReducer.actions.setCurrentUser(user));
 } 
 

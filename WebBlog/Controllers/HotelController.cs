@@ -51,6 +51,7 @@ namespace TouristApp.Controllers
         }
 
         [HttpGet("list")]
+        [Authorize]
         public IEnumerable<HotelListViewModel> Get()
         {
             var model = _context

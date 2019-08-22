@@ -17,6 +17,7 @@ using TouristApp.Domain.Interfaces;
 using TouristApp.Domain.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using TouristApp.Domain.Models.FacebookModels;
+using System;
 
 namespace TouristApp
 {
@@ -70,7 +71,9 @@ namespace TouristApp
                     ValidateAudience = false,
                     ValidateIssuer = false,
                     ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero //вирубаємо похибку
+
                 };
             });
 
