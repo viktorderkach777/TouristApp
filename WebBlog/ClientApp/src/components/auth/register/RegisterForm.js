@@ -75,6 +75,7 @@ class RegisterForm extends Component {
                 { [name]: value })
         }
     }
+    
     handleChange = (e) => {
         //const { name, value } = e.target;
         //this.setStateByErrors({ [name]: value });

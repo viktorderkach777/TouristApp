@@ -2,6 +2,8 @@ import React, { Component, Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import * as router from 'react-router-dom';
 import { Container } from 'reactstrap';
+import { connect } from 'react-redux'
+import get from 'lodash.get';
 
 import {
   AppAside,
@@ -24,7 +26,7 @@ const AdminAside = React.lazy(() => import('./AdminAside'));
 const AdminFooter = React.lazy(() => import('./AdminFooter'));
 const AdminHeader = React.lazy(() => import('./AdminHeader'));
 
-class AdminLayout extends Component {
+class AdminLayoutContainer extends Component {
 
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
@@ -34,7 +36,19 @@ class AdminLayout extends Component {
   }
 
   render() {
-    return (
+    const { roles, isAuthenticated } = this.props;
+    var isAccess = false;
+
+    if (isAuthenticated === true) {
+      if (roles === "Admin") {
+        isAccess = true;
+        console.log('', isAccess);
+      }
+    }
+
+    
+      const form = (
+        <React.Fragment>
       <div className="app">
         <AppHeader fixed>
           <Suspense  fallback={this.loading()}>
@@ -85,8 +99,21 @@ class AdminLayout extends Component {
           </Suspense>
         </AppFooter>
       </div>
+      </React.Fragment>
     );
+    return (!isAccess ? <Redirect to="/login" /> : form);
   }
 }
+
+const mapState = state => {
+  return {
+    isAuthenticated: get(state, 'auth.isAuthenticated'),
+    roles: get(state, 'auth.user.roles')
+  };
+};
+
+
+const AdminLayout =
+  connect(mapState, null)(AdminLayoutContainer);
 
 export default AdminLayout;

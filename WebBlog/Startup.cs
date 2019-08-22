@@ -76,6 +76,7 @@ namespace TouristApp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSession();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -114,6 +115,7 @@ namespace TouristApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseSession();
 
             app.UseStaticFiles(new StaticFileOptions()
             {

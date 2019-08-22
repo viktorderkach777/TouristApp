@@ -1,29 +1,34 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
-//import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import get from 'lodash.get';
-import axios from 'axios';
-import CaptchaWidget from '../../../components/captcha';
+import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
+import { register } from "../../../reducers/auth";
 //import CaptchaService from '../../../components/captcha/captchaService';
-import * as captchaActions from '../../../components/captcha/reducer';
-
+//import * as captchaActions from '../../../components/captcha/reducer';
+//import axios from 'axios';
+//import CaptchaWidget from '../../../components/captcha';
 
 class Register extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
       errors: {},
-      captchaText: "",
       done: false,
       isLoading: false
+
     }
   }
   componentDidMount() {
     // CaptchaService.postNewKey();
     // this.props.dispatch({type: 'captcha/KEY_POST_STARTED'});
-    this.props.createNewKeyCaptcha();
+    //this.props.createNewKeyCaptcha();
 
   }
   setStateByErrors = (name, value) => {
@@ -43,54 +48,57 @@ class Register extends Component {
     this.setStateByErrors(e.target.name, e.target.value);
   };
 
-  onSubmitForm = e => {
+  onSubmitForm = (e) => {
     e.preventDefault();
-    const { captchaText } = this.state;
-
-    const { keyValue } = this.props.captcha;
 
     let errors = {};
-    if (captchaText === "") errors.captchaText = "Поле не може бути пустим!";
+    
+    if (this.state.email === '') errors.email = "Cant't be empty";
 
-    const isValid = Object.keys(errors).length === 0;
+    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$/.test(this.state.password)) errors.password = "Password must be at least 6 characters and contain digits, upper and lower case"
+    if (this.state.password === '') errors.password = "Cant't be empty";
+    if (this.state.confirmPassword === '') errors.confirmPassword = "Cant't be empty";
+    if (this.state.confirmPassword !== this.state.password) errors.confirmPassword = "Passwords do not match";
+
+    const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
-      this.setState({
-        isLoading: true
-      });
-      const model = {
-        captchaText,
-        captchaKey: keyValue
-      };
-      console.log('model send data', model);
-      var url = "https://localhost:44388/api/account/register";
-      axios.post(url, model)
-        .then(() => this.setState({
-          done: true
-        }),
-          err => {
-            //this.reloadCaptcha();
-            this.setState({
-              errors: err.response.data,
-              isLoading: false
-            })
-          }
-        );
-    } else {
-      this.setState({ errors });
+        const { email, password, confirmPassword, username } = this.state;
+        this.setState({ isLoading: true });
+        this.props.register({ email, password, confirmPassword,username})
+            .then(
+                () => this.setState({ done: true }),
+                (err) => {
+                    this.setState({ errors: err.response.data, isLoading: false });
+                }
+            );
     }
-  };
+    else {
+        this.setState({ errors });
+    }
+  
+};
+
   render() {
-    const {captcha}=this.props;
-    console.log('-----props-----', this.props);
-    return (
+    console.log('---FormRegister state----', this.state);
+
+    const { username,
+      isLoading,
+      email,
+      password,
+      confirmPassword,
+      } = this.state;
+    
+    const form = (
+      <React.Fragment>
       <div className="app flex-row align-items-center">
         <Container>
           <Row className="justify-content-center">
             <Col md="9" lg="7" xl="6">
               <Card className="mx-4">
                 <CardBody className="p-4">
-                  <Form>
+                  <Form onSubmit={this.onSubmitForm}>
+
                     <h1>Register</h1>
                     <p className="text-muted">Create your account</p>
                     <InputGroup className="mb-3">
@@ -99,58 +107,65 @@ class Register extends Component {
                           <i className="icon-user"></i>
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input type="text" placeholder="Username" autoComplete="username" />
+                      <Input
+                        type="text"
+                        placeholder="Username"
+                        autoComplete="username"
+                        id="username"
+                        name="username"
+                        value={username}
+                        onChange={this.handleChange}
+                      />
                     </InputGroup>
+
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>@</InputGroupText>
                       </InputGroupAddon>
-                      <Input type="text" placeholder="Email" autoComplete="email" />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="password" placeholder="Password" autoComplete="new-password" />
-                    </InputGroup>
-                    <InputGroup className="mb-4">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="password" placeholder="Repeat password" autoComplete="new-password" />
-                    </InputGroup>
-                    <InputGroup className="mb-4">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <InputGroupText>
-
-                        <CaptchaWidget {...captcha} />
-
-                      </InputGroupText>
-                    </InputGroup>
-
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="fa fa-pencil" aria-hidden="true" onClick={this.reloadCaptcha}></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
                       <Input type="text"
-                        className="form-control"
-                        id="captchaText"
-                        name="captchaText"
-                        value={this.state.captchaText}
+                        placeholder="Email"
+                        autoComplete="email"
+                        id="email"
+                        name="email"
+                        value={email}
                         onChange={this.handleChange} />
                     </InputGroup>
+
+                    <InputGroup className="mb-3">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="icon-lock"></i>
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input type="password"
+                        placeholder="Password"
+                        autoComplete="new-password"
+                        id="password"
+                        name="password"
+                        value={password}
+                        onChange={this.handleChange} />
+                    </InputGroup>
+
+                    <InputGroup className="mb-4">
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="icon-lock"></i>
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input type="password"
+                        placeholder="Confirm password"
+                        autoComplete="confirmPassword"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        onChange={this.handleChange} />
+                    </InputGroup>
+
                     
-                    <Button color="success" block>Create Account</Button>
+
+                    <Button color="success" block disabled={isLoading} >Create Account</Button>
+
+
                   </Form>
                 </CardBody>
                 <CardFooter className="p-4">
@@ -168,7 +183,12 @@ class Register extends Component {
           </Row>
         </Container>
       </div>
+      </React.Fragment>
     );
+    return (
+      this.state.done ?
+          <Redirect to="/" /> : form
+  );
   }
 }
 
@@ -183,14 +203,9 @@ const mapState = (state) => {
   }
 }
 
-const mapDispatch = {
+Register.propTypes =
+    {
+      register: PropTypes.func.isRequired
+    }
 
-  createNewKeyCaptcha: () => {
-    return dispatch => dispatch(captchaActions.createNewKey());
-  }
-
-}
-
-
-
-export default connect(mapState, mapDispatch)(Register);
+export default connect(mapState, {register})(Register);
