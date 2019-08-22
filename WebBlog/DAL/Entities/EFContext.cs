@@ -32,7 +32,9 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
         public virtual DbSet<Regions> Regions { get; set; }
         public virtual DbSet<Tours> Tours { get; set; }
         public virtual DbSet<СityDeparture> СityDeparture { get; set; }
-        
+
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

@@ -10,6 +10,11 @@ using TouristApp.Domain.Interfaces;
 using TouristApp.Domain.Models.AccountModels;
 using TouristApp.Helpers;
 using TouristApp.ViewModels.AccountViewModels;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace TouristApp.Controllers
 {
@@ -25,6 +30,8 @@ namespace TouristApp.Controllers
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;       
         readonly IConfiguration _configuration;
+        private readonly EFContext _db;
+
 
         public AccountController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
@@ -32,7 +39,8 @@ namespace TouristApp.Controllers
             IFileService fileService,           
             IEmailSender emailSender,
             IJWTTokenService jWTTokenService,           
-            IConfiguration configuration)
+            IConfiguration configuration,
+            EFContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,6 +49,7 @@ namespace TouristApp.Controllers
             _roleManager = roleManager;
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
+            _db = db;
         }
 
         [HttpPost("login")]
@@ -62,11 +71,64 @@ namespace TouristApp.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(credentials.Email);
-            await _signInManager.SignInAsync(user, isPersistent: false);            
+            await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
+            var _refreshToken = _db.RefreshTokens.SingleOrDefault(m => m.Id == user.Id);
+            if (_refreshToken == null)
+            {
+                RefreshToken t = new RefreshToken
+                {
+                    Id = user.Id,
+                    Token = Guid.NewGuid().ToString()
+                };
+                _db.RefreshTokens.Add(t);
+                _db.SaveChanges();
+            }
+            else
+            {
+                _refreshToken.Token = Guid.NewGuid().ToString();
+                _db.RefreshTokens.Update(_refreshToken);
+                _db.SaveChanges();
+            }
+            return Ok(
+            new
+            {
+                token = _jWTTokenService.CreateToken(_configuration, _refreshToken.User, _userManager),
+                refToken = _refreshToken.Token
+            });
         }
-       
+
+        [HttpPost("{refreshToken}/refresh")]
+        public IActionResult RefreshToken([FromRoute]string refreshToken)
+        {
+            var _refreshToken = _db.RefreshTokens.SingleOrDefault(m => m.Token == refreshToken);
+
+            if (_refreshToken == null)
+            {
+                return NotFound("Refresh token not found");
+            }
+            //var userclaim = new[] { new Claim(ClaimTypes.Name, _refreshToken.User.FirstName) };
+            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretPhrase"]));//(_configuration["SecretKey"]));
+            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            //var token = new JwtSecurityToken(
+            //    //issuer: "https://localhost:5001",
+            //    //audience: "https://localhost:5001",
+            //    claims: userclaim,
+            //    expires: DateTime.Now.AddMinutes(10),
+            //    signingCredentials: creds);
+
+            _refreshToken.Token = Guid.NewGuid().ToString();
+            _db.RefreshTokens.Update(_refreshToken);
+            _db.SaveChanges();
+
+            return Ok(
+            new {
+                token = _jWTTokenService.CreateToken(_configuration, _refreshToken.User, _userManager),
+                refToken = _refreshToken.Token
+            });
+        }
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]CustomRegisterModel model)
         {

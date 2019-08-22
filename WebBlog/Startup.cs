@@ -69,7 +69,7 @@ namespace TouristApp
                     IssuerSigningKey = signingKey,
                     ValidateAudience = false,
                     ValidateIssuer = false,
-                    ValidateLifetime = false,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true
                 };
             });
