@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from "react-redux";
 import { login } from "../../../reducers/auth";
+import get from 'lodash.get';
 //import validateemail from '../../../helpers/validateEmail'; 
 import { Redirect } from "react-router";
 class LoginForm extends Component {
@@ -35,6 +36,22 @@ class LoginForm extends Component {
     }
   }
 
+  getUrlToRedirect = () => {
+    let auth = this.props.auth;
+    console.log('---getUrlToRedirect----', auth);
+    if (auth.isAuthenticated) {
+        let roles = auth.user.roles;
+        if (roles=== "User") {
+            this.setState({ profileUrl: "/tours" });
+        }
+        else if (roles==="Admin") {
+            this.setState({ profileUrl: "/admin/ss" });
+        }
+
+    }
+
+    console.log('---profileUrl----',this.state.profileUrl);
+  }
   handleChange = (e) => {
     this.setStateByErrors(e.target.name, e.target.value);
   }
@@ -56,6 +73,7 @@ class LoginForm extends Component {
       this.props.login({ Email: email, Password: password })
         .then(
           () => this.setState({ done: true }),
+          this.getUrlToRedirect(),
           (err) => this.setState({ errors: err.response.data, isLoading: false })
         );
     }
@@ -69,7 +87,7 @@ class LoginForm extends Component {
 
 
   render() {
-    const { errors, isLoading } = this.state;
+    const { errors, isLoading,profileUrl } = this.state;
     console.log('---FormLogin state----', this.state);
     const form = (
       <React.Fragment>
@@ -152,7 +170,7 @@ class LoginForm extends Component {
       </div>
       </React.Fragment>
       );
-      return ( this.state.done ? <Redirect to="/" /> : form );
+      return ( this.state.done ? <Redirect to={profileUrl} /> : form );
      
   }
 }
@@ -160,6 +178,10 @@ LoginForm.propTypes =
   {
     login: PropTypes.func.isRequired
   }
-
-  const Login = connect(null, {login})(LoginForm);
+  const mapState = state => {
+    return {
+        auth: get(state, 'auth'),
+    };
+  };
+  const Login = connect(mapState , {login})(LoginForm);
   export default Login;

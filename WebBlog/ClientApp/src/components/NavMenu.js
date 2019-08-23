@@ -40,7 +40,7 @@ class NavMenu extends React.Component {
 */
 
   render () {
-    const { isAuthenticated,user } = this.props.auth;
+    const { isAuthenticated,user  } = this.props.auth;
     
     const logoutLink = (
       <NavItem onClick={this.logout.bind(this)}>
@@ -51,7 +51,7 @@ class NavMenu extends React.Component {
     const userLink = (
       <NavItem>
         <NavLink tag={Link} className="text-dark" to="/user">
-        <i className="fas fa-user"></i>{user.name}</NavLink>
+        <i className="fas fa-user"></i>{}</NavLink>
       </NavItem>
     );
 

@@ -39,10 +39,10 @@ class DefaultLayoutContainer extends Component {
     var isAccess=false;
 
    if ( isAuthenticated === true ){
-      if (roles === "Admin")
+      if (roles === "User")
          {
            isAccess=true;
-           console.log('',isAccess);
+           console.log('DefaultLayor:',isAccess);
           }  
         }
 
@@ -100,7 +100,7 @@ class DefaultLayoutContainer extends Component {
       </div>
       </React.Fragment>
       );
-      return ( !isAccess ? <Redirect to="/login" /> : form );
+      return (!isAccess ? <Redirect to="/login" /> : form);
   }
 }
 
