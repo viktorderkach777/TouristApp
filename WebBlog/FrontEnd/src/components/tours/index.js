@@ -12,9 +12,13 @@ import './tours.css';
 import * as tourAction from './tourReducer';
 //import SpinnerWidget from  "../../components/spinnerStep";
 import {
-
+    Form,
     Card,
+    FormGroup,
+    Label,
+    Input,
     Button,
+    CardHeader,
     CardTitle,
     CardText,
     CardImg,
@@ -27,7 +31,10 @@ import {
 
 const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
 
+ 
+
 class ToursContainer extends Component {
+
 
     componentDidMount() {
         this.props.getListTours();
@@ -35,11 +42,85 @@ class ToursContainer extends Component {
    
 
     render() {
-
+        
         console.log('----state-----', this.state);
         console.log('----Props-----', this.props);
         const { isListLoading } = this.props;
+         
+        const filterlist =(
+                <Form>
+            <Card className="CardTours">
+            
+            <CardBody>
+              <CardHeader>217 знайдено</CardHeader>
+               <CardText >
+               <FormGroup row className="justify-content-md-center">
+               <h4>Країни вильоту</h4>
+                <Label for="checkbox2" ></Label>
+                <Col sm={{ size: 10 }}>
+                    <FormGroup check>
+                    <Label check>
+                        <Input type="checkbox" id="checkbox2" />{' '} Київ
+                    </Label>
+                    </FormGroup>
+                </Col>
+                <Col sm={{ size: 10 }}>
+                    <FormGroup check>
+                    <Label check>
+                        <Input type="checkbox" id="checkbox2" />{' '} Львов
+                    </Label>
+                    </FormGroup>
+                </Col>
+                <Col sm={{ size: 10 }}>
+                    <FormGroup check>
+                    <Label check>
+                        <Input type="checkbox" id="checkbox2" />{' '} Одесса
+                    </Label>
+                    </FormGroup>
+                </Col>
+               </FormGroup>
 
+                <FormGroup row className="justify-content-md-center">
+                   
+                <h4>Клас готелю</h4>
+                <p>
+               
+
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"/>
+                    <label class="form-check-label" for="inlineCheckbox2">2*</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3"/>
+                    <label class="form-check-label" for="inlineCheckbox3">3*</label>
+                </div>
+                
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2"/>
+                    <label class="form-check-label" for="inlineCheckbox2">4*</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option3"/>
+                    <label class="form-check-label" for="inlineCheckbox5">5*</label>
+                </div>
+                </p>    
+          
+                
+               </FormGroup>
+
+
+
+
+              </CardText>
+              
+
+             <Row className="justify-content-md-center">
+              <Button className="btn btn-info btn-sm"  style={{backgroundColor:"#ff9000"}}>Примінити</Button>
+              </Row>  
+            </CardBody>
+          </Card>
+          </Form>
+        );
    
         const toursList = (
 
@@ -48,7 +129,7 @@ class ToursContainer extends Component {
 
                 <Card  key={item.id} className="CardTours" >
                     <Row>
-                        <Col sm="3">
+                        <Col sm="4">
                         <CardLink href="#">
                             <CardImg className="CardImg" src="https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg" alt="Card image cap" />
                             <div className="discount">
@@ -101,11 +182,12 @@ class ToursContainer extends Component {
                             </CardBody>
 
                         </Col>
-                        <Col sm="3"> 
+                        <Col sm="2" style={{verticalAlign:'bottom'}}> 
                         <div className="price-block">
-                            <div className="price">{item.price}<span className="currency"> ₴</span>
+                            <div className="price">{item.price}
+                            <span className="currency"> ₴</span>
                             </div>
-                            </div>
+                        </div>
                             <Button size="sm" className="buttonHotel">Дивитись тур</Button>
                         </Col>
                     </Row>
@@ -117,13 +199,24 @@ class ToursContainer extends Component {
         return (
 
             <React.Fragment>
-                
-                <Row  >
+                <div class="container">
+                    <div class="row">
+                        <div class="col-3">
+                            {filterlist}
+                         </div>
+                        <div class="col-9">
+                        {toursList}
+                        <SpinnerWidget loading={isListLoading} />
+                         </div>
+                       
+                    </div>
+                </div>
+                {/* <Row>
                     <Col sm="12">
                         {toursList}
                         <SpinnerWidget loading={isListLoading} />
                     </Col>
-                </Row>
+                </Row> */}
 
             </React.Fragment>
         );

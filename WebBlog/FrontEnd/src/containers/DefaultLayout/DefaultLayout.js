@@ -4,6 +4,9 @@ import * as router from 'react-router-dom';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux'
 import get from 'lodash.get';
+import PropTypes from 'prop-types';
+import * as userAction from '../../reducers/auth';
+
 import {
   AppAside,
   AppFooter,
@@ -35,14 +38,15 @@ class DefaultLayoutContainer extends Component {
   }
 
   render() {
-    const {roles,isAuthenticated}=this.props;
+    const {isAuthenticated,user}=this.props.auth;
+    const {roles}=this.props.auth.user;
     var isAccess=false;
 
    if ( isAuthenticated === true ){
       if (roles === "User")
          {
            isAccess=true;
-           console.log('DefaultLayor:',isAccess);
+           console.log('DefaultLayout access: ', isAccess);
           }  
         }
 
@@ -51,11 +55,12 @@ class DefaultLayoutContainer extends Component {
       <div className="app">
         <AppHeader fixed>
           <Suspense  fallback={this.loading()}>
-            <DefaultHeader onLogout={e=>this.signOut(e)}/>
+            <DefaultHeader onLogout={e=>this.signOut(e)} user={user}/>
           </Suspense>
         </AppHeader>
         <div className="app-body">
-          <AppSidebar fixed display="lg">
+          
+          {/* <AppSidebar fixed display="lg">
             <AppSidebarHeader />
             <AppSidebarForm />
             <Suspense>
@@ -63,7 +68,8 @@ class DefaultLayoutContainer extends Component {
             </Suspense>
             <AppSidebarFooter />
             <AppSidebarMinimizer />
-          </AppSidebar>
+          </AppSidebar> */}
+
           <main className="main">
             <AppBreadcrumb appRoutes={routes} router={router}/>
             <Container fluid>
@@ -81,7 +87,7 @@ class DefaultLayoutContainer extends Component {
                         )} />
                     ) : (null);
                   })}
-                  <Redirect from="/" to="/dashboard" />
+                  <Redirect from="/" to="/tours" />
                 </Switch>
               </Suspense>
             </Container>
@@ -92,6 +98,7 @@ class DefaultLayoutContainer extends Component {
             </Suspense>
           </AppAside>
         </div>
+      
         <AppFooter>
           <Suspense fallback={this.loading()}>
             <DefaultFooter />
@@ -104,14 +111,31 @@ class DefaultLayoutContainer extends Component {
   }
 }
 
-const mapState = state => {
+DefaultLayoutContainer.propTypes =
+  {
+    logout: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
+    // isAuthenticated:PropTypes.bool.isRequired,
+    // roles: PropTypes.string.isRequired
+  }
+
+const mapStateToProps = state => {
   return {
-      isAuthenticated: get(state, 'auth.isAuthenticated'),
-      roles: get(state, 'auth.user.roles')
+    auth: get(state, 'auth')
+    // isAuthenticated: get(state, 'auth.isAuthenticated'),
+    // roles: get(state, 'auth.user.roles')
   };
 };
 
+const mapDispatch = dispatch => {
+  return {
+     logout: () =>
+          dispatch(userAction.logout())
+
+  };
+};
 
 const  DefaultLayout=
-        connect(mapState, null)(DefaultLayoutContainer);
+        connect(mapStateToProps, mapDispatch)(DefaultLayoutContainer);
 export default DefaultLayout;

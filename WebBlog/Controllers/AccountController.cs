@@ -30,6 +30,7 @@ namespace TouristApp.Controllers
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;       
         readonly IConfiguration _configuration;
+        readonly IUserService _userService;
         private readonly EFContext _db;
 
 
@@ -40,6 +41,7 @@ namespace TouristApp.Controllers
             IEmailSender emailSender,
             IJWTTokenService jWTTokenService,           
             IConfiguration configuration,
+            IUserService userService,
             EFContext db)
         {
             _userManager = userManager;
@@ -49,6 +51,7 @@ namespace TouristApp.Controllers
             _roleManager = roleManager;
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
+            _userService = userService;
             _db = db;
         }
 
@@ -86,14 +89,18 @@ namespace TouristApp.Controllers
             }
             else
             {
+
+            }
+            {
                 _refreshToken.Token = Guid.NewGuid().ToString();
                 _db.RefreshTokens.Update(_refreshToken);
                 _db.SaveChanges();
             }
+
             return Ok(
             new
             {
-                token = _jWTTokenService.CreateToken(_configuration, _refreshToken.User, _userManager),
+                token = _jWTTokenService.CreateToken(_configuration, _userService, _refreshToken.User, _userManager),
                 refToken = _refreshToken.Token
             });
         }
@@ -124,7 +131,7 @@ namespace TouristApp.Controllers
 
             return Ok(
             new {
-                token = _jWTTokenService.CreateToken(_configuration, _refreshToken.User, _userManager),
+                token = _jWTTokenService.CreateToken(_configuration, _userService, _refreshToken.User, _userManager),
                 refToken = _refreshToken.Token
             });
         }
@@ -172,7 +179,7 @@ namespace TouristApp.Controllers
             
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
+            return Ok(_jWTTokenService.CreateToken(_configuration, _userService, user, _userManager));
         }
 
         [HttpPost("ChangePassword")]

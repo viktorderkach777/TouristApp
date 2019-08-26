@@ -13,15 +13,16 @@ namespace TouristApp.Domain.Services
 {
     public class JWTTokenService: IJWTTokenService
     {
-        public string CreateToken(IConfiguration configuration, DbUser user, UserManager<DbUser> userManager)
+        public string CreateToken(IConfiguration configuration, IUserService userService, DbUser user, UserManager<DbUser> userManager)
         {
             var roles = userManager.GetRolesAsync(user).Result;
-
+            var userImage = userService.GetImageUser(user.Id);
             var claims = new List<Claim>()
             {
                 //new Claim(JwtRegisteredClaimNames.Sub, user.Id)
                 new Claim("id", user.Id),
                 new Claim("name", user.UserName),
+                new Claim("image", userImage),
             };
 
             foreach (var role in roles)

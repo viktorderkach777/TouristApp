@@ -4,7 +4,8 @@ import * as router from 'react-router-dom';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux'
 import get from 'lodash.get';
-
+import PropTypes from 'prop-types';
+import * as userAction from '../../reducers/auth';
 import {
   AppAside,
   AppFooter,
@@ -31,7 +32,8 @@ class AdminLayoutContainer extends Component {
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   signOut(e) {
-    e.preventDefault()
+    e.preventDefault();
+    this.props.logout();
     this.props.history.push('/login')
   }
 
@@ -42,12 +44,10 @@ class AdminLayoutContainer extends Component {
     if (isAuthenticated === true) {
       if (roles === "Admin") {
         isAccess = true;
-        console.log('', isAccess);
+        console.log('AdminLayout access: ', isAccess);
       }
     }
-
-    
-      const form = (
+    const form = (
         <React.Fragment>
       <div className="app">
         <AppHeader fixed>
@@ -82,7 +82,7 @@ class AdminLayoutContainer extends Component {
                         )} />
                     ) : (null);
                   })}
-                  <Redirect from="/" to="/dashboard" />
+                  <Redirect from="/" to="/admin/dashboard" />
                 </Switch>
               </Suspense>
             </Container>
@@ -105,15 +105,30 @@ class AdminLayoutContainer extends Component {
   }
 }
 
-const mapState = state => {
+AdminLayoutContainer.propTypes =
+  {
+    logout: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    isAuthenticated:PropTypes.bool.isRequired,
+    roles: PropTypes.string.isRequired
+  }
+
+const mapStateToProps = state => {
   return {
     isAuthenticated: get(state, 'auth.isAuthenticated'),
     roles: get(state, 'auth.user.roles')
   };
 };
 
+const mapDispatch = dispatch => {
+  return {
+     logout: () =>
+          dispatch(userAction.logout())
+
+  };
+};
 
 const AdminLayout =
-  connect(mapState, null)(AdminLayoutContainer);
+  connect(mapStateToProps, mapDispatch)(AdminLayoutContainer);
 
 export default AdminLayout;

@@ -11,6 +11,7 @@ const initialState = {
   user: {
     id: '',
     name: '',
+    image:'',
     roles: []
   }
 };
@@ -32,6 +33,7 @@ export const userReducer = createSlice({
 });
 
   export function logout() {
+    console.log('--logout--');
     return dispatch => {
         localStorage.removeItem('jwtToken');
         setAuthorizationToken(false);

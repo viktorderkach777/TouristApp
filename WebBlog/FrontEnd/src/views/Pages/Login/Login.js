@@ -4,7 +4,8 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from "react-redux";
-import { login } from "../../../reducers/auth";
+//import { login } from "../../../reducers/auth";
+import * as userAction from '../../../reducers/auth';
 import get from 'lodash.get';
 //import validateemail from '../../../helpers/validateEmail'; 
 import { Redirect } from "react-router";
@@ -13,11 +14,12 @@ class LoginForm extends Component {
   state = {
     email: '',
     password: '',
+    profileUrl:'',
     errors: {
     },
     done: false,
     isLoading: false
-  }
+  };
 
   setStateByErrors = (name, value) => {
     if (!!this.state.errors[name]) {
@@ -34,7 +36,7 @@ class LoginForm extends Component {
       this.setState(
         { [name]: value })
     }
-  }
+  };
 
   getUrlToRedirect = () => {
     let auth = this.props.auth;
@@ -45,16 +47,15 @@ class LoginForm extends Component {
             this.setState({ profileUrl: "/tours" });
         }
         else if (roles==="Admin") {
-            this.setState({ profileUrl: "/admin/ss" });
+            this.setState({ profileUrl: "/admin/dashboard" });
         }
-
     }
-
     console.log('---profileUrl----',this.state.profileUrl);
-  }
+  };
+
   handleChange = (e) => {
     this.setStateByErrors(e.target.name, e.target.value);
-  }
+  };
 
   onSubmitForm = (e) => {
     e.preventDefault();
@@ -80,11 +81,7 @@ class LoginForm extends Component {
     else {
       this.setState({ errors });
     }
-
-  }
-
-
-
+  };
 
   render() {
     const { errors, isLoading,profileUrl } = this.state;
@@ -170,18 +167,28 @@ class LoginForm extends Component {
       </div>
       </React.Fragment>
       );
-      return ( this.state.done ? <Redirect to={profileUrl} /> : form );
-     
+      return ( this.state.done ? <Redirect to= {profileUrl} /> : form );
   }
 }
+
 LoginForm.propTypes =
   {
-    login: PropTypes.func.isRequired
+    login: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
   }
+
   const mapState = state => {
     return {
         auth: get(state, 'auth'),
     };
   };
-  const Login = connect(mapState , {login})(LoginForm);
+  const mapDispatch = dispatch => {
+    return {
+        login: (model) =>
+            dispatch(userAction.login(model))
+
+    };
+};
+  const Login = connect(mapState , mapDispatch)(LoginForm);
   export default Login;

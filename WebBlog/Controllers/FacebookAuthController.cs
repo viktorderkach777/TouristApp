@@ -22,7 +22,8 @@ namespace TouristApp.Controllers
         readonly SignInManager<DbUser> _signInManager;             
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;
-        readonly IConfiguration _configuration;       
+        readonly IConfiguration _configuration;
+        readonly IUserService _userService;
         private readonly FacebookAuthSettings _fbAuthSettings;       
         private static readonly HttpClient Client = new HttpClient();
 
@@ -31,7 +32,8 @@ namespace TouristApp.Controllers
             SignInManager<DbUser> signInManager,
             IFileService fileService,                     
             IJWTTokenService jWTTokenService,
-            IConfiguration configuration,           
+            IConfiguration configuration,
+            IUserService userService,
             IOptions<FacebookAuthSettings> fbAuthSettingsAccessor)
         {
             _userManager = userManager;
@@ -41,6 +43,7 @@ namespace TouristApp.Controllers
             _fbAuthSettings = fbAuthSettingsAccessor.Value;
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
+            _userService = userService;
         }
 
         // POST api/externalauth/facebook
@@ -112,7 +115,7 @@ namespace TouristApp.Controllers
             }
             
             await _signInManager.SignInAsync(user, isPersistent: false);
-            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
+            return Ok(_jWTTokenService.CreateToken(_configuration, _userService, user, _userManager));
         }        
     }
 }

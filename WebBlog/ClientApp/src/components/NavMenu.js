@@ -3,10 +3,10 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
-import { logout } from '../actions/authActions';
+//import { logout } from '../actions/authActions';
 import './NavMenu.css';
 import logo from './calculation.png';
-
+import * as userAction from '../actions/authActions';
 import { withRouter } from 'react-router-dom';
 //import { LinkContainer } from "react-router-bootstrap";
 
@@ -17,7 +17,7 @@ import { withRouter } from 'react-router-dom';
 class NavMenu extends React.Component {
   state = {}
 
-  logout(e) {
+  actlogout(e) {
     e.preventDefault();
     this.props.logout();
     this.props.history.push('/');
@@ -43,7 +43,7 @@ class NavMenu extends React.Component {
     const { isAuthenticated,user  } = this.props.auth;
     
     const logoutLink = (
-      <NavItem onClick={this.logout.bind(this)}>
+      <NavItem onClick={this.actlogout.bind(this)}>
         <NavLink tag={Link} className="text-dark" to="/"><i className="fas fa-sign-out-alt"></i> Logout</NavLink>
       </NavItem>
     );
@@ -66,9 +66,8 @@ class NavMenu extends React.Component {
           <Container>
           <NavbarBrand tag={Link} to="/">
           <img src={logo} className="App-logo" alt="logo" />
-          
           </NavbarBrand>
-                    <h2 style={{fontFamily:"cursive"}}> <sup>&copy;</sup>TouristApp </h2>
+           <h2 style={{fontFamily:"cursive"}}><sup>&copy;</sup>TouristApp </h2>
            
          
           <NavbarToggler onClick={this.toggle} className="mr-2" />
@@ -99,13 +98,22 @@ class NavMenu extends React.Component {
 }
 NavMenu.propTypes =
   {
-    logout: PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
   }
 
+  const mapDispatch = dispatch => {
+    return {
+        logout: () =>
+            dispatch(userAction.logout())
+
+    };
+};
 const mapStateToProps = (state) => {
   return {
     auth: state.auth
   };
 }
 
-export default withRouter(connect(mapStateToProps, { logout })(NavMenu));
+export default withRouter(connect(mapStateToProps, mapDispatch)(NavMenu));

@@ -19,14 +19,15 @@ namespace TouristApp.Controllers
         readonly SignInManager<DbUser> _signInManager;    
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;
-        readonly IConfiguration _configuration;         
-
+        readonly IConfiguration _configuration;
+        readonly IUserService _userService;   
         public GoogleAuthController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
             SignInManager<DbUser> signInManager,
             IFileService fileService,
             IJWTTokenService jWTTokenService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -34,6 +35,7 @@ namespace TouristApp.Controllers
             _roleManager = roleManager;
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
+            _userService = userService;
         }
 
         // POST api/googleauth/google
@@ -80,7 +82,7 @@ namespace TouristApp.Controllers
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
-            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));          
+            return Ok(_jWTTokenService.CreateToken(_configuration, _userService, user, _userManager));          
         }       
     }
 }
