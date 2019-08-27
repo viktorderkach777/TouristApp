@@ -5,6 +5,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import {serverUrl} from '../config';
+import BaseService from '../Services/Base/BaseService';
 
 const initialState = {
   isAuthenticated: false,
@@ -73,10 +74,9 @@ export function google_enter(data) {
 }
 
 
-const loginByJWT = (token, dispatch) => {
-  var user=jwt.decode(token.token);
-  localStorage.setItem('jwtToken', token.token);
-  setAuthorizationToken(token.token);
+const loginByJWT = (tokens, dispatch) => {
+  console.log('----loginByJWT----', tokens);
+  const user = BaseService.SetTokensGetUser(tokens);
   dispatch(userReducer.actions.setCurrentUser(user));
 } 
 

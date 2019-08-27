@@ -3,6 +3,8 @@ import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { captchaReducer } from "../components/captcha/reducer";
 import { tours } from "../components/tours/tourReducer";
+import * as RefreshToken from '../components/RefreshToken/reducer';
+import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
 
 import {userReducer} from '../reducers/auth'
 
@@ -10,10 +12,12 @@ export default function configureStore (history, initialState) {
     const reducers = {
       captcha: captchaReducer.reducer,
       auth:userReducer.reducer,
-      tours:tours.reducer
+      tours:tours.reducer,
+      refreshToken: RefreshToken.refreshReducer
     };
 
     const middleware = [
+      refreshTokenMiddleware(),
       thunk,
       routerMiddleware(history)
     ];

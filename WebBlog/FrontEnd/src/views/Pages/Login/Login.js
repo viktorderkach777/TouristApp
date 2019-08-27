@@ -71,12 +71,22 @@ class LoginForm extends Component {
       const { email, password } = this.state;
       console.log('validform',email, password);
       this.setState({ isLoading: true });
+      console.log('----login---', this.props);
       this.props.login({ Email: email, Password: password })
         .then(
-          () => this.setState({ done: true }),
-          this.getUrlToRedirect(),
+          () =>  
+          {
+            this.setState({ done: true },this.getUrlToRedirect());
+            //this.getUrlToRedirect();
+          },
           (err) => this.setState({ errors: err.response.data, isLoading: false })
         );
+      // this.props.login({ Email: email, Password: password })
+      //   .then(
+      //     () => this.setState({ done: true }),
+      //     this.getUrlToRedirect(),
+      //     (err) => this.setState({ errors: err.response.data, isLoading: false })
+      //   );
     }
     else {
       this.setState({ errors });
@@ -84,7 +94,7 @@ class LoginForm extends Component {
   };
 
   render() {
-    const { errors, isLoading,profileUrl } = this.state;
+    const { errors, isLoading,profileUrl, done } = this.state;
     console.log('---FormLogin state----', this.state);
     const form = (
       <React.Fragment>
@@ -167,7 +177,7 @@ class LoginForm extends Component {
       </div>
       </React.Fragment>
       );
-      return ( this.state.done ? <Redirect to= {profileUrl} /> : form );
+      return ( this.state.done ? <Redirect to= {this.state.profileUrl} /> : form );
   }
 }
 

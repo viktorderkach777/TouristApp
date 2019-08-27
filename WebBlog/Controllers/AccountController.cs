@@ -15,6 +15,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
 
 namespace TouristApp.Controllers
 {
@@ -76,7 +77,9 @@ namespace TouristApp.Controllers
             var user = await _userManager.FindByEmailAsync(credentials.Email);
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            var _refreshToken = _db.RefreshTokens.SingleOrDefault(m => m.Id == user.Id);
+            var _refreshToken = _db.RefreshTokens
+                
+                .SingleOrDefault(m => m.Id == user.Id);
             if (_refreshToken == null)
             {
                 RefreshToken t = new RefreshToken
@@ -89,9 +92,6 @@ namespace TouristApp.Controllers
             }
             else
             {
-
-            }
-            {
                 _refreshToken.Token = Guid.NewGuid().ToString();
                 _db.RefreshTokens.Update(_refreshToken);
                 _db.SaveChanges();
@@ -100,15 +100,17 @@ namespace TouristApp.Controllers
             return Ok(
             new
             {
-                token = _jWTTokenService.CreateToken(_configuration, _userService, _refreshToken.User, _userManager),
+                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
                 refToken = _refreshToken.Token
             });
         }
 
-        [HttpPost("{refreshToken}/refresh")]
+        [HttpPost("refresh/{refreshToken}")]
         public IActionResult RefreshToken([FromRoute]string refreshToken)
         {
-            var _refreshToken = _db.RefreshTokens.SingleOrDefault(m => m.Token == refreshToken);
+            var _refreshToken = _db.RefreshTokens
+                .Include(u=>u.User)
+                .SingleOrDefault(m => m.Token == refreshToken);
 
             if (_refreshToken == null)
             {
