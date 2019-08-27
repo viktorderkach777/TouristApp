@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import get from 'lodash.get';
+import { Link  } from 'react-router-dom';
 //import { Col, Row } from 'react-bootstrap';
 //import axios from 'axios';
 //import { LinkContainer } from "react-router-bootstrap";
@@ -30,8 +31,8 @@ import {
 } from 'reactstrap';
 
 const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
-
- 
+const SortToolbar = React.lazy(() => import('../SortToolbar'));
+const PaginationBar= React.lazy(() => import('../Pagination'));
 
 class ToursContainer extends Component {
 
@@ -39,124 +40,124 @@ class ToursContainer extends Component {
     componentDidMount() {
         this.props.getListTours();
     }
-   
+
 
     render() {
-        
+
         console.log('----state-----', this.state);
         console.log('----Props-----', this.props);
         const { isListLoading } = this.props;
-         
-        const filterlist =(
-                <Form>
-            <Card className="CardTours">
-            
-            <CardBody>
-              <CardHeader>217 знайдено</CardHeader>
-               <CardText >
-               <FormGroup row className="justify-content-md-center">
-               <h4>Країни вильоту</h4>
-                <Label for="checkbox2" ></Label>
-                <Col sm={{ size: 10 }}>
-                    <FormGroup check>
-                    <Label check>
-                        <Input type="checkbox" id="checkbox2" />{' '} Київ
+
+        const filterlist = (
+            <Form>
+                <Card className="CardTours">
+                    <CardBody>
+                        <CardHeader>217 знайдено</CardHeader>
+                        <CardText >
+                            <FormGroup row className="justify-content-md-center">
+                                <h4>Країни вильоту</h4>
+                                <Label for="checkbox2" ></Label>
+                                <Col sm={{ size: 10 }}>
+                                    <FormGroup check>
+                                        <Label check>
+                                            <Input type="checkbox" id="checkbox2" />{' '} Київ
                     </Label>
-                    </FormGroup>
-                </Col>
-                <Col sm={{ size: 10 }}>
-                    <FormGroup check>
-                    <Label check>
-                        <Input type="checkbox" id="checkbox2" />{' '} Львов
+                                    </FormGroup>
+                                </Col>
+                                <Col sm={{ size: 10 }}>
+                                    <FormGroup check>
+                                        <Label check>
+                                            <Input type="checkbox" id="checkbox2" />{' '} Львов
                     </Label>
-                    </FormGroup>
-                </Col>
-                <Col sm={{ size: 10 }}>
-                    <FormGroup check>
-                    <Label check>
-                        <Input type="checkbox" id="checkbox2" />{' '} Одесса
+                                    </FormGroup>
+                                </Col>
+                                <Col sm={{ size: 10 }}>
+                                    <FormGroup check>
+                                        <Label check>
+                                            <Input type="checkbox" id="checkbox2" />{' '} Одесса
                     </Label>
-                    </FormGroup>
-                </Col>
-               </FormGroup>
+                                    </FormGroup>
+                                </Col>
+                            </FormGroup>
 
-                <FormGroup row className="justify-content-md-center">
-                   
-                <h4>Клас готелю</h4>
-                <p>
-               
+                            <FormGroup row className="justify-content-md-center">
 
-                    <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"/>
-                    <label class="form-check-label" for="inlineCheckbox2">2*</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3"/>
-                    <label class="form-check-label" for="inlineCheckbox3">3*</label>
-                </div>
-                
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2"/>
-                    <label class="form-check-label" for="inlineCheckbox2">4*</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option3"/>
-                    <label class="form-check-label" for="inlineCheckbox5">5*</label>
-                </div>
-                </p>    
-          
-                
-               </FormGroup>
+                                <h4>Клас готелю</h4>
+                                <p>
 
 
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+                                        <label class="form-check-label" for="inlineCheckbox2">2*</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" />
+                                        <label class="form-check-label" for="inlineCheckbox3">3*</label>
+                                    </div>
+
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2" />
+                                        <label class="form-check-label" for="inlineCheckbox2">4*</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option3" />
+                                        <label class="form-check-label" for="inlineCheckbox5">5*</label>
+                                    </div>
+                                </p>
 
 
-              </CardText>
-              
+                            </FormGroup>
 
-             <Row className="justify-content-md-center">
-              <Button className="btn btn-info btn-sm"  style={{backgroundColor:"#ff9000"}}>Примінити</Button>
-              </Row>  
-            </CardBody>
-          </Card>
-          </Form>
+
+
+
+                        </CardText>
+
+
+                        <Row className="justify-content-md-center">
+                            <Button className="btn btn-info btn-sm" style={{ backgroundColor: "#ff9000" }}>Примінити</Button>
+                        </Row>
+                    </CardBody>
+                </Card>
+            </Form>
         );
-   
-        const toursList = (
 
+        const toursList = (
+           
+            
             this.props.list.map(item => (
 
 
-                <Card  key={item.id} className="CardTours" >
+                <Card key={item.id} className="CardTours" >
                     <Row>
                         <Col sm="4">
-                        <CardLink href="#">
-                            <CardImg className="CardImg" src="https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg" alt="Card image cap" />
-                            <div className="discount">
-                                                 <span className="discount-title">
-                                                     знижка 15%
+                        <Link to={`/views/${item.country}/${item.id}`}>
+                                <CardImg className="CardImg" src="https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg" alt="Card image cap" />
+                                <div className="discount">
+                                    <span className="discount-title">
+                                        знижка 15%
                                                 </span>
-                            </div>
-                        </CardLink>
-                        <CardLink href="#">
-                        <div className="Heart">
-                            <i className="fa fa-heart" aria-hidden="true"></i>
-                            </div>
-                        </CardLink>
+                                </div>
+                        </Link>
+                            <CardLink href="#">
+                                <div className="Heart">
+                                    <i className="fa fa-heart" aria-hidden="true"></i>
+                                </div>
+                            </CardLink>
                         </Col>
                         <Col sm="6">
                             <CardBody>
                                 <CardTitle className="CardTitle">
-                                   {item.name} {item.class}* 
+                                    {item.name} {item.class}*
                                 </CardTitle>
                                 <CardSubtitle className="CardSubTitle">
-                                   <small> <i className="fa fa-map-marker" aria-hidden="true"></i>{item.country}, {item.region}</small>
+                                    <small> <i className="fa fa-map-marker" aria-hidden="true"></i>{item.country}, {item.region}</small>
                                 </CardSubtitle>
-                                     
-                                
-                               
+
+
+
                                 <CardText>
-                                    
+
                                     <li>
                                         <i className="fa fa-plane iconColor" aria-hidden="true"></i>
                                         <span className="skin-color hidden-xs"> Виліт: </span>
@@ -167,28 +168,30 @@ class ToursContainer extends Component {
                                         <span className="skin-color hidden-xs"> Тривалість: </span>
                                         <b>{item.daysCount}</b> ночей
                                      </li>
-                                     <li>
+                                    <li>
                                         <i className="fa fa-bus iconColor" aria-hidden="true"></i>
                                         <span className="skin-color hidden-xs"> Проїзд: </span>
-                                          включений
+                                        включений
                                      </li>
-                                     <li>
+                                    <li>
                                         <i className="fa fa-credit-card iconColor" aria-hidden="true"></i>
                                         <span className="skin-color hidden-xs"> Ціна за: </span>
-                                          2-ох дорослих
+                                        2-ох дорослих
                                     </li>
                                 </CardText>
-                                
+
                             </CardBody>
 
                         </Col>
-                        <Col sm="2" style={{verticalAlign:'bottom'}}> 
-                        <div className="price-block">
-                            <div className="price">{item.price}
-                            <span className="currency"> ₴</span>
+                        <Col sm="2" style={{ verticalAlign: 'bottom' }}>
+                            <div className="price-block">
+                                <div className="price">{item.price}
+                                    <span className="currency"> ₴</span>
+                                </div>
                             </div>
-                        </div>
+                            <Link to={`/views/${item.country}/${item.id}`}>
                             <Button size="sm" className="buttonHotel">Дивитись тур</Button>
+                            </Link> 
                         </Col>
                     </Row>
                 </Card>
@@ -203,21 +206,16 @@ class ToursContainer extends Component {
                     <div class="row">
                         <div class="col-3">
                             {filterlist}
-                         </div>
+                        </div>
                         <div class="col-9">
-                        {toursList}
-                        <SpinnerWidget loading={isListLoading} />
-                         </div>
-                       
+                            <SortToolbar/>
+                            {toursList}
+                            <SpinnerWidget loading={isListLoading} />
+                            <PaginationBar/>
+                        </div>
+
                     </div>
                 </div>
-                {/* <Row>
-                    <Col sm="12">
-                        {toursList}
-                        <SpinnerWidget loading={isListLoading} />
-                    </Col>
-                </Row> */}
-
             </React.Fragment>
         );
     }

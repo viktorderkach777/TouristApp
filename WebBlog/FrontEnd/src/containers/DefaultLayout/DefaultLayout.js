@@ -17,7 +17,7 @@ import {
   AppSidebarHeader,
   AppSidebarMinimizer,
   AppBreadcrumb2 as AppBreadcrumb,
-  AppSidebarNav2 as AppSidebarNav,
+   AppSidebarNav2 as AppSidebarNav,
 } from '@coreui/react';
 // sidebar nav config
 import navigation from '../../_nav';
@@ -38,29 +38,28 @@ class DefaultLayoutContainer extends Component {
   }
 
   render() {
-    const {isAuthenticated,user}=this.props.auth;
-    const {roles}=this.props.auth.user;
-    var isAccess=false;
+    const { isAuthenticated, user } = this.props.auth;
+    const { roles } = this.props.auth.user;
+    var isAccess = false;
 
-   if ( isAuthenticated === true ){
-      if (roles === "User")
-         {
-           isAccess=true;
-           console.log('DefaultLayout access: ', isAccess);
-          }  
-        }
+    if (isAuthenticated === true) {
+      if (roles === "User") {
+        isAccess = true;
+        console.log('DefaultLayout access: ', isAccess);
+      }
+    }
 
-        const form = (
-          <React.Fragment>
-      <div className="app">
-        <AppHeader fixed>
-          <Suspense  fallback={this.loading()}>
-            <DefaultHeader onLogout={e=>this.signOut(e)} user={user}/>
-          </Suspense>
-        </AppHeader>
-        <div className="app-body">
-          
-          {/* <AppSidebar fixed display="lg">
+    const form = (
+      <React.Fragment>
+        <div className="app">
+          <AppHeader fixed>
+            <Suspense fallback={this.loading()}>
+              <DefaultHeader onLogout={e => this.signOut(e)} user={user} />
+            </Suspense>
+          </AppHeader>
+          <div className="app-body">
+
+            <AppSidebar fixed display="lg">
             <AppSidebarHeader />
             <AppSidebarForm />
             <Suspense>
@@ -68,46 +67,46 @@ class DefaultLayoutContainer extends Component {
             </Suspense>
             <AppSidebarFooter />
             <AppSidebarMinimizer />
-          </AppSidebar> */}
+          </AppSidebar>
 
-          <main className="main">
-            <AppBreadcrumb appRoutes={routes} router={router}/>
-            <Container fluid>
+            <main className="main">
+              <AppBreadcrumb appRoutes={routes} router={router} />
+              <Container fluid>
+                <Suspense fallback={this.loading()}>
+                  <Switch>
+                    {routes.map((route, idx) => {
+                      return route.component ? (
+                        <Route
+                          key={idx}
+                          path={route.path}
+                          exact={route.exact}
+                          name={route.name}
+                          render={props => (
+                            <route.component {...props} />
+                          )} />
+                      ) : (null);
+                    })}
+                    <Redirect from="/" to="/tours" />
+                  </Switch>
+                </Suspense>
+              </Container>
+            </main>
+            <AppAside fixed>
               <Suspense fallback={this.loading()}>
-                <Switch>
-                  {routes.map((route, idx) => {
-                    return route.component ? (
-                      <Route
-                        key={idx}
-                        path={route.path}
-                        exact={route.exact}
-                        name={route.name}
-                        render={props => (
-                          <route.component {...props} />
-                        )} />
-                    ) : (null);
-                  })}
-                  <Redirect from="/" to="/tours" />
-                </Switch>
+                <DefaultAside />
               </Suspense>
-            </Container>
-          </main>
-          <AppAside fixed>
+            </AppAside>
+          </div>
+
+          <AppFooter>
             <Suspense fallback={this.loading()}>
-              <DefaultAside />
+              <DefaultFooter />
             </Suspense>
-          </AppAside>
+          </AppFooter>
         </div>
-      
-        <AppFooter>
-          <Suspense fallback={this.loading()}>
-            <DefaultFooter />
-          </Suspense>
-        </AppFooter>
-      </div>
       </React.Fragment>
-      );
-      return (!isAccess ? <Redirect to="/login" /> : form);
+    );
+    return (!isAccess ? <Redirect to="/login" /> : form);
   }
 }
 
@@ -130,12 +129,12 @@ const mapStateToProps = state => {
 
 const mapDispatch = dispatch => {
   return {
-     logout: () =>
-          dispatch(userAction.logout())
+    logout: () =>
+      dispatch(userAction.logout())
 
   };
 };
 
-const  DefaultLayout=
-        connect(mapStateToProps, mapDispatch)(DefaultLayoutContainer);
+const DefaultLayout =
+  connect(mapStateToProps, mapDispatch)(DefaultLayoutContainer);
 export default DefaultLayout;
