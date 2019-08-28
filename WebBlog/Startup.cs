@@ -18,6 +18,7 @@ using TouristApp.Domain.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using TouristApp.Domain.Models.FacebookModels;
 using System;
+using TouristApp.Helpers;
 
 namespace TouristApp
 {
@@ -119,6 +120,18 @@ namespace TouristApp
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseSession();
+
+            #region InitStaticFiles Images
+            string pathRoot = InitStaticFiles
+                .CreateFolderServer(env, this.Configuration,
+                    new string[] { "ImagesPath" });
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(pathRoot),
+                RequestPath = new PathString("/" + Configuration.GetValue<string>("ImagesUrl"))
+            });
+            #endregion;
 
             app.UseStaticFiles(new StaticFileOptions()
             {
