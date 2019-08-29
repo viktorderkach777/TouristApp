@@ -53,7 +53,7 @@ class ToursContainer extends Component {
                 <Card className="CardTours">
                     <CardBody>
                         <CardHeader>217 знайдено</CardHeader>
-                        <CardText >
+                        <div >
                             <FormGroup row className="justify-content-md-center">
                                 <h4>Країни вильоту</h4>
                                 <Label for="checkbox2" ></Label>
@@ -111,7 +111,7 @@ class ToursContainer extends Component {
 
 
 
-                        </CardText>
+                        </div>
 
 
                         <Row className="justify-content-md-center">
@@ -202,12 +202,12 @@ class ToursContainer extends Component {
         return (
 
             <React.Fragment>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-3">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-3">
                             {filterlist}
                         </div>
-                        <div class="col-9">
+                        <div className="col-9">
                             <SortToolbar/>
                             {toursList}
                             <SpinnerWidget loading={isListLoading} />

@@ -203,9 +203,17 @@ const mapState = (state) => {
   }
 }
 
+const mapDispatch = (dispatch)=>{
+  return{
+    register: async()=>{
+      await dispatch(register)
+    }
+  } 
+}
+
 Register.propTypes =
     {
       register: PropTypes.func.isRequired
     }
 
-export default connect(mapState, {register})(Register);
+export default connect(mapState, mapDispatch)(Register);

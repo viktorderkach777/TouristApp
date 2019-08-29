@@ -177,7 +177,7 @@ class LoginForm extends Component {
       </div>
       </React.Fragment>
       );
-      return ( this.state.done ? <Redirect to= {this.state.profileUrl} /> : form );
+      return ( done ? <Redirect to= {profileUrl} /> : form );
   }
 }
 
@@ -195,8 +195,8 @@ LoginForm.propTypes =
   };
   const mapDispatch = dispatch => {
     return {
-        login: (model) =>
-            dispatch(userAction.login(model))
+        login: async(model) =>
+            dispatch(await userAction.login(model))
 
     };
 };

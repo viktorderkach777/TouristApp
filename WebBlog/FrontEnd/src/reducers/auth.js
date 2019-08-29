@@ -2,7 +2,7 @@ import isEmpty from 'lodash/isEmpty';
 import { createSlice } from 'redux-starter-kit';
 import update from '../helpers/update';
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
+//import jwt from 'jsonwebtoken';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import {serverUrl} from '../config';
 import BaseService from '../Services/Base/BaseService';
@@ -43,7 +43,7 @@ export const userReducer = createSlice({
 }
 
 
-export function login(data) {
+export let login= async(data)=> {
     console.log('--login data--', data);
     return dispatch => {
         return axios.post(`${serverUrl}api/Account/login`, data)
@@ -80,7 +80,7 @@ const loginByJWT = (tokens, dispatch) => {
   dispatch(userReducer.actions.setCurrentUser(user));
 } 
 
-export function register(data) {
+export let register= async(data) =>{
     console.log('--data--', data);
     return dispatch => {
         return axios.post(`${serverUrl}api/Account/Register`, data)
