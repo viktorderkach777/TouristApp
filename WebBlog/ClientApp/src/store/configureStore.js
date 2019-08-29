@@ -4,12 +4,14 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import auth from "../reducers/auth";
 import user from "../reducers/user";
 import { hotel as hotelSlice } from "../components/hotel/hotelReducer";
+import { captchaReducer } from "../components/captcha/reducer";
 
 export default function configureStore (history, initialState) {
   const reducers = {
     auth,
       userlist: user,
-      hotel: hotelSlice.reducer
+      hotel: hotelSlice.reducer,
+      captcha: captchaReducer,
   };
 
   const middleware = [

@@ -16,9 +16,20 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace TouristApp.Controllers
 {
+
+    public class RegisterViewModel
+    {
+        [Required(ErrorMessage = "Поле не може бути пустим!")]
+        public string CaptchaText { get; set; }
+        public string CaptchaKey { get; set; }
+    }
+
+
     [Produces("application/json")]
     [Route("api/Account")]
     //[RequireHttps]
@@ -138,6 +149,9 @@ namespace TouristApp.Controllers
             });
         }
 
+
+
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]CustomRegisterModel model)
         {
@@ -146,6 +160,14 @@ namespace TouristApp.Controllers
                 var errors = CustomValidator.GetErrorsByModel(ModelState);
                 return BadRequest(errors);
             }
+
+            //if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
+            //  model.CaptchaText))
+            //{
+            //    var invalid = new Dictionary<string, string>();
+            //    invalid.Add("captchaText", "Помилка вводу зображення на фото");
+            //    return BadRequest(invalid);
+            //}
 
             string path = _fileService.UploadImage(model.ImageBase64);
 
