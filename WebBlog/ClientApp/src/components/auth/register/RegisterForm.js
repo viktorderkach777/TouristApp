@@ -10,7 +10,7 @@ import { Row } from 'react-bootstrap'
 import 'cropperjs/dist/cropper.css';
 import Cropper from 'react-cropper';
 import validateemail from '../../../helpers/validateEmail';
-import axios from 'axios';
+//import axios from 'axios';
 import CaptchaWidget from '../../captcha';
 import * as captchaActions from '../../captcha/reducer';
 import get from 'lodash.get';
@@ -44,10 +44,8 @@ class RegisterForm extends Component {
 
     componentDidMount() {
         // CaptchaService.postNewKey();
-        // this.props.dispatch({type: 'captcha/KEY_POST_STARTED'});
-        console.log("jjjjjjjjjjjjjjj");
+        // this.props.dispatch({type: 'captcha/KEY_POST_STARTED'});       
         this.props.createNewKeyCaptcha();
-
     }
 
     changeInput(e) {
@@ -94,10 +92,7 @@ class RegisterForm extends Component {
     }
 
 
-    handleChange = (e) => {
-        //const { name, value } = e.target;
-        //this.setStateByErrors({ [name]: value });
-        //this.setStateByErrors(e.target.name, e.target.value);
+    handleChange = (e) => {       
 
         const { errors } = this.state;
         const { name, value } = e.target;
@@ -134,72 +129,36 @@ class RegisterForm extends Component {
         this.captchaSetStateByErrors(e.target.name, e.target.value);
     };
 
-
-
     onSubmitForm = (e) => {
         e.preventDefault();
 
         let errors = {};
         if (!validateemail(this.state.email)) errors.email = "Enter valid email"
         if (this.state.email === '') errors.email = "Cant't be empty"
-
         if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$/.test(this.state.password)) errors.password = "Password must be at least 6 characters and contain digits, upper and lower case"
         if (this.state.password === '') errors.password = "Cant't be empty"
         if (this.state.confirmPassword === '') errors.confirmPassword = "Cant't be empty"
         if (this.state.confirmPassword !== this.state.password) errors.confirmPassword = "Passwords do not match"
-
-        const { captchaText } = this.state;
-
-        const { keyValue } = this.props.captcha;
-
-        let captchaErrors = {};
-        if (captchaText === "") captchaErrors.captchaText = "���� �� ���� ���� ������!";
-
-        const CaptchaIsValid = Object.keys(captchaErrors).length === 0;
+        if (this.state.captchaText === '') errors.captchaText = "Cant't be empty"       
 
         const isValid = Object.keys(errors).length === 0
 
+        if (isValid) {
+            const { keyValue } = this.props.captcha;
+            const { email, password, confirmPassword, imageBase64,
+                firstName, middleName, lastName, dateOfBirth, captchaText } = this.state;
 
-        if (CaptchaIsValid) {
             this.setState({
+                isLoading: true,
                 captchaIsLoading: true
             });
-            const model = {
-                captchaText,
-                captchaKey: keyValue
-            };
-            console.log('model send data', model);
-            var url = "/api/account/register";
-            axios.post(url, model)
-                .then(() => this.setState({
-                    captchaDone: true
-                }),
-                    err => {
-                        //this.reloadCaptcha();
-                        this.setState({
-                            captchaErrors: err.response.data,
-                            captchaIsLoading: false
-                        })
-                    }
-                );
-        } else {
-            this.setState({ captchaErrors });
-        }
-
-
-
-
-        if (isValid) {
-            const { email, password, confirmPassword, imageBase64,
-                firstName, middleName, lastName, dateOfBirth } = this.state;
-
-            this.setState({ isLoading: true });
             this.props.register({
                 email, password, confirmPassword, imageBase64,
-                firstName, middleName, lastName, dateOfBirth
+                firstName, middleName, lastName, dateOfBirth, captchaText,
+                captchaKey: keyValue
             })
                 .then(
-                    () => this.setState({ done: true }),
+                    () => this.setState({ done: true, captchaDone: true }),
                     (err) => {
                         this.setState({ errors: err.response.data, isLoading: false });
                     }
@@ -222,8 +181,7 @@ class RegisterForm extends Component {
             dateOfBirth,
             imageBase64 } = this.state;
 
-        const { captcha } = this.props;
-        console.log('-----props-----', this.props);
+        const { captcha } = this.props;       
 
         const form = (<form onSubmit={this.onSubmitForm}>
             <h1 className="text-center">Register</h1>
@@ -339,7 +297,7 @@ class RegisterForm extends Component {
                     </div>
                 </Row>
             </div>
-            {/* <span className="input-group-text">
+            <span className="input-group-text">
                 <CaptchaWidget {...captcha} />
             </span>
             <div className="mb-3 input-group">
@@ -354,7 +312,7 @@ class RegisterForm extends Component {
                     className="form-control "
                     value={this.state.captchaText}
                     onChange={this.captchaHandleChange} />
-            </div> */}
+            </div>
             <div className="form-group">
                 <button type="submit" className="btn btn-info btn-block" disabled={isLoading}><span className="glyphicon glyphicon-send"></span>Register</button>
             </div>
@@ -386,10 +344,9 @@ const mapDispatch = {
 
 }
 
-
 RegisterForm.propTypes =
     {
         register: PropTypes.func.isRequired
     }
-//{ register }
+
 export default connect(mapState, mapDispatch)(RegisterForm);

@@ -61,7 +61,7 @@ export function register(data) {
     return dispatch => {
         return axios.post('api/Account/Register', data)
             .then(res => {
-                //console.log("data register", res);
+                console.log("data register", res);
                 loginByJWT(res.data, dispatch);
             });
     }

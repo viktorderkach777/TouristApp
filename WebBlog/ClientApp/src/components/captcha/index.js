@@ -18,9 +18,7 @@ import {serverUrl} from '../../config';
         }
     }
 
-     //componentWillReceiveProps() {
-
-     //}
+     
     //static getDerivedStateFromProps(nextProps, prevState) {
     //    console.log('asss');
     //    if(nextProps.keyValue!==prevState.keyValue) {
@@ -34,7 +32,7 @@ import {serverUrl} from '../../config';
         const { isKeyLoading } = this.props;
         //console.log('-----Captcha props-----', this.props);
         const {keyValue} = this.state;
-        console.log('----Capthca state----', this.state);
+        //console.log('----Capthca state----', this.state);
         const url= `${serverUrl}api/captchaImage/get-captcha/${keyValue}`;
         const content=(
             <div>

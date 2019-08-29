@@ -161,13 +161,13 @@ namespace TouristApp.Controllers
                 return BadRequest(errors);
             }
 
-            //if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
-            //  model.CaptchaText))
-            //{
-            //    var invalid = new Dictionary<string, string>();
-            //    invalid.Add("captchaText", "Помилка вводу зображення на фото");
-            //    return BadRequest(invalid);
-            //}
+            if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
+              model.CaptchaText))
+            {
+                var invalid = new Dictionary<string, string>();
+                invalid.Add("captchaText", "Помилка вводу зображення на фото");
+                return BadRequest(invalid);
+            }
 
             string path = _fileService.UploadImage(model.ImageBase64);
 
