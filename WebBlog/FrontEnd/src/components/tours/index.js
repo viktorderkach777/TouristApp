@@ -44,74 +44,73 @@ class ToursContainer extends Component {
 
     render() {
 
-        console.log('----state-----', this.state);
+        
         console.log('----Props-----', this.props);
         const { isListLoading } = this.props;
 
         const filterlist = (
             <Form>
-                <Card className="CardTours">
-                    <CardBody>
-                        <CardHeader>217 знайдено</CardHeader>
-                        <CardText >
-                            <FormGroup row className="justify-content-md-center">
-                                <h4>Країни вильоту</h4>
-                                <Label for="checkbox2" ></Label>
-                                <Col sm={{ size: 10 }}>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input type="checkbox" id="checkbox2" />{' '} Київ
-                    </Label>
-                                    </FormGroup>
-                                </Col>
-                                <Col sm={{ size: 10 }}>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input type="checkbox" id="checkbox2" />{' '} Львов
-                    </Label>
-                                    </FormGroup>
-                                </Col>
-                                <Col sm={{ size: 10 }}>
-                                    <FormGroup check>
-                                        <Label check>
-                                            <Input type="checkbox" id="checkbox2" />{' '} Одесса
-                    </Label>
-                                    </FormGroup>
-                                </Col>
-                            </FormGroup>
+            <Card className="CardTours">
+                <CardBody>
+                    <CardHeader>217 знайдено</CardHeader>
+                    
+                        <FormGroup row className="justify-content-md-center">
+                        <h4>  Країни вильоту </h4>
+                            <Label for="checkbox2" ></Label>
+                            <Col sm={{ size: 10 }}>
+                                <FormGroup check>
+                                    <Label check>
+                                        <Input type="checkbox" id="checkbox2" />{' '} Київ
+                                        </Label>
+                                </FormGroup>
+                            </Col>
+                            <Col sm={{ size: 10 }}>
+                                <FormGroup check>
+                                    <Label check> 
+                                        <Input type="checkbox" id="checkbox2" />{' '} Львов 
+                                        </Label>
+                                </FormGroup>
+                            </Col>
+                            <Col sm={{ size: 10 }}>
+                                <FormGroup check>
+                                    <Label check>
+                                        <Input type="checkbox" id="checkbox2" />{' '} Одесса 
+                                        </Label>
+                                </FormGroup>
+                            </Col>
+                        </FormGroup>
 
-                            <FormGroup row className="justify-content-md-center">
+                       
 
-                                <h4>Клас готелю</h4>
-                                <p>
-
-
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
-                                        <label class="form-check-label" for="inlineCheckbox2">2*</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" />
-                                        <label class="form-check-label" for="inlineCheckbox3">3*</label>
-                                    </div>
-
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2" />
-                                        <label class="form-check-label" for="inlineCheckbox2">4*</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option3" />
-                                        <label class="form-check-label" for="inlineCheckbox5">5*</label>
-                                    </div>
-                                </p>
+                            <h4>Клас готелю</h4>
+                           
 
 
-                            </FormGroup>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+                                    <label className="form-check-label" htmlFor="inlineCheckbox2">2*</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" />
+                                    <label className="form-check-label" htmlFor="inlineCheckbox3">3*</label>
+                                </div>
+
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" id="inlineCheckbox4" value="option2" />
+                                    <label className="form-check-label" htmlFor="inlineCheckbox4">4*</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="checkbox" id="inlineCheckbox5" value="option3" />
+                                    <label className="form-check-label" htmlFor="inlineCheckbox5">5*</label>
+                                </div>
+                            
+
+
+                            
 
 
 
 
-                        </CardText>
 
 
                         <Row className="justify-content-md-center">
@@ -202,12 +201,12 @@ class ToursContainer extends Component {
         return (
 
             <React.Fragment>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-3">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-3">
                             {filterlist}
                         </div>
-                        <div class="col-9">
+                        <div className="col-9">
                             <SortToolbar/>
                             {toursList}
                             <SpinnerWidget loading={isListLoading} />

@@ -77,7 +77,7 @@ class LoginForm extends Component {
           () =>  
           {
             this.setState({ done: true },this.getUrlToRedirect());
-            //this.getUrlToRedirect();
+            
           },
           (err) => this.setState({ errors: err.response.data, isLoading: false })
         );
@@ -177,7 +177,7 @@ class LoginForm extends Component {
       </div>
       </React.Fragment>
       );
-      return ( this.state.done ? <Redirect to= {this.state.profileUrl} /> : form );
+      return ( done ? <Redirect to= {profileUrl} /> : form );
   }
 }
 

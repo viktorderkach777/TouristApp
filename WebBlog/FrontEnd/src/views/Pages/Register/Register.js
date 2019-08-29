@@ -4,7 +4,8 @@ import { connect } from "react-redux";
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { register } from "../../../reducers/auth";
+
+import * as userAction from '../../../reducers/auth';
 //import CaptchaService from '../../../components/captcha/captchaService';
 //import * as captchaActions from '../../../components/captcha/reducer';
 //import axios from 'axios';
@@ -203,9 +204,17 @@ const mapState = (state) => {
   }
 }
 
+const mapDispatch = (dispatch)=>{
+  return{
+    register: (model)=>{
+      dispatch(userAction.register(model))
+    }
+  } 
+}
+
 Register.propTypes =
     {
       register: PropTypes.func.isRequired
     }
 
-export default connect(mapState, {register})(Register);
+export default connect(mapState, mapDispatch)(Register);
