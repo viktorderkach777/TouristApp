@@ -5,6 +5,8 @@ import get from 'lodash.get';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { register } from "../../../reducers/auth";
+import Google from "../../../components/google";
+import Facebook from '../../../components/facebook';
 //import CaptchaService from '../../../components/captcha/captchaService';
 //import * as captchaActions from '../../../components/captcha/reducer';
 //import axios from 'axios';
@@ -52,7 +54,7 @@ class Register extends Component {
     e.preventDefault();
 
     let errors = {};
-    
+
     if (this.state.email === '') errors.email = "Cant't be empty";
 
     if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$/.test(this.state.password)) errors.password = "Password must be at least 6 characters and contain digits, upper and lower case"
@@ -63,21 +65,21 @@ class Register extends Component {
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
-        const { email, password, confirmPassword, username } = this.state;
-        this.setState({ isLoading: true });
-        this.props.register({ email, password, confirmPassword,username})
-            .then(
-                () => this.setState({ done: true }),
-                (err) => {
-                    this.setState({ errors: err.response.data, isLoading: false });
-                }
-            );
+      const { email, password, confirmPassword, username } = this.state;
+      this.setState({ isLoading: true });
+      this.props.register({ email, password, confirmPassword, username })
+        .then(
+          () => this.setState({ done: true }),
+          (err) => {
+            this.setState({ errors: err.response.data, isLoading: false });
+          }
+        );
     }
     else {
-        this.setState({ errors });
+      this.setState({ errors });
     }
-  
-};
+
+  };
 
   render() {
     console.log('---FormRegister state----', this.state);
@@ -87,108 +89,111 @@ class Register extends Component {
       email,
       password,
       confirmPassword,
-      } = this.state;
-    
+    } = this.state;
+
     const form = (
       <React.Fragment>
-      <div className="app flex-row align-items-center">
-        <Container>
-          <Row className="justify-content-center">
-            <Col md="9" lg="7" xl="6">
-              <Card className="mx-4">
-                <CardBody className="p-4">
-                  <Form onSubmit={this.onSubmitForm}>
+        <div className="app flex-row align-items-center">
+          <Container>
+            <Row className="justify-content-center">
+              <Col md="9" lg="7" xl="6">
+                <Card className="mx-4">
+                  <CardBody className="p-4">
+                    <Form onSubmit={this.onSubmitForm}>
 
-                    <h1>Register</h1>
-                    <p className="text-muted">Create your account</p>
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-user"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input
-                        type="text"
-                        placeholder="Username"
-                        autoComplete="username"
-                        id="username"
-                        name="username"
-                        value={username}
-                        onChange={this.handleChange}
-                      />
-                    </InputGroup>
+                      <h1>Register</h1>
+                      <p className="text-muted">Create your account</p>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-user"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                          type="text"
+                          placeholder="Username"
+                          autoComplete="username"
+                          id="username"
+                          name="username"
+                          value={username}
+                          onChange={this.handleChange}
+                        />
+                      </InputGroup>
 
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>@</InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="text"
-                        placeholder="Email"
-                        autoComplete="email"
-                        id="email"
-                        name="email"
-                        value={email}
-                        onChange={this.handleChange} />
-                    </InputGroup>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>@</InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="text"
+                          placeholder="Email"
+                          autoComplete="email"
+                          id="email"
+                          name="email"
+                          value={email}
+                          onChange={this.handleChange} />
+                      </InputGroup>
 
-                    <InputGroup className="mb-3">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="password"
-                        placeholder="Password"
-                        autoComplete="new-password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={this.handleChange} />
-                    </InputGroup>
+                      <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-lock"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="password"
+                          placeholder="Password"
+                          autoComplete="new-password"
+                          id="password"
+                          name="password"
+                          value={password}
+                          onChange={this.handleChange} />
+                      </InputGroup>
 
-                    <InputGroup className="mb-4">
-                      <InputGroupAddon addonType="prepend">
-                        <InputGroupText>
-                          <i className="icon-lock"></i>
-                        </InputGroupText>
-                      </InputGroupAddon>
-                      <Input type="password"
-                        placeholder="Confirm password"
-                        autoComplete="confirmPassword"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        onChange={this.handleChange} />
-                    </InputGroup>
-
-                    
-
-                    <Button color="success" block disabled={isLoading} >Create Account</Button>
+                      <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="icon-lock"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="password"
+                          placeholder="Confirm password"
+                          autoComplete="confirmPassword"
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          value={confirmPassword}
+                          onChange={this.handleChange} />
+                      </InputGroup>
 
 
-                  </Form>
-                </CardBody>
-                <CardFooter className="p-4">
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook mb-1" block><span>facebook</span></Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter mb-1" block><span>twitter</span></Button>
-                    </Col>
-                  </Row>
-                </CardFooter>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </div>
+
+                      <Button color="success" block disabled={isLoading} >Create Account</Button>
+
+
+                    </Form>
+                  </CardBody>
+                  <CardFooter className="p-4">
+                    <Row>
+                      <Col xs="12" sm="6">
+                        {/* <Button className="btn-facebook mb-1" block><span>Enter with Facebook</span></Button> */}
+                        <Facebook />
+                      </Col>
+                      <Col xs="12" sm="6">
+                        {/* <Button className="btn-google mb-1" block><span>google</span></Button> */}
+                        {/* <Button style={{backgroundColor:"red", color:"white"}}  className="btn-google-plus  mb-1" block><span>Enter with Google</span></Button> */}
+                        <Google />
+                      </Col>
+                    </Row>
+                  </CardFooter>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </React.Fragment>
     );
     return (
       this.state.done ?
-          <Redirect to="/" /> : form
-  );
+        <Redirect to="/" /> : form
+    );
   }
 }
 
@@ -203,17 +208,17 @@ const mapState = (state) => {
   }
 }
 
-const mapDispatch = (dispatch)=>{
-  return{
-    register: async()=>{
+const mapDispatch = (dispatch) => {
+  return {
+    register: async () => {
       await dispatch(register)
     }
-  } 
+  }
 }
 
 Register.propTypes =
-    {
-      register: PropTypes.func.isRequired
-    }
+  {
+    register: PropTypes.func.isRequired
+  }
 
 export default connect(mapState, mapDispatch)(Register);

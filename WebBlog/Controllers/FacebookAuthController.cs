@@ -11,6 +11,7 @@ using TouristApp.Domain.Models.FacebookModels;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace TouristApp.Controllers
 {
@@ -24,6 +25,7 @@ namespace TouristApp.Controllers
         readonly IJWTTokenService _jWTTokenService;
         readonly IConfiguration _configuration;
         readonly IUserService _userService;
+        private readonly EFContext _db;
         private readonly FacebookAuthSettings _fbAuthSettings;       
         private static readonly HttpClient Client = new HttpClient();
 
@@ -34,7 +36,8 @@ namespace TouristApp.Controllers
             IJWTTokenService jWTTokenService,
             IConfiguration configuration,
             IUserService userService,
-            IOptions<FacebookAuthSettings> fbAuthSettingsAccessor)
+            IOptions<FacebookAuthSettings> fbAuthSettingsAccessor,
+            EFContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -44,6 +47,7 @@ namespace TouristApp.Controllers
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
             _userService = userService;
+            _db = db;
         }
 
         // POST api/externalauth/facebook
@@ -99,7 +103,7 @@ namespace TouristApp.Controllers
                 }).Result;
 
                 result = _userManager.AddToRoleAsync(user, roleName).Result;
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                //await _signInManager.SignInAsync(user, isPersistent: false);
 
                 if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
 
@@ -115,7 +119,34 @@ namespace TouristApp.Controllers
             }
             
             await _signInManager.SignInAsync(user, isPersistent: false);
-            return Ok(_jWTTokenService.CreateToken(_configuration, _userService, user, _userManager));
+            var _refreshToken = _db.RefreshTokens.SingleOrDefault(m => m.Id == user.Id);
+
+            if (_refreshToken == null)
+            {
+                RefreshToken t = new RefreshToken
+                {
+                    Id = user.Id,
+                    Token = Guid.NewGuid().ToString()
+                };
+
+                _db.RefreshTokens.Add(t);
+                _db.SaveChanges();
+            }
+            else
+            {
+                _refreshToken.Token = Guid.NewGuid().ToString();
+                _db.RefreshTokens.Update(_refreshToken);
+                _db.SaveChanges();
+            }
+
+            return Ok(
+            new
+            {
+                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
+                refToken = _refreshToken.Token
+            });
+
+            //return Ok(_jWTTokenService.CreateToken(_configuration, _userService, user, _userManager));
         }        
     }
 }

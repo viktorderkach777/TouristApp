@@ -20,14 +20,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
 namespace TouristApp.Controllers
-{
-
-    public class RegisterViewModel
-    {
-        [Required(ErrorMessage = "Поле не може бути пустим!")]
-        public string CaptchaText { get; set; }
-        public string CaptchaKey { get; set; }
-    }
+{ 
 
 
     [Produces("application/json")]

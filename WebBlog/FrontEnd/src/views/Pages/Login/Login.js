@@ -76,7 +76,7 @@ class LoginForm extends Component {
         .then(
           () =>  
           {
-            this.setState({ done: true },this.getUrlToRedirect());
+            this.setState({ done: true }, this.getUrlToRedirect());
             //this.getUrlToRedirect();
           },
           (err) => this.setState({ errors: err.response.data, isLoading: false })

@@ -46,6 +46,7 @@ class BrandButtons extends Component {
                   <Button size="sm" className="btn-vine btn-brand mr-1 mb-1"><i className="fa fa-vine"></i><span>Vine</span></Button>
                   <Button size="sm" className="btn-foursquare btn-brand mr-1 mb-1"><i className="fa fa-foursquare"></i><span>Forsquare</span></Button>
                   <Button size="sm" className="btn-vimeo btn-brand mr-1 mb-1"><i className="fa fa-vimeo"></i><span>Vimeo</span></Button>
+                  <Button style={{backgroundColor:"red", color:"white"}} size="sm" className="btn-google btn-brand mr-1 mb-1"><i className="fa fa-google"></i><span>Google</span></Button>
                 </p>
                 <h6>Size Normal</h6>
                 <p>

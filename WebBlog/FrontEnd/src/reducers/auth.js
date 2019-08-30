@@ -37,13 +37,14 @@ export const userReducer = createSlice({
     console.log('--logout--');
     return dispatch => {
         localStorage.removeItem('jwtToken');
+        localStorage.removeItem('refreshToken');
         setAuthorizationToken(false);
         dispatch(userReducer.actions.setCurrentUser({}));
     };
 }
 
 
-export let login= async(data)=> {
+export const login= async(data)=> {
     console.log('--login data--', data);
     return dispatch => {
         return axios.post(`${serverUrl}api/Account/login`, data)
@@ -54,7 +55,7 @@ export let login= async(data)=> {
 }
 
 
-export function facebook_enter(data) {
+export const facebook_enter= async(data) =>{
   return dispatch => {
     return axios.post(`${serverUrl}api/facebookauth/facebook`, data)
       .then(res => {
@@ -64,11 +65,14 @@ export function facebook_enter(data) {
 }
 
 
-export function google_enter(data) {
-  return dispatch => {
-    return axios.post(`${serverUrl}api/googleauth/google`, data)
+export const  google_enter= async(data)=> {
+  return async dispatch => {
+    return await axios.post(`${serverUrl}api/googleauth/google`, data)
       .then(res => {
         loginByJWT(res.data, dispatch);
+      })
+      .catch(err =>{
+        console.log("Google error", err)
       });
   }
 }
