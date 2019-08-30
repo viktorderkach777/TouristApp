@@ -2,7 +2,6 @@ import isEmpty from 'lodash/isEmpty';
 import { createSlice } from 'redux-starter-kit';
 import update from '../helpers/update';
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import {serverUrl} from '../config';
 import BaseService from '../Services/Base/BaseService';
@@ -43,15 +42,6 @@ export const userReducer = createSlice({
 }
 
 
-export function login(data) {
-    console.log('--login data--', data);
-    return dispatch => {
-        return axios.post(`${serverUrl}api/Account/login`, data)
-        .then(res => {
-          loginByJWT(res.data, dispatch);
-        });
-    }
-}
 
 
 export function facebook_enter(data) {
@@ -74,27 +64,40 @@ export function google_enter(data) {
 }
 
 
-const loginByJWT = (tokens, dispatch) => {
-  console.log('----loginByJWT----', tokens);
-  const user = BaseService.SetTokensGetUser(tokens);
-  dispatch(userReducer.actions.setCurrentUser(user));
-} 
+
 
 export function register(data) {
     console.log('--data--', data);
     return dispatch => {
         return axios.post(`${serverUrl}api/Account/Register`, data)
             .then(res => {
-                //console.log("data register", res);
+                console.log("data register", res);
                 loginByJWT(res.data, dispatch);
             });
     }
 }
 
+export function login(data) {
+  console.log('--login data--', data);
+  return dispatch => {
+      return axios.post(`${serverUrl}api/Account/login`, data)
+      .then(res => {
+        loginByJWT(res.data, dispatch);
+      });
+  }
+}
+
+const loginByJWT = (tokens, dispatch) => {
+  console.log('----loginByJWT----', tokens);
+  const user = BaseService.SetTokensGetUser(tokens);
+  dispatch(userReducer.actions.setCurrentUser(user));
+} 
+
+
 export function changePassword(data) {
-    return dispatch => {
-    return axios.post(`${serverUrl}api/Account/ChangePassword`, data);
-    }
+  return dispatch => {
+  return axios.post(`${serverUrl}api/Account/ChangePassword`, data);
+  }
 };
 
 export function forgotPassword(data) {

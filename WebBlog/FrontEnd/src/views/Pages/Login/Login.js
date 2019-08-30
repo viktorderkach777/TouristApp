@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from "react-redux";
-//import { login } from "../../../reducers/auth";
 import * as userAction from '../../../reducers/auth';
 import get from 'lodash.get';
 //import validateemail from '../../../helpers/validateEmail'; 
@@ -66,29 +65,20 @@ class LoginForm extends Component {
     if (this.state.password === '') errors.password = "Can't be empty!"
 
     const isValid = Object.keys(errors).length === 0
-    if (isValid) {
-     
+    if (isValid)
+    {
       const { email, password } = this.state;
       console.log('validform',email, password);
       this.setState({ isLoading: true });
       console.log('----login---', this.props);
       this.props.login({ Email: email, Password: password })
         .then(
-          () =>  
-          {
-            this.setState({ done: true },this.getUrlToRedirect());
-            
-          },
+          () =>{this.setState({ done: true },this.getUrlToRedirect());},
           (err) => this.setState({ errors: err.response.data, isLoading: false })
         );
-      // this.props.login({ Email: email, Password: password })
-      //   .then(
-      //     () => this.setState({ done: true }),
-      //     this.getUrlToRedirect(),
-      //     (err) => this.setState({ errors: err.response.data, isLoading: false })
-      //   );
     }
-    else {
+    else 
+    {
       this.setState({ errors });
     }
   };
@@ -108,6 +98,7 @@ class LoginForm extends Component {
                     <Form onSubmit={this.onSubmitForm}>
                       <h1>Login</h1>
                       <p className="text-muted">Sign In to your account</p>
+                  {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">

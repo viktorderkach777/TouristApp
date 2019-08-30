@@ -78,8 +78,7 @@ namespace TouristApp.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             var _refreshToken = _db.RefreshTokens
-                
-                .SingleOrDefault(m => m.Id == user.Id);
+               .SingleOrDefault(m => m.Id == user.Id);
             if (_refreshToken == null)
             {
                 RefreshToken t = new RefreshToken
@@ -181,7 +180,31 @@ namespace TouristApp.Controllers
             
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(_jWTTokenService.CreateToken(_configuration, _userService, user, _userManager));
+            var _refreshToken = _db.RefreshTokens
+               .SingleOrDefault(m => m.Id == user.Id);
+            if (_refreshToken == null)
+            {
+                RefreshToken t = new RefreshToken
+                {
+                    Id = user.Id,
+                    Token = Guid.NewGuid().ToString()
+                };
+                _db.RefreshTokens.Add(t);
+                _db.SaveChanges();
+            }
+            else
+            {
+                _refreshToken.Token = Guid.NewGuid().ToString();
+                _db.RefreshTokens.Update(_refreshToken);
+                _db.SaveChanges();
+            }
+
+            return Ok(
+            new
+            {
+                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
+                refToken = _refreshToken.Token
+            });
         }
 
         [HttpPost("ChangePassword")]

@@ -83,9 +83,7 @@ class ToursContainer extends Component {
                        
 
                             <h4>Клас готелю</h4>
-                           
-
-
+ 
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
                                     <label className="form-check-label" htmlFor="inlineCheckbox2">2*</label>
@@ -104,15 +102,6 @@ class ToursContainer extends Component {
                                     <label className="form-check-label" htmlFor="inlineCheckbox5">5*</label>
                                 </div>
                             
-
-
-                            
-
-
-
-
-
-
                         <Row className="justify-content-md-center">
                             <Button className="btn btn-info btn-sm" style={{ backgroundColor: "#ff9000" }}>Примінити</Button>
                         </Row>
