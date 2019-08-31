@@ -40,7 +40,7 @@ class DefaultLayoutContainer extends Component {
 
   render() {
     const { isAuthenticated, user } = this.props.auth;
-    const { roles } = this.props.auth.user;
+    const { roles } = this.props.auth.user||"User";
     var isAccess = false;
 
     if (isAuthenticated === true) {
