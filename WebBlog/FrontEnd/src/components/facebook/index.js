@@ -4,24 +4,19 @@ import { Redirect } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { facebook_enter } from '../../reducers/auth';
 import { connect } from "react-redux";
-//import { REACT_APP_FACEBOOK_CLIENT_ID } from '../config.js';
+import { REACT_APP_FACEBOOK_CLIENT_ID } from '../../config';
 import CentrPageSpinner from "../CentrPageSpinner";
 
 class Facebook extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            errors: {
-            },
-            done: false,
-            isLoading: false
-        };
-    }
+    state = {
+        errors: {
+        },
+        done: false,
+        isLoading: false
+    };
 
     render() {
-
-        const responseFacebook = (response) => {
-            console.log("facebook", response);
+        const responseFacebook = (response) => {           
             this.setState({ isLoading: true });
             this.props.facebook_enter({ accessToken: response.accessToken })
                 .then(
@@ -30,8 +25,7 @@ class Facebook extends Component {
                 );
         }
 
-        const { isLoading } = this.state;
-        const REACT_APP_FACEBOOK_CLIENT_ID ='880476432333688';        
+        const { isLoading } = this.state;                
         const form = (
             <React.Fragment>
                 <FacebookLogin
@@ -40,8 +34,7 @@ class Facebook extends Component {
                     fields="name,email,picture,first_name,last_name"
                     callback={responseFacebook}
 
-                    render={renderProps => (
-                        //<FacebookLoginButton onClick={renderProps.onClick} />
+                    render={renderProps => (                       
                         <Button onClick={renderProps.onClick} className="btn-facebook mb-1" block><span>Enter with Facebook</span></Button>
                     )}
                 />
@@ -57,7 +50,6 @@ const mapDispatchToProps = dispatch => {
     return {
         facebook_enter: async (model) =>
             dispatch(await facebook_enter(model))
-
     }
 };
 
