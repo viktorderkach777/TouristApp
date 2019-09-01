@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { facebook_enter } from '../../reducers/auth';
 import { connect } from "react-redux";
-import { REACT_APP_FACEBOOK_CLIENT_ID } from '../../config';
 import CentrPageSpinner from "../CentrPageSpinner";
 
 class Facebook extends Component {
@@ -29,7 +28,7 @@ class Facebook extends Component {
         const form = (
             <React.Fragment>
                 <FacebookLogin
-                    appId={REACT_APP_FACEBOOK_CLIENT_ID}
+                    appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}
                     autoLoad={false}
                     fields="name,email,picture,first_name,last_name"
                     callback={responseFacebook}

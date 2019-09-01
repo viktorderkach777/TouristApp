@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { Button } from 'reactstrap';
 import { google_enter } from '../../reducers/auth';
 import { connect } from "react-redux";
-import { REACT_APP_GOOGLE_CLIENT_ID } from '../../config';
 import CentrPageSpinner from "../CentrPageSpinner";
 
 class Google extends Component {
@@ -15,7 +14,7 @@ class Google extends Component {
         isLoading: false
     };
 
-    render() {
+    render() {       
         const responseGoogle = (response) => {
             this.setState({ isLoading: true });
             this.props.google_enter({ TokenId: response.Zi.id_token })
@@ -29,7 +28,7 @@ class Google extends Component {
         const form = (
             <React.Fragment>
                 <GoogleLogin
-                    clientId={REACT_APP_GOOGLE_CLIENT_ID}
+                    clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
                     render={renderProps => (
