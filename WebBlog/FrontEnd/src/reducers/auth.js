@@ -66,16 +66,18 @@ export function google_enter(data) {
 
 
 
-export function register(data) {
+//export function register(data)
+export let register= (data)=> 
+ {
     console.log('--data--', data);
     return dispatch => {
-        return axios.post(`${serverUrl}api/Account/Register`, data)
-            .then(res => {
-                console.log("data register", res);
-                loginByJWT(res.data, dispatch);
-            });
-    }
+          return axios.post(`${serverUrl}api/Account/Register`, data)
+              .then(res =>{
+                          loginByJWT(res.data, dispatch);
+                        });
+   }
 }
+
 
 export function login(data) {
   console.log('--login data--', data);
@@ -88,9 +90,9 @@ export function login(data) {
 }
 
 const loginByJWT = (tokens, dispatch) => {
-  console.log('----loginByJWT----', tokens);
-  const user = BaseService.SetTokensGetUser(tokens);
+   const user = BaseService.SetTokensGetUser(tokens);
   dispatch(userReducer.actions.setCurrentUser(user));
+ 
 } 
 
 

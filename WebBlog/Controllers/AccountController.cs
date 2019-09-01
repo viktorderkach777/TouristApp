@@ -88,6 +88,7 @@ namespace TouristApp.Controllers
                 };
                 _db.RefreshTokens.Add(t);
                 _db.SaveChanges();
+                _refreshToken = t;
             }
             else
             {
@@ -170,11 +171,11 @@ namespace TouristApp.Controllers
             }
             var roleName = "User";
 
-            var roleresult = _roleManager.CreateAsync(new DbRole
-            {
-                Name = roleName
+            //var roleresult = _roleManager.CreateAsync(new DbRole
+            //{
+            //    Name = roleName
 
-            }).Result;
+            //}).Result;
 
             result = _userManager.AddToRoleAsync(user, roleName).Result;
             
@@ -191,6 +192,7 @@ namespace TouristApp.Controllers
                 };
                 _db.RefreshTokens.Add(t);
                 _db.SaveChanges();
+                _refreshToken = t;
             }
             else
             {
@@ -204,7 +206,8 @@ namespace TouristApp.Controllers
             {
                 token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
                 refToken = _refreshToken.Token
-            });
+            }
+            );
         }
 
         [HttpPost("ChangePassword")]

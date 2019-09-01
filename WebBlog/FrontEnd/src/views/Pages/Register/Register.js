@@ -23,11 +23,12 @@ const iconsColor ={
 
 //const imageMaxSize = 3000;
 
-class Register extends Component {
+class RegisterForm extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      profileUrl:'/',
       email: '',
       password: '',
       confirmPassword: '',
@@ -50,7 +51,24 @@ class Register extends Component {
     //this.props.createNewKeyCaptcha();
 
   }
- 
+  getUrlToRedirect = () => {
+    let auth = this.props.auth;
+    console.log('---getUrlToRedirect----', auth);
+    if (auth.isAuthenticated) {
+        let roles = auth.user.roles;
+        if (roles=== "User") {
+            this.setState({ profileUrl: "/tours" });
+        }
+        else if (roles==="Admin") {
+            this.setState({ profileUrl: "/admin/dashboard" });
+        }
+        else 
+         {
+          this.setState({ profileUrl: "/" });
+         }
+    }
+    console.log('---profileUrl:',this.state.profileUrl);
+  };
 
   changeInput=(e)=> {
     e.preventDefault();
@@ -152,28 +170,34 @@ cropImage=()=> {
         const { email, password, confirmPassword, imageBase64,
           firstName, middleName, lastName, dateOfBirth } = this.state;
         this.setState({ isLoading: true });
-        this.props.register({ email, password, confirmPassword, imageBase64,
-          firstName,  middleName, lastName, dateOfBirth})
-            .then(
-              () => {this.setState({ done: true })
-              console.log('---FormRegister step1----');
-            
-            },
-              (err) => {
-                  this.setState({ errors: err.response.data, isLoading: false });
-              }
-            );
+        this.setState({ done: true });
+        this.props.register({ email, password, confirmPassword, firstName,  middleName, lastName, dateOfBirth, imageBase64})
+        .then(
+          () =>{this.setState({ done: true },this.getUrlToRedirect());},
+          (err) => this.setState({ errors: err.response.data, isLoading: false })
+        );
+        
+          // .then(
+          //   () =>{
+          //     this.setState({ done: true });
+          //    },
+          //   (err) => this.setState({ errors: err.response.data, isLoading: false })
+          //    );
     }
     else {
         this.setState({ errors });
     }
+
+    
+   
   
 };
 
   render() {
     console.log('---FormRegister state----', this.state);
     console.log('---FormRegister props----', this.props);
-    const { errors,
+    const {
+      errors,
       isLoading,
       email,
       password,
@@ -360,7 +384,7 @@ cropImage=()=> {
                 </Row>
                 </div>
 
-                    <Button  type="submit" color="success" block disabled={isLoading} >Create Account</Button>
+                    <Button   color="success" block disabled={isLoading} >Create Account</Button>
                     
                   </Form>
                 </CardBody>
@@ -383,13 +407,14 @@ cropImage=()=> {
     );
     return (
       this.state.done ?
-          <Redirect to="/" /> : form
+      <Redirect to="/" /> : form
   );
   }
 }
 
 const mapState = (state) => {
   return {
+    auth: get(state, 'auth'),
     captcha: {
       keyValue: get(state, 'captcha.key.data'),
       isKeyLoading: get(state, 'captcha.key.loading'),
@@ -399,15 +424,7 @@ const mapState = (state) => {
   }
 }
 
-const mapDispatch = (dispatch)=>{
-  return{
-    register: (model)=>{
-      dispatch(userAction.register(model))
-    }
-  } 
-}
-
-Register.propTypes =
+RegisterForm.propTypes =
     {
       register: PropTypes.func.isRequired
      // isKeyError:PropTypes.bool.isRequired,
@@ -415,4 +432,11 @@ Register.propTypes =
      // isSuccess:PropTypes.bool.isRequired
     }
 
-export default connect(mapState, mapDispatch)(Register);
+const mapDispatch = dispatch=>{
+  return {
+    register: (model) =>
+      dispatch(userAction.register(model))
+    };
+  }; 
+  const Register = connect(mapState , mapDispatch)(RegisterForm);
+export default Register;
