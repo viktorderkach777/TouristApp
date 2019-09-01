@@ -1,22 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using TouristApp.DAL.Entities;
-using TouristApp.Domain.Interfaces;
-using TouristApp.Domain.Models;
-using TouristApp.ViewModels;
-using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 using Microsoft.Extensions.Configuration;
 using System.Drawing.Drawing2D;
@@ -33,6 +18,7 @@ namespace TouristApp.Controllers
         private const string FontFamily = "Arial";
         private readonly static Brush Foreground = Brushes.Navy;
         private readonly static Color Background = Color.Silver;
+
         //деформация текста
         private const int WarpFactory = 5;
         private const Double xAmp = WarpFactory * ImageWidth / 150;
@@ -58,12 +44,14 @@ namespace TouristApp.Controllers
             }
             return new GraphicsPath(deformed, path.PathTypes);
         }
+
         public CaptchaImageController(IConfiguration configuration,
             IEmailSender emailSender)
         {
             _configuration = configuration;
             _emailSender = emailSender;
         }
+
         [HttpPost("post-guid-captcha")]
         public IActionResult GuidCaptcha()
         {
@@ -126,6 +114,5 @@ namespace TouristApp.Controllers
 
             return Ok();
         }
-
     }
 }

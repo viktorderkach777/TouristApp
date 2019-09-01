@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TouristApp.Helpers
 {
@@ -19,6 +16,7 @@ namespace TouristApp.Helpers
             context.Session.Remove(SessionKeyPrefix + challengeGuid);
             return ((solution != null) && (attenptedSolution == solution));
         }
+
         public static string MakeRandomSolution()
         {
             Random rng = new Random(Guid.NewGuid().GetHashCode());

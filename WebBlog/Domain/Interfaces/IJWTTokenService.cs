@@ -8,5 +8,6 @@ namespace TouristApp.Domain.Interfaces
     {
         //string CreateToken(IConfiguration configuration, DbUser user, UserManager<DbUser> userManager);
         string CreateToken(IConfiguration configuration, IUserService userService, DbUser user, UserManager<DbUser> userManager);
+        string CreateJWTTokenAndRefreshToken(IConfiguration configuration, IUserService userService, DbUser user, UserManager<DbUser> userManager, EFContext db);
     }
 }

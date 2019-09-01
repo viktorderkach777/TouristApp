@@ -22,10 +22,10 @@ namespace TouristApp.Controllers
         {
             _configuration = configuration;
         }
-        private static string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        //private static string[] Summaries = new[]
+        //{
+        //    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        //};
 
         [HttpGet("images")]
         public IEnumerable<ImageItemViewModel> Images()
@@ -45,35 +45,35 @@ namespace TouristApp.Controllers
             return model;
         }
 
-        [HttpGet("[action]")]
+        //[HttpGet("[action]")]
         
-        public IEnumerable<WeatherForecast> WeatherForecasts(int startDateIndex)
-        {
-            var rng = new Random();
+        //public IEnumerable<WeatherForecast> WeatherForecasts(int startDateIndex)
+        //{
+        //    var rng = new Random();
 
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                DateFormatted = DateTime.Now.AddDays(index + startDateIndex).ToString("d"),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            });
-        }
+        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        //    {
+        //        DateFormatted = DateTime.Now.AddDays(index + startDateIndex).ToString("d"),
+        //        TemperatureC = rng.Next(-20, 55),
+        //        Summary = Summaries[rng.Next(Summaries.Length)]
+        //    });
+        //}
 
-        public class WeatherForecast
-        {
-            public string DateFormatted { get; set; }
+        //public class WeatherForecast
+        //{
+        //    public string DateFormatted { get; set; }
 
-            public int TemperatureC { get; set; }
+        //    public int TemperatureC { get; set; }
 
-            public string Summary { get; set; }
+        //    public string Summary { get; set; }
 
-            public int TemperatureF
-            {
-                get
-                {
-                    return 32 + (int)(TemperatureC / 0.5556);
-                }
-            }
-        }
+        //    public int TemperatureF
+        //    {
+        //        get
+        //        {
+        //            return 32 + (int)(TemperatureC / 0.5556);
+        //        }
+        //    }
+        //}
     }
 }
