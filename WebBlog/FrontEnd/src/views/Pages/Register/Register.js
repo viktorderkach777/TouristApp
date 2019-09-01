@@ -1,37 +1,100 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { connect } from "react-redux";
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { register } from "../../../reducers/auth";
-import Google from "../../../components/google";
+import defaultPath from './default-user.png'
+import * as userAction from '../../../reducers/auth';
+import classnames from 'classnames';
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
+import Google from '../../../components/google';
 import Facebook from '../../../components/facebook';
 //import CaptchaService from '../../../components/captcha/captchaService';
 //import * as captchaActions from '../../../components/captcha/reducer';
 //import axios from 'axios';
 //import CaptchaWidget from '../../../components/captcha';
 
+const iconsColor = {
+  backgroundColor: '#00aced',
+  color: '#fff',
+  borderColor: '#00aced'
+
+}
+
+//const imageMaxSize = 3000;
+
 class Register extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
       email: '',
       password: '',
       confirmPassword: '',
-      errors: {},
+      errors: {
+      },
       done: false,
-      isLoading: false
-
-    }
+      isLoading: false,
+      isLoadingPhoto: false,
+      src: '',
+      imageBase64: defaultPath,
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      dateOfBirth: ''
+    };
   }
   componentDidMount() {
     // CaptchaService.postNewKey();
     // this.props.dispatch({type: 'captcha/KEY_POST_STARTED'});
     //this.props.createNewKeyCaptcha();
 
+  }
+
+
+  changeInput = (e) => {
+    e.preventDefault();
+    let files;
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files;
+    } else if (e.target) {
+      files = e.target.files;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({ src: reader.result });
+    };
+
+    reader.readAsDataURL(files[0]);
+    this.setState({ isLoadingPhoto: true });
+
+    // const currentFile = files[0];
+    // const currentFileSize = currentFile.size;
+    // if (currentFileSize>imageMaxSize ){
+    //     reader.readAsDataURL(currentFile);
+    //     this.setState({ isLoadingPhoto: true });
+    // }
+    // else{
+    //     alert("Фото має бути більше 3Мb");
+
+    // };
+
+
+
+
+
+
+  };
+
+  cropImage = () => {
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
+      return;
+    }
+    this.setState({ imageBase64: this.cropper.getCroppedCanvas().toDataURL() });
+    this.setState({ isLoadingPhoto: false });
+    this.setState({ src: '' });
   }
   setStateByErrors = (name, value) => {
     if (!!this.state.errors[name]) {
@@ -50,6 +113,29 @@ class Register extends Component {
     this.setStateByErrors(e.target.name, e.target.value);
   };
 
+  operationImage = (e, type, value) => {
+    e.preventDefault();
+
+    switch (type) {
+
+      case 'ROTARE_LEFT':
+        this.cropper.rotate(value);
+        break;
+      case 'ROTARE_RIGHT':
+        this.cropper.rotate(-value);
+        break;
+      case 'ZOOM+':
+        this.cropper.zoom(value);
+        break;
+      case 'ZOOM-':
+        this.cropper.zoom(value);
+        break;
+      default:
+
+    }
+  };
+
+
   onSubmitForm = (e) => {
     e.preventDefault();
 
@@ -65,11 +151,19 @@ class Register extends Component {
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
-      const { email, password, confirmPassword, username } = this.state;
+      const { email, password, confirmPassword, imageBase64,
+        firstName, middleName, lastName, dateOfBirth } = this.state;
       this.setState({ isLoading: true });
-      this.props.register({ email, password, confirmPassword, username })
+      this.props.register({
+        email, password, confirmPassword, imageBase64,
+        firstName, middleName, lastName, dateOfBirth
+      })
         .then(
-          () => this.setState({ done: true }),
+          () => {
+            this.setState({ done: true })
+            console.log('---FormRegister step1----');
+
+          },
           (err) => {
             this.setState({ errors: err.response.data, isLoading: false });
           }
@@ -83,13 +177,18 @@ class Register extends Component {
 
   render() {
     console.log('---FormRegister state----', this.state);
-
-    const { username,
+    console.log('---FormRegister props----', this.props);
+    const { errors,
       isLoading,
       email,
       password,
       confirmPassword,
-    } = this.state;
+      firstName,
+      middleName,
+      lastName,
+      dateOfBirth,
+      imageBase64 } = this.state;
+
 
     const form = (
       <React.Fragment>
@@ -103,83 +202,180 @@ class Register extends Component {
 
                       <h1>Register</h1>
                       <p className="text-muted">Create your account</p>
-                      <InputGroup className="mb-3">
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="icon-user"></i>
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          type="text"
-                          placeholder="Username"
-                          autoComplete="username"
-                          id="username"
-                          name="username"
-                          value={username}
-                          onChange={this.handleChange}
-                        />
-                      </InputGroup>
+                      {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
-                          <InputGroupText>@</InputGroupText>
+                          <InputGroupText style={iconsColor}>@</InputGroupText>
                         </InputGroupAddon>
-                        <Input type="text"
+                        <Input
+                          className={classnames('form-control', { 'is-invalid': !!errors.email })}
+                          type="text"
                           placeholder="Email"
-                          autoComplete="email"
+                          autoComplete="Email"
                           id="email"
                           name="email"
                           value={email}
-                          onChange={this.handleChange} />
+                          onChange={this.handleChange}
+                        />
+                        {!!errors.email ? <span className="help-block">{errors.email}</span> : ''}
                       </InputGroup>
+
 
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
+                          <InputGroupText style={iconsColor}>
                             <i className="icon-lock"></i>
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="password"
+                          className={classnames('form-control', { 'is-invalid': !!errors.password })}
                           placeholder="Password"
                           autoComplete="new-password"
                           id="password"
                           name="password"
                           value={password}
                           onChange={this.handleChange} />
+                        {!!errors.password ? <span className="help-block">{errors.password}</span> : ''}
                       </InputGroup>
 
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
+                          <InputGroupText style={iconsColor}>
                             <i className="icon-lock"></i>
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="password"
+                          className={classnames('form-control', { 'is-invalid': !!errors.confirmPassword })}
                           placeholder="Confirm password"
                           autoComplete="confirmPassword"
                           id="confirmPassword"
                           name="confirmPassword"
                           value={confirmPassword}
                           onChange={this.handleChange} />
+                        {!!errors.confirmPassword ? <span className="help-block">{errors.confirmPassword}</span> : ''}
+                      </InputGroup>
+
+                      <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText style={iconsColor}>
+                            <i className="fa fa-user-o"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="text"
+                          className={classnames('form-control', { 'is-invalid': !!errors.firstName })}
+                          placeholder="First Name"
+                          autoComplete="first name"
+                          id="firstName"
+                          name="firstName"
+                          value={firstName}
+                          onChange={this.handleChange} />
+                        {!!errors.firstName ? <span className="help-block">{errors.firstName}</span> : ''}
+                      </InputGroup>
+
+                      <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText style={iconsColor}>
+                            <i className="fa fa-user-o"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="text"
+                          className={classnames('form-control', { 'is-invalid': !!errors.middleName })}
+                          placeholder="Middle Name"
+                          autoComplete="middleName"
+                          id="middleName"
+                          name="middleName"
+                          value={middleName}
+                          onChange={this.handleChange} />
+                        {!!errors.middleName ? <span className="help-block">{errors.middleName}</span> : ''}
                       </InputGroup>
 
 
+                      <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText style={iconsColor}>
+                            <i className="fa fa-user-o"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="text"
+                          className={classnames('form-control', { 'is-invalid': !!errors.lastName })}
+                          placeholder="Last Name"
+                          autoComplete="lastName"
+                          id="lastName"
+                          name="lastName"
+                          value={lastName}
+                          onChange={this.handleChange} />
+                        {!!errors.lastName ? <span className="help-block">{errors.lastName}</span> : ''}
+                      </InputGroup>
 
-                      <Button color="success" block disabled={isLoading} >Create Account</Button>
+                      <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText style={iconsColor}>
+                            <i className="fa fa-birthday-cake"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="date"
+                          className={classnames('form-control', { 'is-invalid': !!errors.dateOfBirth })}
+                          placeholder="Date Of birth "
+                          autoComplete="dateOfBirth"
+                          id="dateOfBirth"
+                          name="dateOfBirth"
+                          value={dateOfBirth}
+                          onChange={this.handleChange} />
+                        {!!errors.dateOfBirth ? <span className="help-block">{errors.dateOfBirth}</span> : ''}
+                      </InputGroup>
 
+                      <div className='container'>
+                        <Row>
+                          <div className="form-group">
+                            <label id="labelForInput" htmlFor="inputFile">
+                              {
+                                !this.state.isLoadingPhoto ?
+                                  <img
+                                    src={imageBase64}
+                                    className="img-circle"
+                                    id="image"
+                                    alt=""
+                                    name="image"
+                                    style={{ marginLeft: '80px' }}
+                                    width="250" />
+                                  : <p></p>
+                              }
+                              {!!errors.image ? <span className="help-block">{errors.image}</span> : ''}
+                              <input type="file" id="inputFile" onChange={this.changeInput} ></input>
+                            </label>
+                          </div>
+
+                          <div className={!this.state.isLoadingPhoto ? "div-hidden" : "div-visible form-group"} >
+                            <Cropper
+                              style={{ height: 400, width: 400, overflow: 'hidden' }}
+                              aspectRatio={1 / 1}
+                              preview=".img-preview"
+                              guides={false}
+                              src={this.state.src}
+                              ref={cropper => { this.cropper = cropper; }}
+                            />
+                            <p></p>
+                            <button type="button" onClick={this.cropImage} className="btn btn-primary">Crop Image</button>
+                            <button type="button" onClick={e => this.operationImage(e, 'ZOOM+', 0.1)} className="btn btn-primary  btn-crop"><i className="fa fa-search-plus" aria-hidden="true" /></button>
+                            <button type="button" onClick={e => this.operationImage(e, 'ZOOM-', -0.1)} className="btn btn-primary  btn-crop"><i className="fa fa-search-minus" aria-hidden="true" /></button>
+                            <button type="button" onClick={e => this.operationImage(e, 'ROTARE_LEFT', 45)} className="btn btn-primary  btn-crop"><i className="fa fa-repeat" aria-hidden="true" /></button>
+                            <button type="button" onClick={e => this.operationImage(e, 'ROTARE_RIGHT', 45)} className="btn btn-primary  btn-crop"><i className="fa fa-undo" aria-hidden="true" /></button>
+                          </div>
+                        </Row>
+                      </div>
+
+                      <Button type="submit" color="success" block disabled={isLoading} >Create Account</Button>
 
                     </Form>
                   </CardBody>
                   <CardFooter className="p-4">
                     <Row>
                       <Col xs="12" sm="6">
-                        {/* <Button className="btn-facebook mb-1" block><span>Enter with Facebook</span></Button> */}
-                        <Facebook />
+                        <Facebook/>
                       </Col>
                       <Col xs="12" sm="6">
-                        {/* <Button className="btn-google mb-1" block><span>google</span></Button> */}
-                        {/* <Button style={{backgroundColor:"red", color:"white"}}  className="btn-google-plus  mb-1" block><span>Enter with Google</span></Button> */}
-                        <Google />
+                        <Google/>
                       </Col>
                     </Row>
                   </CardFooter>
@@ -210,15 +406,18 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    register: async () => {
-      await dispatch(register)
-    }
-  }
+    register: async (model) =>
+      dispatch(await userAction.register(model))
+
+  };
 }
 
 Register.propTypes =
   {
     register: PropTypes.func.isRequired
+    // isKeyError:PropTypes.bool.isRequired,
+    // isKeyLoading:PropTypes.bool.isRequired,
+    // isSuccess:PropTypes.bool.isRequired
   }
 
 export default connect(mapState, mapDispatch)(Register);

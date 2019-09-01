@@ -25,7 +25,6 @@ class NavMenu extends React.Component {
   /*
   constructor (props) {
     super(props);
-
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false
@@ -36,7 +35,6 @@ class NavMenu extends React.Component {
       isOpen: !this.state.isOpen
     });
   }
-
 */
 
   render () {
@@ -51,7 +49,8 @@ class NavMenu extends React.Component {
     const userLink = (
       <NavItem>
         <NavLink tag={Link} className="text-dark" to="/user">
-        <i className="fas fa-user"></i>{}</NavLink>
+        {/* <i className="fas fa-user"></i>{user.name}</NavLink> */}
+        <i className="fas fa-user"></i></NavLink>
       </NavItem>
     );
 

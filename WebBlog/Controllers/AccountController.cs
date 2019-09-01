@@ -81,9 +81,9 @@ namespace TouristApp.Controllers
             var user = await _userManager.FindByEmailAsync(credentials.Email);
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            var _refreshToken = _db.RefreshTokens
-                
+            var _refreshToken = _db.RefreshTokens                
                 .SingleOrDefault(m => m.Id == user.Id);
+
             if (_refreshToken == null)
             {
                 RefreshToken t = new RefreshToken
@@ -91,14 +91,15 @@ namespace TouristApp.Controllers
                     Id = user.Id,
                     Token = Guid.NewGuid().ToString()
                 };
-                _db.RefreshTokens.Add(t);
-                _db.SaveChanges();
+                await _db.RefreshTokens.AddAsync(t);
+                await _db.SaveChangesAsync();
+                _refreshToken = t;
             }
             else
             {
                 _refreshToken.Token = Guid.NewGuid().ToString();
                 _db.RefreshTokens.Update(_refreshToken);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
             }
 
             return Ok(
@@ -154,13 +155,13 @@ namespace TouristApp.Controllers
                 return BadRequest(errors);
             }
 
-            if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
-              model.CaptchaText))
-            {
-                var invalid = new Dictionary<string, string>();
-                invalid.Add("captchaText", "Помилка вводу зображення на фото");
-                return BadRequest(invalid);
-            }
+            //if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
+            //  model.CaptchaText))
+            //{
+            //    var invalid = new Dictionary<string, string>();
+            //    invalid.Add("captchaText", "Помилка вводу зображення на фото");
+            //    return BadRequest(invalid);
+            //}
 
             string path = _fileService.UploadImage(model.ImageBase64);
 
@@ -196,7 +197,33 @@ namespace TouristApp.Controllers
             
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(_jWTTokenService.CreateToken(_configuration, _userService, user, _userManager));
+            var _refreshToken = _db.RefreshTokens
+
+                .SingleOrDefault(m => m.Id == user.Id);
+            if (_refreshToken == null)
+            {
+                RefreshToken t = new RefreshToken
+                {
+                    Id = user.Id,
+                    Token = Guid.NewGuid().ToString()
+                };
+                _db.RefreshTokens.Add(t);
+                _db.SaveChanges();
+                _refreshToken = t;
+            }
+            else
+            {
+                _refreshToken.Token = Guid.NewGuid().ToString();
+                _db.RefreshTokens.Update(_refreshToken);
+                _db.SaveChanges();
+            }
+
+            return Ok(
+            new
+            {
+                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
+                refToken = _refreshToken.Token
+            });           
         }
 
         [HttpPost("ChangePassword")]

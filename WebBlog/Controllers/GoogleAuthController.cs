@@ -80,18 +80,15 @@ namespace TouristApp.Controllers
 
                 }).Result;
 
-                result = _userManager.AddToRoleAsync(user, roleName).Result;
-
-                //await _signInManager.SignInAsync(user, isPersistent: false);
+                result = _userManager.AddToRoleAsync(user, roleName).Result;               
 
                 if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
+            var _refreshToken = _db.RefreshTokens
 
-            //Thread.Sleep(3000);
-            var _refreshToken = _db.RefreshTokens.SingleOrDefault(m => m.Id == user.Id);
-
+                .SingleOrDefault(m => m.Id == user.Id);
             if (_refreshToken == null)
             {
                 RefreshToken t = new RefreshToken
@@ -99,9 +96,9 @@ namespace TouristApp.Controllers
                     Id = user.Id,
                     Token = Guid.NewGuid().ToString()
                 };
-
                 _db.RefreshTokens.Add(t);
                 _db.SaveChanges();
+                _refreshToken = t;
             }
             else
             {
@@ -115,9 +112,7 @@ namespace TouristApp.Controllers
             {
                 token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
                 refToken = _refreshToken.Token
-            });
-
-            //return Ok(_jWTTokenService.CreateToken(_configuration, _userService, user, _userManager));          
+            });                    
         }       
     }
 }

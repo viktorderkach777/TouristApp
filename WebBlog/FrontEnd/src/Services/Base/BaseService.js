@@ -39,11 +39,11 @@ export default class BaseService {
         return user
     }
     // get static file with user's photo
-    static getUserImage = (guid) => {
-        return `${this._imageBase}/users/${guid}`;
-    }
-    // get static file with dish photo from some category
-    static getDishImage = (category, guid) => {
-        return `${this._imageBase}/food/${category}/${guid}`;
-    }
+    // static getUserImage = (guid) => {
+    //     return `${this._imageBase}/users/${guid}`;
+    // }
+    // // get static file with dish photo from some category
+    // static getDishImage = (category, guid) => {
+    //     return `${this._imageBase}/food/${category}/${guid}`;
+    // }
 }

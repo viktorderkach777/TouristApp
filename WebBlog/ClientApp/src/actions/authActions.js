@@ -56,10 +56,10 @@ const loginByJWT = (token, dispatch) => {
   dispatch(setCurrentUser(user));
 } 
 
-export function register(data) {
+export let register= (data)=> {
     console.log('--data--', data);
-    return dispatch => {
-        return axios.post('api/Account/Register', data)
+    return  dispatch => {
+        return  axios.post('api/Account/Register', data)
             .then(res => {
                 console.log("data register", res);
                 loginByJWT(res.data, dispatch);

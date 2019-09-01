@@ -49,7 +49,7 @@ class Google extends Component {
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
                     render={renderProps => (
-                        <Button onClick={renderProps.onClick} style={{ backgroundColor: "red", color: "white" }} className="btn-google-plus  mb-1" block><span>Enter with Google</span></Button>
+                        <Button onClick={renderProps.onClick} style={{ backgroundColor: "red", color: "white",zIndex:"0" }} className="btn-google-plus  mb-1" block><span>Enter with Google</span></Button>
                         // <GoogleLoginButton  />
                     )}
                 />

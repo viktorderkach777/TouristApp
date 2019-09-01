@@ -16,31 +16,52 @@ import * as captchaActions from '../../captcha/reducer';
 import get from 'lodash.get';
 
 class RegisterForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: '',
-            password: '',
-            confirmPassword: '',
-            errors: {
-            },
-            done: false,
-            isLoading: false,
-            isLoadingPhoto: false,
-            src: '',
-            imageBase64: defaultPath,
-            firstName: '',
-            middleName: '',
-            lastName: '',
-            dateOfBirth: '',
-            captchaErrors: {},
-            captchaText: "",
-            captchaDone: false,
-            captchaIsLoading: false
-        };
-        this.cropImage = this.cropImage.bind(this);
-        this.changeInput = this.changeInput.bind(this);
-    }
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         email: '',
+    //         password: '',
+    //         confirmPassword: '',
+    //         errors: {
+    //         },
+    //         done: false,
+    //         isLoading: false,
+    //         isLoadingPhoto: false,
+    //         src: '',
+    //         imageBase64: defaultPath,
+    //         firstName: '',
+    //         middleName: '',
+    //         lastName: '',
+    //         dateOfBirth: '',
+    //         //captchaErrors: {},
+    //         captchaText: "",
+    //         captchaDone: false,
+    //         captchaIsLoading: false
+    //     };
+    //     //this.cropImage = this.cropImage.bind(this);
+    //     //this.changeInput = this.changeInput.bind(this);
+    // }
+
+    state = {
+        email: '',
+        password: '',
+        confirmPassword: '',
+        errors: {
+        },
+        done: false,
+        isLoading: false,
+        isLoadingPhoto: false,
+        src: '',
+        imageBase64: defaultPath,
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        dateOfBirth: '',
+        //captchaErrors: {},
+        captchaText: "",
+        captchaDone: false,
+        captchaIsLoading: false
+    };
 
     componentDidMount() {
         // CaptchaService.postNewKey();
@@ -48,7 +69,7 @@ class RegisterForm extends Component {
         this.props.createNewKeyCaptcha();
     }
 
-    changeInput(e) {
+    changeInput = (e) => {
         e.preventDefault();
         let files;
         if (e.dataTransfer) {
@@ -63,7 +84,8 @@ class RegisterForm extends Component {
         reader.readAsDataURL(files[0]);
         this.setState({ isLoadingPhoto: true });
     }
-    cropImage() {
+
+    cropImage=()=> {
         if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
             return;
         }
@@ -113,15 +135,19 @@ class RegisterForm extends Component {
     }
 
     captchaSetStateByErrors = (name, value) => {
-        if (!!this.state.captchaErrors[name]) {
-            let captchaErrors = Object.assign({}, this.state.captchaErrors);
-            delete captchaErrors[name];
-            this.setState({
-                [name]: value,
-                captchaErrors
-            });
-        } else {
-            this.setState({ [name]: value });
+        if (!!this.state.errors[name]) {
+            let errors = Object.assign({}, this.state.errors);
+            delete errors[name];
+            this.setState(
+                {
+                    [name]: value,
+                    errors
+                }
+            )
+        }
+        else {
+            this.setState(
+                { [name]: value })
         }
     };
 
