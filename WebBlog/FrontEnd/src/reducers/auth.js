@@ -67,7 +67,7 @@ export function google_enter(data) {
 
 
 //export function register(data)
-export let register= (data)=> 
+export function register(data)
  {
     console.log('--data--', data);
     return dispatch => {

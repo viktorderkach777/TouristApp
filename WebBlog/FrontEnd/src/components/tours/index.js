@@ -36,16 +36,19 @@ const PaginationBar= React.lazy(() => import('../Pagination'));
 
 class ToursContainer extends Component {
 
+    state = {
+        currentPage:1,
+        totalPage:''
 
-    componentDidMount() {
-        this.props.getListTours();
     }
 
+    componentDidMount() {
+        this.props.getListTours(this.state.currentPage);
+    }
 
     render() {
-
-        
-        console.log('----Props-----', this.props);
+        console.log('----State Tours -----', this.state);
+        console.log('----Props Tours-----', this.props);
         const { isListLoading } = this.props;
 
         const filterlist = (
@@ -80,10 +83,10 @@ class ToursContainer extends Component {
                             </Col>
                         </FormGroup>
 
-                       
+
 
                             <h4>Клас готелю</h4>
- 
+
                                 <div className="form-check form-check-inline">
                                     <input className="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
                                     <label className="form-check-label" htmlFor="inlineCheckbox2">2*</label>
@@ -155,12 +158,12 @@ class ToursContainer extends Component {
                                         <i className="fa fa-clock iconColor" aria-hidden="true"></i>
                                         <span className="skin-color hidden-xs"> Тривалість: </span>
                                         <b>{item.daysCount}</b> ночей
-                                     </li>
+                                    </li>
                                     <li>
                                         <i className="fa fa-bus iconColor" aria-hidden="true"></i>
                                         <span className="skin-color hidden-xs"> Проїзд: </span>
                                         включений
-                                     </li>
+                                    </li>
                                     <li>
                                         <i className="fa fa-credit-card iconColor" aria-hidden="true"></i>
                                         <span className="skin-color hidden-xs"> Ціна за: </span>
@@ -201,7 +204,6 @@ class ToursContainer extends Component {
                             <SpinnerWidget loading={isListLoading} />
                             <PaginationBar/>
                         </div>
-
                     </div>
                 </div>
             </React.Fragment>
@@ -214,16 +216,19 @@ const mapState = state => {
         list: get(state, 'tours.list.data'),
         isListLoading: get(state, 'tours.list.loading'),
         isListError: get(state, 'tours.list.error'),
-
+        currentPage:get(state, 'tours.list.currentPage'),
+        totalPage:get(state, 'tours.list.totalPage'),
     };
 };
-const mapDispatch = dispatch => {
+
+const mapDispatch = (dispatch) => {
+
     return {
-        getListTours: () =>
-            dispatch(tourAction.getListTours())
-
+        getListTours: (model) =>  {     
+            dispatch(tourAction.getListTours(model))}
     };
 };
+
 
 const TourWidget =
     connect(mapState, mapDispatch)(ToursContainer);

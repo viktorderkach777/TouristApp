@@ -3,9 +3,14 @@ import {serverUrl} from '../../config';
 
 export default class TourService {
 
-    static getListTours() {
-        return axios.get(`${serverUrl}api/Hotel/list`);
+    static getListTours(model) {
+      //  model=1;
+        console.log('getListTours/curentPage:',model)
+        return axios.get(`${serverUrl}api/Hotel/list/`+ model);
     }
+    // static getListTours(Page) {
+    //     return axios.get(`${serverUrl}api/Hotel/list/`+ page);
+    // }
     
     //   static createNewAnimal (model) {
     //     return axios.post ('https://localhost:44320/api/animal/create', model);

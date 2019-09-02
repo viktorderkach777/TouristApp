@@ -15,9 +15,9 @@ namespace TouristApp.ViewModels
         public string Name { get; set; }
 
         public string Description { get; set; }
-    
+
         public int RoomsCount { get; set; }
-               
+
         public string Region { get; set; }
 
         public string Country { get; set; }
@@ -32,6 +32,15 @@ namespace TouristApp.ViewModels
         public string Date { get; set; }
 
         public int? DaysCount { get; set; }
+
+    }
+
+    public class ToursViewModel
+    {
+        public IEnumerable<HotelListViewModel> Tours { get; set; }
+        public int TotalPage { get; set; }
+        public int CurrentPage { get; set; }
+        //public SearchCountryViewModel Search { get; set; }
 
     }
 }
