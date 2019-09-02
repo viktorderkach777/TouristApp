@@ -79,5 +79,31 @@ namespace TouristApp.Domain.Services
 
             return JsonConvert.SerializeObject(tt, Formatting.Indented);
         }
+
+        public string CreateRefreshToken(IConfiguration configuration, IUserService userService, DbUser user, UserManager<DbUser> userManager, EFContext db)
+        {
+            var _refreshToken = db.RefreshTokens
+              .SingleOrDefault(m => m.Id == user.Id);
+
+            if (_refreshToken == null)
+            {
+                RefreshToken t = new RefreshToken
+                {
+                    Id = user.Id,
+                    Token = Guid.NewGuid().ToString()
+                };
+                db.RefreshTokens.Add(t);
+                db.SaveChanges();
+                _refreshToken = t;
+            }
+            else
+            {
+                _refreshToken.Token = Guid.NewGuid().ToString();
+                db.RefreshTokens.Update(_refreshToken);
+                db.SaveChanges();
+            }
+
+            return _refreshToken.Token;           
+        }
     }
 }
