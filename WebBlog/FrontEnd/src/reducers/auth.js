@@ -25,7 +25,7 @@ export const userReducer = createSlice({
         setCurrentUser: (state,action) => {
             let newState = state;
             const user = action.payload;
-            console.log("get user", user);
+            //console.log("get user", user);
             newState = update.set(state, 'isAuthenticated', !isEmpty(user));
             newState = update.set(newState, 'user', user);
             return newState;
@@ -34,7 +34,7 @@ export const userReducer = createSlice({
 });
 
   export function logout() {
-    console.log('--logout--');
+    //console.log('--logout--');
     return dispatch => {
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('refreshToken');
@@ -44,28 +44,24 @@ export const userReducer = createSlice({
 }
 
 
-export const login= async(data)=> {
-    console.log('--login data--', data);
-    return dispatch => {
-        return axios.post(`${serverUrl}api/Account/login`, data)
-        .then(res => {
-          loginByJWT(res.data, dispatch);
-        });
+export const login= (data)=> {
+    //console.log('--login data--', data);
+    return async dispatch => {
+        const res = await axios.post(`${serverUrl}api/Account/login`, data);
+      loginByJWT(res.data, dispatch);
     }
 }
 
 
-export const facebook_enter= async(data) =>{
-  return dispatch => {
-    return axios.post(`${serverUrl}api/facebookauth/facebook`, data)
-      .then(res => {
-        loginByJWT(res.data, dispatch);
-      });
+export const facebook_enter= (data) =>{
+  return async dispatch => {
+    const res = await axios.post(`${serverUrl}api/facebookauth/facebook`, data);
+    loginByJWT(res.data, dispatch);
   }
 }
 
 
-export const  google_enter= async(data)=> {
+export const  google_enter= (data)=> {
   return async dispatch => {
     return await axios.post(`${serverUrl}api/googleauth/google`, data)
       .then(res => {
@@ -77,21 +73,18 @@ export const  google_enter= async(data)=> {
   }
 }
 
-
 const loginByJWT = (tokens, dispatch) => {
-  console.log('----loginByJWT----', tokens);
+  //console.log('----loginByJWT----', tokens);
   const user = BaseService.SetTokensGetUser(tokens);
   dispatch(userReducer.actions.setCurrentUser(user));
 } 
 
-export let register= async(data) =>{
-    console.log('--data--', data);
-    return dispatch => {
-        return axios.post(`${serverUrl}api/Account/Register`, data)
-            .then(res => {
-                //console.log("data register", res);
-                loginByJWT(res.data, dispatch);
-            });
+export const register= (data) =>{
+    //console.log('--register data--', data);
+    return async dispatch => {
+        const res = await axios.post(`${serverUrl}api/Account/Register`, data);
+      //console.log("data register", res);
+      loginByJWT(res.data, dispatch);
     }
 }
 

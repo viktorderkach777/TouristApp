@@ -12,46 +12,66 @@ import 'cropperjs/dist/cropper.css';
 import Google from '../../../components/google';
 import Facebook from '../../../components/facebook';
 //import CaptchaService from '../../../components/captcha/captchaService';
-//import * as captchaActions from '../../../components/captcha/reducer';
+import * as captchaActions from '../../../components/captcha/reducer';
 //import axios from 'axios';
-//import CaptchaWidget from '../../../components/captcha';
+import CaptchaWidget from '../../../components/captcha';
 
 const iconsColor = {
   backgroundColor: '#00aced',
   color: '#fff',
   borderColor: '#00aced'
-
 }
 
 //const imageMaxSize = 3000;
 
-class Register extends Component {
+class RegisterForm extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      confirmPassword: '',
-      errors: {
-      },
-      done: false,
-      isLoading: false,
-      isLoadingPhoto: false,
-      src: '',
-      imageBase64: defaultPath,
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      dateOfBirth: ''
-    };
-  }
+  state = {
+    profileUrl:'/',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    errors: {
+    },
+    done: false,
+    isLoading: false,
+    isLoadingPhoto: false,
+    src: '',
+    imageBase64: defaultPath,
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    dateOfBirth: '',
+    captchaText: "",
+    captchaDone: false,
+    captchaIsLoading: false
+  };
+
   componentDidMount() {
     // CaptchaService.postNewKey();
     // this.props.dispatch({type: 'captcha/KEY_POST_STARTED'});
-    //this.props.createNewKeyCaptcha();
+    this.props.createNewKeyCaptcha();
 
   }
+
+  getUrlToRedirect = () => {
+    let auth = this.props.auth;
+    console.log('---getUrlToRedirect----', auth);
+    if (auth.isAuthenticated) {
+        let roles = auth.user.roles;
+        if (roles=== "User") {
+            this.setState({ profileUrl: "/tours" });
+        }
+        else if (roles==="Admin") {
+            this.setState({ profileUrl: "/admin/dashboard" });
+        }
+        else 
+         {
+          this.setState({ profileUrl: "/" });
+         }
+    }
+    console.log('---profileUrl:',this.state.profileUrl);
+  };
 
 
   changeInput = (e) => {
@@ -80,12 +100,6 @@ class Register extends Component {
     //     alert("Фото має бути більше 3Мb");
 
     // };
-
-
-
-
-
-
   };
 
   cropImage = () => {
@@ -96,6 +110,7 @@ class Register extends Component {
     this.setState({ isLoadingPhoto: false });
     this.setState({ src: '' });
   }
+
   setStateByErrors = (name, value) => {
     if (!!this.state.errors[name]) {
       let errors = Object.assign({}, this.state.errors);
@@ -111,6 +126,27 @@ class Register extends Component {
 
   handleChange = e => {
     this.setStateByErrors(e.target.name, e.target.value);
+  };
+
+  captchaSetStateByErrors = (name, value) => {
+    if (!!this.state.errors[name]) {
+      let errors = Object.assign({}, this.state.errors);
+      delete errors[name];
+      this.setState(
+        {
+          [name]: value,
+          errors
+        }
+      )
+    }
+    else {
+      this.setState(
+        { [name]: value })
+    }
+  };
+
+  captchaHandleChange = e => {
+    this.captchaSetStateByErrors(e.target.name, e.target.value);
   };
 
   operationImage = (e, type, value) => {
@@ -151,19 +187,24 @@ class Register extends Component {
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
+      console.log('this.props.captcha', this.props.captcha);
+      console.log('this.state', this.state);
+      const { keyValue } = this.props.captcha;
       const { email, password, confirmPassword, imageBase64,
-        firstName, middleName, lastName, dateOfBirth } = this.state;
-      this.setState({ isLoading: true });
+        firstName, middleName, lastName, dateOfBirth, captchaText } = this.state;
+
+
+      this.setState({
+        isLoading: true, captchaIsLoading: true
+      });
+
       this.props.register({
         email, password, confirmPassword, imageBase64,
-        firstName, middleName, lastName, dateOfBirth
+        firstName, middleName, lastName, dateOfBirth, captchaText,
+        captchaKey: keyValue
       })
         .then(
-          () => {
-            this.setState({ done: true })
-            console.log('---FormRegister step1----');
-
-          },
+          () => this.setState({ done: true, captchaDone: true },this.getUrlToRedirect()),
           (err) => {
             this.setState({ errors: err.response.data, isLoading: false });
           }
@@ -172,7 +213,6 @@ class Register extends Component {
     else {
       this.setState({ errors });
     }
-
   };
 
   render() {
@@ -189,6 +229,7 @@ class Register extends Component {
       dateOfBirth,
       imageBase64 } = this.state;
 
+    const { captcha } = this.props;
 
     const form = (
       <React.Fragment>
@@ -364,18 +405,34 @@ class Register extends Component {
                           </div>
                         </Row>
                       </div>
+                      <span className="input-group-text">
+                        <CaptchaWidget {...captcha} />
+                      </span>
+                      <div className="mb-3 input-group">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text">
+                            <i className="fa fa-pencil" aria-hidden="true"></i>
+                          </span>
+                        </div>
+                        <input id="captchaText"
+                          name="captchaText"
+                          type="text"
+                          className="form-control "
+                          value={this.state.captchaText}
+                          onChange={this.captchaHandleChange} />
+                      </div>
 
-                      <Button type="submit" color="success" block disabled={isLoading} >Create Account</Button>
+                      <Button  color="success" block disabled={isLoading} >Create Account</Button>
 
                     </Form>
                   </CardBody>
                   <CardFooter className="p-4">
                     <Row>
                       <Col xs="12" sm="6">
-                        <Facebook/>
+                        <Facebook />
                       </Col>
                       <Col xs="12" sm="6">
-                        <Google/>
+                        <Google />
                       </Col>
                     </Row>
                   </CardFooter>
@@ -395,6 +452,7 @@ class Register extends Component {
 
 const mapState = (state) => {
   return {
+    auth: get(state, 'auth'),
     captcha: {
       keyValue: get(state, 'captcha.key.data'),
       isKeyLoading: get(state, 'captcha.key.loading'),
@@ -406,18 +464,20 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    register: async (model) =>
-      dispatch(await userAction.register(model))
-
+    register: (model) =>
+      dispatch(userAction.register(model)),
+    createNewKeyCaptcha: () => {
+      dispatch(captchaActions.createNewKey());
+    }
   };
 }
 
-Register.propTypes =
+RegisterForm.propTypes =
   {
     register: PropTypes.func.isRequired
     // isKeyError:PropTypes.bool.isRequired,
     // isKeyLoading:PropTypes.bool.isRequired,
     // isSuccess:PropTypes.bool.isRequired
   }
-
-export default connect(mapState, mapDispatch)(Register);
+  const Register = connect(mapState , mapDispatch)(RegisterForm);
+  export default Register;

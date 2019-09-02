@@ -187,8 +187,8 @@ LoginForm.propTypes =
   
   const mapDispatch = dispatch => {
     return {
-        login: async(model) =>
-            dispatch(await userAction.login(model))
+        login: (model) =>
+            dispatch(userAction.login(model))
 
     };
 };

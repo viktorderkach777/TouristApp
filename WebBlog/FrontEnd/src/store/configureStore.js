@@ -10,7 +10,7 @@ import {userReducer} from '../reducers/auth'
 
 export default function configureStore (history, initialState) {
     const reducers = {
-      captcha: captchaReducer.reducer,
+      captcha: captchaReducer,//.reducer,
       auth:userReducer.reducer,
       tours:tours.reducer,
       refreshToken: RefreshToken.refreshReducer
