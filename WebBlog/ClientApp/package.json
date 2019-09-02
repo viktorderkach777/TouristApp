@@ -29,7 +29,7 @@
     "react-router-redux": "^5.0.0-alpha.8",
     "react-scripts": "^1.1.5",
     "react-social-login-buttons": "^3.0.0",
-    "reactstrap": "^6.3.0",
+    "reactstrap": "^6.5.0",
     "redux": "^3.7.2",
     "redux-starter-kit": "^0.6.3",
     "redux-thunk": "^2.2.0",

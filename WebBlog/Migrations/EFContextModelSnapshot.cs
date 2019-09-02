@@ -16,7 +16,7 @@ namespace TouristApp.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -521,6 +521,19 @@ namespace TouristApp.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("TouristApp.DAL.Entities.RefreshToken", b =>
+                {
+                    b.Property<string>("Id");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblRefreshTokens");
+                });
+
             modelBuilder.Entity("TouristApp.DAL.Entities.Regions", b =>
                 {
                     b.Property<string>("Id")
@@ -585,7 +598,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "1",
                             DaysCount = 6,
-                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(259),
+                            FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified),
                             HotelId = "1",
                             Price = 3300m
                         },
@@ -593,7 +606,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "2",
                             DaysCount = 8,
-                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(5324),
+                            FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified),
                             HotelId = "2",
                             Price = 4400m
                         },
@@ -601,7 +614,7 @@ namespace TouristApp.Migrations
                         {
                             Id = "3",
                             DaysCount = 10,
-                            FromData = new DateTime(2019, 8, 19, 2, 16, 10, 872, DateTimeKind.Local).AddTicks(5329),
+                            FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified),
                             HotelId = "2",
                             Price = 5500m
                         });
@@ -712,6 +725,14 @@ namespace TouristApp.Migrations
                     b.HasOne("TouristApp.DAL.Entities.DbUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("TouristApp.DAL.Entities.DbUser", "User")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("TouristApp.DAL.Entities.RefreshToken", "Id")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Regions", b =>

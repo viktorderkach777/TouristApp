@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using TouristApp.DAL.Entities;
 using TouristApp.Domain.Interfaces;
-using TouristApp.Domain.Models;
 using TouristApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +42,7 @@ namespace TouristApp.Controllers
         }
 
         [HttpGet("list")]
+      
         public IEnumerable<HotelListViewModel> Get()
         {
             var model = _context
@@ -79,11 +71,7 @@ namespace TouristApp.Controllers
 
             Thread.Sleep(1000);
 
-
             return model;
         }
-
-
-
     }
 }

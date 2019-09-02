@@ -15,7 +15,7 @@ namespace TouristApp.Controllers
     [Produces("application/json")]
     [Route("api/User")]
     [ApiController]
-    [Authorize]
+    
     public class UserController : ControllerBase
     {
         readonly UserManager<DbUser> _userManager;        

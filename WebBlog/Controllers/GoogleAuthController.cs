@@ -8,6 +8,8 @@ using TouristApp.DAL.Entities;
 using TouristApp.Domain.Interfaces;
 using Google.Apis.Auth;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
+using System.Threading;
 
 namespace TouristApp.Controllers
 {
@@ -19,14 +21,18 @@ namespace TouristApp.Controllers
         readonly SignInManager<DbUser> _signInManager;    
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;
-        readonly IConfiguration _configuration;         
+        readonly IConfiguration _configuration;
+        readonly IUserService _userService;
+        private readonly EFContext _db;
 
         public GoogleAuthController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
             SignInManager<DbUser> signInManager,
             IFileService fileService,
             IJWTTokenService jWTTokenService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IUserService userService,
+             EFContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -34,6 +40,8 @@ namespace TouristApp.Controllers
             _roleManager = roleManager;
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
+            _userService = userService;
+            _db = db;
         }
 
         // POST api/googleauth/google
@@ -72,15 +80,39 @@ namespace TouristApp.Controllers
 
                 }).Result;
 
-                result = _userManager.AddToRoleAsync(user, roleName).Result;
-
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                result = _userManager.AddToRoleAsync(user, roleName).Result;               
 
                 if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
-            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));          
+            var _refreshToken = _db.RefreshTokens
+
+                .SingleOrDefault(m => m.Id == user.Id);
+            if (_refreshToken == null)
+            {
+                RefreshToken t = new RefreshToken
+                {
+                    Id = user.Id,
+                    Token = Guid.NewGuid().ToString()
+                };
+                _db.RefreshTokens.Add(t);
+                _db.SaveChanges();
+                _refreshToken = t;
+            }
+            else
+            {
+                _refreshToken.Token = Guid.NewGuid().ToString();
+                _db.RefreshTokens.Update(_refreshToken);
+                _db.SaveChanges();
+            }
+
+            return Ok(
+            new
+            {
+                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
+                refToken = _refreshToken.Token
+            });                    
         }       
     }
 }

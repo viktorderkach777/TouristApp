@@ -17,6 +17,8 @@ using TouristApp.Domain.Interfaces;
 using TouristApp.Domain.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using TouristApp.Domain.Models.FacebookModels;
+using System;
+using TouristApp.Helpers;
 
 namespace TouristApp
 {
@@ -32,6 +34,8 @@ namespace TouristApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors();
             //services.AddDbContext<EFContext>(opt =>
             //    opt.UseSqlServer(Configuration
             //        .GetConnectionString("DefaultConnection")));
@@ -67,13 +71,16 @@ namespace TouristApp
                     IssuerSigningKey = signingKey,
                     ValidateAudience = false,
                     ValidateIssuer = false,
-                    ValidateLifetime = false,
-                    ValidateIssuerSigningKey = true
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = TimeSpan.Zero //вирубаємо похибку
+
                 };
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSession();
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -84,6 +91,19 @@ namespace TouristApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors(
+              builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
             app.UseAuthentication();
             if (env.IsDevelopment())
             {
@@ -99,6 +119,19 @@ namespace TouristApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.UseSession();
+
+            #region InitStaticFiles Images
+            string pathRoot = InitStaticFiles
+                .CreateFolderServer(env, this.Configuration,
+                    new string[] { "ImagesPath" });
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(pathRoot),
+                RequestPath = new PathString("/" + Configuration.GetValue<string>("ImagesUrl"))
+            });
+            #endregion;
 
             app.UseStaticFiles(new StaticFileOptions()
             {

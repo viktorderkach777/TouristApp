@@ -50,18 +50,18 @@ export function google_enter(data) {
 
 
 const loginByJWT = (token, dispatch) => {
-  var user=jwt.decode(token);
-  localStorage.setItem('jwtToken', token);
-  setAuthorizationToken(token);
+  var user=jwt.decode(token.token);
+  localStorage.setItem('jwtToken', token.token);
+  setAuthorizationToken(token.token);
   dispatch(setCurrentUser(user));
 } 
 
-export function register(data) {
+export let register= (data)=> {
     console.log('--data--', data);
-    return dispatch => {
-        return axios.post('api/Account/Register', data)
+    return  dispatch => {
+        return  axios.post('api/Account/Register', data)
             .then(res => {
-                //console.log("data register", res);
+                console.log("data register", res);
                 loginByJWT(res.data, dispatch);
             });
     }

@@ -10,9 +10,19 @@ using TouristApp.Domain.Interfaces;
 using TouristApp.Domain.Models.AccountModels;
 using TouristApp.Helpers;
 using TouristApp.ViewModels.AccountViewModels;
+using System.Linq;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace TouristApp.Controllers
-{
+{ 
+
+
     [Produces("application/json")]
     [Route("api/Account")]
     //[RequireHttps]
@@ -25,6 +35,9 @@ namespace TouristApp.Controllers
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;       
         readonly IConfiguration _configuration;
+        readonly IUserService _userService;
+        private readonly EFContext _db;
+
 
         public AccountController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
@@ -32,7 +45,9 @@ namespace TouristApp.Controllers
             IFileService fileService,           
             IEmailSender emailSender,
             IJWTTokenService jWTTokenService,           
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IUserService userService,
+            EFContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,6 +56,8 @@ namespace TouristApp.Controllers
             _roleManager = roleManager;
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
+            _userService = userService;
+            _db = db;
         }
 
         [HttpPost("login")]
@@ -62,11 +79,82 @@ namespace TouristApp.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(credentials.Email);
-            await _signInManager.SignInAsync(user, isPersistent: false);            
+            await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
+            return Ok(
+            new
+            {
+                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
+                refToken = _jWTTokenService.CreateRefreshToken(_configuration, _userService, user, _userManager,_db)
+            });
+
+            //var _refreshToken = _db.RefreshTokens                
+            //    .SingleOrDefault(m => m.Id == user.Id);
+
+            //if (_refreshToken == null)
+            //{
+            //    RefreshToken t = new RefreshToken
+            //    {
+            //        Id = user.Id,
+            //        Token = Guid.NewGuid().ToString()
+            //    };
+            //    await _db.RefreshTokens.AddAsync(t);
+            //    await _db.SaveChangesAsync();
+            //    _refreshToken = t;
+            //}
+            //else
+            //{
+            //    _refreshToken.Token = Guid.NewGuid().ToString();
+            //    _db.RefreshTokens.Update(_refreshToken);
+            //    await _db.SaveChangesAsync();
+            //}
+
+            //return Ok(
+            //new
+            //{
+            //    token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
+            //    refToken = _refreshToken.Token
+            //});
+
+
         }
-       
+
+        [HttpPost("refresh/{refreshToken}")]
+        public IActionResult RefreshToken([FromRoute]string refreshToken)
+        {
+            var _refreshToken = _db.RefreshTokens
+                .Include(u=>u.User)
+                .SingleOrDefault(m => m.Token == refreshToken);
+
+            if (_refreshToken == null)
+            {
+                return NotFound("Refresh token not found");
+            }
+            //var userclaim = new[] { new Claim(ClaimTypes.Name, _refreshToken.User.FirstName) };
+            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretPhrase"]));//(_configuration["SecretKey"]));
+            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            //var token = new JwtSecurityToken(
+            //    //issuer: "https://localhost:5001",
+            //    //audience: "https://localhost:5001",
+            //    claims: userclaim,
+            //    expires: DateTime.Now.AddMinutes(10),
+            //    signingCredentials: creds);
+
+            _refreshToken.Token = Guid.NewGuid().ToString();
+            _db.RefreshTokens.Update(_refreshToken);
+            _db.SaveChanges();
+
+            return Ok(
+            new {
+                token = _jWTTokenService.CreateToken(_configuration, _userService, _refreshToken.User, _userManager),
+                refToken = _refreshToken.Token
+            });
+        }
+
+
+
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]CustomRegisterModel model)
         {
@@ -75,6 +163,14 @@ namespace TouristApp.Controllers
                 var errors = CustomValidator.GetErrorsByModel(ModelState);
                 return BadRequest(errors);
             }
+
+            //if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
+            //  model.CaptchaText))
+            //{
+            //    var invalid = new Dictionary<string, string>();
+            //    invalid.Add("captchaText", "Помилка вводу зображення на фото");
+            //    return BadRequest(invalid);
+            //}
 
             string path = _fileService.UploadImage(model.ImageBase64);
 
@@ -110,7 +206,12 @@ namespace TouristApp.Controllers
             
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
+            return Ok(
+            new
+            {
+                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
+                refToken = _jWTTokenService.CreateRefreshToken(_configuration, _userService, user, _userManager,_db)
+            });
         }
 
         [HttpPost("ChangePassword")]

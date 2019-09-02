@@ -23,5 +23,6 @@ namespace TouristApp.DAL.Entities
         public string AvatarUrl { get; set; }
         public virtual ICollection<Comments> Comments { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }
+        public virtual RefreshToken RefreshToken { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using TouristApp.Domain.Models.FacebookModels;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace TouristApp.Controllers
 {
@@ -22,7 +23,9 @@ namespace TouristApp.Controllers
         readonly SignInManager<DbUser> _signInManager;             
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;
-        readonly IConfiguration _configuration;       
+        readonly IConfiguration _configuration;
+        readonly IUserService _userService;
+        private readonly EFContext _db;
         private readonly FacebookAuthSettings _fbAuthSettings;       
         private static readonly HttpClient Client = new HttpClient();
 
@@ -31,8 +34,10 @@ namespace TouristApp.Controllers
             SignInManager<DbUser> signInManager,
             IFileService fileService,                     
             IJWTTokenService jWTTokenService,
-            IConfiguration configuration,           
-            IOptions<FacebookAuthSettings> fbAuthSettingsAccessor)
+            IConfiguration configuration,
+            IUserService userService,
+            IOptions<FacebookAuthSettings> fbAuthSettingsAccessor,
+            EFContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,6 +46,8 @@ namespace TouristApp.Controllers
             _fbAuthSettings = fbAuthSettingsAccessor.Value;
             _jWTTokenService = jWTTokenService;
             _configuration = configuration;
+            _userService = userService;
+            _db = db;
         }
 
         // POST api/externalauth/facebook
@@ -96,7 +103,7 @@ namespace TouristApp.Controllers
                 }).Result;
 
                 result = _userManager.AddToRoleAsync(user, roleName).Result;
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                //await _signInManager.SignInAsync(user, isPersistent: false);
 
                 if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
 
@@ -112,7 +119,33 @@ namespace TouristApp.Controllers
             }
             
             await _signInManager.SignInAsync(user, isPersistent: false);
-            return Ok(_jWTTokenService.CreateToken(_configuration, user, _userManager));
+            var _refreshToken = _db.RefreshTokens
+                .SingleOrDefault(m => m.Id == user.Id);
+
+            if (_refreshToken == null)
+            {
+                RefreshToken t = new RefreshToken
+                {
+                    Id = user.Id,
+                    Token = Guid.NewGuid().ToString()
+                };
+                await _db.RefreshTokens.AddAsync(t);
+                await _db.SaveChangesAsync();
+                _refreshToken = t;
+            }
+            else
+            {
+                _refreshToken.Token = Guid.NewGuid().ToString();
+                _db.RefreshTokens.Update(_refreshToken);
+                await _db.SaveChangesAsync();
+            }
+
+            return Ok(
+            new
+            {
+                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
+                refToken = _refreshToken.Token
+            });           
         }        
     }
 }

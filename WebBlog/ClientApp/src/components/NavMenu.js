@@ -3,10 +3,10 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import PropTypes from 'prop-types';
-import { logout } from '../actions/authActions';
+//import { logout } from '../actions/authActions';
 import './NavMenu.css';
 import logo from './calculation.png';
-
+import * as userAction from '../actions/authActions';
 import { withRouter } from 'react-router-dom';
 //import { LinkContainer } from "react-router-bootstrap";
 
@@ -17,7 +17,7 @@ import { withRouter } from 'react-router-dom';
 class NavMenu extends React.Component {
   state = {}
 
-  logout(e) {
+  actlogout(e) {
     e.preventDefault();
     this.props.logout();
     this.props.history.push('/');
@@ -25,7 +25,6 @@ class NavMenu extends React.Component {
   /*
   constructor (props) {
     super(props);
-
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false
@@ -36,14 +35,13 @@ class NavMenu extends React.Component {
       isOpen: !this.state.isOpen
     });
   }
-
 */
 
-  render () {
-    const { isAuthenticated,user } = this.props.auth;
-    
+  render() {
+    const { isAuthenticated, user } = this.props.auth;
+
     const logoutLink = (
-      <NavItem onClick={this.logout.bind(this)}>
+      <NavItem onClick={this.actlogout.bind(this)}>
         <NavLink tag={Link} className="text-dark" to="/"><i className="fas fa-sign-out-alt"></i> Logout</NavLink>
       </NavItem>
     );
@@ -51,7 +49,8 @@ class NavMenu extends React.Component {
     const userLink = (
       <NavItem>
         <NavLink tag={Link} className="text-dark" to="/user">
-        <i className="fas fa-user"></i>{user.name}</NavLink>
+          <i className="fas fa-user"></i>{user == undefined ? null : user.name}</NavLink>
+
       </NavItem>
     );
 
@@ -64,29 +63,28 @@ class NavMenu extends React.Component {
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3" light >
           <Container>
-          <NavbarBrand tag={Link} to="/">
-          <img src={logo} className="App-logo" alt="logo" />
-          
-          </NavbarBrand>
-                    <h2 style={{fontFamily:"cursive"}}> <sup>&copy;</sup>TouristApp </h2>
-           
-         
-          <NavbarToggler onClick={this.toggle} className="mr-2" />
+            <NavbarBrand tag={Link} to="/">
+              <img src={logo} className="App-logo" alt="logo" />
+            </NavbarBrand>
+            <h2 style={{ fontFamily: "cursive" }}><sup>&copy;</sup>TouristApp </h2>
+
+
+            <NavbarToggler onClick={this.toggle} className="mr-2" />
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
               <ul className="navbar-nav flex-grow">
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/users"><i className="fas fa-users"></i> Users</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/usersUI"><i className="fas fa-users"></i> Users Ui</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink tag={Link} className="text-dark" to="/hotels"><i className="fas fa-bed"></i> Tours</NavLink>
-              </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/users"><i className="fas fa-users"></i> Users</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/usersUI"><i className="fas fa-users"></i> Users Ui</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink tag={Link} className="text-dark" to="/hotels"><i className="fas fa-bed"></i> Tours</NavLink>
+                </NavItem>
                 <NavItem>
                   <NavLink tag={Link} className="text-dark" to="/"><i className="fas fa-home"></i> Home</NavLink>
                 </NavItem>
-                
+
                 {isAuthenticated ? userLink : ''}
                 {isAuthenticated ? logoutLink : loginLink}
               </ul>
@@ -99,13 +97,22 @@ class NavMenu extends React.Component {
 }
 NavMenu.propTypes =
   {
-    logout: PropTypes.func.isRequired
+    logout: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    auth: PropTypes.object.isRequired
   }
 
+const mapDispatch = dispatch => {
+  return {
+    logout: () =>
+      dispatch(userAction.logout())
+
+  };
+};
 const mapStateToProps = (state) => {
   return {
     auth: state.auth
   };
 }
 
-export default withRouter(connect(mapStateToProps, { logout })(NavMenu));
+export default withRouter(connect(mapStateToProps, mapDispatch)(NavMenu));
