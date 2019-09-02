@@ -233,7 +233,7 @@ class RegisterForm extends Component {
 
     const form = (
       <React.Fragment>
-        <div className="app flex-row align-items-center">
+        <div className="app flex-row ">
           <Container>
             <Row className="justify-content-center">
               <Col md="9" lg="7" xl="6">
@@ -432,7 +432,7 @@ class RegisterForm extends Component {
                         <Facebook />
                       </Col>
                       <Col xs="12" sm="6">
-                        <Google />
+                        {/* <Google /> */}
                       </Col>
                     </Row>
                   </CardFooter>

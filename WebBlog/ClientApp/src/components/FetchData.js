@@ -5,18 +5,15 @@ import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/WeatherForecasts';
 
 class FetchData extends Component {
-  componentDidMount() {
-    // This method is called when the component is first added to the document
-    this.ensureDataFetched();
-  }
-
-  componentDidUpdate() {
-    // This method is called when the route parameters change
-    this.ensureDataFetched();
-  }
-
-  ensureDataFetched() {
+  componentWillMount() {
+    // This method runs when the component is first added to the page
     const startDateIndex = parseInt(this.props.match.params.startDateIndex, 10) || 0;
+    this.props.requestWeatherForecasts(startDateIndex);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // This method runs when incoming props (e.g., route params) change
+    const startDateIndex = parseInt(nextProps.match.params.startDateIndex, 10) || 0;
     this.props.requestWeatherForecasts(startDateIndex);
   }
 
@@ -34,7 +31,7 @@ class FetchData extends Component {
 
 function renderForecastsTable(props) {
   return (
-    <table className='table table-striped'>
+    <table className='table'>
       <thead>
         <tr>
           <th>Date</th>
@@ -62,8 +59,8 @@ function renderPagination(props) {
   const nextStartDateIndex = (props.startDateIndex || 0) + 5;
 
   return <p className='clearfix text-center'>
-    <Link className='btn btn-default pull-left' to={`/fetch-data/${prevStartDateIndex}`}>Previous</Link>
-    <Link className='btn btn-default pull-right' to={`/fetch-data/${nextStartDateIndex}`}>Next</Link>
+    <Link className='btn btn-default pull-left' to={`/fetchdata/${prevStartDateIndex}`}>Previous</Link>
+    <Link className='btn btn-default pull-right' to={`/fetchdata/${nextStartDateIndex}`}>Next</Link>
     {props.isLoading ? <span>Loading...</span> : []}
   </p>;
 }
