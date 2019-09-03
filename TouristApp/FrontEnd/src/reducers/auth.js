@@ -48,10 +48,21 @@ export const login= (data)=> {
     //console.log('--login data--', data);
     return async dispatch => {
         const res = await axios.post(`${serverUrl}api/Account/login`, data);
-      loginByJWT(res.data, dispatch);
+        console.log('----res-----', res);
+        loginByJWT(res.data, dispatch);
     }
 }
 
+// export const login= (data)=> {
+//   console.log('--login data--', data);
+//   return dispatch => {
+//       axios.post(`${serverUrl}api/Account/login`, data)
+//         .then(res => {
+//           console.log('----res-----', res);
+//           loginByJWT(res.data, dispatch);
+//         });      
+//   }
+// }
 
 export const facebook_enter= (data) =>{
   return async dispatch => {

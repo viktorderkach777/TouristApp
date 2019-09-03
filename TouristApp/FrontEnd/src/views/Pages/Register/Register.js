@@ -432,7 +432,7 @@ class RegisterForm extends Component {
                         <Facebook />
                       </Col>
                       <Col xs="12" sm="6">
-                        {/* <Google /> */}
+                        <Google />
                       </Col>
                     </Row>
                   </CardFooter>
