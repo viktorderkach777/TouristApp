@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TouristApp", "WebBlog\TouristApp.csproj", "{A7F976C3-3F67-43FD-A207-6DCBC3665174}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouristApp", "TouristApp\TouristApp.csproj", "{149136AF-9E28-4BB7-9CEF-537802C548DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A7F976C3-3F67-43FD-A207-6DCBC3665174}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7F976C3-3F67-43FD-A207-6DCBC3665174}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A7F976C3-3F67-43FD-A207-6DCBC3665174}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7F976C3-3F67-43FD-A207-6DCBC3665174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{149136AF-9E28-4BB7-9CEF-537802C548DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{149136AF-9E28-4BB7-9CEF-537802C548DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{149136AF-9E28-4BB7-9CEF-537802C548DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{149136AF-9E28-4BB7-9CEF-537802C548DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0F457031-97CC-4988-BBA5-0B26B3E13C31}
+		SolutionGuid = {7DBA93DB-8EC5-436B-BD74-5F11D2D4A73F}
 	EndGlobalSection
 EndGlobal

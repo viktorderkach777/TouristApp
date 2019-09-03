@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
@@ -10,14 +12,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IO;
 using System.Text;
 using TouristApp.DAL.Entities;
 using TouristApp.Domain.Interfaces;
-using TouristApp.Domain.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using TouristApp.Domain.Models.FacebookModels;
-using System;
+using TouristApp.Domain.Services;
 using TouristApp.Helpers;
 
 namespace TouristApp
@@ -34,8 +35,6 @@ namespace TouristApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddCors();
             //services.AddDbContext<EFContext>(opt =>
             //    opt.UseSqlServer(Configuration
             //        .GetConnectionString("DefaultConnection")));
@@ -78,7 +77,7 @@ namespace TouristApp
                 };
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSession();
             // In production, the React files will be served from this directory
@@ -93,16 +92,6 @@ namespace TouristApp
         {
             app.UseCors(
               builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
             app.UseAuthentication();
             if (env.IsDevelopment())
@@ -112,7 +101,6 @@ namespace TouristApp
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -139,6 +127,7 @@ namespace TouristApp
                 RequestPath = new PathString("/UserImages")
             });
 
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -155,8 +144,6 @@ namespace TouristApp
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
-
-            SeederDB.SeedDataByAS(app.ApplicationServices);
         }
     }
 }
