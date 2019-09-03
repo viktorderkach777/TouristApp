@@ -6,7 +6,9 @@ export const initialState = {
         data: [],
         error: false,
         success: false,
-        loading: false
+        loading: false,
+        totalPage:'',
+        currentPage:'1'
     }
 };
 
@@ -27,7 +29,9 @@ export const tours = createSlice({
             console.log("get list", data);
             newState = update.set(state, 'list.loading', false);
             newState = update.set(newState, 'list.success', true);
-            newState = update.set(newState, 'list.data', data);
+            newState = update.set(newState, 'list.data', data.tours);
+            newState = update.set(newState, 'list.totalPage', data.totalPage);
+            newState = update.set(newState, 'list.currentPage', data.currentPage);
             return newState;
         },
         getToursFailed: state => {
@@ -39,11 +43,11 @@ export const tours = createSlice({
     }
 });
 
-export const getListTours = () => {
+export const getListTours = (page) => {
     return (dispatch) => {
         dispatch(tours.actions.getToursStarted());
 
-        TourService.getListTours()
+        TourService.getListTours(page)
             .then((response) => {
                 console.log('--success create--', response.data);
                 dispatch(tours.actions.getToursSuccess(response));

@@ -3,8 +3,8 @@ import {serverUrl} from '../../config';
 
 export default class TourService {
 
-    static getListTours() {
-        return axios.get(`${serverUrl}api/Hotel/list`);
+    static getListTours(page) {
+        return axios.get(`${serverUrl}api/Hotel/list/`+ page);
     }
     
     //   static createNewAnimal (model) {

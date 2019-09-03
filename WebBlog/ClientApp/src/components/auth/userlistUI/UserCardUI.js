@@ -64,7 +64,7 @@ const styles = theme => ({
     render(){
         const { classes,user } = this.props;
         console.log("--user in props--", this.props);
-         
+
 
   return (
     
@@ -73,12 +73,9 @@ const styles = theme => ({
           <Grid item>
             <ButtonBase className={classes.image}>
             <img className={classes.img} alt="complex" src={user.userImage} />
-                 
             </ButtonBase>
           </Grid>
           <Grid>
-          
-        
         <ModalWindow
           title="Delete user disalog"
           isOpen={this.state.isOpen}
@@ -92,12 +89,12 @@ const styles = theme => ({
             <Grid item xs container direction="column" spacing={16}>
               <Grid item xs>
                 <Typography gutterBottom variant="subtitle1">
-                 {user.fullName}
+                {user.fullName}
                 </Typography>
                 <Typography gutterBottom>Email: {user.email}</Typography>
                 <Typography> Roles:
                 {user.roles.map(item => (
-                 <UserRoles role={item} key={item.id} />
+                <UserRoles role={item} key={item.id} />
                 ))}
                 </Typography> 
               </Grid>

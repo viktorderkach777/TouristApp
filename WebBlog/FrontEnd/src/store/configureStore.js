@@ -7,11 +7,14 @@ import * as RefreshToken from '../components/RefreshToken/reducer';
 import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
 
 import {userReducer} from '../reducers/auth'
+import user from '../reducers/user'
+
 
 export default function configureStore (history, initialState) {
     const reducers = {
       captcha: captchaReducer,//.reducer,
       auth:userReducer.reducer,
+      userlist: user,
       tours:tours.reducer,
       refreshToken: RefreshToken.refreshReducer
     };

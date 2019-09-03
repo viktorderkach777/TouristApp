@@ -35,18 +35,23 @@ const SortToolbar = React.lazy(() => import('../SortToolbar'));
 const PaginationBar= React.lazy(() => import('../Pagination'));
 
 class ToursContainer extends Component {
-
+    state = {
+        currentPage:0,
+        totalPage:''
+    }
 
     componentDidMount() {
-        this.props.getListTours();
+        const { currentPage, totalPage } = this.props;
+        this.props.getListTours( currentPage);
+        this.setState({ currentPage: currentPage });
+        this.setState({ totalPage: totalPage });
     }
 
 
     render() {
-
-        
-        console.log('----Props-----', this.props);
-        const { isListLoading } = this.props;
+        console.log('----State Tours -----', this.state);
+        console.log('----Props Tours-----', this.props);
+        const { isListLoading,totalPage,currentPage } = this.props;
 
         const filterlist = (
             <Form>
@@ -80,7 +85,6 @@ class ToursContainer extends Component {
                             </Col>
                         </FormGroup>
 
-                       
 
                             <h4>Клас готелю</h4>
  
@@ -111,7 +115,7 @@ class ToursContainer extends Component {
         );
 
         const toursList = (
-           
+
             
             this.props.list.map(item => (
 
@@ -199,7 +203,7 @@ class ToursContainer extends Component {
                             <SortToolbar/>
                             {toursList}
                             <SpinnerWidget loading={isListLoading} />
-                            <PaginationBar/>
+                            <PaginationBar  totalPage={totalPage} currentPage={currentPage}/>
                         </div>
 
                     </div>
@@ -214,14 +218,15 @@ const mapState = state => {
         list: get(state, 'tours.list.data'),
         isListLoading: get(state, 'tours.list.loading'),
         isListError: get(state, 'tours.list.error'),
-
+        currentPage:get(state, 'tours.list.currentPage'),
+        totalPage:get(state, 'tours.list.totalPage'),
     };
 };
-const mapDispatch = dispatch => {
-    return {
-        getListTours: () =>
-            dispatch(tourAction.getListTours())
 
+const mapDispatch = (dispatch) => {
+    return {
+        getListTours: (model) =>  {     
+            dispatch(tourAction.getListTours(model))}
     };
 };
 
