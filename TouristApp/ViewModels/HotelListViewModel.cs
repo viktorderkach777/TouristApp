@@ -34,4 +34,15 @@ namespace TouristApp.ViewModels
         public int? DaysCount { get; set; }
 
     }
+
+    public class ToursViewModel
+    {
+        public IEnumerable<HotelListViewModel> Tours { get; set; }
+        public int TotalPage { get; set; }
+        public int CurrentPage { get; set; }
+        //public SearchCountryViewModel Search { get; set; }
+
+    }
+
+
 }
