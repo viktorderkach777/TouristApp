@@ -20,38 +20,23 @@ const range = (from, to, step = 1) => {
 class PaginationBar extends Component {
     constructor(props) {
         super(props);
-        const { totalRecords = null, pageLimit = 30, pageNeighbours = 0 } = props;
-
-        this.pageLimit = typeof pageLimit === "number" ? pageLimit : 30;
-        this.totalRecords = typeof totalRecords === "number" ? totalRecords : 0;
-
-        this.pageNeighbours =
-            typeof pageNeighbours === "number"
-                ? Math.max(0, Math.min(pageNeighbours, 2))
-                : 0;
-
-        this.totalPages = Math.ceil(this.totalRecords / this.pageLimit);
-
-        this.state = { currentPage: 1 };
+        // const { totalPage = null, currentPage = 1, pageNeighbours = 0  } = this.props;
     }
 
-    gotoPage = page => {
-        const { onPageChanged = f => f } = this.props;
-
-        const currentPage = Math.max(0, Math.min(page, this.totalPages));
-
-        const paginationData = {
-            currentPage,
-            totalPages: this.totalPages,
-            pageLimit: this.pageLimit,
-            totalRecords: this.totalRecords
+    state = {
+         currentPage: 1,
+         totalPage:null   
         };
 
-        this.setState({ currentPage }, () => onPageChanged(paginationData));
+    gotoPage = page => {
+       const { currentPage, totalPage, onPageChanged = f => f } = this.props;
+       var pages = this.getPager(currentPage, totalPage);
+       console.log('state pagination',this.state);
+       this.setState({ currentPage:page }, () => onPageChanged(page));
     };
 
     componentDidMount() {
-        this.gotoPage(1);
+     this.gotoPage(1);
     }
 
     handleMoveLeft = evt => {
@@ -64,89 +49,78 @@ class PaginationBar extends Component {
         this.gotoPage(this.state.currentPage + this.pageNeighbours * 2 + 1);
     };
 
-    fetchPageNumbers = () => {
-        const totalPages = this.totalPages;
-        const currentPage = this.state.currentPage;
-        const pageNeighbours = this.pageNeighbours;
+    getPager = (currentPage, totalPages)=> {
+        currentPage = currentPage || 1;
+    
+        // var totalItems=2;
+        //if (totalPages <= 10) {
+            // less than 10 total pages so show all
+          //  startPage = 1;
+         //   endPage = totalPages;
+       // }
+        // else
+        // {
+            // more than 10 total pages so calculate start and end pages
+            // if (currentPage <= 6) {
+            //     startPage = 1;
+            //     endPage = 10;
+            // } else if (currentPage + 4 >= totalPages) {
+            //     startPage = totalPages - 9;
+            //     endPage = totalPages;
+            // } else {
+            //     startPage = currentPage - 5;
+            //     endPage = currentPage + 4;
+            // }
+      //   }
 
-        const totalNumbers = this.pageNeighbours * 2 + 3;
-        const totalBlocks = totalNumbers + 2;
-
-        if (totalPages > totalBlocks) {
-            let pages = [];
-
-            const leftBound = currentPage - pageNeighbours;
-            const rightBound = currentPage + pageNeighbours;
-            const beforeLastPage = totalPages - 1;
-
-            const startPage = leftBound > 2 ? leftBound : 2;
-            const endPage = rightBound < beforeLastPage ? rightBound : beforeLastPage;
-
-            pages = range(startPage, endPage);
-
-            const pagesCount = pages.length;
-            const singleSpillOffset = totalNumbers - pagesCount - 1;
-
-            const leftSpill = startPage > 2;
-            const rightSpill = endPage < beforeLastPage;
-
-            const leftSpillPage = LEFT_PAGE;
-            const rightSpillPage = RIGHT_PAGE;
-
-            if (leftSpill && !rightSpill) {
-                const extraPages = range(startPage - singleSpillOffset, startPage - 1);
-                pages = [leftSpillPage, ...extraPages, ...pages];
-            } else if (!leftSpill && rightSpill) {
-                const extraPages = range(endPage + 1, endPage + singleSpillOffset);
-                pages = [...pages, ...extraPages, rightSpillPage];
-            } else if (leftSpill && rightSpill) {
-                pages = [leftSpillPage, ...pages, rightSpillPage];
+         const pages = [];
+            if (totalPages !== null) {
+            for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
             }
-
-            return [1, ...pages, totalPages];
         }
+        // calculate start and end item indexes
+        // var startIndex = (currentPage - 1) * pageSize;
+        // var endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
 
-        return range(1, totalPages);
-    };
+        // create an array of pages to ng-repeat in the pager control
+       // var pages = [...Array((endPage + 1) - startPage).keys()].map(i => startPage + i);
+
+        // return object with all pager properties required by the view
+        return pages;
+    }
 
 
     handleClick = (page, evt) => {
         evt.preventDefault();
+        console.log('---gotopage---',page)
         this.gotoPage(page);
     };
 
+
+    
+
+
+
     render() {
-        const { currentPage } = this.state;
-         const pages = this.fetchPageNumbers();
+        const { currentPage, totalPage, onPageChanged = f => f } = this.props;
+        const pages = this.getPager(currentPage,totalPage);
+        const pageList = (
+
+            pages.map(page => (
+                <PaginationItem key={page} className={`page-item${currentPage === page ? " active" : ""}`} >
+                        <PaginationLink tag="button" onClick={e => this.handleClick(page, e)}>
+                            {page}
+                        </PaginationLink>
+                </PaginationItem>
+            )));
+       
+
         return (
             <React.Fragment>
                 <Form>
                     <Pagination>
-                    {pages.map((page, index) => {
-                    if (page === LEFT_PAGE)
-                    return (
-                        <PaginationItem  key={index}>
-                            <PaginationLink previous tag="button" onClick={this.handleMoveLeft} />
-                        </PaginationItem>
-                    );
-                    if (page === RIGHT_PAGE)
-                    return (
-                        <PaginationItem  key={index}>
-                            <PaginationLink previous tag="button" onClick={this.handleMoveRight} />
-                        </PaginationItem>
-                    );
-                    return (
-                            <PaginationItem key={index}
-                            className={`page-item${currentPage === page ? " active" : ""}`}
-                            >
-                                    <PaginationLink tag="button" onClick={e => this.handleClick(page, e)}>
-                                        {page}
-                                    </PaginationLink>
-                            </PaginationItem>
-                    );
-
-                    })};
-
+                    {pageList}
                     </Pagination>
                 </Form>
             </React.Fragment>
@@ -189,3 +163,28 @@ export default PaginationBar;
                 //         <PaginationItem>
                 //             <PaginationLink next tag="button" />
                 //         </PaginationItem>
+
+                //{pages.map(page => {
+                    // if (page === LEFT_PAGE)
+                    // return (
+                    //     <PaginationItem  key={page}>
+                    //         <PaginationLink previous tag="button" onClick={this.handleMoveLeft} />
+                    //     </PaginationItem>
+                    // );
+                    // if (page === RIGHT_PAGE)
+                    // return (
+                    //     <PaginationItem  key={page}>
+                    //         <PaginationLink previous tag="button" onClick={this.handleMoveRight} />
+                    //     </PaginationItem>
+                    // );
+                   
+                    //         <PaginationItem key={page}
+                    //         className={`page-item${currentPage === page ? " active" : ""}`}
+                    //         >
+                    //                 <PaginationLink tag="button" onClick={e => this.handleClick(page, e)}>
+                    //                     {page}
+                    //                 </PaginationLink>
+                    //         </PaginationItem>
+                   
+
+                    // })};

@@ -50,10 +50,10 @@ class ToursContainer extends Component {
   onPageChanged=data=>{
 
   console.log('---data from pagination',data);
-
+  this.props.getListTours(data);
+  this.setState({ currentPage: data });
+  
   }
-
-
 
   render() {
     console.log('----State Tours -----', this.state);
@@ -209,7 +209,7 @@ class ToursContainer extends Component {
             <div className="col-9">
               <SortToolbar />
               {toursList}
-              <SpinnerWidget loading={isListLoading} />
+              {/* <SpinnerWidget loading={isListLoading} /> */}
               <PaginationBar totalPage={totalPage} currentPage={currentPage}  onPageChanged={this.onPageChanged}/>
             </div>
 

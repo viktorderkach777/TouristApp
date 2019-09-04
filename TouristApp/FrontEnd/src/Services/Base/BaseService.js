@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 
 export default class BaseService {
 
-    static _apiBase = 'https://localhost:44318/api/';
-    static _imageBase = 'https://localhost/images';
+    static _apiBase = 'http://localhost:50744/api/';
+    static _imageBase = 'http://localhost/images';
 
     static async GetResourse(url) {
         const res = await axios.get(`${this._apiBase}${url}`);
