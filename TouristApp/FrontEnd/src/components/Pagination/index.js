@@ -31,7 +31,7 @@ class PaginationBar extends Component {
     };
 
     componentDidMount() {
-        this.gotoPage(1);
+     this.gotoPage(1);
     }
 
 
@@ -66,33 +66,20 @@ class PaginationBar extends Component {
         if (totalPages > totalBlocks) {
             let pages = [];
 
-            const leftBound = currentPage - pageNeighbours;
-            const rightBound = currentPage + pageNeighbours;
-            const beforeLastPage = totalPages - 1;
+        // create an array of pages to ng-repeat in the pager control
+       // var pages = [...Array((endPage + 1) - startPage).keys()].map(i => startPage + i);
 
-            const startPage = leftBound > 2 ? leftBound : 2;
-            const endPage = rightBound < beforeLastPage ? rightBound : beforeLastPage;
+        // return object with all pager properties required by the view
+        return pages;
+    }
 
-            pages = range(startPage, endPage);
 
-            const pagesCount = pages.length;
-            const singleSpillOffset = totalNumbers - pagesCount - 1;
+    handleClick = (page, evt) => {
+        evt.preventDefault();
+        console.log('---gotopage---',page)
+        this.gotoPage(page);
+    };
 
-            const leftSpill = startPage > 2;
-            const rightSpill = endPage < beforeLastPage;
-
-            const leftSpillPage = LEFT_PAGE;
-            const rightSpillPage = RIGHT_PAGE;
-
-            if (leftSpill && !rightSpill) {
-                const extraPages = range(startPage - singleSpillOffset, startPage - 1);
-                pages = [leftSpillPage, ...extraPages, ...pages];
-            } else if (!leftSpill && rightSpill) {
-                const extraPages = range(endPage + 1, endPage + singleSpillOffset);
-                pages = [...pages, ...extraPages, rightSpillPage];
-            } else if (leftSpill && rightSpill) {
-                pages = [leftSpillPage, ...pages, rightSpillPage];
-            }
 
             return [1, ...pages, totalPages];
         }
