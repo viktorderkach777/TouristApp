@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { compose } from '../../../../utils';
+import  compose  from '../../../../utils/compose';
 import withWeatherService from '../hoc';
 import { fetchTiles, cityDataLoadedByDay } from '../../actions';
 //import WeatherList from '../weather-list';
@@ -9,7 +9,7 @@ import { fetchTiles, cityDataLoadedByDay } from '../../actions';
 
 const WeatherList = React.lazy(() => import('../weatherList'));
 const Spinner = React.lazy(() => import('../spinner'));
-const ErrorIndicator = React.lazy(() => import('../errorIndicator'));
+const ErrorIndicator = React.lazy(() => import('../../../errorIndicator'));
 
 class WeatherListContainer extends Component {
 
@@ -19,7 +19,7 @@ class WeatherListContainer extends Component {
 
     render() {
         const { tiles, tilesLoading, tilesError, clickTile } = this.props;
-
+        console.log("WeatherListContainer-props", this.props);
         if (tilesLoading) {
             return <Spinner />
         }

@@ -16,7 +16,7 @@ export default function Wheather() {
             <ErrorBoundry>
                 <WeatherServiceProvider value={weatherService}>
                     <WeatherDashboard />
-                </WeatherServiceProvider>
+                </WeatherServiceProvider>               
             </ErrorBoundry>
         </Suspense>
     )

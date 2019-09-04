@@ -5,7 +5,8 @@ import './weatherCity.css';
 
 class WeatherCity extends Component {    
 
-    render() {       
+    render() {  
+        console.log("weathercity-props", this.props);     
         const {
             cityDay,
             cityName,

@@ -1,16 +1,19 @@
 import axios from "axios";
 
-export default class WeatherService {   
+export default class WeatherService {
 
     _apiBase = 'https://api.openweathermap.org/data/2.5/forecast';
 
     _fetchData = async (region = 'Rivne') => {
         const { latitude, longitude } = region || {};
-        const getDataByCity = `${this._apiBase}?q=${region}&units=metric&appid=${process.env.REACT_APP_WEATHER_ID}`;
-        const getDataByCoords = `${this._apiBase}?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.REACT_APP_WEATHER_ID}`;
+        // const getDataByCity = `${this._apiBase}?q=${region}&units=metric&appid=${process.env.REACT_APP_WEATHER_ID}`;
+        // const getDataByCoords = `${this._apiBase}?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.REACT_APP_WEATHER_ID}`;
+        const getDataByCity = `${this._apiBase}?q=${region}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29`;
+        const getDataByCoords = `${this._apiBase}?lat=${latitude}&lon=${longitude}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29`;
         let location = typeof (region) === "object" ? getDataByCoords : getDataByCity;
-
-        return await axios.get(location);
+        let a = await axios.get(location);
+        console.log(a);
+        return a;
     };
 
     _avgArr = (arr) => {
@@ -96,7 +99,7 @@ export default class WeatherService {
     _getResources = async () => {
         const weather = await this._fetchData()
             .then((body) => {
-                // console.log("res", body);               
+                console.log("res", body);
                 if (body.ok) {
                     throw new Error(`Could not fetch, received ${body.status}`);
                 }
@@ -119,7 +122,7 @@ export default class WeatherService {
                     cityDay: tiles[0].day,
                     tiles: tiles
                 }
-                //console.log("weather", weather);
+                console.log("weather", weather);
                 return weather;
             });
 
@@ -127,8 +130,15 @@ export default class WeatherService {
     }
 
     getTiles = async () => {
+        console.log('getTilesStart')
         const weather = await this._getResources();
-       
+        console.log('weather', weather)
         return weather;
-    }   
+    }
+
+    // getCityData = async () => {
+    //     const weather = await this._getResources();
+    //     console.log("weather", weather);
+    //     return weather;
+    // }
 }
