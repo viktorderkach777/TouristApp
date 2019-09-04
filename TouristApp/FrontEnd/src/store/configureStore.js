@@ -5,7 +5,7 @@ import { captchaReducer } from "../components/captcha/reducer";
 import { tours } from "../components/tours/tourReducer";
 import * as RefreshToken from '../components/RefreshToken/reducer';
 import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
-
+import {weatherReducer} from '../components/weather/reducers'
 import {userReducer} from '../reducers/auth'
 
 export default function configureStore (history, initialState) {
@@ -13,7 +13,8 @@ export default function configureStore (history, initialState) {
       captcha: captchaReducer,//.reducer,
       auth:userReducer.reducer,
       tours:tours.reducer,
-      refreshToken: RefreshToken.refreshReducer
+      refreshToken: RefreshToken.refreshReducer,
+      weather:weatherReducer
     };
 
     const middleware = [

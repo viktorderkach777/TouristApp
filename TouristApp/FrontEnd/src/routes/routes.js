@@ -39,6 +39,7 @@ const SinglePage = React.lazy(()=>import('../components/client/tours/singleTour/
 const Salo = React.lazy(()=>import("../components/client/Salo"))
 const TourWidget = React.lazy(()=>import("../components/tours/index"))
 const SimplyTour = React.lazy(()=>import("../components/tours/TourPage"))
+const WeatherWidget = React.lazy(()=>import("../components/weather"))
 
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
@@ -88,7 +89,8 @@ const routes = [
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/views/:country/:id', exact: true, name: 'User Details', component: SimplyTour },
-  { path: '/images', exact: true, name: 'User Details', component: SimplyTour }
+  { path: '/images', exact: true, name: 'User Details', component: SimplyTour },
+  { path: '/weather', exact: true, name: 'Weather', component: WeatherWidget }
 ];
 
 export default routes;
