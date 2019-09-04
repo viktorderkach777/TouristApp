@@ -86,37 +86,7 @@ namespace TouristApp.Controllers
             {
                 token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
                 refToken = _jWTTokenService.CreateRefreshToken(_configuration, _userService, user, _userManager,_db)
-            });
-
-            //var _refreshToken = _db.RefreshTokens                
-            //    .SingleOrDefault(m => m.Id == user.Id);
-
-            //if (_refreshToken == null)
-            //{
-            //    RefreshToken t = new RefreshToken
-            //    {
-            //        Id = user.Id,
-            //        Token = Guid.NewGuid().ToString()
-            //    };
-            //    await _db.RefreshTokens.AddAsync(t);
-            //    await _db.SaveChangesAsync();
-            //    _refreshToken = t;
-            //}
-            //else
-            //{
-            //    _refreshToken.Token = Guid.NewGuid().ToString();
-            //    _db.RefreshTokens.Update(_refreshToken);
-            //    await _db.SaveChangesAsync();
-            //}
-
-            //return Ok(
-            //new
-            //{
-            //    token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
-            //    refToken = _refreshToken.Token
-            //});
-
-
+            });            
         }
 
         [HttpPost("refresh/{refreshToken}")]
@@ -164,13 +134,13 @@ namespace TouristApp.Controllers
                 return BadRequest(errors);
             }
 
-            if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
-              model.CaptchaText))
-            {
-                var invalid = new Dictionary<string, string>();
-                invalid.Add("captchaText", "Помилка вводу зображення на фото");
-                return BadRequest(invalid);
-            }
+            //if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
+            //  model.CaptchaText))
+            //{
+            //    var invalid = new Dictionary<string, string>();
+            //    invalid.Add("captchaText", "Помилка вводу зображення на фото");
+            //    return BadRequest(invalid);
+            //}
 
             string path = _fileService.UploadImage(model.ImageBase64);
 

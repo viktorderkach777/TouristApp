@@ -47,38 +47,7 @@ namespace TouristApp.Domain.Services
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
-
-        public string CreateJWTTokenAndRefreshToken(IConfiguration configuration, IUserService userService, DbUser user, UserManager<DbUser> userManager, EFContext db)
-        {
-            var _refreshToken = db.RefreshTokens
-               .SingleOrDefault(m => m.Id == user.Id);
-
-            if (_refreshToken == null)
-            {
-                RefreshToken t = new RefreshToken
-                {
-                    Id = user.Id,
-                    Token = Guid.NewGuid().ToString()
-                };
-                db.RefreshTokens.Add(t);
-                db.SaveChanges();
-                _refreshToken = t;
-            }
-            else
-            {
-                _refreshToken.Token = Guid.NewGuid().ToString();
-                db.RefreshTokens.Update(_refreshToken);
-                db.SaveChanges();
-            }
-
-            Token tt = new Token
-            {
-                token = CreateToken(configuration, userService, user, userManager),
-                refToken = _refreshToken.Token
-            };
-
-            return JsonConvert.SerializeObject(tt, Formatting.Indented);
-        }
+       
 
         public string CreateRefreshToken(IConfiguration configuration, IUserService userService, DbUser user, UserManager<DbUser> userManager, EFContext db)
         {
