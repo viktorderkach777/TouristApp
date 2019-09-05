@@ -109,7 +109,7 @@ namespace TouristApp.Controllers
                 }).ToList();
 
             int count = _context.Tours.Count();
-            model.TotalPage = (int)Math.Ceiling((double)count / pageSize);
+            model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
             model.CurrentPage = page;
             return model;
         }

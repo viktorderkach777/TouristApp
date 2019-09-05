@@ -7,7 +7,7 @@ export const initialState = {
     error: false,
     success: false,
     loading: false,
-    totalPage: '',
+    totalPages: null,
     currentPage: '1'
   }
 };
@@ -30,7 +30,7 @@ export const tours = createSlice({
       newState = update.set(state, 'list.loading', false);
       newState = update.set(newState, 'list.success', true);
       newState = update.set(newState, 'list.data', data.tours);
-      newState = update.set(newState, 'list.totalPage', data.totalPage);
+      newState = update.set(newState, 'list.totalPages', data.totalPages);
       newState = update.set(newState, 'list.currentPage', data.currentPage);
       return newState;
     },

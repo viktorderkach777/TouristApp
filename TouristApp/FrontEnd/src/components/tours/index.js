@@ -37,14 +37,14 @@ const PaginationBar = React.lazy(() => import('../Pagination'));
 class ToursContainer extends Component {
   state = {
     currentPage: null,
-    totalPage: null
+    totalPages: null
   }
 
   componentDidMount() {
-    const { currentPage, totalPage } = this.props;
+    const { currentPage, totalPages } = this.props;
     this.props.getListTours(currentPage);
     this.setState({ currentPage: currentPage });
-    this.setState({ totalPage: totalPage });
+    this.setState({ totalPages: totalPages });
   }
 
   onPageChanged=data=>{
@@ -58,7 +58,7 @@ class ToursContainer extends Component {
   render() {
     console.log('----State Tours -----', this.state);
     console.log('----Props Tours-----', this.props);
-    const { isListLoading, totalPage, currentPage } = this.props;
+    const { isListLoading, totalPages, currentPage } = this.props;
 
     const filterlist = (
       <Form>
@@ -210,7 +210,7 @@ class ToursContainer extends Component {
               <SortToolbar />
               {toursList}
               {/* <SpinnerWidget loading={isListLoading} /> */}
-              <PaginationBar totalPage={totalPage} currentPage={currentPage}  onPageChanged={this.onPageChanged}/>
+              <PaginationBar totalPages={totalPages} currentPage={currentPage}  onPageChanged={this.onPageChanged}/>
             </div>
 
           </div>
@@ -226,7 +226,7 @@ const mapState = state => {
     isListLoading: get(state, 'tours.list.loading'),
     isListError: get(state, 'tours.list.error'),
     currentPage: get(state, 'tours.list.currentPage'),
-    totalPage: get(state, 'tours.list.totalPage'),
+    totalPages: get(state, 'tours.list.totalPages'),
   };
 };
 
