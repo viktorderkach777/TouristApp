@@ -31,7 +31,7 @@ class PaginationBar extends Component {
     };
 
     componentDidMount() {
-     this.gotoPage(1);
+        this.gotoPage(1);
     }
 
 
@@ -69,14 +69,17 @@ class PaginationBar extends Component {
         // create an array of pages to ng-repeat in the pager control
        // var pages = [...Array((endPage + 1) - startPage).keys()].map(i => startPage + i);
 
-        // return object with all pager properties required by the view
-        return pages;
-    }
+            return [1, ...pages, totalPages];
+        }
+
+        return range(1, totalPages);
+    };
+
 
 
     handleClick = (page, evt) => {
         evt.preventDefault();
-        console.log('---gotopage---',page)
+        console.log('---gotopage---', page)
         this.gotoPage(page);
     };
 
