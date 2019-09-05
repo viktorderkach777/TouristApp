@@ -16,14 +16,15 @@ import {
     //Input,
     FormGroup
 } from 'reactstrap';
+
 class SortToolbar extends Component {
     state = {
         modal: true,
         dropdownOpen: false,
         dropDownValue: 'по імені від А до Я',
-        name: '',
-        surname: '',
-        phone: '',
+        // name: '',
+        // surname: '',
+        // phone: '',
         initialDate: "2019-01-01",
         lastDate: new Date(),
         sandFormSuccess: false,
@@ -45,9 +46,11 @@ class SortToolbar extends Component {
         const { type, sort } = e.target.dataset;
         this.setState({ dropDownValue: e.currentTarget.textContent, typeOfSort: type, sortByAscending: sort });
     }
+
     callBackCloseDialog = () => {
         this.setState({ openModal: false });
     }
+
     handleChange = e => {
         this.setState({ [e.target.name]: e.target.value });
     };
@@ -58,6 +61,7 @@ class SortToolbar extends Component {
 
 
     render() {
+        console.log('--Sorting state----',this.state);
         return (
             <Card className="CardTours" >
                 <CardBody>

@@ -18,22 +18,15 @@ const range = (from, to, step = 1) => {
     return range;
 };
 class PaginationBar extends Component {
-    constructor(props) {
-        super(props);
-        const { totalPages = null, currentPage = 1, pageNeighbours = 0 } = this.props;
-
-
-    }
-
+  
     state = {
         currentPage: 1,
-        totalPages: null
+        totalPages: null,
+        pageNeighbours:null
     };
 
     gotoPage = page => {
-        const { currentPage, totalPages, onPageChanged = f => f } = this.props;
-        var pages = this.getPager(currentPage, totalPages);
-        console.log('state pagination', this.state);
+        const { onPageChanged = f => f } = this.props;
         this.setState({ currentPage: page }, () => onPageChanged(page));
     };
 
@@ -41,38 +34,35 @@ class PaginationBar extends Component {
         this.gotoPage(1);
     }
 
+
+    handleClick = (page, evt) => {
+        evt.preventDefault();
+        console.log('---gotopage---', page)
+        this.gotoPage(page);
+    };
+
+
     handleMoveLeft = evt => {
         evt.preventDefault();
-        this.gotoPage(this.state.currentPage - this.pageNeighbours * 2 - 1);
+        const {pageNeighbours}=this.props;
+        console.log('---LEFT to GO---',this.state.currentPage - pageNeighbours * 2 - 1);
+        this.gotoPage(this.state.currentPage - pageNeighbours * 2 - 1);
     };
 
     handleMoveRight = evt => {
         evt.preventDefault();
-        this.gotoPage(this.state.currentPage + this.pageNeighbours * 2 + 1);
+        const {pageNeighbours}=this.props;
+        console.log('---RIGHT to GO---',this.state.currentPage + pageNeighbours * 2 + 1);
+        this.gotoPage(this.state.currentPage + pageNeighbours * 2 + 1);
     };
 
-    getPager = (currentPage, totalPages) => {
-        currentPage = currentPage || 1;
-
-
-        const pages = [];
-        if (totalPages !== null) {
-            for (let i = 1; i <= totalPages; i++) {
-                pages.push(i);
-            }
-        }
-        return pages;
-    }
-
-    getPagerV2 = () => {
-        const totalPages = this.totalPages;
-        const currentPage = this.state.currentPage;
-        const pageNeighbours = this.pageNeighbours;
-
-        const totalNumbers = this.pageNeighbours * 2 + 3;
+    getPager = () => {
+        const{totalPages,currentPage,pageNeighbours}=this.props;
+       
+        const totalNumbers = pageNeighbours * 2 + 3;
         const totalBlocks = totalNumbers + 2;
 
-
+       
         if (totalPages > totalBlocks) {
             let pages = [];
 
@@ -106,37 +96,33 @@ class PaginationBar extends Component {
 
             return [1, ...pages, totalPages];
         }
-
         return range(1, totalPages);
     };
 
-
-
-    handleClick = (page, evt) => {
-        evt.preventDefault();
-        console.log('---gotopage---', page)
-        this.gotoPage(page);
-    };
-
-
-
-
-
-
     render() {
-        const { currentPage, totalPages } = this.props;
-        const pages = this.getPager(currentPage, totalPages);
+        const { currentPage} = this.props;
+        console.log('---Pagination props---', this.props);
+           const pages = this.getPager();
+        console.log('pages', pages);
+
         const pageList = (
-
             pages.map(page => (
-                <PaginationItem key={page} className={`page-item${currentPage === page ? " active" : ""}`} >
-                    <PaginationLink tag="button" onClick={e => this.handleClick(page, e)}>
-                        {page}
-                    </PaginationLink>
-                </PaginationItem>
+                   (page === LEFT_PAGE) ?  (
+                                <PaginationItem  key={page}>
+                                    <PaginationLink previous tag="button" onClick={e => this.handleMoveLeft(e)} />
+                                </PaginationItem> ):
+                   ( (page === RIGHT_PAGE) ?                 
+                            (
+                                <PaginationItem  key={page}>
+                                    <PaginationLink next tag="button" onClick={e => this.handleMoveRight(e)} />
+                                </PaginationItem>
+                        ):
+                             <PaginationItem key={page} className={`page-item${currentPage === page ? " active" : ""}`} >
+                                <PaginationLink tag="button" onClick={e => this.handleClick(page, e)}>
+                                    {page}
+                                </PaginationLink>
+                            </PaginationItem>)
             )));
-
-
         return (
             <React.Fragment>
                 <Form>
@@ -151,61 +137,3 @@ class PaginationBar extends Component {
 }
 
 export default PaginationBar;
-
-                 //         <PaginationItem disabled>
-                //             <PaginationLink previous tag="button" />
-                //         </PaginationItem>
-
-                //         <PaginationItem active>
-                //             <PaginationLink tag="button">
-                //                 1
-                // </PaginationLink>
-                //         </PaginationItem>
-                //         <PaginationItem>
-                //             <PaginationLink tag="button">
-                //                 2
-                // </PaginationLink>
-                //         </PaginationItem>
-                //         <PaginationItem>
-                //             <PaginationLink tag="button">
-                //                 3
-                // </PaginationLink>
-                //         </PaginationItem>
-                //         <PaginationItem>
-                //             <PaginationLink tag="button">
-                //                 4
-                // </PaginationLink>
-                //         </PaginationItem>
-                //         <PaginationItem>
-                //             <PaginationLink tag="button">
-                //                 5
-                // </PaginationLink>
-                //         </PaginationItem>
-                //         <PaginationItem>
-                //             <PaginationLink next tag="button" />
-                //         </PaginationItem>
-
-                //{pages.map(page => {
-                    // if (page === LEFT_PAGE)
-                    // return (
-                    //     <PaginationItem  key={page}>
-                    //         <PaginationLink previous tag="button" onClick={this.handleMoveLeft} />
-                    //     </PaginationItem>
-                    // );
-                    // if (page === RIGHT_PAGE)
-                    // return (
-                    //     <PaginationItem  key={page}>
-                    //         <PaginationLink previous tag="button" onClick={this.handleMoveRight} />
-                    //     </PaginationItem>
-                    // );
-
-                    //         <PaginationItem key={page}
-                    //         className={`page-item${currentPage === page ? " active" : ""}`}
-                    //         >
-                    //                 <PaginationLink tag="button" onClick={e => this.handleClick(page, e)}>
-                    //                     {page}
-                    //                 </PaginationLink>
-                    //         </PaginationItem>
-
-
-                    // })};

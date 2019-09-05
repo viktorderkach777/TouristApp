@@ -79,7 +79,7 @@ namespace TouristApp.Controllers
         }
 
         // DELETE: api/ApiWithActions/5
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute]string id)
         {
