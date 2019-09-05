@@ -1,20 +1,46 @@
 import axios from "axios";
+import {serverUrl} from '../../../config';
+
+
+
+
 
 export default class WeatherService {
+    
+    _apiBase = `${serverUrl}api/sampledata/weather/`;
 
-    _apiBase = 'https://api.openweathermap.org/data/2.5/forecast';
+    //region = {latitude:'55.7507',longitude: '37.6177'}
+    _fetchData = async (region) => {
 
-    _fetchData = async (region = 'Rivne') => {
+        // if (region === '') {
+        //     const detectLocation = new Promise((resolve,reject) => {
+        //         if ("geolocation" in navigator) {
+        //           navigator.geolocation.getCurrentPosition((position) => {
+        //             resolve(position.coords);
+        //           }, (error) => {
+        //             if(error.code === error.PERMISSION_DENIED) {
+        //               console.error("Error detecting location.");
+        //             }
+        //           });
+        //         }
+        //       });
+          
+        //       detectLocation.then((location) => {
+        //         this.props.dispatch(fetchData(location));
+        //       }).catch(() => {
+        //         this.props.dispatch(fetchData("london"));
+        //       });
+        // }
         const { latitude, longitude } = region || {};
-        // const getDataByCity = `${this._apiBase}?q=${region}&units=metric&appid=${process.env.REACT_APP_WEATHER_ID}`;
-        // const getDataByCoords = `${this._apiBase}?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.REACT_APP_WEATHER_ID}`;
-        const getDataByCity = `${this._apiBase}?q=${region}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29`;
-        const getDataByCoords = `${this._apiBase}?lat=${latitude}&lon=${longitude}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29`;
+        const getDataByCity = `${this._apiBase}${region}`;
+        const getDataByCoords = `${this._apiBase}coords-${latitude}-${longitude}`;
         let location = typeof (region) === "object" ? getDataByCoords : getDataByCity;
-        let a = await axios.get(location);
-        console.log(a);
-        return a;
-    };
+
+       
+        return await axios.get(location);
+        //return await axios.get('http://localhost:44318/api/sampledata/weather/Moscow');//55.7507, lon: 37.6177
+        //return await axios.get('http://localhost:44318/api/sampledata/weather/coords-55.7507-37.6177');
+    };    
 
     _avgArr = (arr) => {
         return Math.round(arr.reduce((curr, next) => curr + next) / arr.length);
@@ -96,14 +122,14 @@ export default class WeatherService {
     _getDate = date => date ? new Date(date).getDate() : new Date().getDate();
     _getMonth = date => date ? new Date(date).getMonth() : new Date().getMonth();
 
-    _getResources = async () => {
-        const weather = await this._fetchData()
+    _getResources = async (region) => {
+        const weather = await this._fetchData(region)
             .then((body) => {
                 console.log("res", body);
                 if (body.ok) {
                     throw new Error(`Could not fetch, received ${body.status}`);
                 }
-
+                body.data = JSON.parse(body.data.data);
                 const tilesValues = Object.values(this._groupByDays(body.data.list));
                 //console.log("tilesValues", tilesValues);
                 const forecastTiles = tilesValues.length > 5 ? tilesValues.slice(0, 5) : tilesValues;
@@ -122,23 +148,17 @@ export default class WeatherService {
                     cityDay: tiles[0].day,
                     tiles: tiles
                 }
-                console.log("weather", weather);
+                //console.log("weather", weather);
                 return weather;
             });
 
         return weather;
     }
 
-    getTiles = async () => {
-        console.log('getTilesStart')
-        const weather = await this._getResources();
-        console.log('weather', weather)
+    getTiles = async (region) => {
+        //console.log('getTilesStart')
+        const weather = await this._getResources(region);
+        //console.log('weather', weather)
         return weather;
-    }
-
-    // getCityData = async () => {
-    //     const weather = await this._getResources();
-    //     console.log("weather", weather);
-    //     return weather;
-    // }
+    }    
 }

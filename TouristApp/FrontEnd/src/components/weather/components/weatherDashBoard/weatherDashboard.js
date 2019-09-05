@@ -13,8 +13,9 @@ import {
 const WeatherListContainer = React.lazy(() => import('../weatherListContainer'));
 const WeatherCity = React.lazy(() => import('../weatherCity'));
 
-const weatherDashboard = () => {
-
+const weatherDashboard = (props) => {
+const {region} = props;
+console.log("props-region", region);
     return (
         <Container>
             <Row>
@@ -25,7 +26,7 @@ const weatherDashboard = () => {
                         </CardTitle>
                         <CardBody>
                             <Row>
-                                <WeatherListContainer />
+                                <WeatherListContainer region={region}/>
                             </Row>
                         </CardBody>
                     </Card>

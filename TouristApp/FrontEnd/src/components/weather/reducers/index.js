@@ -5,7 +5,8 @@ const initialState = {
     tilesError: null,    
     cityName: null,
     country: null,   
-    cityDay: null
+    cityDay: null,
+    region: null
 };
 
 export const weatherReducer = (state = initialState, action) => {

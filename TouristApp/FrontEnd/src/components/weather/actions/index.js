@@ -32,13 +32,13 @@ const cityDataLoaded = (data) => {
     };
 };
 
-const fetchTiles = (weatherService, dispatch) => () => {
+const fetchTiles = (weatherService, dispatch, region) => () => {
 
     dispatch(tilesRequested());
-    console.log("fetchTiles");
-    weatherService.getTiles()
+    //console.log("fetchTiles");
+    weatherService.getTiles(region)
         .then((tiles) => { 
-            console.log("tillles", tiles);           
+            //console.log("tillles", tiles);           
             dispatch(tilesLoaded(tiles))
         })
         .catch((err) => dispatch(tilesError(err)));

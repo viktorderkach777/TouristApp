@@ -80,6 +80,7 @@ const mapStateToProps = (state) => {
         tilesLoading,
         tilesError
     }=state.weather;
+    console.log("state.weather",state.weather);
     return {
         tiles,
         cityDay,
