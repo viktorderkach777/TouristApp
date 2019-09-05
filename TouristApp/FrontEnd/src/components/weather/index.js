@@ -14,7 +14,7 @@ export default function Wheather(props) {
         <Suspense fallback={<div>Завантаження...</div>}>
             <ErrorBoundry>
                 <WeatherServiceProvider value={weatherService}>
-                    <WeatherDashboard />
+                    <WeatherDashboard region={region}/>
                 </WeatherServiceProvider>               
             </ErrorBoundry>
         </Suspense>
