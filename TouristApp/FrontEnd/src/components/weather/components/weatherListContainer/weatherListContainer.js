@@ -16,10 +16,15 @@ class WeatherListContainer extends Component {
 
     componentDidMount() {
         console.log("WeatherListContainer",this.props);
-        const{region} = this.props;
-        console.log("WeatherListContainer-region",region);
-        this.props.fetchTiles(region);        
+        
+        this.props.fetchTiles('Kyiv');        
     }
+
+    // componentWillReceiveProps(props, next){
+    //     if(props =! next){
+    //         this.props.fetchTiles('Kyiv'); 
+    //     }
+    // }
 
     render() {
         const { tiles, tilesLoading, tilesError, clickTile } = this.props;
@@ -38,11 +43,11 @@ class WeatherListContainer extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch, ownProps, region='Lutsk') => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     const { weatherService } = ownProps;
 
     return {
-        fetchTiles: fetchTiles(weatherService, dispatch, region),
+        fetchTiles: (region)=>fetchTiles(weatherService, dispatch, region),
         clickTile: (name) =>{
             dispatch(cityDataLoadedByDay(name))            
         }        
@@ -50,12 +55,13 @@ const mapDispatchToProps = (dispatch, ownProps, region='Lutsk') => {
 };
 
 const mapStateToProps = (state) => {
-    const {tiles, tilesLoading,tilesError} = state.weather;
-    //console.log("state.weather",state.weather )
+    const {tiles, tilesLoading,tilesError, region} = state.weather;
+    console.log("state.weather", state.weather )
     return {
         tiles,
         tilesLoading,
-        tilesError
+        tilesError,
+        region
     };
 };
 

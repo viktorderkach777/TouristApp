@@ -2,11 +2,11 @@
 const initialState = {
     tiles: [],
     tilesLoading: true,
-    tilesError: null,    
+    tilesError: null,
     cityName: null,
-    country: null,   
+    country: null,
     cityDay: null,
-    region: null
+    region: 'Kyiv'
 };
 
 export const weatherReducer = (state = initialState, action) => {
@@ -47,9 +47,14 @@ export const weatherReducer = (state = initialState, action) => {
                 ...state,
                 cityDay: action.payload
             };
+        case 'UPLOAD_REGION_SUCCESS':
+            return {
+                ...state,
+                region: action.payload
+            };
         default:
             return state;
-    }   
+    }
 };
 
 //export default reducer;

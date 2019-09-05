@@ -32,10 +32,17 @@ const cityDataLoaded = (data) => {
     };
 };
 
+const regionLoaded = (region) => {
+    return {
+        type: 'UPLOAD_REGION_SUCCESS',
+        payload: region
+    };
+};
+
 const fetchTiles = (weatherService, dispatch, region) => () => {
 
     dispatch(tilesRequested());
-    //console.log("fetchTiles");
+    console.log("fetchTiles-region", region);
     weatherService.getTiles(region)
         .then((tiles) => { 
             //console.log("tillles", tiles);           
@@ -47,5 +54,6 @@ const fetchTiles = (weatherService, dispatch, region) => () => {
 export {
     fetchTiles,   
     cityDataLoadedByDay,
-    cityDataLoaded   
+    cityDataLoaded,
+    regionLoaded   
 };

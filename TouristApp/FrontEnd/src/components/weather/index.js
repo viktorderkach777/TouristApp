@@ -9,12 +9,12 @@ const weatherService = new WeatherService();
 //const fakeService = new FakeService();
 
 export default function Wheather(props) {
-    const region = 'Rivne';
+    
     return (
         <Suspense fallback={<div>Завантаження...</div>}>
             <ErrorBoundry>
                 <WeatherServiceProvider value={weatherService}>
-                    <WeatherDashboard region={region}/>
+                    <WeatherDashboard />
                 </WeatherServiceProvider>               
             </ErrorBoundry>
         </Suspense>
