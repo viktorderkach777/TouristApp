@@ -2,9 +2,6 @@ import axios from "axios";
 import {serverUrl} from '../../../config';
 
 
-
-
-
 export default class WeatherService {
     
     _apiBase = `${serverUrl}api/sampledata/weather/`;
@@ -125,7 +122,7 @@ export default class WeatherService {
     _getResources = async (region) => {
         const weather = await this._fetchData(region)
             .then((body) => {
-                console.log("res", body);
+                //console.log("res", body);
                 if (body.ok) {
                     throw new Error(`Could not fetch, received ${body.status}`);
                 }

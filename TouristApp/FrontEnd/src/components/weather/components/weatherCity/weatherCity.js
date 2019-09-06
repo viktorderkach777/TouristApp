@@ -6,7 +6,7 @@ import './weatherCity.css';
 class WeatherCity extends Component {    
 
     render() {  
-        console.log("weathercity-props", this.props);     
+        //console.log("weathercity-props", this.props);     
         const {
             cityDay,
             cityName,
@@ -80,7 +80,7 @@ const mapStateToProps = (state) => {
         tilesLoading,
         tilesError
     }=state.weather;
-    console.log("state.weather",state.weather);
+    //console.log("state.weather",state.weather);
     return {
         tiles,
         cityDay,

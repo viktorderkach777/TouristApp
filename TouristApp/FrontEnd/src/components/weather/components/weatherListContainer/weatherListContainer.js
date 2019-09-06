@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import  compose  from '../../../../utils/compose';
+import compose from '../../../../utils/compose';
 import withWeatherService from '../hoc';
-import { fetchTiles, cityDataLoadedByDay } from '../../actions';
+import { cityDataLoadedByDay, tilesLoaded, tilesError, tilesRequested } from '../../actions';
 //import WeatherList from '../weather-list';
 //import Spinner from '../spinner';
 //import ErrorIndicator from '../error-indicator';
 import CentrPageSpinner from '../../../CentrPageSpinner';
-
 const WeatherList = React.lazy(() => import('../weatherList'));
 //const Spinner = React.lazy(() => import('../spinner'));
 const ErrorIndicator = React.lazy(() => import('../../../errorIndicator'));
@@ -15,20 +14,14 @@ const ErrorIndicator = React.lazy(() => import('../../../errorIndicator'));
 class WeatherListContainer extends Component {
 
     componentDidMount() {
-        console.log("WeatherListContainer",this.props);
-        
-        this.props.fetchTiles('Kyiv');        
-    }
+        //console.log("WeatherListContainer", this.props);
 
-    // componentWillReceiveProps(props, next){
-    //     if(props =! next){
-    //         this.props.fetchTiles('Kyiv'); 
-    //     }
-    // }
+        this.props.fetchTiles(this.props.region);
+    }    
 
     render() {
         const { tiles, tilesLoading, tilesError, clickTile } = this.props;
-        console.log("WeatherListContainer-props", this.props);
+        //console.log("WeatherListContainer-props", this.props);
         if (tilesLoading) {
             return <CentrPageSpinner loading={tilesLoading} />
         }
@@ -38,25 +31,34 @@ class WeatherListContainer extends Component {
         }
 
         return (
-            <WeatherList tiles={tiles} clickTile={clickTile}/>            
+            <WeatherList tiles={tiles} clickTile={clickTile} />
         );
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     const { weatherService } = ownProps;
+    //onst region = 'Kyiv';
 
     return {
-        fetchTiles: (region)=>fetchTiles(weatherService, dispatch, region),
-        clickTile: (name) =>{
-            dispatch(cityDataLoadedByDay(name))            
-        }        
+        fetchTiles: (region) => {
+            dispatch(tilesRequested());
+            weatherService.getTiles(region)
+                .then((tiles) => {
+                    dispatch(tilesLoaded(tiles))
+                })
+                .catch((err) => dispatch(tilesError(err)))
+        },
+
+        clickTile: (name) => {
+            dispatch(cityDataLoadedByDay(name))
+        }
     }
 };
 
 const mapStateToProps = (state) => {
-    const {tiles, tilesLoading,tilesError, region} = state.weather;
-    console.log("state.weather", state.weather )
+    const { tiles, tilesLoading, tilesError, region } = state.weather;
+    //console.log("state.weather", state.weather)
     return {
         tiles,
         tilesLoading,

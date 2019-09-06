@@ -6,7 +6,7 @@ const initialState = {
     cityName: null,
     country: null,
     cityDay: null,
-    region: 'Kyiv'
+    region: {latitude:'55.7507',longitude: '37.6177'}
 };
 
 export const weatherReducer = (state = initialState, action) => {

@@ -22,10 +22,8 @@ class WeatherDashboard extends Component {
         this.state = {}
     }   
 
-    render() {
-      
-        console.log("WeatherDashboard-props", this.props);
-       
+    render() {      
+        //console.log("WeatherDashboard-props", this.props);       
         return (
             <Container>
                <Buttons/>
@@ -49,32 +47,3 @@ class WeatherDashboard extends Component {
 }
 
 export default WeatherDashboard;
-
-// const WeatherDashboard = (props) => {
-//     const { region } = props;
-//     console.log("props-region", region);
-//     return (
-//         <Container>
-//             <Row>
-//                 <Button>Lutsk</Button>
-//                 <Button>Rivne</Button>
-//             </Row>
-//             <Row>
-//                 <Col sm="12" md={{ size: 10, offset: 1 }}>
-//                     <Card body outline color="primary">
-//                         <CardTitle>
-//                             <WeatherCity />
-//                         </CardTitle>
-//                         <CardBody>
-//                             <Row>
-//                                 <WeatherListContainer region={region} />
-//                             </Row>
-//                         </CardBody>
-//                     </Card>
-//                 </Col>
-//             </Row>
-//         </Container>
-//     );
-// };
-
-//export default WeatherDashboard;

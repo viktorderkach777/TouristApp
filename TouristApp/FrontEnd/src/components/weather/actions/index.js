@@ -39,21 +39,22 @@ const regionLoaded = (region) => {
     };
 };
 
-const fetchTiles = (weatherService, dispatch, region) => () => {
+// const fetchTiles = (weatherService, dispatch, region='Rivne') => () => {
 
-    dispatch(tilesRequested());
-    console.log("fetchTiles-region", region);
-    weatherService.getTiles(region)
-        .then((tiles) => { 
-            //console.log("tillles", tiles);           
-            dispatch(tilesLoaded(tiles))
-        })
-        .catch((err) => dispatch(tilesError(err)));
-}
+//     dispatch(tilesRequested());
+//     console.log("fetchTiles-region", region);
+//     weatherService.getTiles(region)
+//         .then((tiles) => { 
+//             //console.log("tillles", tiles);           
+//             dispatch(tilesLoaded(tiles))
+//         })
+//         .catch((err) => dispatch(tilesError(err)));
+// }
 
 export {
-    fetchTiles,   
+    //fetchTiles,   
     cityDataLoadedByDay,
     cityDataLoaded,
-    regionLoaded   
+    regionLoaded,
+    tilesLoaded, tilesError, tilesRequested   
 };
