@@ -26,12 +26,6 @@ class WeatherListContainer extends Component {
         this.props.fetchTiles(this.props.region);
     }    
 
-    // componentWillReceiveProps(props, next){
-    //     if(props =! next){
-    //         this.props.fetchTiles('Kyiv'); 
-    //     }
-    // }
-
     render() {
         const { tiles, tilesLoading, tilesError, clickTile } = this.props;
         //console.log("WeatherListContainer-props", this.props);
