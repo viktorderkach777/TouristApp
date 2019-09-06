@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
-
+import PropTypes from 'prop-types';
 
 
 const LEFT_PAGE = "LEFT";
@@ -135,5 +135,13 @@ class PaginationBar extends Component {
         );
     }
 }
+
+PaginationBar.propTypes =
+  {
+    currentPage: PropTypes.number.isRequired,
+    pageNeighbours: PropTypes.number.isRequired,
+    totalPages: PropTypes.number.isRequired
+  }
+
 
 export default PaginationBar;

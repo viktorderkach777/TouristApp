@@ -3,8 +3,9 @@ import { serverUrl } from '../../config';
 
 export default class TourService {
 
-  static getListTours(page) {
-    return axios.get(`${serverUrl}api/Hotel/list/` + page);
+  static getListTours(model) {
+    console.log('---STEP3----',model);
+    return axios.get(`${serverUrl}api/Hotel/list/` + model.currentPage+"?sortOrder=" + model.sortOrder);
   }
 
   //   static createNewAnimal (model) {

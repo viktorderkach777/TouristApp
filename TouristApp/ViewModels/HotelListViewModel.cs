@@ -44,5 +44,13 @@ namespace TouristApp.ViewModels
 
     }
 
+    public class SearchModel
+    {
+        public string typeOfSort { get; set; }
+        public string sortByAscending { get; set; }
+        
+
+    }
+
 
 }

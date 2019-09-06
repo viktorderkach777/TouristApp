@@ -43,11 +43,11 @@ export const tours = createSlice({
   }
 });
 
-export const getListTours = (page) => {
+export const getListTours = (model) => {
   return (dispatch) => {
     dispatch(tours.actions.getToursStarted());
 
-    TourService.getListTours(page)
+    TourService.getListTours(model)
       .then((response) => {
         console.log('--success create--', response.data);
         dispatch(tours.actions.getToursSuccess(response));

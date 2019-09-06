@@ -37,20 +37,35 @@ const PaginationBar = React.lazy(() => import('../Pagination'));
 class ToursContainer extends Component {
   state = {
     currentPage: null,
-    totalPages: null
+    totalPages: null,
+    sortOrder:'name',
+   
   }
 
   componentDidMount() {
     const { currentPage, totalPages } = this.props;
-    this.props.getListTours(currentPage);
+    const { sortOrder  } = this.state;
+    const model = {
+      currentPage:currentPage,
+      sortOrder:sortOrder,
+      
+    }
+    console.log('---STEP1----',model);
+    this.props.getListTours(model);
     this.setState({ currentPage: currentPage });
     this.setState({ totalPages: totalPages });
   }
 
   onPageChanged = data => {
-
+  
   console.log('---data from pagination',data);
-  this.props.getListTours(data);
+  const { sortOrder  } = this.state;
+  const model = {
+    currentPage:data,
+    sortOrder:sortOrder
+  }
+  console.log('---STEP2----',model);
+  this.props.getListTours(model);
   this.setState({ currentPage: data });
   
   }
@@ -153,8 +168,6 @@ class ToursContainer extends Component {
                   <small> <i className="fa fa-map-marker" aria-hidden="true"></i>{item.country}, {item.region}</small>
                 </CardSubtitle>
 
-
-
                 <CardText>
 
                   <li>
@@ -166,12 +179,12 @@ class ToursContainer extends Component {
                     <i className="fa fa-clock iconColor" aria-hidden="true"></i>
                     <span className="skin-color hidden-xs"> Тривалість: </span>
                     <b>{item.daysCount}</b> ночей
-                                     </li>
+                                    </li>
                   <li>
                     <i className="fa fa-bus iconColor" aria-hidden="true"></i>
                     <span className="skin-color hidden-xs"> Проїзд: </span>
                     включений
-                                     </li>
+                                    </li>
                   <li>
                     <i className="fa fa-credit-card iconColor" aria-hidden="true"></i>
                     <span className="skin-color hidden-xs"> Ціна за: </span>
