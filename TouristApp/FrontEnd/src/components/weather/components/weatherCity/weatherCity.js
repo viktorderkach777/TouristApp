@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Col, Row } from 'reactstrap';
 import { connect } from 'react-redux';
+import Thermometer from 'react-thermometer-component';
+import WeatherChart from '../weatherChart';
+import DayChart from '../dayChart';
 import './weatherCity.css';
 
 class WeatherCity extends Component {    
@@ -37,12 +40,28 @@ class WeatherCity extends Component {
             pressure,
             wind,
             calendDay,
-            calendMonth
+            calendMonth,
+            temps
         } = data;       
 
         return (
             <>
                 <Row>
+                    <Col>
+                        <div style={{ margin: "40px" }}>
+                            <Thermometer
+                                theme="light"
+                                value={tempMax}
+                                max="50"
+                                steps="1"
+                                format="°C"
+                                size="large"
+                                height="300"
+                            />
+                        </div>
+                    </Col>
+                    {/* <Col>
+                        <Row> */}
                     <Col>
                         <Row>
                             <div className="city">
@@ -65,6 +84,20 @@ class WeatherCity extends Component {
                             </div>
                         </Row>
                     </Col>
+                </Row>
+                <Row>
+                    <Col>
+                    <div className="graph">
+                    <WeatherChart tiles={tiles}  />
+                    </div>
+                    </Col>
+                    <Col>
+                    <div className="graph">
+                    <DayChart temps={temps} />
+                    </div>
+                    </Col>
+                    {/* </Row>
+                    </Col> */}
                 </Row>
             </>
         );

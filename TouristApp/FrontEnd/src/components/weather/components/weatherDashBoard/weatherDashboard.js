@@ -9,6 +9,9 @@ import {
     //Button
 } from 'reactstrap';
 import Buttons from '../buttons';
+import './weatherDashboard.css';
+//import WeatherChart from '../../weatherChart';
+
 
 //import WeatherListContainer from '../weather-list-container';
 //import WeatherCity from '../weather-city';
@@ -23,17 +26,21 @@ class WeatherDashboard extends Component {
     }   
 
     render() {      
-        //console.log("WeatherDashboard-props", this.props);       
+        //console.log("WeatherDashboard-props", this.props);  color="primary"     
         return (
+            <>            
             <Container>
-               <Buttons/>
+               <Buttons/>              
                 <Row>
                     <Col sm="12" md={{ size: 10, offset: 1 }}>
-                        <Card body outline color="primary">
+                        <Card body outline  className="CardWeather">
                             <CardTitle>
                                 <WeatherCity />
                             </CardTitle>
                             <CardBody>
+                            {/* <Row>
+                                    <WeatherChart/>
+                                </Row> */}
                                 <Row>
                                     <WeatherListContainer/>
                                 </Row>
@@ -42,6 +49,7 @@ class WeatherDashboard extends Component {
                     </Col>
                 </Row>
             </Container>
+            </>
         );
     }
 }

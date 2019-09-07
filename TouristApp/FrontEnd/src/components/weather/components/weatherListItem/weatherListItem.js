@@ -13,7 +13,7 @@ const WeatherListItem = ({ tile, onClick }) => {
     const { tempMax, tempMin, icon, day, calendDay, calendMonth } = tile;
     return (
         <Col>           
-            <Card tag="a" style={{ cursor: "pointer"}} onClick={onClick} body outline color="primary">
+            <Card tag="a"  onClick={onClick} body outline className="cardWeather">
                 <CardBody >
                     <Row>
                         <div className="center">

@@ -1,9 +1,9 @@
 import axios from "axios";
-import {serverUrl} from '../../../config';
+import { serverUrl } from '../../../config';
 
 
 export default class WeatherService {
-    
+
     _apiBase = `${serverUrl}api/sampledata/weather/`;
 
     //region = {latitude:'55.7507',longitude: '37.6177'}
@@ -21,7 +21,7 @@ export default class WeatherService {
         //           });
         //         }
         //       });
-          
+
         //       detectLocation.then((location) => {
         //         this.props.dispatch(fetchData(location));
         //       }).catch(() => {
@@ -33,11 +33,11 @@ export default class WeatherService {
         const getDataByCoords = `${this._apiBase}coords-${latitude}-${longitude}`;
         let location = typeof (region) === "object" ? getDataByCoords : getDataByCity;
 
-       
+
         return await axios.get(location);
         //return await axios.get('http://localhost:44318/api/sampledata/weather/Moscow');//55.7507, lon: 37.6177
         //return await axios.get('http://localhost:44318/api/sampledata/weather/coords-55.7507-37.6177');
-    };    
+    };
 
     _avgArr = (arr) => {
         return Math.round(arr.reduce((curr, next) => curr + next) / arr.length);
@@ -56,7 +56,8 @@ export default class WeatherService {
                 calendDay: this._getDate(item.dt * 1000),
                 calendMonth: this._getMonth(item.dt * 1000),
                 icon: item.weather[0].icon,
-                description: item.weather[0].description
+                description: item.weather[0].description,
+                temp: Math.round(item.main.temp)
             });
             return data;
         });
@@ -65,6 +66,15 @@ export default class WeatherService {
             min: Math.round(Math.min(...min)),
             max: Math.round(Math.max(...max)),
         };
+
+        const temps = dataTime.map((el) => {
+            return {
+                hour: el.hour,
+                temp: el.temp
+            }
+        });
+
+        console.log("temps", temps);
 
         const avgHumdity = this._avgArr(humidity);
         const avgWindSpeed = this._avgArr(windSpeed);
@@ -83,7 +93,8 @@ export default class WeatherService {
                 hour: weatherData.hour,
                 calendDay: weatherData.calendDay,
                 calendMonth: this._getMonthInfo(weatherData.calendMonth),
-                icon: `https://openweathermap.org/img/w/${weatherData.icon}.png`
+                icon: `https://openweathermap.org/img/w/${weatherData.icon}.png`,
+                temps: temps
             }
         );
     };
@@ -129,7 +140,8 @@ export default class WeatherService {
                 body.data = JSON.parse(body.data.data);
                 const tilesValues = Object.values(this._groupByDays(body.data.list));
                 //console.log("tilesValues", tilesValues);
-                const forecastTiles = tilesValues.length > 5 ? tilesValues.slice(0, 5) : tilesValues;
+                const forecastTiles = tilesValues.length > 5 ? (tilesValues[0].length > 1 ?
+                    tilesValues.slice(0, 5) : tilesValues.slice(1, 6)) : tilesValues;
                 // console.log("forecastTiles", forecastTiles);                
                 const tiles = forecastTiles.reduce((list, element) => {
                     let item = this._getInfo(element);
@@ -145,7 +157,7 @@ export default class WeatherService {
                     cityDay: tiles[0].day,
                     tiles: tiles
                 }
-                //console.log("weather", weather);
+                console.log("weather", weather);
                 return weather;
             });
 
@@ -157,5 +169,5 @@ export default class WeatherService {
         const weather = await this._getResources(region);
         //console.log('weather', weather)
         return weather;
-    }    
+    }
 }
