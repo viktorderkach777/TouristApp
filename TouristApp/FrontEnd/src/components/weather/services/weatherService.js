@@ -131,7 +131,7 @@ export default class WeatherService {
                     cityDay: tiles[0].day,
                     tiles: tiles
                 }
-                //console.log("weather", weather);
+                console.log("weather", weather);
                 return weather;
             });
 
