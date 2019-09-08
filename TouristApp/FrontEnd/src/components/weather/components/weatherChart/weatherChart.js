@@ -40,12 +40,12 @@ class WeatherChart extends Component {
         // console.log("max", max)
         // console.log("min", min)
         return (
-            <div className="area" >
+            // <div className="area" >
                 <Chart options={options}
                     series={series}
                     type="area"
                     width="350" />
-            </div>
+            // </div>
         );
     }
 }

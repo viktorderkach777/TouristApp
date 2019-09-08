@@ -5,38 +5,14 @@ import { serverUrl } from '../../../config';
 export default class WeatherService {
 
     _apiBase = `${serverUrl}api/sampledata/weather/`;
-
-    //region = {latitude:'55.7507',longitude: '37.6177'}
-    _fetchData = async (region) => {
-
-        // if (region === '') {
-        //     const detectLocation = new Promise((resolve,reject) => {
-        //         if ("geolocation" in navigator) {
-        //           navigator.geolocation.getCurrentPosition((position) => {
-        //             resolve(position.coords);
-        //           }, (error) => {
-        //             if(error.code === error.PERMISSION_DENIED) {
-        //               console.error("Error detecting location.");
-        //             }
-        //           });
-        //         }
-        //       });
-
-        //       detectLocation.then((location) => {
-        //         this.props.dispatch(fetchData(location));
-        //       }).catch(() => {
-        //         this.props.dispatch(fetchData("london"));
-        //       });
-        // }
+    
+    _fetchData = async (region) => {        
         const { latitude, longitude } = region || {};
         const getDataByCity = `${this._apiBase}${region}`;
         const getDataByCoords = `${this._apiBase}coords-${latitude}-${longitude}`;
         let location = typeof (region) === "object" ? getDataByCoords : getDataByCity;
 
-
-        return await axios.get(location);
-        //return await axios.get('http://localhost:44318/api/sampledata/weather/Moscow');//55.7507, lon: 37.6177
-        //return await axios.get('http://localhost:44318/api/sampledata/weather/coords-55.7507-37.6177');
+        return await axios.get(location);       
     };
 
     _avgArr = (arr) => {
@@ -72,14 +48,12 @@ export default class WeatherService {
                 hour: el.hour,
                 temp: el.temp
             }
-        });
-
-        console.log("temps", temps);
+        });       
 
         const avgHumdity = this._avgArr(humidity);
         const avgWindSpeed = this._avgArr(windSpeed);
         const avgPressure = this._avgArr(pressure);
-        const weatherData = dataTime.length > 7 ? dataTime[4] : dataTime[0];
+        const weatherData = dataTime.length > 5 ? dataTime[4] : dataTime[0];
 
         return (
             {
@@ -157,7 +131,7 @@ export default class WeatherService {
                     cityDay: tiles[0].day,
                     tiles: tiles
                 }
-                console.log("weather", weather);
+                //console.log("weather", weather);
                 return weather;
             });
 

@@ -11,6 +11,13 @@ const WeatherList = React.lazy(() => import('../weatherList'));
 //const Spinner = React.lazy(() => import('../spinner'));
 const ErrorIndicator = React.lazy(() => import('../../../errorIndicator'));
 
+// position: fixed;
+// /* background-color: #fff; */ 
+// width: 175px; 
+// top: 50%;
+// left: 50%;
+// transform: translate(-50%,-50%);
+
 class WeatherListContainer extends Component {
 
     componentDidMount() {
@@ -37,8 +44,7 @@ class WeatherListContainer extends Component {
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-    const { weatherService } = ownProps;
-    //onst region = 'Kyiv';
+    const { weatherService } = ownProps;    
 
     return {
         fetchTiles: (region) => {

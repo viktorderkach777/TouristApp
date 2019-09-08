@@ -4,7 +4,7 @@ import {
     Row,
     Col,
     Card,
-    CardTitle,
+    //CardTitle,
     CardBody,
     //Button
 } from 'reactstrap';
@@ -33,14 +33,11 @@ class WeatherDashboard extends Component {
                <Buttons/>              
                 <Row>
                     <Col sm="12" md={{ size: 10, offset: 1 }}>
-                        <Card body outline  className="CardWeather">
-                            <CardTitle>
+                        <Card body outline  className="CardWeather" style={{minHeight:"800px"}}>
+                            {/* <CardTitle> */}
                                 <WeatherCity />
-                            </CardTitle>
-                            <CardBody>
-                            {/* <Row>
-                                    <WeatherChart/>
-                                </Row> */}
+                            {/* </CardTitle> */}
+                            <CardBody>                           
                                 <Row>
                                     <WeatherListContainer/>
                                 </Row>

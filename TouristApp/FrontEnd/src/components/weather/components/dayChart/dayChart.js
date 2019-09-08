@@ -8,19 +8,19 @@ class DayChart extends Component {
             temps            
         } = this.props;       
 
-        console.log("dayTemp-temps", temps);
+        //console.log("dayTemp-temps", temps);
 
         const temperature = temps.map((el) => {
             return el.temp;
         });
 
-        console.log("temperature", temperature);
+        //console.log("temperature", temperature);
 
         const hours = temps.map((el) => {
             return el.hour;
         });
 
-        console.log("hours", hours);
+        //console.log("hours", hours);
 
         const options = {
             stroke: {
@@ -40,12 +40,12 @@ class DayChart extends Component {
         }];
 
         return (
-            <div className="area">
+            // <div className="area">
                 <Chart options={options}
                     series={series}
                     type="area"
                     width="350" />
-            </div>
+            // </div>
         );
     }
 }
