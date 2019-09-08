@@ -51,6 +51,18 @@ namespace TouristApp.ViewModels
         
 
     }
+    public class CountriesViewModel
+    {
 
+        public string Id { get; set; }
+        public string Name { get; set; }
 
+    }
+    public class RegionViewModel
+    {
+
+        public string Id { get; set; }
+        public string Name { get; set; }
+
+    }
 }

@@ -41,9 +41,11 @@ const User = React.lazy(() => import('../views/Users/User'));
 const SinglePage = React.lazy(() => import('../components/client/tours/singleTour/SingleTour'));
 const Salo = React.lazy(() => import("../components/client/Salo"))
 const TourWidget = React.lazy(() => import("../components/tours/index"))
+const HotelAddWidget = React.lazy(() => import("../components/admin/addHotel"))
 
 const routes=[
   { path: '/admin/', exact: true, name: 'Home' },
+  { path: '/admin/hoteladd', exact: true, name: 'Готель', component: HotelAddWidget},
   { path: '/admin/singlepage', exact: true, name: 'Готель', component: SinglePage },
   { path: '/admin/tours', exact: true, name: 'Тури', component: TourWidget },
   { path: "/admin/ss", exact: true, name: "ss", component: Salo },

@@ -78,6 +78,43 @@ namespace TouristApp.Controllers
         //public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         //{
         //    return await _context.TodoItems.ToListAsync();
+        [HttpGet("countries")]
+        public async Task<ActionResult<IEnumerable<CountriesViewModel>>> Get()
+        {
+
+            var model = await  _context
+               .Countries
+               .OrderBy(c => c.Name)
+               .Select(u => new CountriesViewModel
+               {
+                   Id=u.Id,
+                   Name=u.Name
+               })
+               .ToListAsync();
+
+            return Ok(model);
+        }
+
+        [HttpGet("regions/{id}")]
+        public async Task<ActionResult<IEnumerable<RegionViewModel>>> Get([FromRoute] int id)
+        {
+
+            var model = await _context
+               .Regions
+               .Where(f => f.CountryId == id.ToString())
+               .OrderBy(c => c.Name)
+               .Select(u => new RegionViewModel
+               {
+                   Id = u.Id,
+                   Name = u.Name
+               })
+               .ToListAsync();
+
+            return Ok(model);
+        }
+
+
+
 
         [HttpGet("list/{currentPage}")]
         public async Task <ActionResult <IEnumerable<ToursViewModel>>> Get ([FromRoute] int currentPage,string sortOrder)

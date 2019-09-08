@@ -30,7 +30,7 @@ import {
   Col,
 } from 'reactstrap';
 
-const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
+//const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
 const SortToolbar = React.lazy(() => import('../SortToolbar'));
 const PaginationBar = React.lazy(() => import('../Pagination'));
 
@@ -73,7 +73,7 @@ class ToursContainer extends Component {
   render() {
     console.log('----State Tours -----', this.state);
     console.log('----Props Tours-----', this.props);
-    const { isListLoading, totalPages, currentPage } = this.props;
+    const {  totalPages, currentPage } = this.props;//isListLoading,
 
     const filterlist = (
       <Form>
