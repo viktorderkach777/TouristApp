@@ -1,13 +1,13 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-
+import { serverUrl } from '../../config';
 export default class BaseService {
 
-    static _apiBase = 'https://localhost:44318/api/';
-    static _imageBase = 'https://localhost/images';
+    static _apiBase = 'http://localhost:50744/api/';
+    static _imageBase = 'http://localhost/images';
 
     static async GetResourse(url) {
-        const res = await axios.get(`${this._apiBase}${url}`);
+        const res = await axios.get(`${serverUrl}api/${url}`);
         if (!res) {
             throw new Error(`Could not axios ${url}, received ${res.status}`)
         }
@@ -15,7 +15,7 @@ export default class BaseService {
     }
 
     static async PostResourse(url, data) {
-        return await axios.post(`${this._apiBase}${url}`, data)
+        return await axios.post(`${serverUrl}api/${url}`, data)
         .then(res => {
             if (!res) {
                 throw new Error(`Could not axios ${url}, received ${res.status}`)

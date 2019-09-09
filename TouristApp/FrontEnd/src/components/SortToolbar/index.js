@@ -16,20 +16,20 @@ import {
     //Input,
     FormGroup
 } from 'reactstrap';
+
 class SortToolbar extends Component {
     state = {
         modal: true,
         dropdownOpen: false,
         dropDownValue: 'по імені від А до Я',
-        name: '',
-        surname: '',
-        phone: '',
+        // name: '',
+        // surname: '',
+        // phone: '',
         initialDate: "2019-01-01",
         lastDate: new Date(),
         sandFormSuccess: false,
         openModal: false,
-        typeOfSort: 'default',
-        sortByAscending: 'true',
+        sortOrder: 'name',
         collapse: false,
         accordion: [true, false, false],
         custom: [true, false],
@@ -42,12 +42,14 @@ class SortToolbar extends Component {
     }
 
     sorting = (e) => {
-        const { type, sort } = e.target.dataset;
-        this.setState({ dropDownValue: e.currentTarget.textContent, typeOfSort: type, sortByAscending: sort });
+        const { type } = e.target.dataset;
+        this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type});
     }
+
     callBackCloseDialog = () => {
         this.setState({ openModal: false });
     }
+
     handleChange = e => {
         this.setState({ [e.target.name]: e.target.value });
     };
@@ -58,6 +60,7 @@ class SortToolbar extends Component {
 
 
     render() {
+        console.log('--Sorting state----',this.state);
         return (
             <Card className="CardTours" >
                 <CardBody>
@@ -71,16 +74,16 @@ class SortToolbar extends Component {
                                         {this.state.dropDownValue}
                                     </DropdownToggle>
                                     <DropdownMenu >
-                                        <DropdownItem onClick={this.sorting} data-type="name" data-sort="true">
+                                        <DropdownItem onClick={this.sorting} data-type="name" >
                                             по імені від А до Я
                                         </DropdownItem>
-                                        <DropdownItem onClick={this.sorting} data-type="name" data-sort="false">
+                                        <DropdownItem onClick={this.sorting} data-type="name_desc">
                                             по імені від Я до А
                                         </DropdownItem>
-                                        <DropdownItem onClick={this.sorting} data-type="date" data-sort="true">
+                                        <DropdownItem onClick={this.sorting} data-type="rate">
                                             по рейтингу ↑
                                         </DropdownItem>
-                                        <DropdownItem onClick={this.sorting} data-type="date" data-sort="false">
+                                        <DropdownItem onClick={this.sorting} data-type="rate_desc">
                                             по рейтингу ↓
                                         </DropdownItem>
                                     </DropdownMenu>
