@@ -8,24 +8,46 @@ using TouristApp.DAL.Entities;
 
 namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
-    public class СityDepartureConfig : IEntityTypeConfiguration<СityDeparture>
+    public class СityDepartureConfig : IEntityTypeConfiguration<CityDepartures>
     {
-        public void Configure(EntityTypeBuilder<СityDeparture> builder)
+        //public void Configure(EntityTypeBuilder<СityDepartures> builder)
+        //{
+        //    int cityId = 0;
+        //    СityDepartures[] cities = new СityDepartures[]
+        //    {
+        //        new СityDepartures
+        //        {
+        //            Id=(++cityId).ToString(),
+        //            Name="Київ",
+        //        },
+        //        new СityDepartures
+        //        {
+        //            Id=(++cityId).ToString(),
+        //            Name="Львов"
+        //        },
+        //        new СityDepartures
+        //        {
+        //            Id=(++cityId).ToString(), //3
+        //            Name="Одеса"
+        //        }
+        //    };
+        //}
+        public void Configure(EntityTypeBuilder<CityDepartures> builder)
         {
             int cityId = 0;
-            СityDeparture[] cities = new СityDeparture[]
+            CityDepartures[] cities = new CityDepartures[]
             {
-                new СityDeparture
+                new CityDepartures
                 {
                     Id=(++cityId).ToString(),
                     Name="Київ",
                 },
-                new СityDeparture
+                new CityDepartures
                 {
                     Id=(++cityId).ToString(),
                     Name="Львов"
                 },
-                new СityDeparture
+                new CityDepartures
                 {
                     Id=(++cityId).ToString(), //3
                     Name="Одеса"

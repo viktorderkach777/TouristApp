@@ -19,9 +19,6 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
 
         }
 
-        //public DbSet<UserProfile> UserProfiles { get; set; }
-        //public DbSet<UserImage> UserImages { get; set; }
-
         public virtual DbSet<Comments> Comments { get; set; }
         public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<HotelImages> HotelImages { get; set; }
@@ -31,7 +28,9 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Regions> Regions { get; set; }
         public virtual DbSet<Tours> Tours { get; set; }
-        public virtual DbSet<СityDeparture> СityDeparture { get; set; }
+
+        public virtual DbSet<CityDepartures> CityDepartures { get; set; }
+        //public virtual DbSet<СityDeparture> СityDeparture { get; set; }
 
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
@@ -43,7 +42,7 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
             builder.ApplyConfiguration(new HotelInitialConfig());
             builder.ApplyConfiguration(new TourInitialConfig());
             builder.ApplyConfiguration(new СityDepartureConfig());
-            
+
 
 
             base.OnModelCreating(builder);

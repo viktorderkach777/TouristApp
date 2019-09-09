@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TouristApp.DAL.Entities;
 
 namespace TouristApp.Migrations
@@ -15,14 +15,15 @@ namespace TouristApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
@@ -41,7 +42,8 @@ namespace TouristApp.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
@@ -94,6 +96,18 @@ namespace TouristApp.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("TouristApp.DAL.Entities.CityDepartures", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CityDepartures");
+                });
+
             modelBuilder.Entity("TouristApp.DAL.Entities.Comments", b =>
                 {
                     b.Property<string>("Id")
@@ -130,166 +144,39 @@ namespace TouristApp.Migrations
                     b.ToTable("Countries");
 
                     b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            Name = "Poland"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Name = "Russia"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            Name = "Germany"
-                        },
-                        new
-                        {
-                            Id = "4",
-                            Name = "Ukraine"
-                        },
-                        new
-                        {
-                            Id = "5",
-                            Name = "USA"
-                        },
-                        new
-                        {
-                            Id = "6",
-                            Name = "UK"
-                        },
-                        new
-                        {
-                            Id = "7",
-                            Name = "Australia"
-                        },
-                        new
-                        {
-                            Id = "8",
-                            Name = "Belgium"
-                        },
-                        new
-                        {
-                            Id = "9",
-                            Name = "Bosnia and Herzegovina"
-                        },
-                        new
-                        {
-                            Id = "10",
-                            Name = "Canada"
-                        },
-                        new
-                        {
-                            Id = "11",
-                            Name = "Chile"
-                        },
-                        new
-                        {
-                            Id = "12",
-                            Name = "China"
-                        },
-                        new
-                        {
-                            Id = "13",
-                            Name = "Croatia"
-                        },
-                        new
-                        {
-                            Id = "14",
-                            Name = "Czech Republic"
-                        },
-                        new
-                        {
-                            Id = "15",
-                            Name = "Denmark"
-                        },
-                        new
-                        {
-                            Id = "16",
-                            Name = "Egypt"
-                        },
-                        new
-                        {
-                            Id = "17",
-                            Name = "Estonia"
-                        },
-                        new
-                        {
-                            Id = "18",
-                            Name = "Finland"
-                        },
-                        new
-                        {
-                            Id = "19",
-                            Name = "France"
-                        },
-                        new
-                        {
-                            Id = "20",
-                            Name = "Greece"
-                        },
-                        new
-                        {
-                            Id = "21",
-                            Name = "Iceland"
-                        },
-                        new
-                        {
-                            Id = "22",
-                            Name = "Ireland"
-                        },
-                        new
-                        {
-                            Id = "23",
-                            Name = "Israel"
-                        },
-                        new
-                        {
-                            Id = "24",
-                            Name = "Italy"
-                        },
-                        new
-                        {
-                            Id = "25",
-                            Name = "Japan"
-                        },
-                        new
-                        {
-                            Id = "26",
-                            Name = "Kazakhstan"
-                        },
-                        new
-                        {
-                            Id = "27",
-                            Name = "Latvia"
-                        },
-                        new
-                        {
-                            Id = "28",
-                            Name = "Moldova"
-                        },
-                        new
-                        {
-                            Id = "29",
-                            Name = "Netherlands"
-                        },
-                        new
-                        {
-                            Id = "30",
-                            Name = "Slovakia"
-                        },
-                        new
-                        {
-                            Id = "31",
-                            Name = "Slovenia"
-                        },
-                        new
-                        {
-                            Id = "32",
-                            Name = "Spain"
-                        });
+                        new { Id = "1", Name = "Poland" },
+                        new { Id = "2", Name = "Russia" },
+                        new { Id = "3", Name = "Germany" },
+                        new { Id = "4", Name = "Ukraine" },
+                        new { Id = "5", Name = "USA" },
+                        new { Id = "6", Name = "UK" },
+                        new { Id = "7", Name = "Australia" },
+                        new { Id = "8", Name = "Belgium" },
+                        new { Id = "9", Name = "Bosnia and Herzegovina" },
+                        new { Id = "10", Name = "Canada" },
+                        new { Id = "11", Name = "Chile" },
+                        new { Id = "12", Name = "China" },
+                        new { Id = "13", Name = "Croatia" },
+                        new { Id = "14", Name = "Czech Republic" },
+                        new { Id = "15", Name = "Denmark" },
+                        new { Id = "16", Name = "Egypt" },
+                        new { Id = "17", Name = "Estonia" },
+                        new { Id = "18", Name = "Finland" },
+                        new { Id = "19", Name = "France" },
+                        new { Id = "20", Name = "Greece" },
+                        new { Id = "21", Name = "Iceland" },
+                        new { Id = "22", Name = "Ireland" },
+                        new { Id = "23", Name = "Israel" },
+                        new { Id = "24", Name = "Italy" },
+                        new { Id = "25", Name = "Japan" },
+                        new { Id = "26", Name = "Kazakhstan" },
+                        new { Id = "27", Name = "Latvia" },
+                        new { Id = "28", Name = "Moldova" },
+                        new { Id = "29", Name = "Netherlands" },
+                        new { Id = "30", Name = "Slovakia" },
+                        new { Id = "31", Name = "Slovenia" },
+                        new { Id = "32", Name = "Spain" }
+                    );
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.DbRole", b =>
@@ -310,7 +197,8 @@ namespace TouristApp.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -372,7 +260,8 @@ namespace TouristApp.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -424,24 +313,6 @@ namespace TouristApp.Migrations
                     b.ToTable("HotelParameters");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameters", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("HotelParameterId");
-
-                    b.Property<bool?>("IsFree");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelParameterId");
-
-                    b.ToTable("HotelSubParameters");
-                });
-
             modelBuilder.Entity("TouristApp.DAL.Entities.Hotels", b =>
                 {
                     b.Property<string>("Id")
@@ -450,6 +321,10 @@ namespace TouristApp.Migrations
                     b.Property<int>("Class");
 
                     b.Property<string>("Description");
+
+                    b.Property<double?>("Latitude");
+
+                    b.Property<double?>("Longtitude");
 
                     b.Property<string>("Name");
 
@@ -468,39 +343,28 @@ namespace TouristApp.Migrations
                     b.ToTable("Hotels");
 
                     b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            Class = 4,
-                            Description = "Отель расположен в районе Хадаба курорта Шарм-Эль-Шейх на берегу Красного моря. Был открыт в 1996 году. Реновации в отеле не было, только косметический поточный ремонт. Состоит из основного 2-этажного здания (без номеров) и комплекса 2-этажных корпусов. Коралловый пляж отеля граничит с уникальными коралловыми рифами. Рядом возле отеля находится развлекательный центр Alf Leila Wa Leila, а торговые ряды Il Merkato и Old Market порадуют любителей шопинга и местного колорита. Отель расположен в 22 км от международного аэропорта Шарм-эль-Шейх в районе Hadaba | Ras Um El Sid. Расстояние до Naama Bay: 7 км; Расстояние до Old Market (Старый Город): 4 км; Расстояние до Soho Square: 20 км.",
-                            Name = "Royal Paradise Resort",
-                            Price = 550m,
-                            Rate = 5.0,
-                            RegionId = "1",
-                            RoomsCount = 286
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Class = 3,
-                            Description = "Отель находится в районе Рас Умм Элсид в Шарм-эль-Шейхе. В 8 км расположена набережная Наама-Бэй со множеством ресторанов и магазинов. Гостиница впервые распахнула свои двери гостям в 1999 году, последняя реновация проводилась в 2014 году. Отель подойдет для молодежного, романтического или индивидуального отдыха. В 18 км от аэропорта г. Шарм-эль-Шейх.",
-                            Name = "Amar Sina",
-                            Price = 572m,
-                            Rate = 3.6099999999999999,
-                            RegionId = "1",
-                            RoomsCount = 98
-                        },
-                        new
-                        {
-                            Id = "3",
-                            Class = 5,
-                            Description = "Отель расположен в Хадабет Ом Эль Сид, в самом центре променада Эль Меркато, на курорте Шарм-эль-Шейх, рядом с побережьем Красного моря. Отель был открыт в 2010 году, последняя реновация проводилась в 2018 году (обновление мебели на территории отеля, обновление бассейнов и номеров категории Deluxe). Отель подойдет для семейного, романтического или молодежного отдыха. Отель расположен в 17 км от аэропорта города Шарм Эль Шейх.",
-                            Name = "Il Mercato Hotel (ex.Iberotel Il Mercato)",
-                            Price = 675m,
-                            Rate = 4.5199999999999996,
-                            RegionId = "1",
-                            RoomsCount = 318
-                        });
+                        new { Id = "1", Class = 4, Description = "Отель расположен в районе Хадаба курорта Шарм-Эль-Шейх на берегу Красного моря. Был открыт в 1996 году. Реновации в отеле не было, только косметический поточный ремонт. Состоит из основного 2-этажного здания (без номеров) и комплекса 2-этажных корпусов. Коралловый пляж отеля граничит с уникальными коралловыми рифами. Рядом возле отеля находится развлекательный центр Alf Leila Wa Leila, а торговые ряды Il Merkato и Old Market порадуют любителей шопинга и местного колорита. Отель расположен в 22 км от международного аэропорта Шарм-эль-Шейх в районе Hadaba | Ras Um El Sid. Расстояние до Naama Bay: 7 км; Расстояние до Old Market (Старый Город): 4 км; Расстояние до Soho Square: 20 км.", Name = "Royal Paradise Resort", Price = 550m, Rate = 5.0, RegionId = "1", RoomsCount = 286 },
+                        new { Id = "2", Class = 3, Description = "Отель находится в районе Рас Умм Элсид в Шарм-эль-Шейхе. В 8 км расположена набережная Наама-Бэй со множеством ресторанов и магазинов. Гостиница впервые распахнула свои двери гостям в 1999 году, последняя реновация проводилась в 2014 году. Отель подойдет для молодежного, романтического или индивидуального отдыха. В 18 км от аэропорта г. Шарм-эль-Шейх.", Name = "Amar Sina", Price = 572m, Rate = 3.61, RegionId = "1", RoomsCount = 98 },
+                        new { Id = "3", Class = 5, Description = "Отель расположен в Хадабет Ом Эль Сид, в самом центре променада Эль Меркато, на курорте Шарм-эль-Шейх, рядом с побережьем Красного моря. Отель был открыт в 2010 году, последняя реновация проводилась в 2018 году (обновление мебели на территории отеля, обновление бассейнов и номеров категории Deluxe). Отель подойдет для семейного, романтического или молодежного отдыха. Отель расположен в 17 км от аэропорта города Шарм Эль Шейх.", Name = "Il Mercato Hotel (ex.Iberotel Il Mercato)", Price = 675m, Rate = 4.52, RegionId = "1", RoomsCount = 318 }
+                    );
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameters", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("HotelParameterId");
+
+                    b.Property<bool?>("IsFree");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelParameterId");
+
+                    b.ToTable("HotelSubParameters");
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Orders", b =>
@@ -550,30 +414,18 @@ namespace TouristApp.Migrations
                     b.ToTable("Regions");
 
                     b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            CountryId = "16",
-                            Name = "Шарм Эль Шейх"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            CountryId = "1",
-                            Name = "Krakow"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            CountryId = "1",
-                            Name = "Wroclaw"
-                        });
+                        new { Id = "1", CountryId = "16", Name = "Шарм Эль Шейх" },
+                        new { Id = "2", CountryId = "1", Name = "Krakow" },
+                        new { Id = "3", CountryId = "1", Name = "Wroclaw" }
+                    );
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Tours", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CityDepartureId");
 
                     b.Property<int?>("DaysCount");
 
@@ -583,53 +435,19 @@ namespace TouristApp.Migrations
 
                     b.Property<decimal?>("Price");
 
-                    b.Property<string>("СityDepartureId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelId");
+                    b.HasIndex("CityDepartureId");
 
-                    b.HasIndex("СityDepartureId");
+                    b.HasIndex("HotelId");
 
                     b.ToTable("Tours");
 
                     b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            DaysCount = 6,
-                            FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified),
-                            HotelId = "1",
-                            Price = 3300m
-                        },
-                        new
-                        {
-                            Id = "2",
-                            DaysCount = 8,
-                            FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified),
-                            HotelId = "2",
-                            Price = 4400m
-                        },
-                        new
-                        {
-                            Id = "3",
-                            DaysCount = 10,
-                            FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified),
-                            HotelId = "2",
-                            Price = 5500m
-                        });
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.СityDeparture", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("СityDeparture");
+                        new { Id = "1", DaysCount = 6, FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), HotelId = "1", Price = 3300m },
+                        new { Id = "2", DaysCount = 8, FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), HotelId = "2", Price = 4400m },
+                        new { Id = "3", DaysCount = 10, FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), HotelId = "2", Price = 5500m }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -702,18 +520,18 @@ namespace TouristApp.Migrations
                         .HasForeignKey("HotelId");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameters", b =>
-                {
-                    b.HasOne("TouristApp.DAL.Entities.HotelParameters", "HotelParameter")
-                        .WithMany("HotelSubParameters")
-                        .HasForeignKey("HotelParameterId");
-                });
-
             modelBuilder.Entity("TouristApp.DAL.Entities.Hotels", b =>
                 {
                     b.HasOne("TouristApp.DAL.Entities.Regions", "Region")
                         .WithMany("Hotels")
                         .HasForeignKey("RegionId");
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameters", b =>
+                {
+                    b.HasOne("TouristApp.DAL.Entities.HotelParameters", "HotelParameter")
+                        .WithMany("HotelSubParameters")
+                        .HasForeignKey("HotelParameterId");
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Orders", b =>
@@ -744,13 +562,13 @@ namespace TouristApp.Migrations
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Tours", b =>
                 {
+                    b.HasOne("TouristApp.DAL.Entities.CityDepartures", "CityDeparture")
+                        .WithMany("Tours")
+                        .HasForeignKey("CityDepartureId");
+
                     b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
                         .WithMany("Tours")
                         .HasForeignKey("HotelId");
-
-                    b.HasOne("TouristApp.DAL.Entities.СityDeparture", "СityDeparture")
-                        .WithMany()
-                        .HasForeignKey("СityDepartureId");
                 });
 #pragma warning restore 612, 618
         }

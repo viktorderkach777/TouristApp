@@ -50,7 +50,7 @@ namespace TouristApp.Controllers
                 .Include(s => s.Hotel)
                 .Include(d => d.Hotel.Region)
                 .Include(f => f.Hotel.Region.Country)
-                .Include(z => z.СityDeparture)
+                .Include(z => z.CityDeparture)
                 .OrderBy(c => c.Hotel.Class)
                 .Select(u => new HotelListViewModel
                 {

@@ -10,7 +10,7 @@ using TouristApp.DAL.Entities;
 
 namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
-   
+
 
     class TourInitialConfig : IEntityTypeConfiguration<Tours>
     {

@@ -19,9 +19,14 @@ namespace TouristApp.DAL.Entities
             {
                 var user = new DbUser
                 {
+                    FirstName = "Vasyl",
+                    MiddleName = "Vasylyovych",
+                    LastName = "Vasylyuk",
+                    DateOfBirth = DateTime.Now,
+                    AvatarUrl = "no_image.jpg",
                     Email = email,
                     UserName = email,
-                    SignUpTime = DateTime.Now
+                    SignUpTime = DateTime.Now,
                 };
                 var result = userManager.CreateAsync(user, "Qwerty1-").Result;
 
