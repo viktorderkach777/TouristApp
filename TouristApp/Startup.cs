@@ -145,7 +145,7 @@ namespace TouristApp
                 }
             });
 
-            //SeederDB.Seed(app.ApplicationServices);
+            SeederDB.SeedDataByAS(app.ApplicationServices);
         }
     }
 }
