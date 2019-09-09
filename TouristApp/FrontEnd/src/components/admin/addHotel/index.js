@@ -225,7 +225,7 @@ class HotelAddForm extends Component {
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend" >
                           <InputGroupText style={iconsColor}>
-                          <i class="fa fa-calculator" aria-hidden="true"></i>
+                          <i className="fa fa-calculator" aria-hidden="true"></i>
                           </InputGroupText>
                         </InputGroupAddon>
                           <Input 
@@ -246,7 +246,7 @@ class HotelAddForm extends Component {
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend" >
                           <InputGroupText style={iconsColor}>
-                          <i class="fa fa-money" aria-hidden="true"></i>
+                          <i className="fa fa-money" aria-hidden="true"></i>
                           </InputGroupText>
                         </InputGroupAddon>
                           <Input 
@@ -261,7 +261,7 @@ class HotelAddForm extends Component {
                           />
                           <InputGroupAddon addonType="append">
                           <InputGroupText style={iconsColor}>
-                          <i class="fa fa-usd" aria-hidden="true"></i>
+                          <i className="fa fa-usd" aria-hidden="true"></i>
                           </InputGroupText>
                         </InputGroupAddon>
                           {!!errors.price ? <span className="help-block">{errors.price}</span> : ''}

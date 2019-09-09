@@ -154,8 +154,10 @@ class RegionAddForm extends Component {
                                                     {!!errors.regionName ? <span className="help-block">{errors.regionName}</span> : ''}
                                                 </InputGroup>
                                                 <Row className="justify-content-center">
-                                                    <Col xs="6">
+                                                    <Col xs="3">
                                                         <Button  type="submit" color="primary" className="px-4" disabled={isLoading}>Додати</Button>
+                                                    </Col>
+                                                    <Col xs="3">
                                                         <Link to={`/admin/`}>
                                                         <Button   color="danger" className="px-4" style={{marginLeft:'10px'}} >Закрити</Button>
                                                         </Link>
