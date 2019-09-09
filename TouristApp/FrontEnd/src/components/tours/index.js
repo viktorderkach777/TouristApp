@@ -198,7 +198,7 @@ class ToursContainer extends Component {
             <Col sm="2" style={{ verticalAlign: 'bottom' }}>
               <div className="price-block">
                 <div className="price">{item.price}
-                  <span className="currency"> ₴</span>
+                  <span className="currency">₴</span>
                 </div>
               </div>
               <Link to={`/views/${item.country}/${item.id}`}>

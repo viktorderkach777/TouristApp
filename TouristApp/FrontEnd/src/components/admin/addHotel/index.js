@@ -190,7 +190,7 @@ class HotelAddForm extends Component {
                       <InputGroup  className="mb-3 " >
                       <InputGroupAddon addonType="prepend">
                               <InputGroupText style={iconsColor}>
-                              <i class="fa fa-star" aria-hidden="true"></i>
+                              <i className="fa fa-star" aria-hidden="true"></i>
                               </InputGroupText>
                       </InputGroupAddon>
                                   <Input type="select"
@@ -268,9 +268,9 @@ class HotelAddForm extends Component {
                       </InputGroup>
 
 
-                      <Row>
+                      <Row  className="justify-content-center">
                         <Col xs="6">
-                          <Button color="primary" className="px-4" disabled={isLoading}>Додати</Button>
+                          <Button type="submit" color="primary" className="px-4" disabled={isLoading}>Додати</Button>
                         </Col>
                       </Row>
                     </Form>

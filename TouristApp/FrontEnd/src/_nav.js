@@ -35,7 +35,7 @@ export default {
     },
     {
       name: 'Додати регіон',
-      url: '/admin/hoteladd',
+      url: '/admin/regionadd',
       icon: 'icon-pencil',
     },
     {
@@ -45,7 +45,7 @@ export default {
     },
     {
       name: 'Додати країну',
-      url: '/admin/hoteladd',
+      url: '/admin/countryadd',
       icon: 'icon-pencil',
     },
   ],

@@ -95,6 +95,7 @@ namespace TouristApp.Controllers
             return Ok(model);
         }
 
+
         [HttpGet("regions/{id}")]
         public async Task<ActionResult<IEnumerable<RegionViewModel>>> Get([FromRoute] int id)
         {
@@ -113,6 +114,34 @@ namespace TouristApp.Controllers
             return Ok(model);
         }
 
+        
+
+        //Get api/Hotel/create
+        [HttpPost("regions/create")]
+        public IActionResult Post([FromBody] RegionViewModel model)
+        {
+            
+            _context.Regions.Add(new Regions
+            {
+                Name = model.Name,
+                CountryId= model.Id
+            });
+            _context.SaveChanges();
+            return Ok();
+
+        }
+
+        [HttpPost("countries/create")]
+        public IActionResult Post([FromBody]  CountriesAddViewModel model)
+        {
+            _context.Countries.Add(new Countries
+            {
+                Name = model.Name
+            });
+            _context.SaveChanges();
+            return Ok();
+
+        }
 
 
 
