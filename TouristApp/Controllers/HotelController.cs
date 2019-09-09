@@ -158,7 +158,7 @@ namespace TouristApp.Controllers
                 .Include(s => s.Hotel)
                 .Include(d => d.Hotel.Region)
                 .Include(f => f.Hotel.Region.Country)
-                .Include(z => z.СityDeparture)
+                .Include(z => z.CityDeparture)
                 .Select(u => new HotelListViewModel
                 {
                     Id = u.Id,
