@@ -9,7 +9,7 @@ import './weatherCity.css';
 class WeatherCity extends Component {
 
     render() {
-        //console.log("weathercity-props", this.props);     
+           
         const {
             cityDay,
             cityName,
