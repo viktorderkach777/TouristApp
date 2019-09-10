@@ -57,8 +57,8 @@ class PaginationBar extends Component {
     };
 
     getPager = () => {
-        const{totalPages,currentPage,pageNeighbours}=this.props;
-       
+        //const{totalPages,currentPage,pageNeighbours}=this.props;
+        const{totalPages,pageNeighbours}=this.props;
         const totalNumbers = pageNeighbours * 2 + 3;
         const totalBlocks = totalNumbers + 2;
 
@@ -83,10 +83,10 @@ class PaginationBar extends Component {
     };
 
 
-            return [1, ...pages, totalPages];
-        }
-        return range(1, totalPages);
-    };
+    //         return [1, ...pages, totalPages];
+    //     }
+    //     return range(1, totalPages);
+    // };
 
     render() {
         const { currentPage} = this.props;

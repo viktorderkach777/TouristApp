@@ -98,23 +98,7 @@ class WeatherCity extends Component {
                             </div>
                         </div>
                     </Col>                   
-                </Row>
-                <Row>
-                    <Col>
-                        <div className="box">
-                            <div className="child">
-                                <WeatherChart tiles={tiles} />
-                            </div>
-                        </div>
-                    </Col>
-                    <Col>
-                        <div className="box">
-                            <div className="child">
-                                <DayChart temps={temps} />
-                            </div>
-                        </div>
-                    </Col>                   
-                </Row>
+                </Row>               
             </>
             // <>
             //     <Row>
