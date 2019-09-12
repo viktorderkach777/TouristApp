@@ -10,4 +10,18 @@ export default class AdminService {
     }
 
 
+
+//-----------------OPERATION    COUTRIES---------------------------
+
+    static getCounties () {
+        return axios.get(`${serverUrl}api/country/countries`);
+    }
+
+    static deleteCounty (id) {
+        return  axios.delete (`${serverUrl}api/country/`+id);
+        
+    }
+
 }
+
+

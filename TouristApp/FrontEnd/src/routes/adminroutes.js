@@ -44,12 +44,14 @@ const TourWidget = React.lazy(() => import("../components/tours/index"))
 const HotelAddWidget = React.lazy(() => import("../components/admin/addHotel"))
 const RegionAddWidget = React.lazy(() => import("../components/admin/addRegion"))
 const CountryAddWidget = React.lazy(() => import("../components/admin/addCountry"))
+const CountryDelWidget = React.lazy(() => import("../components/admin/delCountry"))
 
 const routes=[
   { path: '/admin/', exact: true, name: 'Home' },
   { path: '/admin/hoteladd', exact: true, name: 'Готель', component: HotelAddWidget},
   { path: '/admin/regionadd', exact: true, name: 'Регіон', component: RegionAddWidget},
-  { path: '/admin/countryadd', exact: true, name: 'Країна', component: CountryAddWidget},
+  { path: '/admin/countryadd', exact: true, name: 'Країна додавання', component: CountryAddWidget},
+  { path: '/admin/countrydel', exact: true, name: 'Країна видалення', component: CountryDelWidget},
   { path: '/admin/singlepage', exact: true, name: 'Готель', component: SinglePage },
   { path: '/admin/tours', exact: true, name: 'Тури', component: TourWidget },
   { path: "/admin/ss", exact: true, name: "ss", component: Salo },

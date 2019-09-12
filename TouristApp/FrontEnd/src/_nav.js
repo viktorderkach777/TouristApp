@@ -67,7 +67,7 @@ export default {
 },
 {
   name: 'Видалити країну',
-  url: '/admin/hoteladd',
+  url: '/admin/countrydel',
   icon: 'icon-pencil',
 },
 ],

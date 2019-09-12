@@ -67,7 +67,7 @@ class HotelAddForm extends Component {
 
   componentDidMount() {
     console.log('---componentDiDMount----');
-    axios.get(`${serverUrl}api/Hotel/countries`)
+    axios.get(`${serverUrl}api/country/countries`)
       .then(res => {
         const countries = res.data;
         this.setState({ countries });
