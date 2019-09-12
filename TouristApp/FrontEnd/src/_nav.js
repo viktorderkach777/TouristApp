@@ -72,6 +72,28 @@ export default {
 },
 ],
 },
+{
+  name: 'Редагування',
+  url: '/base',
+  icon: 'icon-pencil',
+  children: [  
+{
+  name: 'Редагувати готель',
+  url: '/admin/hoteladd',
+  icon: 'icon-pencil',
+},
+{
+  name: 'Редагувати тур',
+  url: '/admin/hoteladd',
+  icon: 'icon-pencil',
+},
+{
+  name: 'Редагувати країну',
+  url: '/admin/countryedit',
+  icon: 'icon-pencil',
+},
+],
+},
     {
       title: true,
       name: 'Components',

@@ -78,22 +78,22 @@ namespace TouristApp.Controllers
         //public async Task<ActionResult<IEnumerable<TodoItem>>> GetTodoItems()
         //{
         //    return await _context.TodoItems.ToListAsync();
-        [HttpGet("countries")]
-        public async Task<ActionResult<IEnumerable<CountriesViewModel>>> Get()
-        {
+        //[HttpGet("countries")]
+        //public async Task<ActionResult<IEnumerable<CountriesViewModel>>> Get()
+        //{
 
-            var model = await  _context
-               .Countries
-               .OrderBy(c => c.Name)
-               .Select(u => new CountriesViewModel
-               {
-                   Id=u.Id,
-                   Name=u.Name
-               })
-               .ToListAsync();
+        //    var model = await  _context
+        //       .Countries
+        //       .OrderBy(c => c.Name)
+        //       .Select(u => new CountriesViewModel
+        //       {
+        //           Id=u.Id,
+        //           Name=u.Name
+        //       })
+        //       .ToListAsync();
 
-            return Ok(model);
-        }
+        //    return Ok(model);
+        //}
 
 
         [HttpGet("regions/{id}")]
@@ -131,17 +131,17 @@ namespace TouristApp.Controllers
 
         }
 
-        [HttpPost("countries/create")]
-        public IActionResult Post([FromBody]  CountriesAddViewModel model)
-        {
-            _context.Countries.Add(new Countries
-            {
-                Name = model.Name
-            });
-            _context.SaveChanges();
-            return Ok();
+        //[HttpPost("countries/create")]
+        //public IActionResult Post([FromBody]  CountriesAddViewModel model)
+        //{
+        //    _context.Countries.Add(new Countries
+        //    {
+        //        Name = model.Name
+        //    });
+        //    _context.SaveChanges();
+        //    return Ok();
 
-        }
+        //}
 
 
 

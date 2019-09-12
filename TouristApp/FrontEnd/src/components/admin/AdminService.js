@@ -17,11 +17,19 @@ export default class AdminService {
         return axios.get(`${serverUrl}api/country/countries`);
     }
 
-    static deleteCounty (id) {
+    static deleteCountry (id) {
         return  axios.delete (`${serverUrl}api/country/`+id);
         
     }
 
+    static editCountry (id,model) {
+        return  axios.put (`${serverUrl}api/country/`+id,model);
+    }
+
+    static addCountry (model) {
+        return  axios.post(`${serverUrl}api/country/create`, model )
+    }
+  
 }
 
 

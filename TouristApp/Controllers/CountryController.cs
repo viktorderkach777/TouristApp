@@ -67,17 +67,26 @@ namespace TouristApp.Controllers
 
         // PUT: api/Countries/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountries([FromRoute] string id, [FromBody] Countries countries)
+        public async Task<IActionResult> PutCountries([FromRoute] string id, [FromBody] CountriesEditViewModel model)
         {
+
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != countries.Id)
+            Countries countries = new Countries
             {
-                return BadRequest();
-            }
+                Id = id,
+                Name = model.Name
+
+            };
+
+            //if (id != countries.Id)
+            //{
+            //    return BadRequest();
+            //}
 
             _context.Entry(countries).State = EntityState.Modified;
 
@@ -101,18 +110,22 @@ namespace TouristApp.Controllers
         }
 
         // POST: api/Countries
-        [HttpPost]
-        public async Task<IActionResult> PostCountries([FromBody] Countries countries)
+        [HttpPost("country/create")]
+        public async Task<IActionResult> PostCountries([FromBody] CountriesAddViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            _context.Countries.Add(countries);
+            _context.Countries.Add(new Countries
+            {
+                Name = model.Name
+            });
+            
+            
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCountries", new { id = countries.Id }, countries);
+            return Ok(model);
         }
 
         // DELETE: api/Countries/5

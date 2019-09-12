@@ -96,7 +96,7 @@ class HotelAddForm extends Component {
     e.preventDefault();
     let errors = {};
     console.log('submit');
-    //if (!validateemail(this.state.email)) errors.email = "Enter valid email"
+    
     if (this.state.email === '') errors.email = "Can't be empty!"
     if (this.state.password === '') errors.password = "Can't be empty!"
 

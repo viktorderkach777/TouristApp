@@ -77,7 +77,7 @@ class CountryDelForm extends Component {
             this.setState({ isLoading: true });
  
             console.log('CountryDelete: validform', selectedCountry);
-                AdminService.deleteCounty(selectedCountry)
+                AdminService.deleteCountry(selectedCountry)
                 .then(
                     () => { this.setState({ done: true }) },
                     (err) => this.setState({ errors: err.response.data, isLoading: false })
