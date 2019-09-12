@@ -67,9 +67,31 @@ export default {
 },
 {
   name: 'Видалити країну',
+  url: '/admin/maphotel',
+  icon: 'icon-pencil',
+},
+],
+},
+{
+  name: 'Карти',
+  url: '/base',
+  icon: 'icon-minus',
+  children: [  
+{
+  name: 'Додати маркер',
   url: '/admin/hoteladd',
   icon: 'icon-pencil',
 },
+// {
+//   name: 'Видалити тур',
+//   url: '/admin/hoteladd',
+//   icon: 'icon-pencil',
+// },
+// {
+//   name: 'Видалити країну',
+//   url: '/admin/hoteladd',
+//   icon: 'icon-pencil',
+// },
 ],
 },
     {

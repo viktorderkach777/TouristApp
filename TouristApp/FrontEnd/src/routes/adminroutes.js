@@ -44,7 +44,7 @@ const TourWidget = React.lazy(() => import("../components/tours/index"))
 const HotelAddWidget = React.lazy(() => import("../components/admin/addHotel"))
 const RegionAddWidget = React.lazy(() => import("../components/admin/addRegion"))
 const CountryAddWidget = React.lazy(() => import("../components/admin/addCountry"))
-
+const MapHotelWidget = React.lazy(() => import("../components/admin/mapHotel"))
 const routes=[
   { path: '/admin/', exact: true, name: 'Home' },
   { path: '/admin/hoteladd', exact: true, name: 'Готель', component: HotelAddWidget},
@@ -93,5 +93,6 @@ const routes=[
   { path: '/admin/charts', name: 'Charts', component: Charts },
   { path: '/admin/users', exact: true, name: 'Users', component: Users },
   { path: '/admin/users/:id', exact: true, name: 'User Details', component: User },
+  { path: '/admin/maphotel', exact: true, name: 'MapHotel', component: MapHotelWidget },
 ];
 export default routes;
