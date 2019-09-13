@@ -110,8 +110,8 @@ namespace TouristApp.Controllers
         }
 
         // POST: api/Countries
-        [HttpPost("country/create")]
-        public async Task<IActionResult> PostCountries([FromBody] CountriesAddViewModel model)
+        [HttpPost("create")]
+        public async Task<IActionResult> Post([FromBody] CountriesAddViewModel model)
         {
             if (!ModelState.IsValid)
             {

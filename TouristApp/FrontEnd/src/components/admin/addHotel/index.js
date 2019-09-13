@@ -11,6 +11,8 @@ import { Redirect } from "react-router";
 import axios from 'axios';
 import { serverUrl } from '../../../config';
 import hotelimg from '../addHotel/hotel.png';
+import  AdminService from '../AdminService'
+
 const iconsColor = {
   backgroundColor: '#00aced',
   color: '#fff',
@@ -63,16 +65,16 @@ class HotelAddForm extends Component {
     }
   };
 
- 
+
 
   componentDidMount() {
     console.log('---componentDiDMount----');
-    axios.get(`${serverUrl}api/country/countries`)
+    AdminService.getCountries()
       .then(res => {
         const countries = res.data;
         this.setState({ countries });
       })
-     .catch(() => {console.log('--failed--'); });
+    .catch(() => {console.log('--failed--'); });
     }
 
   handleChange = (e) => {
@@ -86,9 +88,9 @@ class HotelAddForm extends Component {
     .then(res => {
       const regions = res.data;
       this.setState({ regions, regionsLoad:true });
-     
+    
     })
-   .catch(() => {console.log('--failed--'); });
+  .catch(() => {console.log('--failed--'); });
   };
 
 
@@ -96,7 +98,7 @@ class HotelAddForm extends Component {
     e.preventDefault();
     let errors = {};
     console.log('submit');
-    
+    //if (!validateemail(this.state.email)) errors.email = "Enter valid email"
     if (this.state.email === '') errors.email = "Can't be empty!"
     if (this.state.password === '') errors.password = "Can't be empty!"
 

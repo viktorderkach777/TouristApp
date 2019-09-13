@@ -55,7 +55,7 @@ class CountryEditForm extends Component {
 
     componentDidMount() {
         console.log('---componentDiDMount----');
-        AdminService.getCounties()
+        AdminService.getCountries()
             .then(res => {
                 const countries = res.data;
                 this.setState({ countries });

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Redirect } from "react-router";
+//import { Redirect } from "react-router";
 import  AdminService from '../AdminService'
+import Notifications, { notify } from '../../Notifications'
 
 const iconsColor = {
     backgroundColor: '#00aced',
@@ -46,15 +47,19 @@ class CountryDelForm extends Component {
     };
 
 
+    getCountry=()=>{
+        AdminService.getCountries()
+        .then(res => {
+            const countries = res.data;
+            this.setState({ countries });
+        })
+        .catch(() => { console.log('--failed--'); });
+    }
+
 
     componentDidMount() {
         console.log('---componentDiDMount----');
-        AdminService.getCounties()
-            .then(res => {
-                const countries = res.data;
-                this.setState({ countries });
-            })
-            .catch(() => { console.log('--failed--'); });
+        this.getCountry();
     }
 
     handleChange = (e) => {
@@ -75,11 +80,15 @@ class CountryDelForm extends Component {
             const { selectedCountry } = this.state;
             
             this.setState({ isLoading: true });
- 
             console.log('CountryDelete: validform', selectedCountry);
                 AdminService.deleteCountry(selectedCountry)
                 .then(
-                    () => { this.setState({ done: true }) },
+                    () => { this.setState({ done: true, isLoading: false },() => 
+                    {
+                        notify(" Країну видалено!" , '#071');
+                        this.GetCounries();
+                    }
+                    )},
                     (err) => this.setState({ errors: err.response.data, isLoading: false })
                 )
                 .catch(() => { console.log('--failed--'); });
@@ -90,10 +99,11 @@ class CountryDelForm extends Component {
     };
 
     render() {
-        const { countries, errors, isLoading, done } = this.state;
-        console.log('----AddHotel---', this.state);
+        const { countries, errors, isLoading} = this.state;
+        console.log('----Del Hotel---', this.state);
         const form = (
             <React.Fragment>
+                <Notifications />
                 <div className="app flex-row align-items-center">
                     <Container>
                         <Row className="justify-content-center">
@@ -142,7 +152,7 @@ class CountryDelForm extends Component {
                 </div>
             </React.Fragment>
         );
-        return (done ? <Redirect to='/admin/' /> : form);
+        return form;//(done ? <Redirect to='/admin/' /> : form);
     }
 }
 

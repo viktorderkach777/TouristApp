@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
 //import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import Notifications, { notify } from '../../Notifications'
 //import { connect } from "react-redux";
 //import * as userAction from '../../../reducers/auth';
 //import get from 'lodash.get';
 //import validateemail from '../../../helpers/validateEmail'; 
 import { Link } from 'react-router-dom';
-import { Redirect } from "react-router";
+//import { Redirect } from "react-router";
 import  AdminService from '../AdminService'
 
 const iconsColor = {
@@ -64,10 +65,9 @@ class CountryAddForm extends Component {
                         name: countryName
                     };
                 console.log('CountryAdd: validform', model );
-               // axios.post(`${serverUrl}api/Hotel/countries/create`, model )
                 AdminService.addCountry(model)
                 .then(
-                    () => { this.setState({ done: true }) },
+                    () => { this.setState({ done: true, isLoading: false},() => notify("Додано країну з назвою: "+ countryName, '#071'))},
                     (err) => this.setState({ errors: err.response.data, isLoading: false })
                 )
                 .catch(() => { console.log('--failed--'); });
@@ -78,10 +78,11 @@ class CountryAddForm extends Component {
     };
 
     render() {
-        const { errors, isLoading, done } = this.state;
+        const { errors, isLoading  } = this.state;
         console.log('----AddCountry---', this.state);
         const form = (
             <React.Fragment>
+                <Notifications />
                 <div className="app flex-row align-items-center">
                     <Container>
                         <Row className="justify-content-center">
@@ -91,6 +92,7 @@ class CountryAddForm extends Component {
                                         <CardBody>
                                             <Form onSubmit={this.onSubmitForm}>
                                                 {/* <img src={hotelimg} style={{ height: '100px' }} alt='hotel'></img> */}
+                                                
                                                 <h1> Додати країну</h1>
                                                 <p className="text-muted">Додайте нову країну</p>
                                                 {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
@@ -112,12 +114,13 @@ class CountryAddForm extends Component {
                                                         onChange={this.handleChange}
                                                     />
                                                     {!!errors.countryName ? <span className="help-block">{errors.countryName}</span> : ''}
+                                                    
                                                 </InputGroup>
                                                 <Row className="justify-content-center">
                                                     <Col xs="6">
                                                         <Button  type="submit" color="primary" className="px-4" disabled={isLoading}>Додати</Button>
                                                         <Link to={`/admin/`}>
-                                                        <Button   color="danger" className="px-4" style={{marginLeft:'10px'}} >Закрити</Button>
+                                                        <Button   color="danger"   className="px-4" style={{marginLeft:'10px'}} >Закрити</Button>
                                                         </Link>
                                                     </Col>
                                                 </Row>
@@ -132,7 +135,7 @@ class CountryAddForm extends Component {
                 </div>
             </React.Fragment>
         );
-        return (done ? <Redirect to='/admin/' /> : form);
+        return form;// (done ? <Redirect to='/admin/countryadd' /> : form);
     }
 }
 

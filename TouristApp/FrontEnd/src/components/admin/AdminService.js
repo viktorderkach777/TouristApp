@@ -13,7 +13,7 @@ export default class AdminService {
 
 //-----------------OPERATION    COUTRIES---------------------------
 
-    static getCounties () {
+    static getCountries () {
         return axios.get(`${serverUrl}api/country/countries`);
     }
 

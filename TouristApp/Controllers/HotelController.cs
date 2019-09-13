@@ -114,17 +114,17 @@ namespace TouristApp.Controllers
             return Ok(model);
         }
 
-        
+
 
         //Get api/Hotel/create
         [HttpPost("regions/create")]
         public IActionResult Post([FromBody] RegionViewModel model)
         {
-            
+
             _context.Regions.Add(new Regions
             {
                 Name = model.Name,
-                CountryId= model.Id
+                CountryId = model.Id
             });
             _context.SaveChanges();
             return Ok();
@@ -146,7 +146,7 @@ namespace TouristApp.Controllers
 
 
         [HttpGet("list/{currentPage}")]
-        public async Task <ActionResult <IEnumerable<ToursViewModel>>> Get ([FromRoute] int currentPage,string sortOrder)
+        public async Task<ActionResult<IEnumerable<ToursViewModel>>> Get([FromRoute] int currentPage, string sortOrder)
         {
             int page = currentPage;
             int pageSize = 2;
@@ -162,7 +162,7 @@ namespace TouristApp.Controllers
                 .Select(u => new HotelListViewModel
                 {
                     Id = u.Id,
-                    СityDeparture = "Київ",  //u.СityDeparture.Name,
+                    СityDeparture = "Київ",//СityDeparture = "Київ",  //
                     Name = u.Hotel.Name,
                     Region = u.Hotel.Region.Name,
                     Country = u.Hotel.Region.Country.Name,
@@ -175,8 +175,8 @@ namespace TouristApp.Controllers
                     DaysCount = u.DaysCount
                 }).ToListAsync();
 
-           
-            
+
+
             switch (sortOrder)
             {
                 case "name":
@@ -202,7 +202,7 @@ namespace TouristApp.Controllers
                 .Skip(pageNo * pageSize)
                 .Take(pageSize).ToList();
 
-           // var result = model.Tours.OrderBy(c => c.Class);
+            // var result = model.Tours.OrderBy(c => c.Class);
             //model.Tours = await _context
             //    .Tours
             //    .Include(s => s.Hotel)
@@ -235,11 +235,11 @@ namespace TouristApp.Controllers
             int count = _context.Tours.Count();
             model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
             model.CurrentPage = page;
-            return  Ok(model);
+            return Ok(model);
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<ToursViewModel>>> Get( [FromBody] SearchModel searchModel)
+        public async Task<ActionResult<IEnumerable<ToursViewModel>>> Get([FromBody] SearchModel searchModel)
         {
             int page = 1;
             int pageSize = 2;
@@ -278,32 +278,32 @@ namespace TouristApp.Controllers
 
         }
 
-            //public async Task<IActionResult> Index(string sortOrder)
-            //{
-            //    //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            //    //ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            //    //var students = from s in _context.Students
-            //    //               select s;
-            //    //switch (sortOrder)
-            //    //{
-            //    //    case "name_desc":
-            //    //        students = students.OrderByDescending(s => s.LastName);
-            //    //        break;
-            //    //    case "Date":
-            //    //        students = students.OrderBy(s => s.EnrollmentDate);
-            //    //        break;
-            //    //    case "date_desc":
-            //    //        students = students.OrderByDescending(s => s.EnrollmentDate);
-            //    //        break;
-            //    //    default:
-            //    //        students = students.OrderBy(s => s.LastName);
-            //    //        break;
-            //    //}
-            //    return View(await students.AsNoTracking().ToListAsync());
-            //}
+        //public async Task<IActionResult> Index(string sortOrder)
+        //{
+        //    //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        //    //ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+        //    //var students = from s in _context.Students
+        //    //               select s;
+        //    //switch (sortOrder)
+        //    //{
+        //    //    case "name_desc":
+        //    //        students = students.OrderByDescending(s => s.LastName);
+        //    //        break;
+        //    //    case "Date":
+        //    //        students = students.OrderBy(s => s.EnrollmentDate);
+        //    //        break;
+        //    //    case "date_desc":
+        //    //        students = students.OrderByDescending(s => s.EnrollmentDate);
+        //    //        break;
+        //    //    default:
+        //    //        students = students.OrderBy(s => s.LastName);
+        //    //        break;
+        //    //}
+        //    return View(await students.AsNoTracking().ToListAsync());
+        //}
 
 
 
-        }
+    }
 
 }
