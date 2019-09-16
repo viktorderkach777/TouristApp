@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-//import { Link } from 'react-router-dom';
 import { Label,Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
-//import PropTypes from 'prop-types';
 import classnames from 'classnames';
-//import { connect } from "react-redux";
-//import * as userAction from '../../../reducers/auth';
-//import get from 'lodash.get';
-//import validateemail from '../../../helpers/validateEmail'; 
 import { Link } from 'react-router-dom';
-import { Redirect } from "react-router";
+
 import  AdminService from '../AdminService'
+import { notify } from '../../Notifications'
 
 const iconsColor = {
     backgroundColor: '#00aced',
@@ -85,9 +80,10 @@ class CountryEditForm extends Component {
                  name: countryName
             };
             console.log('EditCountryAdd: validform', model);
-            AdminService.editCountry(selectedCountry,model)   //xios.put(`${serverUrl}api/country/edit`, model)
+            AdminService.editCountry(selectedCountry,model)  
                 .then(
-                    () => { this.setState({ done: true }) },
+                    () => { this.setState({ done: true, isLoading: false,regionName:''},
+                        () =>notify("Назву країни змінено! ", '#071'))},
                     (err) => this.setState({ errors: err.response.data, isLoading: false })
                 )
                 .catch(() => { console.log('--failed--'); });
@@ -98,7 +94,7 @@ class CountryEditForm extends Component {
     };
 
     render() {
-        const { countries, errors, isLoading, done } = this.state;
+        const { countries, errors, isLoading} = this.state;
         console.log('----AddHotel---', this.state);
         const form = (
             <React.Fragment>
@@ -170,30 +166,10 @@ class CountryEditForm extends Component {
                 </div>
             </React.Fragment>
         );
-        return (done ? <Redirect to='/admin/' /> : form);
+        return form; //(done ? <Redirect to='/admin/' /> : form);
     }
 }
 
-// HotelAddForm.propTypes =
-//     {
-//         login: PropTypes.func.isRequired,
-//         history: PropTypes.object.isRequired,
-//         auth: PropTypes.object.isRequired
-//     }
 
-// const mapState = state => {
-//     return {
-//         auth: get(state, 'auth'),
-//     };
-// };
-
-// const mapDispatch = dispatch => {
-//     return {
-//         login: (model) =>
-//             dispatch(userAction.login(model))
-
-//     };
-// };
-//const HotelAdd = connect(mapState, mapDispatch)(HotelAddForm);
 const CountryEdit = CountryEditForm;
 export default CountryEdit;

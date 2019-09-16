@@ -35,6 +35,9 @@ class AdminHeader extends Component {
           <NavItem className="px-3">
             <Link to="/admin/users" className="nav-link">Users</Link>
           </NavItem>
+          <NavItem className="px-3">
+            <Link to="/admin/tours" className="nav-link">Tours</Link>
+          </NavItem>
           {/* <NavItem className="px-3">
             <NavLink to="#" className="nav-link">Settings</NavLink>
           </NavItem> */}

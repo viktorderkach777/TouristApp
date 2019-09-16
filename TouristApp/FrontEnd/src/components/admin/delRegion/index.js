@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
+//import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
+//import PropTypes from 'prop-types';
+//import classnames from 'classnames';
+//import { connect } from "react-redux";
+//import * as userAction from '../../../reducers/auth';
+//import get from 'lodash.get';
+//import validateemail from '../../../helpers/validateEmail'; 
 import { Link } from 'react-router-dom';
 //import { Redirect } from "react-router";
-import  AdminService from '../AdminService'
 import { notify } from '../../Notifications'
+import  AdminService from '../AdminService';
 
 const iconsColor = {
     backgroundColor: '#00aced',
@@ -11,16 +18,19 @@ const iconsColor = {
     borderColor: '#00aced'
 }
 
-class CountryDelForm extends Component {
+class RegionAddForm extends Component {
 
     state = {
         countries: [
             {
-                id: 7,
-                name: 'Australia'
+              id:7,
+              name:'Australia'
             }
-        ],
-        selectedCountry: '7',
+             ],
+             selectedCountry:'7',
+             regions:[],
+             regionsLoad:false,
+             selectedRegion:'7',
         errors: {
         },
         done: false,
@@ -46,26 +56,34 @@ class CountryDelForm extends Component {
         }
     };
 
-
-    getCountry=()=>{
-        AdminService.getCountries()
-        .then(res => {
-            const countries = res.data;
-            this.setState({ countries });
-        })
-        .catch(() => { console.log('--failed--'); });
-    }
-
-
     componentDidMount() {
         console.log('---componentDiDMount----');
-        this.getCountry();
+            AdminService.getCountries()
+            .then(res => {
+                const countries = res.data;
+                this.setState({ countries });
+            })
+            .catch(() => { console.log('--failed--'); });
     }
 
     handleChange = (e) => {
         this.setStateByErrors(e.target.name, e.target.value);
     };
 
+    getRegion=(id)=>{
+        AdminService.getRegiones(id)
+        .then(res => {
+          const regions = res.data;
+          this.setState({ regions, regionsLoad:true });
+        })
+      .catch(() => {console.log('--failed--'); });
+    }
+
+    handleChangeSelect = (e) => {
+        this.setStateByErrors(e.target.name, e.target.value);
+        console.log('--region id--', e.target.value);
+        this.getRegion(e.target.value);
+      };
 
     onSubmitForm = (e) => {
         e.preventDefault();
@@ -73,20 +91,20 @@ class CountryDelForm extends Component {
         console.log('submit');
 
         if (this.state.selectedCountry === '') errors.selectedCountry = " Can't be empty!"
-        
+        if (this.state.selectedRegion === '') errors.selectedRegion = " Can't be empty!"
 
         const isValid = Object.keys(errors).length === 0
         if (isValid) {
-            const { selectedCountry } = this.state;
-            
-            this.setState({ isLoading: true });
-            console.log('CountryDelete: validform', selectedCountry);
-                AdminService.deleteCountry(selectedCountry)
+            const { selectedCountry, selectedRegion } = this.state;
+             this.setState({ isLoading: true });
+              console.log('RegionAdd: validform', selectedRegion);
+         
+            AdminService.deleteRegion(selectedRegion)
                 .then(
                     () => { this.setState({ done: true, isLoading: false },() => 
                     {
-                        notify(" Країну видалено!" , '#071') 
-                        this.getCountry();
+                        notify(" Регіон видалено!" , '#071') 
+                        this.getRegion(selectedCountry);
                     }
                     )},
                     (err) => this.setState({ errors: err.response.data, isLoading: false })
@@ -99,11 +117,11 @@ class CountryDelForm extends Component {
     };
 
     render() {
-        const { countries, errors, isLoading} = this.state;
-        console.log('----Del Hotel---', this.state);
+        const {regions, regionsLoad,countries, errors, isLoading } = this.state;
+        console.log('----AddHotel---', this.state);
         const form = (
             <React.Fragment>
-                
+                 {/* <Notifications /> */}
                 <div className="app flex-row align-items-center">
                     <Container>
                         <Row className="justify-content-center">
@@ -112,9 +130,8 @@ class CountryDelForm extends Component {
                                     <Card className="p-4">
                                         <CardBody>
                                             <Form onSubmit={this.onSubmitForm}>
-                                                {/* <img src={hotelimg} style={{ height: '100px' }} alt='hotel'></img> */}
-                                                <h1>  Видалення країни</h1>
-                                                <p className="text-muted">Видаліть вибрану країну</p>
+                                                <h1> Видалити регіон країни</h1>
+                                                <p className="text-muted">Видалити вибраний регіон</p>
                                                 {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 
                                                 <InputGroup className="mb-3" >
@@ -127,11 +144,26 @@ class CountryDelForm extends Component {
                                                         name="selectedCountry"
                                                         id="selectedCountry"
                                                         value={this.state.selectedCountry}
-                                                        onChange={this.handleChange}>
+                                                        onChange={this.handleChangeSelect}>
                                                         {countries.map(item => <option key={item.id} value={item.id} >{item.name}</option>)}
                                                     </Input>
                                                 </InputGroup>
-                                                
+
+                                                <InputGroup  className="mb-3 " hidden={!regionsLoad} >
+                  <InputGroupAddon addonType="prepend">
+                          <InputGroupText style={iconsColor}>
+                          <i className="fa fa-map-marker" aria-hidden="true"></i>
+                          </InputGroupText>
+                   </InputGroupAddon>
+                              <Input type="select"
+                              name="selectedRegion"
+                              id="selectedRegion" 
+                              value={this.state.selectedRegion}
+                              onChange={this.handleChange}>
+                          {regions.map(item => <option  key={item.id} value={item.id} >{item.name}</option>)} 
+                             </Input>
+                   </InputGroup>
+                                               
                                                 <Row className="justify-content-center">
                                                     <Col xs="3">
                                                         <Button  type="submit" color="primary" className="px-4" disabled={isLoading}>Видалити</Button>
@@ -145,6 +177,7 @@ class CountryDelForm extends Component {
                                             </Form>
                                         </CardBody>
                                     </Card>
+
                                 </CardGroup>
                             </Col>
                         </Row>
@@ -156,5 +189,26 @@ class CountryDelForm extends Component {
     }
 }
 
-const CountryDel = CountryDelForm;
-export default CountryDel;
+// HotelAddForm.propTypes =
+//     {
+//         login: PropTypes.func.isRequired,
+//         history: PropTypes.object.isRequired,
+//         auth: PropTypes.object.isRequired
+//     }
+
+// const mapState = state => {
+//     return {
+//         auth: get(state, 'auth'),
+//     };
+// };
+
+// const mapDispatch = dispatch => {
+//     return {
+//         login: (model) =>
+//             dispatch(userAction.login(model))
+
+//     };
+// };
+//const HotelAdd = connect(mapState, mapDispatch)(HotelAddForm);
+const RegionAdd = RegionAddForm;
+export default RegionAdd;

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TouristApp.DAL.Entities;
+using TouristApp.ViewModels;
 
 namespace TouristApp.Controllers
 {
@@ -29,14 +30,23 @@ namespace TouristApp.Controllers
 
         // GET: api/Region/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRegions([FromRoute] string id)
+        public async Task<ActionResult<IEnumerable<RegionViewModel>>> Get([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var regions = await _context.Regions.FindAsync(id);
+            var regions = await _context
+               .Regions
+               .Where(f => f.CountryId == id.ToString())
+               .OrderBy(c => c.Name)
+               .Select(u => new RegionViewModel
+               {
+                   Id = u.Id,
+                   Name = u.Name
+               })
+               .ToListAsync();
 
             if (regions == null)
             {
@@ -45,6 +55,24 @@ namespace TouristApp.Controllers
 
             return Ok(regions);
         }
+        //[HttpGet("regions/{id}")]
+        //public async Task<ActionResult<IEnumerable<RegionViewModel>>> Get([FromRoute] string id)
+        //{
+
+        //    var regions = await _context
+        //       .Regions
+        //       .Where(f => f.CountryId == id.ToString())
+        //       .OrderBy(c => c.Name)
+        //       .Select(u => new RegionViewModel
+        //       {
+        //           Id = u.Id,
+        //           Name = u.Name
+        //       })
+        //       .ToListAsync();
+
+        //    return Ok(regions);
+        //}
+
 
         // PUT: api/Region/5
         [HttpPut("{id}")]
@@ -81,20 +109,27 @@ namespace TouristApp.Controllers
             return NoContent();
         }
 
-        // POST: api/Region
-        [HttpPost]
-        public async Task<IActionResult> PostRegions([FromBody] Regions regions)
+        // POST: api/region/create
+        [HttpPost("create")]
+
+        public async Task<IActionResult> PostRegions([FromBody] RegionViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Regions.Add(regions);
+
+            _context.Regions.Add(new Regions
+            {
+                Name = model.Name,
+                CountryId = model.Id
+            });
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRegions", new { id = regions.Id }, regions);
+           return Ok();
         }
+        
 
         // DELETE: api/Region/5
         [HttpDelete("{id}")]

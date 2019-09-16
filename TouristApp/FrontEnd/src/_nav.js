@@ -30,7 +30,7 @@ export default {
     },
     {
       name: 'Додати фото готеля',
-      url: '/admin/hoteladd',
+      url: '/admin/photohoteladd',
       icon: 'icon-pencil',
     },
     {
@@ -40,7 +40,7 @@ export default {
     },
     {
       name: 'Додати тур',
-      url: '/admin/hoteladd',
+      url: '/admin/touradd',
       icon: 'icon-pencil',
     },
     {
@@ -61,13 +61,13 @@ export default {
   icon: 'icon-pencil',
 },
 {
-  name: 'Видалити тур',
-  url: '/admin/hoteladd',
+  name: 'Видалити країну',
+  url: '/admin/countrydel',
   icon: 'icon-pencil',
 },
 {
-  name: 'Видалити країну',
-  url: '/admin/countrydel',
+  name: 'Видалити регіон',
+  url: '/admin/regiondel',
   icon: 'icon-pencil',
 },
 ],

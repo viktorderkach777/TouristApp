@@ -5,7 +5,7 @@ export default class TourService {
 
   static getListTours(model) {
     console.log('---STEP3----',model);
-    return axios.get(`${serverUrl}api/Hotel/list/` + model.currentPage+"?sortOrder=" + model.sortOrder);
+    return axios.get(`${serverUrl}api/tour/list/` + model.currentPage+"?sortOrder=" + model.sortOrder);
   }
 
   //   static createNewAnimal (model) {

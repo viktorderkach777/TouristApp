@@ -53,6 +53,7 @@
     "redux": "^4.0.4",
     "redux-starter-kit": "^0.6.3",
     "redux-thunk": "^2.3.0",
+    "select": "^1.1.2",
     "simple-line-icons": "^2.4.1",
     "styled-components": "^4.3.2"
   },

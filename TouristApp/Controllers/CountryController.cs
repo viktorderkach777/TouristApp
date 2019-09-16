@@ -128,7 +128,7 @@ namespace TouristApp.Controllers
             return Ok(model);
         }
 
-        // DELETE: api/Countries/5
+        // DELETE: api/Country/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCountries([FromRoute] string id)
         {
@@ -137,16 +137,20 @@ namespace TouristApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var countries = await _context.Countries.FindAsync(id);
-            if (countries == null)
+            var country = await _context.Countries.FindAsync(id);
+            if (country == null)
             {
                 return NotFound();
             }
 
-            _context.Countries.Remove(countries);
+            
+            var regionsToDelete = _context.Regions.Where(c => c.CountryId == id);
+            _context.Regions.RemoveRange(regionsToDelete); 
+
+            _context.Countries.Remove(country);
             await _context.SaveChangesAsync();
 
-            return Ok(countries);
+            return Ok(country);
         }
 
         private bool CountriesExists(string id)

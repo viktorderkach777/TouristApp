@@ -22,10 +22,13 @@ import {
 import navigation from '../../_nav';
 // routes config
 import routes from '../../routes/adminroutes';
+//import Notifications from '../../Notifications'
 
 const AdminAside = React.lazy(() => import('./AdminAside'));
 const AdminFooter = React.lazy(() => import('./AdminFooter'));
 const AdminHeader = React.lazy(() => import('./AdminHeader'));
+const Notifications = React.lazy(() => import('../../components/Notifications'));
+
 
 class AdminLayoutContainer extends Component {
 
@@ -49,6 +52,7 @@ class AdminLayoutContainer extends Component {
     }
     const form = (
         <React.Fragment>
+          <Notifications/>
       <div className="app">
         <AppHeader fixed>
           <Suspense  fallback={this.loading()}>

@@ -8,9 +8,9 @@ import classnames from 'classnames';
 //import get from 'lodash.get';
 //import validateemail from '../../../helpers/validateEmail'; 
 import { Link } from 'react-router-dom';
-import { Redirect } from "react-router";
-import axios from 'axios';
-import { serverUrl } from '../../../config';
+//import { Redirect } from "react-router";
+import  { notify } from '../../Notifications'
+import  AdminService from '../AdminService';
 
 const iconsColor = {
     backgroundColor: '#00aced',
@@ -54,11 +54,9 @@ class RegionAddForm extends Component {
         }
     };
 
-
-
     componentDidMount() {
         console.log('---componentDiDMount----');
-        axios.get(`${serverUrl}api/country/countries`)
+            AdminService.getCountries()
             .then(res => {
                 const countries = res.data;
                 this.setState({ countries });
@@ -89,9 +87,12 @@ class RegionAddForm extends Component {
                 name: regionName
             };
             console.log('RegionAdd: validform', model);
-                axios.post(`${serverUrl}api/Hotel/regions/create`, model)
+
+            
+            AdminService.addRegion(model)
                 .then(
-                    () => { this.setState({ done: true }) },
+                    () => { this.setState({ done: true, isLoading: false,regionName:''},
+                        () =>notify("Додано регіон з назвою: "+ regionName, '#071'))},
                     (err) => this.setState({ errors: err.response.data, isLoading: false })
                 )
                 .catch(() => { console.log('--failed--'); });
@@ -102,7 +103,7 @@ class RegionAddForm extends Component {
     };
 
     render() {
-        const { countries, errors, isLoading, done } = this.state;
+        const { countries, errors, isLoading } = this.state;
         console.log('----AddHotel---', this.state);
         const form = (
             <React.Fragment>
@@ -174,7 +175,7 @@ class RegionAddForm extends Component {
                 </div>
             </React.Fragment>
         );
-        return (done ? <Redirect to='/admin/' /> : form);
+        return form;//(done ? <Redirect to='/admin/' /> : form);
     }
 }
 

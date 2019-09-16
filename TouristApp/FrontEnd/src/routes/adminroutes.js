@@ -43,17 +43,24 @@ const Salo = React.lazy(() => import("../components/client/Salo"))
 const TourWidget = React.lazy(() => import("../components/tours/index"))
 const HotelAddWidget = React.lazy(() => import("../components/admin/addHotel"))
 const RegionAddWidget = React.lazy(() => import("../components/admin/addRegion"))
+const RegionDelWidget = React.lazy(() => import("../components/admin/delRegion"))
 const CountryAddWidget = React.lazy(() => import("../components/admin/addCountry"))
 const CountryDelWidget = React.lazy(() => import("../components/admin/delCountry"))
 const CountryEditWidget = React.lazy(() => import("../components/admin/editCountry"))
+const TourAddWidget = React.lazy(() => import("../components/admin/addTour"))
+const PhotoHotelAddWidget = React.lazy(() => import("../components/admin/addPhotoHotel"))
+
 
 const routes=[
   { path: '/admin/', exact: true, name: 'Home' },
   { path: '/admin/hoteladd', exact: true, name: 'Готель', component: HotelAddWidget},
-  { path: '/admin/regionadd', exact: true, name: 'Регіон', component: RegionAddWidget},
+  { path: '/admin/photohoteladd', exact: true, name: 'Фото додавання', component: PhotoHotelAddWidget},
+  { path: '/admin/regionadd', exact: true, name: 'Регіон додавання', component: RegionAddWidget},
+  { path: '/admin/regiondel', exact: true, name: 'Регіон видалення', component: RegionDelWidget},
   { path: '/admin/countryadd', exact: true, name: 'Країна додавання', component: CountryAddWidget},
   { path: '/admin/countrydel', exact: true, name: 'Країна видалення', component: CountryDelWidget},
   { path: '/admin/countryedit', exact: true, name: 'Країна редагування', component: CountryEditWidget},
+  { path: '/admin/touradd', exact: true, name: 'Тур додавання', component: TourAddWidget},
   { path: '/admin/singlepage', exact: true, name: 'Готель', component: SinglePage },
   { path: '/admin/tours', exact: true, name: 'Тури', component: TourWidget },
   { path: "/admin/ss", exact: true, name: "ss", component: Salo },
