@@ -9,6 +9,7 @@ import {userReducer} from '../reducers/auth';
 import user from '../reducers/user';
 import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
 import {weatherReducer} from '../components/weather/reducers'
+import {mapReducer} from '../components/map/reducers'
 
 export default function configureStore (history, initialState) {
     const reducers = {
@@ -17,7 +18,8 @@ export default function configureStore (history, initialState) {
       userlist: user,
       tours:tours.reducer,
       refreshToken: RefreshToken.refreshReducer,
-      weather:weatherReducer
+      weather:weatherReducer,
+      map:mapReducer
     };
 
     const middleware = [

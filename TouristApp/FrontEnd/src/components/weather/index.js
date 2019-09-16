@@ -11,7 +11,7 @@ const weatherService = new WeatherService();
 export default function Wheather(props) {
     
     return (
-        <Suspense fallback={<div>Завантаження...</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
             <ErrorBoundry>
                 <WeatherServiceProvider value={weatherService}>
                     <WeatherDashboard />

@@ -67,7 +67,7 @@ export default {
 },
 {
   name: 'Видалити країну',
-  url: '/admin/maphotel',
+  url: '/admin/hoteladd',
   icon: 'icon-pencil',
 },
 ],
@@ -79,7 +79,7 @@ export default {
   children: [  
 {
   name: 'Додати маркер',
-  url: '/admin/hoteladd',
+  url: '/admin/maphotel',
   icon: 'icon-pencil',
 },
 // {
