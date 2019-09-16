@@ -34,7 +34,7 @@
     color: #101010;
   } */
 
-    .item a.title{
+    .item span.title{
     color: #404040;
     text-decoration: none;
     cursor: pointer;

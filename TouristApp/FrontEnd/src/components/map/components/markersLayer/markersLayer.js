@@ -1,18 +1,13 @@
-
-
-
-
-
 import React, { Component } from 'react';
-// import { connect } from 'react-redux';
-// import compose from '../../../../utils/compose';
-// import withMapService from '../hoc';
-// import { markersLayerLoaded, markersLayerError, markersLayerRequested } from '../../actions';
-// import CentrPageSpinner from '../../../CentrPageSpinner';
-// const ErrorIndicator = React.lazy(() => import('../../../errorIndicator'));
-
+import { connect } from 'react-redux';
+import compose from '../../../../utils/compose';
+import withMapService from '../hoc';
+import { markersLayerLoading, markersLayerError, markersLayerRequested } from '../../actions';
+import CentrPageSpinner from '../../../CentrPageSpinner';
 import mapboxgl from 'mapbox-gl';
 import './markersLayer.css';
+
+const ErrorIndicator = React.lazy(() => import('../../../errorIndicator'));
 
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
@@ -236,14 +231,16 @@ class MarkersLayer extends Component {
     };
 
     componentDidMount() {
-        // this.props.getMarkersLayer();
-        // const { hotels} = this.props;     
+        this.props.getMarkersLayer();
+        const { data } = this.props;
+
+        console.log('hotels', data);
 
         this.map = new mapboxgl.Map({
             container: this.mapContainer,
             style: 'mapbox://styles/mapbox/streets-v10',
-            //center: [-77.034084, 38.909671],
-            center: hotels.features[0].geometry.coordinates,
+            center: [-77.034084, 38.909671],
+            //center: hotels.features[0].geometry.coordinates,
             zoom: 10
         });
 
@@ -253,15 +250,33 @@ class MarkersLayer extends Component {
                 data: hotels
             });
 
-            this.createAllMarkers();
+           
         });
+
+        this.createAllMarkers();
+
+        //this.map.resize();
     }
+
+
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+       if(nextProps.markersLayerLoading){
+        console.log("nextProps", nextProps)
+        }    
+
+
+          return { markersLayerLoading: nextProps.markersLayerLoading,  markersLayerError: nextProps.select};
+        
+      }
 
     createMarker(index) {
         var el = document.createElement('div');
 
         // Add a class called 'marker' to each div
         el.className = 'marker';
+        // const { data } = this.props;
+        // console.log('hotels', data);
 
         el.onclick = () => this.linkOrMarkerClick(hotels.features[index], index);
 
@@ -274,6 +289,9 @@ class MarkersLayer extends Component {
     }
 
     createAllMarkers = () => {
+        // const { data } = this.props;
+        // console.log('hotels', data);
+
         const res = (hotels.features.map((element, index) => {
             this.createMarker(index);
             return res;
@@ -285,6 +303,8 @@ class MarkersLayer extends Component {
             center,
             zoom
         });
+
+        this.map.resize();
     }
 
     setStars(stars) {
@@ -300,80 +320,6 @@ class MarkersLayer extends Component {
             }
         }
         return text;
-
-        // switch (nstars) {
-        //   case 0:
-        //     return (
-        //       <div>
-        //         <span className="fa fa-star"></span>
-        //         <span className="fa fa-star"></span>
-        //         <span className="fa fa-star"></span>
-        //         <span className="fa fa-star"></span>
-        //         <span className="fa fa-star"></span>
-        //       </div>
-        //     )
-        //   case 1:
-        //       return (
-        //         <div>
-        //           <span className="fa fa-star checked"></span>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //         </div>
-        //       )
-        //   case 2:
-        //       return (
-        //         <div>
-        //           <span className="fa fa-star checked"></span>
-        //           <span className="fa fa-star checked"></span>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //         </div>
-        //       )
-        //   case 3:
-        //       return (
-        //       <div>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star"></span>
-        //       <span className="fa fa-star"></span>
-        //     </div>
-        //       )
-        //   case 4:
-        //       return (
-        //       <div>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star"></span>
-        //     </div>
-        //       )
-        //   case 5:
-        //       return (
-        //       <div>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //       <span className="fa fa-star checked"></span>
-        //     </div>
-        //       )
-        //   default:
-        //       return (
-        //         <div>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //           <span className="fa fa-star"></span>
-        //         </div>
-        //       )
-        // }
-
     }
 
     linkOrMarkerClick = (element, index) => {
@@ -406,15 +352,18 @@ class MarkersLayer extends Component {
 
     render() {
 
-        // const { hotels, markersLayerLoaded, markersLayerError } = this.props;
+        const { markersLayerLoading, markersLayerError } = this.props;
 
-        // if (markersLayerLoaded) {
-        //     return <CentrPageSpinner loading={markersLayerLoaded} />
+        // if (markersLayerLoading) {
+        //     return <CentrPageSpinner loading={markersLayerLoading} />
         // }
 
         // if (markersLayerError) {
         //     return <ErrorIndicator />
         // }
+
+
+        console.log('if hotels', this.props);
 
         const locations = hotels.features.map((element, index) => {
 
@@ -427,7 +376,7 @@ class MarkersLayer extends Component {
 
             return (
                 <div key={index} className={this.state.active === 'listing-' + index ? 'item active' : 'item'} id={'listing-' + index}>
-                    <a tabIndex="0" className="title" onClick={() => this.linkOrMarkerClick(element, index)}>{prop.name}</a>
+                    <span className="title" onClick={() => this.linkOrMarkerClick(element, index)}>{prop.name}</span>
 
                     <div>{det}</div>
                 </div>
@@ -438,49 +387,61 @@ class MarkersLayer extends Component {
         return (
             <div id="body">
                 <div ref={el => this.mapContainer = el} id='map' className='map pad2' />
-                <div className='mysidebar'>
-                    <div className='heading'>
-                        <h1>Our locations</h1>
-                    </div>
-                    <div id='listings' className='listings'>
-                        {locations}
-                    </div>
-                </div>
+                <CentrPageSpinner loading={markersLayerLoading} />
+
+                {/* <div className='mysidebar'>
+                        <div className='heading'>
+                            <h1>Our locations</h1>
+                        </div>
+                        <div id='listings' className='listings'>
+                            {locations}
+                        </div>
+                    </div> */}
+                {markersLayerError ? <ErrorIndicator />  :
+                    (<div className='mysidebar'>
+                        <div className='heading'>
+                            <h1>Our locations</h1>
+                        </div>
+                        <div id='listings' className='listings'>
+                            {locations}
+                        </div>
+                    </div>)}
             </div>
         );
     }
 }
 
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//     const { mapService } = ownProps;    
+const mapDispatchToProps = (dispatch, ownProps) => {
+    const { mapService } = ownProps;
 
-//     return {
-//         getMarkersLayer: () => {
-//             dispatch(markersLayerRequested());
-//             mapService.getMarkersLayer()
-//                 .then((hotels) => {
-//                     dispatch(markersLayerLoaded(hotels))
-//                 })
-//                 .catch((err) => dispatch(markersLayerError(err)))
-//         }       
-//     }
-// };
+    return {
+        getMarkersLayer: () => {
+            dispatch(markersLayerRequested());
+            mapService.getMarkersLayer()
+                .then((hotels) => {
+                    console.log("hotels111", hotels)
+                    dispatch(markersLayerLoading(hotels))
+                })
+                .catch((err) => dispatch(markersLayerError(err)))
+        }
+    }
+};
 
-// const mapStateToProps = (state) => {
-//     const { hotels, markersLayerLoading, markersLayerError } = state.map;
-//     //console.log("state.weather", state.weather)
-//     return {
-//         hotels,
-//         markersLayerLoading,
-//         markersLayerError
-//     };
-// };
+const mapStateToProps = (state) => {
+    const { hotels, markersLayerLoading, markersLayerError } = state.map;
+    console.log("state.map", state.map)
+    return {
+        data: hotels,
+        markersLayerLoading,
+        markersLayerError
+    };
+};
 
-// export default compose(
-//     withMapService(),
-//     connect(mapStateToProps, mapDispatchToProps)
-// )(MarkersLayer);
+export default compose(
+    withMapService(),
+    connect(mapStateToProps, mapDispatchToProps)
+)(MarkersLayer);
 
-export default MarkersLayer;
+//export default MarkersLayer;
 
 

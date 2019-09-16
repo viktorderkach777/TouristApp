@@ -4,10 +4,11 @@ const markersLayerRequested = () => {
     };
 };
 
-const markersLayerLoaded = (data) => {
+const markersLayerLoading = (hotels) => {
+    console.log("markersLayerLoading", hotels)
     return {
         type: 'FETCH_MARKERS_LAYER_SUCCESS',
-        payload: data
+        payload: hotels
     };
 };
 
@@ -20,5 +21,5 @@ const markersLayerError = (error) => {
 
 
 export {
-    markersLayerLoaded, markersLayerError, markersLayerRequested   
+    markersLayerLoading, markersLayerError, markersLayerRequested   
 };

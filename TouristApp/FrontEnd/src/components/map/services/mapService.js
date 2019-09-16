@@ -215,7 +215,7 @@ export default class MapService {
     getMarkersLayer= async () => {
         return new Promise((resolve) => {
             setTimeout(() => {
-              resolve(this.weather)
+              resolve(this.hotels)
             }, 700);
           });
         // console.log('weather', weather)
