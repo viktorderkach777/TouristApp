@@ -7,6 +7,7 @@ using System.Drawing;
 using TouristApp.Helpers;
 using System.Drawing.Imaging;
 using System.Net;
+using System.Collections.Generic;
 
 namespace TouristApp.Domain.Services
 {
@@ -20,6 +21,10 @@ namespace TouristApp.Domain.Services
             _configuration = configuration;
             _env = env;
         }
+
+        
+
+
 
         public string UploadImage(string base64)
         {

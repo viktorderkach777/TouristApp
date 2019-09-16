@@ -276,7 +276,6 @@ else {
                                 !this.state.isLoadingPhoto ?
                                   <img
                                     src={imageBase64}
-                                   // className="img-circle"
                                     id="image"
                                     alt=""
                                     name="image"
@@ -292,7 +291,7 @@ else {
                           <div className={!this.state.isLoadingPhoto ? "div-hidden" : "div-visible form-group"} >
                             <Cropper
                               style={{ height: 400, width: 400, overflow: 'hidden' }}
-                              aspectRatio={1 / 1}
+                              aspectRatio={640 / 480}
                               preview=".img-preview"
                               guides={false}
                               src={this.state.src}

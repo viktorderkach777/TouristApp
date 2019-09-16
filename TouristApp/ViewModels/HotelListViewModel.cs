@@ -5,6 +5,14 @@ using System.Threading.Tasks;
 
 namespace TouristApp.ViewModels
 {
+    public class ImageItemViewModel
+    {
+        public int Id { get; set; }
+        public string BigImage { get; set; }
+        public string SmallImage { get; set; }
+    }
+
+
     public class HotelListViewModel
     {
 
@@ -84,10 +92,16 @@ namespace TouristApp.ViewModels
 
         public int? DaysCount { get; set; }
 
-    }
+        public List<HotelPhotoViewModel> Images {get; set; }
+
+}
+        public class HotelPhotoViewModel
+        {
+            public string Name { get; set; }
+        }
 
 
-    public class HotelAddViewModel
+        public class HotelAddViewModel
     {
 
         

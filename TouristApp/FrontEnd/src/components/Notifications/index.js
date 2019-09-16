@@ -9,7 +9,7 @@ padding: 16px;
 border-radius: 25px;
 position: absolute;
 top: ${props => props.top}px;
-right: 26px;
+right: 260px;
 z-index: 999;
 transition: top 0.5s ease;
 
@@ -42,7 +42,7 @@ export default class Notifications extends React.Component {
     }
     showNotification = (msg,color) => {
         this.setState({
-            top: 100,
+            top: 500,
             message: msg,
             color: color
         }, () => {

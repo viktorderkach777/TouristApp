@@ -29,7 +29,7 @@ import {
   Row,
   Col,
 } from 'reactstrap';
-
+import { serverUrl } from '../../config';
 //const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
 const SortToolbar = React.lazy(() => import('../SortToolbar'));
 const PaginationBar = React.lazy(() => import('../Pagination'));
@@ -146,10 +146,10 @@ class ToursContainer extends Component {
           <Row>
             <Col sm="4">
               <Link to={`/views/${item.country}/${item.id}`}>
-                <CardImg className="CardImg" src="https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg" alt="Card image cap" />
+                <CardImg className="CardImg" src={item.images.length>0 ? serverUrl+item.images[0].name:'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
                 <div className="discount">
                   <span className="discount-title">
-                    знижка 15%
+                    знижка 15% 
                                                 </span>
                 </div>
               </Link>
@@ -162,7 +162,9 @@ class ToursContainer extends Component {
             <Col sm="6">
               <CardBody>
                 <CardTitle className="CardTitle">
-                  {item.name} {item.class}*
+                  {item.name} {item.class}* 
+                  
+                                    
                                 </CardTitle>
                 <CardSubtitle className="CardSubTitle">
                   <small> <i className="fa fa-map-marker" aria-hidden="true"></i>{item.country}, {item.region}</small>

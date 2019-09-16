@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using TouristApp.DAL.Entities;
 using TouristApp.ViewModels;
 
@@ -20,10 +21,12 @@ namespace TouristApp.Controllers
     public class TourController : ControllerBase
     {
         private readonly EFContext _context;
+        private readonly IConfiguration _configuration;
 
-        public TourController(EFContext context)
+        public TourController(EFContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: api/Tour/list/id
@@ -36,9 +39,12 @@ namespace TouristApp.Controllers
             int pageNo = page - 1;
             ToursViewModel model = new ToursViewModel();
 
+            var url = _configuration.GetValue<string>("ImagesHotelUrl");
+
             var query = await _context
                 .Tours
                 .Include(s => s.Hotel)
+                .Include(s => s.Hotel.HotelImages)
                 .Include(d => d.Hotel.Region)
                 .Include(f => f.Hotel.Region.Country)
                 .Include(z => z.CityDeparture)
@@ -55,8 +61,13 @@ namespace TouristApp.Controllers
                     Class = u.Hotel.Class,
                     FromData = u.FromData,
                     Date = u.FromData.ToString().Substring(0, 10),
-                    DaysCount = u.DaysCount
-                }).ToListAsync();
+                    DaysCount = u.DaysCount,
+                    Images = u.Hotel.HotelImages.Where(
+                        f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
+                    {
+                        Name= $"{url}/1200_{x.HotelImageUrl}"  
+                    }).ToList()
+        }).ToListAsync();
 
 
 
