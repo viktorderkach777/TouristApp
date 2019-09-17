@@ -146,7 +146,7 @@ class ToursContainer extends Component {
           <Row>
             <Col sm="4">
               <Link to={`/views/${item.country}/${item.id}`}>
-                <CardImg className="CardImg" src={item.images.length>0 ? serverUrl+item.images[0].name:'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
+                <CardImg className="CardImg" src={!!item.imagePath ? serverUrl+item.imagePath:'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
                 <div className="discount">
                   <span className="discount-title">
                     знижка 15% 

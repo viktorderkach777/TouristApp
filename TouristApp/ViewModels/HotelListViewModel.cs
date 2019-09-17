@@ -92,9 +92,10 @@ namespace TouristApp.ViewModels
 
         public int? DaysCount { get; set; }
 
-        public List<HotelPhotoViewModel> Images {get; set; }
+       // public List<HotelPhotoViewModel> Images {get; set; }
 
-}
+        public string ImagePath { get; set; }
+    }
         public class HotelPhotoViewModel
         {
             public string Name { get; set; }

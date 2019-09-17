@@ -40,7 +40,7 @@ namespace TouristApp.Controllers
             ToursViewModel model = new ToursViewModel();
 
             var url = _configuration.GetValue<string>("ImagesHotelUrl");
-
+            
             var query = await _context
                 .Tours
                 .Include(s => s.Hotel)
@@ -62,14 +62,18 @@ namespace TouristApp.Controllers
                     FromData = u.FromData,
                     Date = u.FromData.ToString().Substring(0, 10),
                     DaysCount = u.DaysCount,
-                    Images = u.Hotel.HotelImages.Where(
-                        f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
-                    {
-                        Name= $"{url}/1200_{x.HotelImageUrl}"  
-                    }).ToList()
-        }).ToListAsync();
+                    ImagePath =url + "/1200_" + u.Hotel.HotelImages.FirstOrDefault(
+                        f => f.HotelId == u.HotelId).HotelImageUrl,
+                   
+                    //Images = u.Hotel.HotelImages.Where(
+                    //    f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
+                    //{
+                    //    Name= $"{url}/1200_{x.HotelImageUrl}"  
+                    //}).ToList()
 
+                }).ToListAsync();
 
+          
 
             switch (sortOrder)
             {
