@@ -16,7 +16,15 @@ namespace TouristApp.Controllers
         public string BigImage { get; set; }
         public string SmallImage { get; set; }
     }
-   
+
+    public class ImageItemViewModelNext
+    {
+        public int Id { get; set; }
+        public string original { get; set; }
+        public string thumbnail { get; set; }
+    }
+
+
 
     [Route("api/[controller]")]
     public class SampleDataController : Controller
@@ -45,6 +53,25 @@ namespace TouristApp.Controllers
                     Id = int.Parse(x),
                     BigImage = $"{url}/1200_{x}.jpg",
                     SmallImage = $"{url}/268_{x}.jpg"
+                }).ToList();
+            return model;
+        }
+
+        [HttpGet("images2")]
+        public IEnumerable<ImageItemViewModelNext> Images2()
+        {
+            var serverUrl = "http://localhost:44318/";
+            var url = _configuration.GetValue<string>("ImagesUrl");
+            List<string> imageNames = new List<string>
+            {
+                "1", "2", "3", "4"
+            };
+            var model = imageNames
+                .Select(x => new ImageItemViewModelNext
+                {
+                    Id = int.Parse(x),
+                    original = $"{serverUrl}{url}/1200_{x}.jpg",
+                    thumbnail = $"{serverUrl}{url}/268_{x}.jpg"
                 }).ToList();
             return model;
         }

@@ -1,14 +1,42 @@
 // Here you can add other styles
+
+@import "~react-image-gallery/styles/scss/image-gallery.scss";
+
 .menuText
     {
     font-size: 20px;
 }
 
+.YColor{
+  color: #ff9000;
+}
+.BlueColor{
+  color: #22b1f3;
+}
+
+.buttonHotel{
+  background: #ff9000;
+  color:#FFF;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  width: 80% !important;
+  text-align:  center;
+  margin-bottom: 10px;
+
+}
 .menuUserName
     {
     font-size: 16px;
     margin-right: 10px;
 }
+.CardTours {
+  width:100%;
+  margin-bottom: 15px;
+  border-radius:10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
 
 .footer{
     

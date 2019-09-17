@@ -137,11 +137,7 @@ class ToursContainer extends Component {
     );
 
     const toursList = (
-
-
       this.props.list.map(item => (
-
-
         <Card key={item.id} className="CardTours" >
           <Row>
             <Col sm="4">
@@ -204,7 +200,7 @@ class ToursContainer extends Component {
                 </div>
               </div>
               <Link to={`/views/${item.country}/${item.id}`}>
-                <Button size="sm" className="buttonHotel">Дивитись тур</Button>
+                <Button size="lg" className="buttonHotel">Дивитись тур</Button>
               </Link>
             </Col>
           </Row>
