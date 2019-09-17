@@ -1,8 +1,7 @@
 const initialState = {
     hotels: {},
     markersLayerLoading: true,
-    markersLayerError: null,  
-
+    markersLayerError: null
 };
 
 export const mapReducer = (state = initialState, action) => {
@@ -15,11 +14,7 @@ export const mapReducer = (state = initialState, action) => {
                 markersLayerLoading: true,
                 markersLayerError: null
             };
-        case 'FETCH_MARKERS_LAYER_SUCCESS':
-            // const {
-            //     features
-            // } = action.payload;
-            console.log("redux", action)
+        case 'FETCH_MARKERS_LAYER_SUCCESS':            
             return {
                 ...state,
                 hotels: action.payload,

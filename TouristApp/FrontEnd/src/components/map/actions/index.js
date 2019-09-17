@@ -4,8 +4,7 @@ const markersLayerRequested = () => {
     };
 };
 
-const markersLayerLoading = (hotels) => {
-    console.log("markersLayerLoading", hotels)
+const markersLayerLoading = (hotels) => {    
     return {
         type: 'FETCH_MARKERS_LAYER_SUCCESS',
         payload: hotels

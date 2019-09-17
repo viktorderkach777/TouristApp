@@ -13,7 +13,7 @@ import {mapReducer} from '../components/map/reducers'
 
 export default function configureStore (history, initialState) {
     const reducers = {
-      captcha: captchaReducer,//.reducer,
+      captcha: captchaReducer,
       auth:userReducer.reducer,
       userlist: user,
       tours:tours.reducer,

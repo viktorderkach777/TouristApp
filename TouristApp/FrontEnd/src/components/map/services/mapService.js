@@ -221,4 +221,8 @@ export default class MapService {
         // console.log('weather', weather)
         // return weather;
     }
+
+    getResources = async () => {
+      return await this.getMarkersLayer();
+  }
 }

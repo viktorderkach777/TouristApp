@@ -5,14 +5,14 @@ import { serverUrl } from '../../../config';
 export default class WeatherService {
 
     _apiBase = `${serverUrl}api/sampledata/weather/`;
-    
-    _fetchData = async (region) => {        
+
+    _fetchData = async (region) => {
         const { latitude, longitude } = region || {};
         const getDataByCity = `${this._apiBase}${region}`;
         const getDataByCoords = `${this._apiBase}coords-${latitude}-${longitude}`;
         let location = typeof (region) === "object" ? getDataByCoords : getDataByCity;
 
-        return await axios.get(location);       
+        return await axios.get(location);
     };
 
     _avgArr = (arr) => {
@@ -48,13 +48,13 @@ export default class WeatherService {
                 hour: el.hour,
                 temp: el.temp
             }
-        });       
+        });
 
         const avgHumdity = this._avgArr(humidity);
         const avgWindSpeed = this._avgArr(windSpeed);
         const avgPressure = this._avgArr(pressure);
         const weatherData = dataTime.length > 5 ? dataTime[4] : dataTime[0];
-
+        
         return (
             {
                 tempMax: minMax.max,
@@ -107,7 +107,7 @@ export default class WeatherService {
     _getResources = async (region) => {
         const weather = await this._fetchData(region)
             .then((body) => {
-                //console.log("res", body);
+                console.log("res", body);
                 if (body.ok) {
                     throw new Error(`Could not fetch, received ${body.status}`);
                 }
@@ -124,11 +124,12 @@ export default class WeatherService {
                         list
                     )
                 }, []);
-
+                console.log("body.data",body.data);
                 const weather = {
                     cityName: body.data.city.name,
                     country: body.data.city.country,
                     cityDay: tiles[0].day,
+                    //cityCoord: body.data.city.coord,
                     tiles: tiles
                 }
                 //console.log("weather", weather);
@@ -144,4 +145,6 @@ export default class WeatherService {
         //console.log('weather', weather)
         return weather;
     }
+
+    
 }
