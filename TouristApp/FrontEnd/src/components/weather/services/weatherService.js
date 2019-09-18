@@ -129,7 +129,7 @@ export default class WeatherService {
                     cityName: body.data.city.name,
                     country: body.data.city.country,
                     cityDay: tiles[0].day,
-                    //cityCoord: body.data.city.coord,
+                    cityCoord: body.data.city.coord,
                     tiles: tiles
                 }
                 //console.log("weather", weather);

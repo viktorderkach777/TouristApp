@@ -1,7 +1,7 @@
 
 const initialState = {
     tiles: [],
-    tilesLoading: true,
+    tilesLoading: false,
     tilesError: null,
     cityName: null,
     country: null,

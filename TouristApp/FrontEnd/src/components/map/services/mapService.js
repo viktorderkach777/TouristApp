@@ -217,12 +217,6 @@ export default class MapService {
             setTimeout(() => {
               resolve(this.hotels)
             }, 700);
-          });
-        // console.log('weather', weather)
-        // return weather;
-    }
-
-    getResources = async () => {
-      return await this.getMarkersLayer();
-  }
+          });        
+    } 
 }

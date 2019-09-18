@@ -16,38 +16,14 @@ class MarkersLayer extends Component {
     state = {
         active: null,
         popup: null        
-    };  
+    };   
     
-    func = (_map)=>{
-        this.props.dispatch(markersLayerRequested());
-        this.props.mapService.getResources()
-            .then((hotels) => {
-                this.props.dispatch(markersLayerLoading(hotels))                
-                _map = new mapboxgl.Map({
-                    container: this.mapContainer,
-                    style: 'mapbox://styles/mapbox/streets-v10',
-                    //center: [-77.034084, 38.909671],
-                    center: hotels.features[0].geometry.coordinates,
-                    zoom: 10
-                });
-
-                _map.on('load', () => {
-                    _map.addSource('places', {
-                        type: 'geojson',
-                        data: hotels
-                    });
-                });
-
-                this.createAllMarkers();
-            })
-            .catch((err) => this.props.dispatch(markersLayerError(err)))
-    }
-
     componentDidMount() {
-        this.props.dispatch(markersLayerRequested());
-        this.props.mapService.getResources()
+        const {dispatch, mapService} = this.props;
+        dispatch(markersLayerRequested());
+        mapService.getMarkersLayer()
             .then((hotels) => {
-                this.props.dispatch(markersLayerLoading(hotels))                
+                dispatch(markersLayerLoading(hotels))                
                 this.map = new mapboxgl.Map({
                     container: this.mapContainer,
                     style: 'mapbox://styles/mapbox/streets-v10',
@@ -65,7 +41,7 @@ class MarkersLayer extends Component {
 
                 this.createAllMarkers();
             })
-            .catch((err) => this.props.dispatch(markersLayerError(err)))
+            .catch((err) => dispatch(markersLayerError(err)))
     }
 
     createMarker(index) {
@@ -131,8 +107,7 @@ class MarkersLayer extends Component {
             '<img alt="marker" + src="' + element.properties.image + '" />' +
             '<div class="stars" style="padding-bottom: 0px;">' + this.setStars(element.properties.rate) + '</div>' +
             '<h4 style="padding-top: 0px;">' + element.properties.country + ', ' + element.properties.region + '</h4>';
-
-        //'<h3>Sweetgreen</h3>' +'<h4>' + element.properties.address + '</h4>'
+        
         const popup = new mapboxgl.Popup({ closeOnClick: false, offset: [17, 0] })
             .setLngLat(element.geometry.coordinates)
             .setHTML(descript)
@@ -182,65 +157,6 @@ class MarkersLayer extends Component {
     }
 }
 
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//     const { mapService } = ownProps;
-
-//     return {
-//         getMarkersLayer: async () => {
-//             dispatch(markersLayerRequested());
-//             mapService.getMarkersLayer()
-//                 .then((hotels) => {
-//                     console.log("hotels-mapDispatchToProps", hotels)
-//                     dispatch(markersLayerLoading(hotels))
-
-
-//                 })
-//                 .catch((err) => dispatch(markersLayerError(err)))
-
-
-
-//             // return new Promise((resolve) => {
-//             //     const a = mapService.getMarkersLayer();
-//             //     console.log("a", a)
-//             //     setTimeout((a) => {
-//             //         resolve(a)
-//             //     }, 3000);
-//             // });
-
-
-//         }
-//     }
-// };
-
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//     const { mapService } = ownProps;
-
-//     return {
-//         getMarkersLayer: async (_map) => {
-           
-//                 dispatch(markersLayerRequested());
-//                 mapService.getResources()
-//                     .then((hotels) => {
-//                         dispatch(markersLayerLoading(hotels))                
-//                         _map = new mapboxgl.Map({
-//                             container: this.mapContainer,
-//                             style: 'mapbox://styles/mapbox/streets-v10',
-//                             //center: [-77.034084, 38.909671],
-//                             center: hotels.features[0].geometry.coordinates,
-//                             zoom: 10
-//                         });
-        
-//                         _map.on('load', () => {
-//                             _map.addSource('places', {
-//                                 type: 'geojson',
-//                                 data: hotels
-//                             });
-//                         });
-        
-//                         this.createAllMarkers();
-//                     })
-//                     .catch((err) => this.props.dispatch(markersLayerError(err)))
-//         }}}
 
 const mapStateToProps = (state) => {
     const { markersLayerLoading, markersLayerError, hotels } = state.map;   
