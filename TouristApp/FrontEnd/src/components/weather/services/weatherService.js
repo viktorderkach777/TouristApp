@@ -12,7 +12,21 @@ export default class WeatherService {
         const getDataByCoords = `${this._apiBase}coords-${latitude}-${longitude}`;
         let location = typeof (region) === "object" ? getDataByCoords : getDataByCity;
 
-        return await axios.get(location);
+
+        try {
+            const tt = await axios.get(location);
+            console.log("tt", tt);
+            return tt;
+        }
+        catch (ex) {
+            //console.log("tt", tt);
+            console.log("ex", ex);
+            console.log("ex.error", ex.error);
+
+            const body = { ok: true, status: 400 }
+            return body;
+        }
+
     };
 
     _avgArr = (arr) => {
@@ -54,7 +68,7 @@ export default class WeatherService {
         const avgWindSpeed = this._avgArr(windSpeed);
         const avgPressure = this._avgArr(pressure);
         const weatherData = dataTime.length > 5 ? dataTime[4] : dataTime[0];
-        
+
         return (
             {
                 tempMax: minMax.max,
@@ -107,9 +121,11 @@ export default class WeatherService {
     _getResources = async (region) => {
         const weather = await this._fetchData(region)
             .then((body) => {
-                console.log("res", body);
+                //console.log("res", body);
                 if (body.ok) {
+                    console.log("body.status", body.status);
                     throw new Error(`Could not fetch, received ${body.status}`);
+
                 }
                 body.data = JSON.parse(body.data.data);
                 const tilesValues = Object.values(this._groupByDays(body.data.list));
@@ -124,7 +140,7 @@ export default class WeatherService {
                         list
                     )
                 }, []);
-                console.log("body.data",body.data);
+                //console.log("body.data",body.data);
                 const weather = {
                     cityName: body.data.city.name,
                     country: body.data.city.country,
@@ -134,17 +150,27 @@ export default class WeatherService {
                 }
                 //console.log("weather", weather);
                 return weather;
-            });
+            })
 
         return weather;
     }
 
     getTiles = async (region) => {
         //console.log('getTilesStart')
-        const weather = await this._getResources(region);
+        let weather;
+        try {
+            weather = await this._getResources(region);
+        }
+        catch (ex) {
+            console.log("ex-getTiles", ex)
+            weather = ex;
+
+            throw new Error(`Could not fetch, received ${ex}`);
+        }
+
         //console.log('weather', weather)
         return weather;
     }
 
-    
+
 }

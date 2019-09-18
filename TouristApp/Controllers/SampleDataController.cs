@@ -79,15 +79,33 @@ namespace TouristApp.Controllers
             }
             else
             {
-                getData = $"{_apiBase}?q={region}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";
+               
+                    getData = $"{_apiBase}?q={region}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";
+               
+               
             }         
            
 
            // string getDataByCity = "https://api.openweathermap.org/data/2.5/forecast?q=Rivne&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";
 
             request = WebRequest.Create(getData);
-            response = await request.GetResponseAsync();
+
+
            
+
+
+            try
+            {
+                response = await request.GetResponseAsync();
+            }
+            catch (Exception e)
+            {
+
+                string s = e.Message;
+                string p = s;
+                return BadRequest(new { invalid = s });
+            }
+
             using (Stream stream = response.GetResponseStream())
             {
                 using (StreamReader reader = new StreamReader(stream))
