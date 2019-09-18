@@ -98,8 +98,12 @@ namespace TouristApp.ViewModels
     }
         public class HotelPhotoViewModel
         {
-            public string Name { get; set; }
-        }
+            
+            public string Id { get; set; }
+            public string original { get; set; }
+            public string thumbnail { get; set; }
+
+    }
 
 
         public class HotelAddViewModel
@@ -135,6 +139,12 @@ namespace TouristApp.ViewModels
 
     }
 
+    public class ImageItemViewModelNext2
+    {
+        public string Id { get; set; }
+        public string original { get; set; }
+        public string thumbnail { get; set; }
+    }
 
 
     public class ToursViewModel
@@ -146,6 +156,36 @@ namespace TouristApp.ViewModels
 
     }
 
+    public class SingleTourViewModel
+    {
+        public string Id { get; set; }
+
+        public int Class { get; set; }
+
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public int RoomsCount { get; set; }
+
+        public string Region { get; set; }
+
+        public string Country { get; set; }
+
+        public string СityDeparture { get; set; }
+
+        public double? Rate { get; set; }
+
+        public decimal? Price { get; set; }
+
+        public DateTime? FromData { get; set; }
+        public string Date { get; set; }
+
+        public int? DaysCount { get; set; }
+
+        public List<HotelPhotoViewModel> Images {get; set; }
+
+    }
     public class SearchModel
     {
         public string typeOfSort { get; set; }

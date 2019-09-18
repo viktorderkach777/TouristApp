@@ -24,6 +24,12 @@ namespace TouristApp.Controllers
         public string thumbnail { get; set; }
     }
 
+    public class ImageItemViewModelNext2
+    {
+        public string Id { get; set; }
+        public string original { get; set; }
+        public string thumbnail { get; set; }
+    }
 
 
     [Route("api/[controller]")]

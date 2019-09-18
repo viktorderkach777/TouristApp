@@ -133,6 +133,8 @@ namespace TouristApp.Controllers
             return model;
         }
 
+        
+
 
         // POST: api/hotel/photo
         [HttpPost("photo")]

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Lightbox from 'react-image-lightbox';
+//import Lightbox from 'react-image-lightbox';
 import axios from 'axios';
-import { Button, CardText, CardSubtitle, CardTitle, Card, CardBody, CardGroup, Col, Container, Row,NavItem, NavLink} from 'reactstrap';
+import { Button, CardText, CardSubtitle, CardTitle, Card, CardBody, Col, Container, Row,NavItem, NavLink} from 'reactstrap';
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 import { serverUrl } from '../../config';
 import ImageGallery from 'react-image-gallery';
@@ -12,11 +12,7 @@ import './tours.css'
 
 export default class Hotel extends Component {
     state = {
-        activeTab: '1',
-        photoIndex: 0,
-        isOpen: false,
-        images: [],
-        images2: []
+            tour:{}
     };
 
     toggle(tab) {
@@ -27,32 +23,19 @@ export default class Hotel extends Component {
         }
     }
     componentDidMount() {
-        // const url = `${serverUrl}api/SampleData/Images`;
-        const url2 = `${serverUrl}api/SampleData/Images2`;
-        // axios.get(url)
-        //     .then(
-        //         result => {
-        //             console.log('--result--', result.data);
-        //             this.setState({ images: result.data });
-        //         },
-        //         err => {
-        //             console.log('--problem--', err);
-        //         }
-        //     );
+        const url2 = `${serverUrl}api/tour/single/`+this.props.match.params.id;
         axios.get(url2)
             .then(
                 result => {
                     console.log('--result--', result.data);
-                    this.setState({ images2: result.data });
+                   
+                    this.setState({ tour: result.data });
                 },
                 err => {
                     console.log('--problem--', err);
                 }
             );
-        //    Count: {this.props.match.params.id}
-
-
-
+        
     }
 
     onClickImage = (e, img_index) => {
@@ -61,43 +44,36 @@ export default class Hotel extends Component {
     }
 
     render() {
-        console.log('-----Single Tour------ ', this.state);
-        // const { photoIndex, isOpen, images } = this.state;
-        // const imageItems = images.map((item, index) => {
-        //     return (
-        //         <div key={item.id} className="col-lg-3 col-md-4 col-6">
-        //             <a href="url" className="d-block mb-4 h-100" onClick={(e) => this.onClickImage(e, index)} >
-        //                 <img className="img-fluid img-thumbnail" src={serverUrl + item.smallImage} alt="" />
-        //             </a>
-        //         </div>
-        //     );
-        // });
+        console.log('-----Single Tour state------ ', this.state);
+        console.log('-----Single Tour props------ ', this.props);
+        const { tour}=this.state;
+
         return (
             <React.Fragment>
                 <div className="app flex-row align-items-top">
                     <Container>
                         <Card className="CardTours text-center" style={{ height: '70px', padding: '20px' }}>
-                            <CardText>
-                                <h4>Зареєструйся до <b>1 жовтня</b> отримай бонус 250 гривень на оплату туру від нашого агентства!</h4>
+                            <CardText tag="h4">
+                                Зареєструйся до <b>1 жовтня</b> отримай бонус 250 гривень на оплату туру від нашого агентства!
                             </CardText>
                         </Card>
                         <Card className="CardTours">
                             <CardBody>
-                                <CardTitle>Готель</CardTitle>
-                                <CardSubtitle>Tour id: {this.props.match.params.id}</CardSubtitle>
+                                <CardTitle tag="h3">{tour.name} {tour.class}*</CardTitle>
+                                <CardSubtitle><i className="fa fa-map-marker" aria-hidden="true"/> {tour.country},{tour.region}</CardSubtitle> 
                                 <Row>
                                     <Col sm="5">
-                                        <ImageGallery items={this.state.images2} />
+                                        <ImageGallery items={this.state.tour.images} />
                                     </Col>
                                     <Col sm="4">
                                         <CardText>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Виліт:</span>
-                                                <span className="date-capitalize"><b>19.09</b></span>
+                                                <span className="date-capitalize"><b> {tour.date}</b></span>
                                             </li>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Тур:</span>
-                                                <b>  7 ночей</b>
+                                                <b> {tour.daysCount} ночей</b>
                                             </li>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Харчування:</span>
@@ -117,7 +93,7 @@ export default class Hotel extends Component {
                                             </li>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Перельот туди:</span>
-                                                <b>19.09</b>
+                                                <b>{tour.date}</b>
                                             </li>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Перельот назад:</span>
@@ -130,6 +106,7 @@ export default class Hotel extends Component {
                                     </Col>
                                     <Col sm="3">
                                         <CardText className="skin-color hidden-xs" tag="h3" >Найкраща ціна: </CardText>
+                                        <CardText className="GreenColor" tag="h2" >{tour.price} ₴</CardText>
                                         <Button size="lg" className="buttonHotel">Потрібна консультація</Button>
                                         <Button size="lg" className="buttonHotel">Замовлення</Button>
                                     </Col>

@@ -200,7 +200,7 @@ class ToursContainer extends Component {
                 </div>
               </div>
               <Link to={`/views/${item.country}/${item.id}`}>
-                <Button size="lg" className="buttonHotel">Дивитись тур</Button>
+                <Button size="sm" className="buttonHotel">Дивитись тур</Button>
               </Link>
             </Col>
           </Row>
