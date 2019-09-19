@@ -203,14 +203,14 @@
   border-bottom-color: #91c949;
 } */
 
-/* .marker {
+.marker {
   border: none;
   cursor: pointer;    
   height: 48px;
   width: 48px;   
-  background-image: url(./hotel.ico);
+  background-image: url(./marker-icon.svg);
   background-color: rgba(0, 0, 0, 0);
-} */
+}
 
 .mapboxgl-popup {
   padding-bottom: 29px;

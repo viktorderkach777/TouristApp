@@ -8,7 +8,7 @@ const ErrorBoundry = lazy(() => import('../../components/errorBoundry'));
 const mapService = new MapService();
 //const fakeService = new FakeService();
 
-export default function Wheather(props) {
+export default function MapMarker(props) {
     
     return (
         <Suspense fallback={<div>Loading...</div>}>

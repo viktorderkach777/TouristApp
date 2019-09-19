@@ -41,6 +41,7 @@ const TourWidget = React.lazy(()=>import("../components/tours/index"))
 const SimplyTour = React.lazy(()=>import("../components/tours/TourPage"))
 const WeatherWidget = React.lazy(()=>import("../components/weather"))
 const MapLayoutWidget = React.lazy(()=>import("../components/map"))
+const MapNavigation = React.lazy(()=>import("../components/mapNavigation"))
 
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
@@ -92,7 +93,8 @@ const routes = [
   { path: '/views/:country/:id', exact: true, name: 'User Details', component: SimplyTour },
   { path: '/images', exact: true, name: 'User Details', component: SimplyTour },
   { path: '/weather', exact: true, name: 'Weather', component: WeatherWidget },
-  { path: '/map', exact: true, name: 'MapLayout', component: MapLayoutWidget }
+  { path: '/map', exact: true, name: 'MapLayout', component: MapLayoutWidget },
+  { path: '/mapNavigation', exact: true, name: 'map-navigation', component: MapNavigation }
 ];
 
 export default routes;

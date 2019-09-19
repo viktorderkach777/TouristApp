@@ -16,6 +16,7 @@ export default class WeatherService {
         try {
             const tt = await axios.get(location);
             console.log("tt", tt);
+            console.log("tt.statusText", tt.statusText);
             return tt;
         }
         catch (ex) {
@@ -23,7 +24,7 @@ export default class WeatherService {
             console.log("ex", ex);
             console.log("ex.error", ex.error);
 
-            const body = { ok: true, status: 400 }
+            const body = {  statusText: false, status: 400 }
             return body;
         }
 
@@ -121,9 +122,9 @@ export default class WeatherService {
     _getResources = async (region) => {
         const weather = await this._fetchData(region)
             .then((body) => {
-                //console.log("res", body);
-                if (body.ok) {
-                    console.log("body.status", body.status);
+                console.log("body", body);
+                if (body.statusText !== "OK") {
+                    console.log("body.status", body.statusText);
                     throw new Error(`Could not fetch, received ${body.status}`);
 
                 }

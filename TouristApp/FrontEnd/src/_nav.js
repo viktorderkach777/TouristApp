@@ -75,23 +75,23 @@ export default {
 {
   name: 'Карти',
   url: '/base',
-  icon: 'icon-minus',
+  icon: 'icon-pencil',
   children: [  
 {
   name: 'Додати маркер',
   url: '/admin/maphotel',
   icon: 'icon-pencil',
 },
-// {
-//   name: 'Видалити тур',
-//   url: '/admin/hoteladd',
-//   icon: 'icon-pencil',
-// },
-// {
-//   name: 'Видалити країну',
-//   url: '/admin/hoteladd',
-//   icon: 'icon-pencil',
-// },
+{
+  name: 'Навігація',
+  url: '/mapNavigation',
+  icon: 'icon-pencil',
+},
+{
+  name: 'Готелі на карті',
+  url: '/map',
+  icon: 'icon-pencil',
+},
 ],
 },
     {

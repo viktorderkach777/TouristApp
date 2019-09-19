@@ -48,7 +48,8 @@ class HotelMarkerMap extends Component {
     cityName: "",
     marker: null,
     popup: null,
-    currentCityName: ""
+    currentCityName: "",
+    statusText: ""
   };
 
   markerContainer;
@@ -56,7 +57,7 @@ class HotelMarkerMap extends Component {
   componentDidMount() {
     const { lng, lat, zoom } = this.state;
 
-    this.markerContainer = document.createElement('div');
+    this.markerContainer = document.createElement('div');    
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -83,8 +84,10 @@ class HotelMarkerMap extends Component {
         <img alt="marker" src={mapMarkerIcon} height="45px" width="25px" />
       </div>, this.markerContainer);
 
+    //this.markerRef = document.createElement('div');
 
-
+    // Add a class called 'marker' to each div
+    //this.markerRef.className = 'marker';  
 
     this.map.on('mousedown', (e) => {
       // console.log("mousedown", e);
@@ -289,15 +292,18 @@ class HotelMarkerMap extends Component {
   // }
 
   _updateCity = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
+
     const city = this.state.currentCityName;
     this.setState({
       currentCityName: ""
     });
-    console.log("city", city);
+    //console.log("city", city);
     if (city.length !== 0) {
       //this.props.fetchTiles(city);
-      console.log("this.props_updateCity", this.props);
+      // console.log("this.props_updateCity", this.props);
 
       const { dispatch, weatherService } = this.props;
       dispatch(tilesRequested());
@@ -305,14 +311,14 @@ class HotelMarkerMap extends Component {
         .then((tiles) => {
           dispatch(tilesLoaded(tiles))
 
-          console.log("tiles", tiles.cityCoord);
+          // console.log("tiles", tiles.cityCoord);
           const { lat, lon } = tiles.cityCoord;
 
           this.setState({
             lat: lat,
             lng: lon,
-            cityName: city
-
+            cityName: city,
+            statusText: ""
           });
 
           this.map.flyTo({
@@ -324,8 +330,11 @@ class HotelMarkerMap extends Component {
           this.createMarker();
 
         })
-        .catch((err) => dispatch(tilesError(err)))
-
+        .catch((err) => {
+          dispatch(tilesError(err))
+          this.setState({ statusText: "Invalid name of city!" })
+        }
+        )
 
 
       //   this.props.weatherService.getTiles(city)
@@ -348,190 +357,191 @@ class HotelMarkerMap extends Component {
       //       // this.map.resize();
       //       this.createMarker();
       //     })
-       }
     }
+  }
 
-    _onkeyPress = e => {
+  _onkeyPress = e => {
 
-      console.log("e", e.key);
-      return e.key === "Enter" ? this._updateCity() : null
-    }
-
-
-
-    render() {
-      const { lng, lat, cityType, cityName, currentCityName } = this.state;
-      console.log("render - this.props", this.props);
-
-      // if(!this.props.tilesLoading){
-
-      // }
+    //console.log("e", e.key);
+    return e.key === "Enter" ? this._updateCity() : null
+  }
 
 
-      const form1 = (
 
-        <Form onSubmit={this._updateCity}>
-          {/* <h1>Login</h1>
+  render() {
+    const { lng, lat, cityType, cityName, currentCityName } = this.state;
+    const {tilesError} = this.props;
+    //console.log("render - this.props", this.props);
+
+    // if(!this.props.tilesLoading){
+
+    // }
+
+
+    const form1 = (
+
+      <Form onSubmit={this._updateCity}>
+        {/* <h1>Login</h1>
                         <p className="text-muted">Sign In to your account</p> */}
-          {/* {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''} */}
+        {/* {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''} */}
 
-          <InputGroup className="mb-4">
-            <InputGroupAddon addonType="prepend">
-              <InputGroupText>
-                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-              </InputGroupText>
-            </InputGroupAddon>
-            <Input
-              type="text"
-              placeholder="currentCityName"
-              autoComplete="current-currentCityName"
-              // className={classnames('form-control', { 'is-invalid': !!errors.password})}
-              className='form-control'
-              id="currentCityName"
-              name="currentCityName"
-              value={currentCityName}
-              onChange={this.handleChange}
-              onKeyPress={this._onkeyPress}
-            />
-            {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
-          </InputGroup>
-
-
+        <InputGroup className="mb-4">
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>
+              <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+            </InputGroupText>
+          </InputGroupAddon>
+          <Input
+            type="text"
+            placeholder="currentCityName"
+            autoComplete="current-currentCityName"
+            // className={classnames('form-control', { 'is-invalid': !!errors.password})}
+            className='form-control'
+            id="currentCityName"
+            name="currentCityName"
+            value={currentCityName}
+            onChange={this.handleChange}
+            onKeyPress={this._onkeyPress}
+          />
+          {tilesError===null ?'': <span className="help-block">{"Invalid name of city!"}</span>}
+        </InputGroup>
 
 
-          <Row>
-            <Col xs="6">
-              {/* <Button color="primary" className="px-4" disabled={isLoading}>Login</Button> */}
-              <Button color="primary"
-                className="px-4"
-                value="&gt;"
-              >
-                Button
+
+
+        <Row>
+          <Col xs="6">
+            {/* <Button color="primary" className="px-4" disabled={isLoading}>Login</Button> */}
+            <Button color="primary"
+              className="px-4"
+              value="&gt;"
+            >
+              Button
             </Button>
-            </Col>
-            {/* <Col xs="6" className="text-right">
+          </Col>
+          {/* <Col xs="6" className="text-right">
                           <Button color="link" className="px-0">Forgot password?</Button>
                         </Col> */}
-          </Row>
-        </Form>
+        </Row>
+      </Form>
 
-      );
-
-
+    );
 
 
 
-      const form2 = (
-        <React.Fragment>
-          <div className="app flex-row align-items-center">
-            <Container>
-              <Row className="justify-content-center">
-                <Col md="10">
-                  <CardGroup>
-                    <Card className="p-4">
-                      <CardBody>
-                        {form1}
-                        <Form onSubmit={this.onSubmitForm}>
-                          {/* <h1>Login</h1>
+
+
+    const form2 = (
+      <React.Fragment>
+        <div className="app flex-row align-items-center">
+          <Container>
+            <Row className="justify-content-center">
+              <Col md="10">
+                <CardGroup>
+                  <Card className="p-4">
+                    <CardBody>
+                      {form1}
+                      <Form onSubmit={this.onSubmitForm}>
+                        {/* <h1>Login</h1>
                         <p className="text-muted">Sign In to your account</p> */}
-                          {/* {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''} */}
+                        {/* {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''} */}
 
-                          <InputGroup className="mb-4">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input
-                              type="text"
-                              placeholder="CityName"
-                              autoComplete="current-cityName"
-                              // className={classnames('form-control', { 'is-invalid': !!errors.password})}
-                              className='form-control'
-                              id="cityName"
-                              name="cityName"
-                              value={cityName}
-                              onChange={this.handleChange}
-                            />
-                            {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
-                          </InputGroup>
-
-
-                          <InputGroup className="mb-4">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input
-                              type="text"
-                              placeholder="CityType"
-                              autoComplete="current-cityType"
-                              // className={classnames('form-control', { 'is-invalid': !!errors.password})}
-                              className='form-control'
-                              id="cityType"
-                              name="cityType"
-                              value={cityType}
-                              onChange={this.handleChange}
-                            />
-                            {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
-                          </InputGroup>
+                        <InputGroup className="mb-4">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            type="text"
+                            placeholder="CityName"
+                            autoComplete="current-cityName"
+                            // className={classnames('form-control', { 'is-invalid': !!errors.password})}
+                            className='form-control'
+                            id="cityName"
+                            name="cityName"
+                            value={cityName}
+                            onChange={this.handleChange}
+                          />
+                          {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
+                        </InputGroup>
 
 
+                        <InputGroup className="mb-4">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            type="text"
+                            placeholder="CityType"
+                            autoComplete="current-cityType"
+                            // className={classnames('form-control', { 'is-invalid': !!errors.password})}
+                            className='form-control'
+                            id="cityType"
+                            name="cityType"
+                            value={cityType}
+                            onChange={this.handleChange}
+                          />
+                          {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
+                        </InputGroup>
 
-                          <InputGroup className="mb-3">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input
-                              type="text"
-                              placeholder="Username"
-                              autoComplete="username"
-                              // className={classnames('form-control', { 'is-invalid': !!errors.email})}
-                              className='form-control'
-                              id="email"
-                              name="email"
-                              value={lng}
-                              onChange={this.handleChange}
-                            />
-                            {/* {!!errors.email ? <span className="help-block">{errors.email}</span> : ''} */}
-                          </InputGroup>
 
-                          <InputGroup className="mb-4">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input
-                              type="text"
-                              placeholder="Password"
-                              autoComplete="current-password"
-                              // className={classnames('form-control', { 'is-invalid': !!errors.password})}
-                              className='form-control'
-                              id="password"
-                              name="password"
-                              value={lat}
-                              onChange={this.handleChange}
-                            />
-                            {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
-                          </InputGroup>
 
-                          <Row>
-                            <Col xs="6">
-                              {/* <Button color="primary" className="px-4" disabled={isLoading}>Login</Button> */}
-                              <Button color="primary" className="px-4" >Login</Button>
-                            </Col>
-                            {/* <Col xs="6" className="text-right">
+                        <InputGroup className="mb-3">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            type="text"
+                            placeholder="Username"
+                            autoComplete="username"
+                            // className={classnames('form-control', { 'is-invalid': !!errors.email})}
+                            className='form-control'
+                            id="email"
+                            name="email"
+                            value={lng}
+                            onChange={this.handleChange}
+                          />
+                          {/* {!!errors.email ? <span className="help-block">{errors.email}</span> : ''} */}
+                        </InputGroup>
+
+                        <InputGroup className="mb-4">
+                          <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                              <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            </InputGroupText>
+                          </InputGroupAddon>
+                          <Input
+                            type="text"
+                            placeholder="Password"
+                            autoComplete="current-password"
+                            // className={classnames('form-control', { 'is-invalid': !!errors.password})}
+                            className='form-control'
+                            id="password"
+                            name="password"
+                            value={lat}
+                            onChange={this.handleChange}
+                          />
+                          {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
+                        </InputGroup>
+
+                        <Row>
+                          <Col xs="6">
+                            {/* <Button color="primary" className="px-4" disabled={isLoading}>Login</Button> */}
+                            <Button color="primary" className="px-4" >Login</Button>
+                          </Col>
+                          {/* <Col xs="6" className="text-right">
                           <Button color="link" className="px-0">Forgot password?</Button>
                         </Col> */}
-                          </Row>
-                        </Form>
-                      </CardBody>
-                    </Card>
-                    {/* <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
+                        </Row>
+                      </Form>
+                    </CardBody>
+                  </Card>
+                  {/* <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
                   <CardBody className="text-center">
                     <div>
                       <h2>Sign up</h2>
@@ -543,95 +553,95 @@ class HotelMarkerMap extends Component {
                     </div>
                   </CardBody>
                 </Card> */}
-                  </CardGroup>
-                </Col>
-              </Row>
-            </Container>
-          </div>
-        </React.Fragment>
-      );
-      const { tilesLoading } = this.props;
-      return (
-        //     <div style={{ position: "absolute", top: "200px", left: "200px", width: "50%", height: "50%", borderRadius: "100px" }}>
-        //       <div className="inline-block absolute top left mt12 ml12 bg-darken75 color-white z1 py6 px12 round-full txt-s txt-bold">
-        //         <div>{`Longitude: ${lng} Latitude: ${lat} Zoom: ${zoom}`}</div>
-        //       </div>
-        //       <div ref={el => this.mapContainer = el} className="absolute top right left bottom" />
-        //     </div>
+                </CardGroup>
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </React.Fragment>
+    );
+    const { tilesLoading } = this.props;
+    return (
+      //     <div style={{ position: "absolute", top: "200px", left: "200px", width: "50%", height: "50%", borderRadius: "100px" }}>
+      //       <div className="inline-block absolute top left mt12 ml12 bg-darken75 color-white z1 py6 px12 round-full txt-s txt-bold">
+      //         <div>{`Longitude: ${lng} Latitude: ${lat} Zoom: ${zoom}`}</div>
+      //       </div>
+      //       <div ref={el => this.mapContainer = el} className="absolute top right left bottom" />
+      //     </div>
 
 
 
-        <div id="body">
-          {/* <div className="inline-block absolute top left mt12 ml12 bg-darken75 color-white z1 py6 px12 round-full txt-s txt-bold">
+      <div id="body">
+        {/* <div className="inline-block absolute top left mt12 ml12 bg-darken75 color-white z1 py6 px12 round-full txt-s txt-bold">
           <div>{`Longitude: ${lng} Latitude: ${lat} Zoom: ${zoom}`}</div>
         </div> */}
 
-          <div ref={el => this.mapContainer = el} id='map' className='map pad2' />
+        <div ref={el => this.mapContainer = el} id='map' className='map pad2' />
 
-          <CentrPageSpinner loading={tilesLoading} />
+        <CentrPageSpinner loading={tilesLoading} />
 
-          <div className='mysidebar'>
-            <div className='heading'>
-              <h1>Our locations</h1>
-            </div>
-            <div id='listings' className='listings'>
-              {form2}
-            </div>
+        <div className='mysidebar'>
+          <div className='heading'>
+            <h1>Our locations</h1>
+          </div>
+          <div id='listings' className='listings'>
+            {form2}
           </div>
         </div>
-      );
-    }
-
-
-
-  }
-
-  const mapStateToProps = (state) => {
-    const {
-      //tiles,
-      //cityDay,
-      cityName,
-      country,
-      tilesLoading,
-      tilesError
-    } = state.weather;
-    //console.log("state.weather",state.weather);
-    return {
-      //tiles,
-      //cityDay,
-      cityName,
-      country,
-      tilesLoading,
-      tilesError
-    };
+      </div>
+    );
   }
 
 
-  // const mapDispatchToProps = (dispatch, ownProps) => {
-  //   const { weatherService } = ownProps;
 
-  //   return {
-  //     fetchTiles: (region) => {
-  //       dispatch(tilesRequested());
-  //       weatherService.getTiles(region)
-  //         .then((tiles) => {
-  //           dispatch(tilesLoaded(tiles))
-  //         })
-  //         .catch((err) => dispatch(tilesError(err)))
-  //     },
+}
 
-  //     // clickTile: (name) => {
-  //     //     dispatch(cityDataLoadedByDay(name))
-  //     // },
+const mapStateToProps = (state) => {
+  const {
+    //tiles,
+    //cityDay,
+    cityName,
+    country,
+    tilesLoading,
+    tilesError
+  } = state.weather;
+  //console.log("state.weather",state.weather);
+  return {
+    //tiles,
+    //cityDay,
+    cityName,
+    country,
+    tilesLoading,
+    tilesError
+  };
+}
 
-  //     //regionLoaded: (region) => dispatch(regionLoaded(region))
-  //   }
-  // };
 
-  export default compose(
-    withWeatherService(),
-      connect(mapStateToProps, null)
-) (HotelMarkerMap);
+// const mapDispatchToProps = (dispatch, ownProps) => {
+//   const { weatherService } = ownProps;
+
+//   return {
+//     fetchTiles: (region) => {
+//       dispatch(tilesRequested());
+//       weatherService.getTiles(region)
+//         .then((tiles) => {
+//           dispatch(tilesLoaded(tiles))
+//         })
+//         .catch((err) => dispatch(tilesError(err)))
+//     },
+
+//     // clickTile: (name) => {
+//     //     dispatch(cityDataLoadedByDay(name))
+//     // },
+
+//     //regionLoaded: (region) => dispatch(regionLoaded(region))
+//   }
+// };
+
+export default compose(
+  withWeatherService(),
+  connect(mapStateToProps, null)
+)(HotelMarkerMap);
 
 //export default HotelMarkerMap;
 
