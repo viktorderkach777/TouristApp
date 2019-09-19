@@ -29,7 +29,7 @@ class MarkersLayer extends Component {
                     style: 'mapbox://styles/mapbox/streets-v10',
                     //center: [-77.034084, 38.909671],
                     center: hotels.features[0].geometry.coordinates,
-                    zoom: 10
+                    zoom: 14
                 });
 
                 this.map.on('load', () => {

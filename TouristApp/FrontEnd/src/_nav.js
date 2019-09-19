@@ -94,6 +94,21 @@ export default {
 },
 ],
 },
+
+{
+  name: 'Погода',
+  url: '/base',
+  icon: 'icon-pencil',
+  children: [  
+
+{
+  name: 'Погода на курортах',
+  url: '/weather',
+  icon: 'icon-pencil',
+},
+],
+},
+
     {
       title: true,
       name: 'Components',
