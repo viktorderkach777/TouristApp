@@ -61,9 +61,9 @@ namespace TouristApp.Controllers
 
             //string st = "coords-50.6196-26.2513"; //lat: 55.7507, lon: 37.6177
 
-            if (region.StartsWith("coords-"))
+            if (region.StartsWith("coords;"))
             {
-                String[] breakApart = region.Split('-');
+                String[] breakApart = region.Split(';');
 
                 if (breakApart.Length > 2)
                 {

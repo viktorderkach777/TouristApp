@@ -9,20 +9,20 @@ export default class WeatherService {
     _fetchData = async (region) => {
         const { latitude, longitude } = region || {};
         const getDataByCity = `${this._apiBase}${region}`;
-        const getDataByCoords = `${this._apiBase}coords-${latitude}-${longitude}`;
+        const getDataByCoords = `${this._apiBase}coords;${latitude};${longitude}`;
         let location = typeof (region) === "object" ? getDataByCoords : getDataByCity;
 
-
+        console.log("location", location);
         try {
             const tt = await axios.get(location);
             console.log("tt", tt);
-            console.log("tt.statusText", tt.statusText);
+            //console.log("tt.statusText", tt.statusText);
             return tt;
         }
         catch (ex) {
             //console.log("tt", tt);
-            console.log("ex", ex);
-            console.log("ex.error", ex.error);
+            //console.log("ex", ex);
+            //console.log("ex.error", ex.error);
 
             const body = {  statusText: false, status: 400 }
             return body;
@@ -122,9 +122,9 @@ export default class WeatherService {
     _getResources = async (region) => {
         const weather = await this._fetchData(region)
             .then((body) => {
-                console.log("body", body);
+                //console.log("body", body);
                 if (body.statusText !== "OK") {
-                    console.log("body.status", body.statusText);
+                    //console.log("body.status", body.statusText);
                     throw new Error(`Could not fetch, received ${body.status}`);
 
                 }
@@ -163,13 +163,13 @@ export default class WeatherService {
             weather = await this._getResources(region);
         }
         catch (ex) {
-            console.log("ex-getTiles", ex)
+            //console.log("ex-getTiles", ex)
             weather = ex;
 
             throw new Error(`Could not fetch, received ${ex}`);
         }
 
-        //console.log('weather', weather)
+        console.log('weather', weather)
         return weather;
     }
 
