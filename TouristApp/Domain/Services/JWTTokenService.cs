@@ -13,18 +13,29 @@ using Newtonsoft.Json;
 
 namespace TouristApp.Domain.Services
 {
-    public class Token
-    {
-        public string token;
-        public string refToken;
-    }
-
     public class JWTTokenService : IJWTTokenService
     {
-        public string CreateToken(IConfiguration configuration, IUserService userService, DbUser user, UserManager<DbUser> userManager)
+        private readonly EFContext _context;
+        private readonly UserManager<DbUser> _userManager;
+        private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
+
+        public JWTTokenService(
+            EFContext context,
+            UserManager<DbUser> userManager,
+            IConfiguration configuration,
+            IUserService userService)
         {
-            var roles = userManager.GetRolesAsync(user).Result;
-            var userImage = userService.GetImageUser(user.Id);
+            _context = context;
+            _configuration = configuration;
+            _userManager = userManager;
+            _userService = userService;
+        }
+
+        public string CreateToken(DbUser user)
+        {
+            var roles = _userManager.GetRolesAsync(user).Result;
+            var userImage = _userService.GetImageUser(user.Id);
             var claims = new List<Claim>()
             {
                 //new Claim(JwtRegisteredClaimNames.Sub, user.Id)
@@ -38,7 +49,7 @@ namespace TouristApp.Domain.Services
                 claims.Add(new Claim("roles", role));
             }
 
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("SecretPhrase")));
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("SecretPhrase")));
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             var jwt = new JwtSecurityToken(
                 signingCredentials: signingCredentials,
@@ -47,11 +58,11 @@ namespace TouristApp.Domain.Services
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
-       
 
-        public string CreateRefreshToken(IConfiguration configuration, IUserService userService, DbUser user, UserManager<DbUser> userManager, EFContext db)
+
+        public string CreateRefreshToken(DbUser user)
         {
-            var _refreshToken = db.RefreshTokens
+            var _refreshToken = _context.RefreshTokens
               .SingleOrDefault(m => m.Id == user.Id);
 
             if (_refreshToken == null)
@@ -61,18 +72,18 @@ namespace TouristApp.Domain.Services
                     Id = user.Id,
                     Token = Guid.NewGuid().ToString()
                 };
-                db.RefreshTokens.Add(t);
-                db.SaveChanges();
+                _context.RefreshTokens.Add(t);
+                _context.SaveChanges();
                 _refreshToken = t;
             }
             else
             {
                 _refreshToken.Token = Guid.NewGuid().ToString();
-                db.RefreshTokens.Update(_refreshToken);
-                db.SaveChanges();
+                _context.RefreshTokens.Update(_refreshToken);
+                _context.SaveChanges();
             }
 
-            return _refreshToken.Token;           
+            return _refreshToken.Token;
         }
     }
 }

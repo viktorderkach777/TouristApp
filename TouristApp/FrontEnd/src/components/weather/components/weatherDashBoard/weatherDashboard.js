@@ -22,12 +22,12 @@ class WeatherDashboard extends Component {
     render() {
         //console.log("WeatherDashboard-props", this.props);  color="primary"     
         return (
-            <div id="body">
+            <div id="weather-dashboard-body">
                 {/* <Container >
                     <Buttons />
                     <Row> */}
                         {/* <Col sm="12" md={{ size: 10, offset: 1 }}> */}
-                        <Col id='map' className='map'>
+                        <Col id='weather-dashboard-map' className='weather-dashboard-map'>
                             <Card body outline className="CardWeather" style={{ minHeight: "800px" }}>
                                 {/* <CardTitle> */}
                                 <WeatherCity />
@@ -39,12 +39,12 @@ class WeatherDashboard extends Component {
                                 </CardBody>
                             </Card>
                         </Col>
-                        <Col className='mysidebar'>
+                        <Col className='weather-dashboard-sidebar'>
                             <div >
-                                <div className='heading'>
+                                <div className='weather-dashboard-heading'>
                                     <h1>Our locations</h1>
                                 </div>
-                                <div id='listings' className='listings'>
+                                <div id='weather-dashboard-listings' className='weather-dashboard-listings'>
                                     {/* {locations} */}
                                     <Locations/>
                                 </div>

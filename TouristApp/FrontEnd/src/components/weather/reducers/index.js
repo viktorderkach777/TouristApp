@@ -47,11 +47,11 @@ export const weatherReducer = (state = initialState, action) => {
                 ...state,
                 cityDay: action.payload
             };
-        case 'UPLOAD_REGION_SUCCESS':
-            return {
-                ...state,
-                region: action.payload
-            };
+        // case 'UPLOAD_REGION_SUCCESS':
+        //     return {
+        //         ...state,
+        //         region: action.payload
+        //     };
         default:
             return state;
     }

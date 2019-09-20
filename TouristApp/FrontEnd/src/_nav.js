@@ -22,93 +22,91 @@ export default {
       name: 'Додавання',
       url: '/base',
       icon: 'icon-plus',
-      children: [  
-    {
-      name: 'Додати готель',
-      url: '/admin/hoteladd',
-      icon: 'icon-pencil',
+      children: [
+        {
+          name: 'Додати готель',
+          url: '/admin/hoteladd',
+          icon: 'icon-pencil',
+        },
+        {
+          name: 'Додати фото готеля',
+          url: '/admin/hoteladd',
+          icon: 'icon-pencil',
+        },
+        {
+          name: 'Додати регіон',
+          url: '/admin/regionadd',
+          icon: 'icon-pencil',
+        },
+        {
+          name: 'Додати тур',
+          url: '/admin/hoteladd',
+          icon: 'icon-pencil',
+        },
+        {
+          name: 'Додати країну',
+          url: '/admin/countryadd',
+          icon: 'icon-pencil',
+        },
+      ],
     },
     {
-      name: 'Додати фото готеля',
-      url: '/admin/hoteladd',
-      icon: 'icon-pencil',
+      name: 'Видалення',
+      url: '/base',
+      icon: 'icon-minus',
+      children: [
+        {
+          name: 'Видалити готель',
+          url: '/admin/hoteladd',
+          icon: 'icon-pencil',
+        },
+        {
+          name: 'Видалити тур',
+          url: '/admin/hoteladd',
+          icon: 'icon-pencil',
+        },
+        {
+          name: 'Видалити країну',
+          url: '/admin/hoteladd',
+          icon: 'icon-pencil',
+        },
+      ],
     },
     {
-      name: 'Додати регіон',
-      url: '/admin/regionadd',
-      icon: 'icon-pencil',
+      name: 'Карти',
+      url: '/base',
+      icon: 'icon-cursor',
+      children: [
+        {
+          name: 'Додати маркер',
+          url: '/admin/maphotel',
+          icon: 'icon-pencil',
+        },
+        {
+          name: 'Навігація',
+          url: '/mapNavigation',
+          icon: 'icon-cursor',
+        },
+        {
+          name: 'Готелі на карті',
+          url: '/map',
+          icon: 'icon-cursor',
+        },
+      ],
     },
     {
-      name: 'Додати тур',
-      url: '/admin/hoteladd',
-      icon: 'icon-pencil',
-    },
-    {
-      name: 'Додати країну',
-      url: '/admin/countryadd',
-      icon: 'icon-pencil',
-    },
-  ],
-},
-{
-  name: 'Видалення',
-  url: '/base',
-  icon: 'icon-minus',
-  children: [  
-{
-  name: 'Видалити готель',
-  url: '/admin/hoteladd',
-  icon: 'icon-pencil',
-},
-{
-  name: 'Видалити тур',
-  url: '/admin/hoteladd',
-  icon: 'icon-pencil',
-},
-{
-  name: 'Видалити країну',
-  url: '/admin/hoteladd',
-  icon: 'icon-pencil',
-},
-],
-},
-{
-  name: 'Карти',
-  url: '/base',
-  icon: 'icon-pencil',
-  children: [  
-{
-  name: 'Додати маркер',
-  url: '/admin/maphotel',
-  icon: 'icon-pencil',
-},
-{
-  name: 'Навігація',
-  url: '/mapNavigation',
-  icon: 'icon-pencil',
-},
-{
-  name: 'Готелі на карті',
-  url: '/map',
-  icon: 'icon-pencil',
-},
-],
-},
+      name: 'Погода',
+      url: '/base',
+      icon: 'icon-cloud-download',
+      children: [
 
-{
-  name: 'Погода',
-  url: '/base',
-  icon: 'icon-pencil',
-  children: [  
-
-{
-  name: 'Погода на курортах',
-  url: '/weather',
-  icon: 'icon-pencil',
-},
-],
-},
-
+        {
+          name: 'Погода на курортах',
+          url: '/weather',
+          icon: 'icon-cloud-download',
+        },
+      ],
+    },
     {
       title: true,
       name: 'Components',

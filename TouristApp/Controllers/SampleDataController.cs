@@ -16,7 +16,7 @@ namespace TouristApp.Controllers
         public string BigImage { get; set; }
         public string SmallImage { get; set; }
     }
-   
+
 
     [Route("api/[controller]")]
     public class SampleDataController : Controller
@@ -50,7 +50,7 @@ namespace TouristApp.Controllers
         }
 
 
-        [HttpGet("weather/{region}")]       
+        [HttpGet("weather/{region}")]
         public async Task<IActionResult> Weather(string region)
         {
             WebRequest request;
@@ -58,8 +58,7 @@ namespace TouristApp.Controllers
             string data = "";
             string _apiBase = "https://api.openweathermap.org/data/2.5/forecast";
             string getData = "";
-
-            //string st = "coords-50.6196-26.2513"; //lat: 55.7507, lon: 37.6177
+            string appid = _configuration.GetValue<string>("WheatherId");
 
             if (region.StartsWith("coords;"))
             {
@@ -67,10 +66,7 @@ namespace TouristApp.Controllers
 
                 if (breakApart.Length > 2)
                 {
-                    string latitude = breakApart[1];
-                    string longitude = breakApart[2];
-                   
-                    getData = $"{_apiBase}?lat={latitude}&lon={longitude}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";                   
+                    getData = $"{_apiBase}?lat={breakApart[1]}&lon={breakApart[2]}&units=metric&appid={appid}";
                 }
                 else
                 {
@@ -79,20 +75,10 @@ namespace TouristApp.Controllers
             }
             else
             {
-               
-                    getData = $"{_apiBase}?q={region}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";
-               
-               
-            }         
-           
-
-           // string getDataByCity = "https://api.openweathermap.org/data/2.5/forecast?q=Rivne&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";
+                getData = $"{_apiBase}?q={region}&units=metric&appid={appid}";
+            }
 
             request = WebRequest.Create(getData);
-
-
-           
-
 
             try
             {
@@ -100,9 +86,7 @@ namespace TouristApp.Controllers
             }
             catch (Exception e)
             {
-
-                string s = e.Message;
-                string p = s;
+                string s = e.Message;               
                 return BadRequest(new { invalid = s });
             }
 
@@ -110,15 +94,15 @@ namespace TouristApp.Controllers
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    data = reader.ReadToEnd();                    
+                    data = reader.ReadToEnd();
                 }
             }
             response.Close();
 
-            return Ok(new{data });
+            return Ok( new { data });
         }
 
-       
+
 
         //[HttpGet("[action]")]
 

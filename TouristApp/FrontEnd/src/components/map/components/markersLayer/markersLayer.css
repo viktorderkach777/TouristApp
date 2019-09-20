@@ -202,7 +202,7 @@
     border-bottom-color: #91c949;
   } */
 
-  .marker {
+  .map-marker {
     border: none;
     cursor: pointer;    
     height: 48px;

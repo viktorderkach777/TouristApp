@@ -7,9 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using TouristApp.DAL.Entities;
 using TouristApp.Domain.Interfaces;
 using Google.Apis.Auth;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
-using System.Threading;
 
 namespace TouristApp.Controllers
 {
@@ -20,28 +17,19 @@ namespace TouristApp.Controllers
         readonly RoleManager<DbRole> _roleManager;
         readonly SignInManager<DbUser> _signInManager;    
         readonly IFileService _fileService;
-        readonly IJWTTokenService _jWTTokenService;
-        readonly IConfiguration _configuration;
-        readonly IUserService _userService;
-        private readonly EFContext _db;
+        readonly IJWTTokenService _jWTTokenService;        
 
         public GoogleAuthController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
             SignInManager<DbUser> signInManager,
             IFileService fileService,
-            IJWTTokenService jWTTokenService,
-            IConfiguration configuration,
-            IUserService userService,
-             EFContext db)
+            IJWTTokenService jWTTokenService)           
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _fileService = fileService;                           
             _roleManager = roleManager;
-            _jWTTokenService = jWTTokenService;
-            _configuration = configuration;
-            _userService = userService;
-            _db = db;
+            _jWTTokenService = jWTTokenService;           
         }
 
         // POST api/googleauth/google
@@ -90,8 +78,8 @@ namespace TouristApp.Controllers
             return Ok(
             new
             {
-                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
-                refToken = _jWTTokenService.CreateRefreshToken(_configuration, _userService, user, _userManager, _db)
+                token = _jWTTokenService.CreateToken(user),
+                refToken = _jWTTokenService.CreateRefreshToken(user)
             });
         }       
     }

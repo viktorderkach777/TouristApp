@@ -32,12 +32,12 @@ const cityDataLoaded = (data) => {
     };
 };
 
-const regionLoaded = (region) => {
-    return {
-        type: 'UPLOAD_REGION_SUCCESS',
-        payload: region
-    };
-};
+// const regionLoaded = (region) => {
+//     return {
+//         type: 'UPLOAD_REGION_SUCCESS',
+//         payload: region
+//     };
+// };
 
 // const fetchTiles = (weatherService, dispatch, region='Rivne') => () => {
 
@@ -55,6 +55,6 @@ export {
     //fetchTiles,   
     cityDataLoadedByDay,
     cityDataLoaded,
-    regionLoaded,
+    // regionLoaded,
     tilesLoaded, tilesError, tilesRequested   
 };

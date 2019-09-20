@@ -12,10 +12,10 @@ export default class WeatherService {
         const getDataByCoords = `${this._apiBase}coords;${latitude};${longitude}`;
         let location = typeof (region) === "object" ? getDataByCoords : getDataByCity;
 
-        console.log("location", location);
+        //console.log("location", location);
         try {
             const tt = await axios.get(location);
-            console.log("tt", tt);
+            //console.log("tt", tt);
             //console.log("tt.statusText", tt.statusText);
             return tt;
         }
@@ -169,7 +169,7 @@ export default class WeatherService {
             throw new Error(`Could not fetch, received ${ex}`);
         }
 
-        console.log('weather', weather)
+        //console.log('weather', weather)
         return weather;
     }
 

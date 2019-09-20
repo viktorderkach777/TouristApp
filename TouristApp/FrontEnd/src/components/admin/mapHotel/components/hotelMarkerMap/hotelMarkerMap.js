@@ -80,7 +80,7 @@ class HotelMarkerMap extends Component {
     // this.map.resize();
 
     this.markerRef = ReactDOM.render(
-      <div className='mapboxgl-marker'>
+      <div className='hotel-markermap-mapboxgl-marker'>
         <img alt="marker" src={mapMarkerIcon} height="45px" width="25px" />
       </div>, this.markerContainer);
 
@@ -571,20 +571,20 @@ class HotelMarkerMap extends Component {
 
 
 
-      <div id="body">
+      <div id="hotel-markermap-body">
         {/* <div className="inline-block absolute top left mt12 ml12 bg-darken75 color-white z1 py6 px12 round-full txt-s txt-bold">
           <div>{`Longitude: ${lng} Latitude: ${lat} Zoom: ${zoom}`}</div>
         </div> */}
 
-        <div ref={el => this.mapContainer = el} id='map' className='map pad2' />
+        <div ref={el => this.mapContainer = el} id='hotel-markermap-map' className='hotel-markermap-map' />
 
         <CentrPageSpinner loading={tilesLoading} />
 
-        <div className='mysidebar'>
-          <div className='heading'>
+        <div className='hotel-markermap-mysidebar'>
+          <div className='hotel-markermap-heading'>
             <h1>Our locations</h1>
           </div>
-          <div id='listings' className='listings'>
+          <div id='hotel-markermap-listings' className='hotel-markermap-listings'>
             {form2}
           </div>
         </div>

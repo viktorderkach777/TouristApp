@@ -9,13 +9,13 @@ const ErrorIndicator = React.lazy(() => import('../../../errorIndicator'));
 const CentrPageSpinner = React.lazy(() => import('../../../CentrPageSpinner'));
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ID;
 
-
 class MarkersLayer extends Component {
     map;
 
     state = {
         active: null,
-        popup: null        
+        popup: null,
+        zoom: 5       
     };   
     
     componentDidMount() {
@@ -26,10 +26,9 @@ class MarkersLayer extends Component {
                 dispatch(markersLayerLoading(hotels))                
                 this.map = new mapboxgl.Map({
                     container: this.mapContainer,
-                    style: 'mapbox://styles/mapbox/streets-v10',
-                    //center: [-77.034084, 38.909671],
+                    style: 'mapbox://styles/mapbox/streets-v10',                   
                     center: hotels.features[0].geometry.coordinates,
-                    zoom: 14
+                    zoom: this.state.zoom
                 });
 
                 this.map.on('load', () => {
@@ -39,6 +38,7 @@ class MarkersLayer extends Component {
                     });
                 });
 
+                this.map.addControl(new mapboxgl.NavigationControl());
                 this.createAllMarkers();
             })
             .catch((err) => dispatch(markersLayerError(err)))
@@ -49,7 +49,7 @@ class MarkersLayer extends Component {
         var el = document.createElement('div');
 
         // Add a class called 'marker' to each div
-        el.className = 'marker';       
+        el.className = 'map-marker';       
         el.onclick = () => this.linkOrMarkerClick(hotels.features[index], index);
 
         // By default the image for your custom marker will be anchored
@@ -96,7 +96,7 @@ class MarkersLayer extends Component {
     linkOrMarkerClick = (element, index) => {
 
         // 1. Fly to the point associated with the clicked link
-        this.flyToMarker(element.geometry.coordinates, 12);
+        this.flyToMarker(element.geometry.coordinates, this.state.zoom);
 
         // 2. Close all other popups and display popup for clicked store
         // Check if there is already a popup on the map and if so, remove it

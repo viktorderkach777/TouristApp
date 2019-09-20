@@ -2,8 +2,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { serverUrl } from '../../config';
 export default class BaseService {
-
-    static _apiBase = 'http://localhost:50744/api/';
+    
     static _imageBase = 'http://localhost/images';
 
     static async GetResourse(url) {
@@ -37,13 +36,5 @@ export default class BaseService {
         const user=jwt.decode(tokens.token);
         console.log('-----user login------', user);
         return user
-    }
-    // get static file with user's photo
-    // static getUserImage = (guid) => {
-    //     return `${this._imageBase}/users/${guid}`;
-    // }
-    // // get static file with dish photo from some category
-    // static getDishImage = (category, guid) => {
-    //     return `${this._imageBase}/food/${category}/${guid}`;
-    // }
+    }    
 }
