@@ -413,7 +413,7 @@ class HotelMarkerMap extends Component {
           <Col xs="6">
             {/* <Button color="primary" className="px-4" disabled={isLoading}>Login</Button> */}
             <Button color="primary"
-              className="px-4"
+              className="px-4 mb-4"
               value="&gt;"
             >
               Button
@@ -439,7 +439,7 @@ class HotelMarkerMap extends Component {
               <Col md="10">
                 <CardGroup>
                   <Card className="p-4">
-                    <CardBody>
+                    <CardBody>                    
                       {form1}
                       <Form onSubmit={this.onSubmitForm}>
                         {/* <h1>Login</h1>
@@ -584,6 +584,7 @@ class HotelMarkerMap extends Component {
           <div className='hotel-markermap-heading'>
             <h1>Our locations</h1>
           </div>
+         
           <div id='hotel-markermap-listings' className='hotel-markermap-listings'>
             {form2}
           </div>

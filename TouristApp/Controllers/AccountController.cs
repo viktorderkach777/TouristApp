@@ -11,6 +11,7 @@ using TouristApp.Helpers;
 using TouristApp.ViewModels.AccountViewModels;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace TouristApp.Controllers
 {
@@ -26,7 +27,6 @@ namespace TouristApp.Controllers
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;       
         private readonly EFContext _context;
-
 
         public AccountController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
@@ -64,7 +64,7 @@ namespace TouristApp.Controllers
 
             var user = await _userManager.FindByEmailAsync(credentials.Email);
             await _signInManager.SignInAsync(user, isPersistent: false);
-
+            Thread.Sleep(2000);
             return Ok(
             new
             {
@@ -88,7 +88,7 @@ namespace TouristApp.Controllers
             _refreshToken.Token = Guid.NewGuid().ToString();
             _context.RefreshTokens.Update(_refreshToken);
             _context.SaveChanges();
-
+            Thread.Sleep(2000);
             return Ok(
             new {
                 token = _jWTTokenService.CreateToken( _refreshToken.User),

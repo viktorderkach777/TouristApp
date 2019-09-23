@@ -33,11 +33,11 @@ export default class Hotel extends Component {
         axios.get(url)
             .then(
                 result => {
-                    console.log('--result--', result.data);
+                    //console.log('--result--', result.data);
                     this.setState({ images: result.data });
                 },
                 err => {
-                    console.log('--problem--', err);
+                    //console.log('--problem--', err);
                 }
             );
     }

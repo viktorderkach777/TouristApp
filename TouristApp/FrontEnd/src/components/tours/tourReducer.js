@@ -26,7 +26,7 @@ export const tours = createSlice({
     getToursSuccess: (state, action) => {
       let newState = state;
       const data = action.payload.data;
-      console.log("get list", data);
+      //console.log("get list", data);
       newState = update.set(state, 'list.loading', false);
       newState = update.set(newState, 'list.success', true);
       newState = update.set(newState, 'list.data', data.tours);
@@ -49,11 +49,11 @@ export const getListTours = (model) => {
 
     TourService.getListTours(model)
       .then((response) => {
-        console.log('--success create--', response.data);
+        //console.log('--success create--', response.data);
         dispatch(tours.actions.getToursSuccess(response));
       })
       .catch(() => {
-        console.log('--failed--');
+        //console.log('--failed--');
         dispatch(tours.actions.getToursFailed());
       });
   }

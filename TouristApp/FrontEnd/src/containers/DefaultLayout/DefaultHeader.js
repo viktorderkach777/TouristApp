@@ -4,7 +4,8 @@ import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle
 import PropTypes from 'prop-types';
 import { AppNavbarBrand } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.png'
-import sygnet from '../../assets/img/brand/sygnet.svg'
+import sygnet from '../../assets/img/brand/logo.png'
+import CentralPageSpinner from '../../components/CentrPageSpinner';
 
 const propTypes = {
   children: PropTypes.node,
@@ -16,14 +17,14 @@ class DefaultHeader extends Component {
   render() {
 
     // eslint-disable-next-line
-    const {user, children, ...attributes } = this.props;
+    const {loading, user, children, ...attributes } = this.props;
 
     return (
       <React.Fragment>
         {/* <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppSidebarToggler className="d-md-down-none" display="lg" /> */}
         <AppNavbarBrand
-          full={{ src: logo, width: 25, height: 25, alt: 'CoreUI Logo' }}
+          full={{ src: logo, width: 30, height: 30, alt: 'CoreUI Logo' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         />
         
@@ -77,6 +78,7 @@ class DefaultHeader extends Component {
         </Nav>
         {/* <AppAsideToggler className="d-md-down-none" /> */}
         {/*<AppAsideToggler className="d-lg-none" mobile />*/}
+       <CentralPageSpinner loading={loading}/>
       </React.Fragment>
     );
   }

@@ -32,9 +32,9 @@ export default class BaseService {
         } else {
             delete axios.defaults.headers.common['Authorization'];
         }
-        console.log("data login", tokens.token);
+        //console.log("data login", tokens.token);
         const user=jwt.decode(tokens.token);
-        console.log('-----user login------', user);
+        //console.log('-----user login------', user);
         return user
     }    
 }

@@ -40,22 +40,25 @@ class DefaultLayoutContainer extends Component {
 
   render() {
     const { isAuthenticated, user } = this.props.auth;
-    const { roles } = this.props.auth.user||"User";
+    const { roles } = this.props.auth.user;//||"User";
     var isAccess = false;
+    const {loading} = this.props.loading;
+    //console.log('DefaultLayout props: ', this.props);
+
 
     if (isAuthenticated === true) {
       if (roles === "User") {
         isAccess = true;
-        console.log('DefaultLayout access: ', isAccess);
+        //console.log('DefaultLayout access: ', isAccess);
       }
     }
 
     const form = (
       <React.Fragment>
         <div className="app">
-          <AppHeader fixed>
+          <AppHeader fixed >
             <Suspense fallback={this.loading()}>
-              <DefaultHeader onLogout={e => this.signOut(e)} user={user} />
+              <DefaultHeader onLogout={e => this.signOut(e)} user={user} loading={loading}/>
             </Suspense>
           </AppHeader>
           <div className="app-body">
@@ -122,7 +125,8 @@ DefaultLayoutContainer.propTypes =
 
 const mapStateToProps = state => {
   return {
-    auth: get(state, 'auth')
+    auth: get(state, 'auth'),
+    loading: get(state, 'refreshToken.loading')
     // isAuthenticated: get(state, 'auth.isAuthenticated'),
     // roles: get(state, 'auth.user.roles')
   };

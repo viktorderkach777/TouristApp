@@ -37,7 +37,7 @@ class PaginationBar extends Component {
 
     handleClick = (page, evt) => {
         evt.preventDefault();
-        console.log('---gotopage---', page)
+        //console.log('---gotopage---', page)
         this.gotoPage(page);
     };
 
@@ -45,14 +45,14 @@ class PaginationBar extends Component {
     handleMoveLeft = evt => {
         evt.preventDefault();
         const {pageNeighbours}=this.props;
-        console.log('---LEFT to GO---',this.state.currentPage - pageNeighbours * 2 - 1);
+        //console.log('---LEFT to GO---',this.state.currentPage - pageNeighbours * 2 - 1);
         this.gotoPage(this.state.currentPage - pageNeighbours * 2 - 1);
     };
 
     handleMoveRight = evt => {
         evt.preventDefault();
         const {pageNeighbours}=this.props;
-        console.log('---RIGHT to GO---',this.state.currentPage + pageNeighbours * 2 + 1);
+        //console.log('---RIGHT to GO---',this.state.currentPage + pageNeighbours * 2 + 1);
         this.gotoPage(this.state.currentPage + pageNeighbours * 2 + 1);
     };
 
@@ -90,9 +90,9 @@ class PaginationBar extends Component {
 
     render() {
         const { currentPage} = this.props;
-        console.log('---Pagination props---', this.props);
+        //console.log('---Pagination props---', this.props);
            const pages = this.getPager();
-        console.log('pages', pages);
+        //console.log('pages', pages);
 
         const pageList = (
             pages.map(page => (

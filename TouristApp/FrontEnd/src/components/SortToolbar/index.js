@@ -60,7 +60,7 @@ class SortToolbar extends Component {
 
 
     render() {
-        console.log('--Sorting state----',this.state);
+        //console.log('--Sorting state----',this.state);
         return (
             <Card className="CardTours" >
                 <CardBody>

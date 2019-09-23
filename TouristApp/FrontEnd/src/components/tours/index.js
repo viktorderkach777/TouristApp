@@ -50,7 +50,7 @@ class ToursContainer extends Component {
       sortOrder:sortOrder,
       
     }
-    console.log('---STEP1----',model);
+    //console.log('---STEP1----',model);
     this.props.getListTours(model);
     this.setState({ currentPage: currentPage });
     this.setState({ totalPages: totalPages });
@@ -58,21 +58,21 @@ class ToursContainer extends Component {
 
   onPageChanged = data => {
   
-  console.log('---data from pagination',data);
+  //console.log('---data from pagination',data);
   const { sortOrder  } = this.state;
   const model = {
     currentPage:data,
     sortOrder:sortOrder
   }
-  console.log('---STEP2----',model);
+  //console.log('---STEP2----',model);
   this.props.getListTours(model);
   this.setState({ currentPage: data });
   
   }
 
   render() {
-    console.log('----State Tours -----', this.state);
-    console.log('----Props Tours-----', this.props);
+    //console.log('----State Tours -----', this.state);
+    //console.log('----Props Tours-----', this.props);
     const {  totalPages, currentPage } = this.props;//isListLoading,
 
     const filterlist = (

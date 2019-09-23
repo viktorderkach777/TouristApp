@@ -4,7 +4,7 @@ import { serverUrl } from '../../config';
 export default class TourService {
 
   static getListTours(model) {
-    console.log('---STEP3----',model);
+    //console.log('---STEP3----',model);
     return axios.get(`${serverUrl}api/Hotel/list/` + model.currentPage+"?sortOrder=" + model.sortOrder);
   }
 
