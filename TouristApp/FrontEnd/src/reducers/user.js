@@ -5,7 +5,10 @@ export const SET_USERS = "SET_USERS";
 export const DELETE_USER = 'DELETE_USER';
 
 const initialState = {
-    list: []
+    list: [],
+    error: false,
+    success: false,
+    loading: false
 };
 
 export default function users(state = initialState, action = {}) {

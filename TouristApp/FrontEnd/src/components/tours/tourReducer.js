@@ -1,6 +1,7 @@
 import { createSlice } from 'redux-starter-kit';
 import update from '../../helpers/update'
 import TourService from "./tourService";
+
 export const initialState = {
   list: {
     data: [],
@@ -9,7 +10,18 @@ export const initialState = {
     loading: false,
     totalPages: null,
     currentPage: '1'
-  }
+  },
+  deleting: {
+    error: false,
+    loading: false,
+    success: false
+},
+  creating: {
+    error: false,
+    loading: false,
+    success: false
+}
+
 };
 
 
@@ -17,6 +29,7 @@ export const tours = createSlice({
   slice: 'tours',
   initialState: initialState,
   reducers: {
+
     getToursStarted: state => {
       let newState = state;
       newState = update.set(state, 'list.loading', true);
@@ -39,7 +52,34 @@ export const tours = createSlice({
       newState = update.set(state, 'list.loading', false);
       newState = update.set(newState, 'list.error', true);
       return newState;
-    }
+    },
+
+//------------------DELETE TOUR --------------------------------------
+
+    deleteTourStarted:state => {
+      let newState = state;
+      newState = update.set(state, 'deleting.loading', true);
+      newState = update.set(newState, 'deleting.success', false);
+      return newState;
+    }, 
+    deleteTourSuccess: (state, action) =>  {
+      let newState = state;
+      let data = state.list.data.filter(item => item.id !== action.payload);
+      newState = update.set(state, 'deleting.loading', false);
+      newState = update.set(newState, 'deleting.success', true);
+      newState = update.set(newState, 'list.data', data);
+      return newState;
+    }, 
+    deleteTourFailed:state => {
+      let newState = state;
+      newState = update.set(state, 'deleting.loading', false);
+      newState = update.set(newState, 'deleting.error', true);
+      return newState;
+    } 
+
+//------------------CREATE TOUR --------------------------------------
+
+
   }
 });
 
@@ -58,4 +98,22 @@ export const getListTours = (model) => {
       });
   }
 };
+
+
+export const deleteTour = (tourId) => {
+  return (dispatch) => {
+      dispatch(tours.actions.deleteTourStarted());
+      
+      TourService.deleteTour(tourId)
+          .then((response) => {
+              console.log('--success delete--', response.data);
+              var tourId = response.data;
+              dispatch(tours.actions.deleteTourSuccess(tourId));
+          })
+          .catch(() => {
+              console.log('--failed--');
+              dispatch(tours.actions.deleteTourFailed());
+          });
+  }
+}
 

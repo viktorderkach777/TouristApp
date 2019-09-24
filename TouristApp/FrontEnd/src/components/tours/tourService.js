@@ -8,6 +8,10 @@ export default class TourService {
     return axios.get(`${serverUrl}api/tour/list/` + model.currentPage+"?sortOrder=" + model.sortOrder);
   }
 
+  static deleteTour (id) {
+         return axios.delete (`${serverUrl}api/tour/`+id);
+  }
+  
   //   static createNewAnimal (model) {
   //     return axios.post ('https://localhost:44320/api/animal/create', model);
   //   }

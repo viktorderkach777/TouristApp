@@ -275,7 +275,7 @@ namespace TouristApp.Controllers
             _context.Tours.Remove(tours);
             await _context.SaveChangesAsync();
 
-            return Ok(tours);
+            return Ok(tours.Id);
         }
 
         private bool ToursExists(string id)

@@ -30,7 +30,7 @@ import {
   Col,
 } from 'reactstrap';
 import { serverUrl } from '../../config';
-//const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
+const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
 const SortToolbar = React.lazy(() => import('../SortToolbar'));
 const PaginationBar = React.lazy(() => import('../Pagination'));
 
@@ -56,6 +56,13 @@ class ToursContainer extends Component {
     this.setState({ totalPages: totalPages });
   }
 
+  deleteTour = (e, id)  =>{
+    e.preventDefault();
+    console.log('delete tour with:',id);
+    this.props.deleteTour(id);
+  }
+
+
   onPageChanged = data => {
   
   console.log('---data from pagination',data);
@@ -73,7 +80,7 @@ class ToursContainer extends Component {
   render() {
     console.log('----State Tours -----', this.state);
     console.log('----Props Tours-----', this.props);
-    const {  totalPages, currentPage } = this.props;//isListLoading,
+    const { isAuthenticated, roles,  isListLoading, totalPages, currentPage } = this.props;
 
     const filterlist = (
       <Form>
@@ -202,6 +209,7 @@ class ToursContainer extends Component {
               <Link to={`/views/${item.country}/${item.id}`}>
                 <Button size="sm" className="buttonHotel">Дивитись тур</Button>
               </Link>
+              <Button color="primary" className="DeleteTour" size="sm" hidden={roles !== "Admin"} onClick={e => this.deleteTour(e,item.id)}><i className="fa fa-trash" aria-hidden="true"/></Button>
             </Col>
           </Row>
         </Card>
@@ -218,9 +226,10 @@ class ToursContainer extends Component {
               {filterlist}
             </div>
             <div className="col-9">
+              <span> Status: {isAuthenticated} {roles}</span>
               <SortToolbar />
               {toursList}
-              {/* <SpinnerWidget loading={isListLoading} /> */}
+               <SpinnerWidget loading={isListLoading} /> 
               <PaginationBar totalPages={totalPages} currentPage={currentPage} pageNeighbours={1} onPageChanged={this.onPageChanged}/>
             </div>
 
@@ -238,6 +247,8 @@ const mapState = state => {
     isListError: get(state, 'tours.list.error'),
     currentPage: get(state, 'tours.list.currentPage'),
     totalPages: get(state, 'tours.list.totalPages'),
+    isAuthenticated: get(state, 'auth.isAuthenticated'),
+    roles: get(state, 'auth.user.roles')
   };
 };
 
@@ -245,7 +256,11 @@ const mapDispatch = (dispatch) => {
   return {
     getListTours: (model) => {
       dispatch(tourAction.getListTours(model))
+    },
+    deleteTour: (tourId) => {
+      dispatch(tourAction.deleteTour(tourId))
     }
+
   };
 };
 

@@ -74,6 +74,14 @@
         
     }
 
+    .DeleteTour{
+        position:absolute;
+        top:5px;
+        right: 20px;
+        color:#FFF;
+        
+    }
+
     .discount {
         position: absolute;
         top: 20px;
