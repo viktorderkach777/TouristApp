@@ -133,7 +133,31 @@ namespace TouristApp.Controllers
             return Ok(new{data });
         }
 
-       
+
+        [HttpGet("kurs/{date}")]
+        public async Task<IActionResult> Kurs(string date)
+        {
+            WebRequest request;
+            WebResponse response;
+            string data = "";
+            string _apiBase = "https://api.privatbank.ua/p24api/exchange_rates?json&date=";
+            string getData = _apiBase+date;
+
+            request = WebRequest.Create(getData);
+            response = await request.GetResponseAsync();
+
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    data = reader.ReadToEnd();
+                }
+            }
+            response.Close();
+
+            return Ok(new { data });
+        }
+
 
         //[HttpGet("[action]")]
 

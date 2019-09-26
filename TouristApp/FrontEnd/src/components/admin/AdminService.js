@@ -64,6 +64,16 @@ export default class AdminService {
         return axios.post (`${serverUrl}api/Hotel/regions/create`, model);
     }
 
+          //-----------------OPERATION  PrivatBank---------------------------
+          static getKurs (date) {
+            return axios.get(`${serverUrl}api/SampleData/kurs/`+ date);
+        }
+
+
+        //   static getKurs (date) {
+        //     return axios.get('https://api.privatbank.ua/p24api/exchange_rates?json&date='+ date);
+        //}
+
 }
 
 

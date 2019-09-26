@@ -49,7 +49,7 @@ const CountryDelWidget = React.lazy(() => import("../components/admin/delCountry
 const CountryEditWidget = React.lazy(() => import("../components/admin/editCountry"))
 const TourAddWidget = React.lazy(() => import("../components/admin/addTour"))
 const PhotoHotelAddWidget = React.lazy(() => import("../components/admin/addPhotoHotel"))
-
+const KursWidget = React.lazy(() => import("../components/admin/ConverterPrivatBank"))
 
 const routes=[
   { path: '/admin/', exact: true, name: 'Home' },
@@ -60,6 +60,7 @@ const routes=[
   { path: '/admin/countryadd', exact: true, name: 'Країна додавання', component: CountryAddWidget},
   { path: '/admin/countrydel', exact: true, name: 'Країна видалення', component: CountryDelWidget},
   { path: '/admin/countryedit', exact: true, name: 'Країна редагування', component: CountryEditWidget},
+  { path: '/admin/kurs', exact: true, name: 'Курси валют', component: KursWidget},
   { path: '/admin/touradd', exact: true, name: 'Тур додавання', component: TourAddWidget},
   { path: '/admin/singlepage', exact: true, name: 'Готель', component: SinglePage },
   { path: '/admin/tours', exact: true, name: 'Тури', component: TourWidget },

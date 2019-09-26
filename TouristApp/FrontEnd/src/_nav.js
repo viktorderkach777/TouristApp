@@ -94,6 +94,18 @@ export default {
 },
 ],
 },
+{
+  name: 'Приватбанк',
+  url: '/base',
+  icon: 'icon-pencil',
+  children: [  
+{
+  name: 'Курси валют',
+  url: '/admin/kurs',
+  icon: 'icon-pencil',
+},
+],
+},
     {
       title: true,
       name: 'Components',
