@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 //import Lightbox from 'react-image-lightbox';
 import axios from 'axios';
 import { Button, CardText, CardSubtitle, CardTitle, Card, CardBody, Col, Container, Row,NavItem, NavLink} from 'reactstrap';
-import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
+//import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 import { serverUrl } from '../../config';
 import ImageGallery from 'react-image-gallery';
 //import classnames from 'classnames';
@@ -63,7 +63,7 @@ export default class Hotel extends Component {
                                 <CardSubtitle><i className="fa fa-map-marker" aria-hidden="true"/> {tour.country},{tour.region}</CardSubtitle> 
                                 <Row>
                                     <Col sm="5">
-                                        <ImageGallery items={this.state.tour.images} />
+                                        <ImageGallery items={this.state.tour.images} showBullets={true} />
                                     </Col>
                                     <Col sm="4">
                                         <CardText>
