@@ -64,7 +64,7 @@ namespace TouristApp.Controllers
 
             var user = await _userManager.FindByEmailAsync(credentials.Email);
             await _signInManager.SignInAsync(user, isPersistent: false);
-            Thread.Sleep(2000);
+            
             return Ok(
             new
             {

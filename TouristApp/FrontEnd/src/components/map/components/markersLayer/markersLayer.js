@@ -104,7 +104,9 @@ class MarkersLayer extends Component {
 
         const descript =
             '<h3 >' + element.properties.name + '</h2>' +
+            '<div class="img-hover-zoom">'+
             '<img alt="marker" + src="' + element.properties.image + '" />' +
+            '</div>' +
             '<div class="stars" style="padding-bottom: 0px;">' + this.setStars(element.properties.rate) + '</div>' +
             '<h4 style="padding-top: 0px;">' + element.properties.country + ', ' + element.properties.region + '</h4>';
         
