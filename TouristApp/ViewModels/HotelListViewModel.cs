@@ -156,6 +156,13 @@ namespace TouristApp.ViewModels
 
     }
 
+    public class ToursListViewModel
+    {
+        public int CurrentPage { get; set; }
+        public string sortOrder { get; set; }
+        public string Filter { get; set; }
+
+    }
     public class SingleTourViewModel
     {
         public string Id { get; set; }

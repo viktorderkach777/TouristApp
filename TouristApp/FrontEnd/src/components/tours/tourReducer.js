@@ -9,7 +9,8 @@ export const initialState = {
     success: false,
     loading: false,
     totalPages: null,
-    currentPage: '1'
+    currentPage: '1',
+    sortOrder:'name'
   },
   deleting: {
     error: false,
@@ -78,6 +79,11 @@ export const tours = createSlice({
     } 
 
 //------------------CREATE TOUR --------------------------------------
+
+
+
+
+
 
 
   }

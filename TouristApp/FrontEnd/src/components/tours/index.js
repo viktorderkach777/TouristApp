@@ -13,6 +13,7 @@ import './tours.css';
 import * as tourAction from './tourReducer';
 //import SpinnerWidget from  "../../components/spinnerStep";
 import {
+  Modal,ModalHeader,ModalFooter,ModalBody,
   Form,
   Card,
   FormGroup,
@@ -39,7 +40,8 @@ class ToursContainer extends Component {
     currentPage: null,
     totalPages: null,
     sortOrder:'name',
-   
+    deleteDialog_isOpen: false,
+    id_delete:0
   }
 
   componentDidMount() {
@@ -57,11 +59,25 @@ class ToursContainer extends Component {
   }
 
   deleteTour = (e, id)  =>{
-    e.preventDefault();
+    
+    this.toggleDialogDelete();
+    this.setState({id_delete: id});
     console.log('delete tour with:',id);
-    this.props.deleteTour(id);
+    
   }
 
+  toggleDialogDelete=() => {
+    this.setState({
+      deleteDialog_isOpen: !this.state.deleteDialog_isOpen
+    });
+  }
+
+  onClickRemoveImageYes= () =>
+  {
+    const {id_delete}=this.state;
+    this.props.deleteTour(id_delete);
+    this.toggleDialogDelete();
+  }
 
   onPageChanged = data => {
   
@@ -77,10 +93,28 @@ class ToursContainer extends Component {
   
   }
 
+
+
   render() {
     console.log('----State Tours -----', this.state);
     console.log('----Props Tours-----', this.props);
     const { isAuthenticated, roles,  isListLoading, totalPages, currentPage } = this.props;
+    const {deleteDialog_isOpen,id_delete} =this.state;
+
+    const deleteDialogContent = (deleteDialog_isOpen && 
+          <Modal isOpen={true}>
+            <form >
+              <ModalHeader>Видалення</ModalHeader>
+              <ModalBody>
+                    Ви дійсно хочете видалити тур з id: <b>{id_delete}</b>  ?
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={this.onClickRemoveImageYes} className="btn btn-primary">Да</Button>
+                <Button color="danger" onClick={this.toggleDialogDelete} >Скасувати</Button>
+              </ModalFooter>
+              </form>
+            </Modal>
+      );
 
     const filterlist = (
       <Form>
@@ -222,6 +256,7 @@ class ToursContainer extends Component {
       <React.Fragment>
         <div className="container">
           <div className="row">
+           {deleteDialogContent}
             <div className="col-3">
               {filterlist}
             </div>
