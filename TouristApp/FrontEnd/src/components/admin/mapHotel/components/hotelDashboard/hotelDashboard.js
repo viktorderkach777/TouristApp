@@ -1,32 +1,19 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
-//import {MapboxDirections} from '@mapbox/mapbox-gl-directions';
-//import Tooltip from './components/tooltip';
 import mapMarkerIcon from './marker-icon.svg';
-//var mapboxgl = require('mapbox-gl');
-//var MapboxDirections = require('@mapbox/mapbox-gl-directions');
-//import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions' utils/compose
-
-//import 'mapbox-gl/dist/mapbox-gl.css' // Updating node module will keep css up to date.
-//import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css'
-//import './hotelMarkerMap.css';
-
-import { Button, Card, CardBody, CardGroup, Col, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
-
-
+import { Button, Col, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import { connect } from 'react-redux';
 import { tilesLoaded, tilesError, tilesRequested } from '../../../../weather/actions';
 import compose from '../../../../../utils/compose';
 import withWeatherService from '../../../../weather/components/hoc';
+import withMapService from '../../../../map/components/hoc';
+import { markersLayerLoading, markersLayerError, markersLayerRequested } from '../../../../map/actions';
 import './hotelDashboard.css';
-//const ErrorIndicator = React.lazy(() => import('../../../errorIndicator'));
+
+const ErrorIndicator = React.lazy(() => import('../../../../errorIndicator'));
 const CentrPageSpinner = React.lazy(() => import('../../../../CentrPageSpinner'));
-
-
-//mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ID;
-
 
 class HotelDashboard extends Component {
     map;
@@ -49,7 +36,8 @@ class HotelDashboard extends Component {
         marker: null,
         popup: null,
         currentCityName: "",
-        statusText: ""
+        statusText: "",
+        features: []
     };
 
     markerContainer;
@@ -124,6 +112,19 @@ class HotelDashboard extends Component {
 
         this.map.addControl(new mapboxgl.NavigationControl());
         this.map.resize();
+
+        const { dispatch, mapService } = this.props;
+        dispatch(markersLayerRequested());
+        mapService.getMarkersLayer()
+            .then((hotels) => {
+                dispatch(markersLayerLoading(hotels))
+                console.log("hotels", hotels);
+                this.setState({
+                    features: hotels.features
+                });
+
+            })
+            .catch((err) => dispatch(markersLayerError(err)))
     }
 
 
@@ -208,7 +209,6 @@ class HotelDashboard extends Component {
         if (city.length !== 0) {
             //this.props.fetchTiles(city);
             // console.log("this.props_updateCity", this.props);
-
             const { dispatch, weatherService } = this.props;
             dispatch(tilesRequested());
             weatherService.getTiles(city)
@@ -265,7 +265,7 @@ class HotelDashboard extends Component {
                 <InputGroup className="mb-4">
                     <InputGroupAddon addonType="prepend">
                         <InputGroupText>
-                            <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            <i className="fa fa-search" aria-hidden="true"></i>
                         </InputGroupText>
                     </InputGroupAddon>
                     <Input
@@ -283,149 +283,117 @@ class HotelDashboard extends Component {
                     {tilesError === null ? '' : <span className="help-block">{"Invalid name of city!"}</span>}
                 </InputGroup>
 
-
-
-
                 <Row>
                     <Col xs="12" className="text-center">
                         <Button color="primary"
                             className="px-4 mb-4"
                             value="&gt;"
                         >
-                            Button1
+                       Search
                   </Button>
                     </Col>
                 </Row>
             </Form>
-
         );
-
-
-
-
 
         const form2 = (
             <React.Fragment>
-                <CardGroup>
-                    <Card >
-                        <CardBody>
-                            {form1}
-                            <Form onSubmit={this.onSubmitForm}>
-                                {/* <h1>Login</h1>
+                {form1}
+                <Form onSubmit={this.onSubmitForm}>
+                    {/* <h1>Login</h1>
                               <p className="text-muted">Sign In to your account</p> */}
-                                {/* {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''} */}
+                    {/* {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''} */}
 
-                                <InputGroup className="mb-4">
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>
-                                            <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                                        </InputGroupText>
-                                    </InputGroupAddon>
-                                    <Input
-                                        type="text"
-                                        placeholder="CityName"
-                                        autoComplete="current-cityName"
-                                        // className={classnames('form-control', { 'is-invalid': !!errors.password})}
-                                        className='form-control'
-                                        id="cityName"
-                                        name="cityName"
-                                        value={cityName}
-                                        onChange={this.handleChange}
-                                    />
-                                    {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
-                                </InputGroup>
-
-
-                                <InputGroup className="mb-4">
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>
-                                            <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                                        </InputGroupText>
-                                    </InputGroupAddon>
-                                    <Input
-                                        type="text"
-                                        placeholder="CityType"
-                                        autoComplete="current-cityType"
-                                        // className={classnames('form-control', { 'is-invalid': !!errors.password})}
-                                        className='form-control'
-                                        id="cityType"
-                                        name="cityType"
-                                        value={cityType}
-                                        onChange={this.handleChange}
-                                    />
-                                    {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
-                                </InputGroup>
+                    <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                            type="text"
+                            placeholder="CityName"
+                            autoComplete="current-cityName"
+                            // className={classnames('form-control', { 'is-invalid': !!errors.password})}
+                            className='form-control'
+                            id="cityName"
+                            name="cityName"
+                            value={cityName}
+                            onChange={this.handleChange}
+                        />
+                        {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
+                    </InputGroup>
 
 
+                    <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                            type="text"
+                            placeholder="CityType"
+                            autoComplete="current-cityType"
+                            // className={classnames('form-control', { 'is-invalid': !!errors.password})}
+                            className='form-control'
+                            id="cityType"
+                            name="cityType"
+                            value={cityType}
+                            onChange={this.handleChange}
+                        />
+                        {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
+                    </InputGroup>
 
-                                <InputGroup className="mb-3">
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>
-                                            <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                                        </InputGroupText>
-                                    </InputGroupAddon>
-                                    <Input
-                                        type="text"
-                                        placeholder="Username"
-                                        autoComplete="username"
-                                        // className={classnames('form-control', { 'is-invalid': !!errors.email})}
-                                        className='form-control'
-                                        id="email"
-                                        name="email"
-                                        value={lng}
-                                        onChange={this.handleChange}
-                                    />
-                                    {/* {!!errors.email ? <span className="help-block">{errors.email}</span> : ''} */}
-                                </InputGroup>
+                    <InputGroup className="mb-3">
+                        <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                            type="text"
+                            placeholder="Username"
+                            autoComplete="username"
+                            // className={classnames('form-control', { 'is-invalid': !!errors.email})}
+                            className='form-control'
+                            id="email"
+                            name="email"
+                            value={lng}
+                            onChange={this.handleChange}
+                        />
+                        {/* {!!errors.email ? <span className="help-block">{errors.email}</span> : ''} */}
+                    </InputGroup>
 
-                                <InputGroup className="mb-4">
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>
-                                            <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
-                                        </InputGroupText>
-                                    </InputGroupAddon>
-                                    <Input
-                                        type="text"
-                                        placeholder="Password"
-                                        autoComplete="current-password"
-                                        // className={classnames('form-control', { 'is-invalid': !!errors.password})}
-                                        className='form-control'
-                                        id="password"
-                                        name="password"
-                                        value={lat}
-                                        onChange={this.handleChange}
-                                    />
-                                    {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
-                                </InputGroup>
+                    <InputGroup className="mb-4">
+                        <InputGroupAddon addonType="prepend">
+                            <InputGroupText>
+                                <i className="fa fa-hand-pointer-o" aria-hidden="true"></i>
+                            </InputGroupText>
+                        </InputGroupAddon>
+                        <Input
+                            type="text"
+                            placeholder="Password"
+                            autoComplete="current-password"
+                            // className={classnames('form-control', { 'is-invalid': !!errors.password})}
+                            className='form-control'
+                            id="password"
+                            name="password"
+                            value={lat}
+                            onChange={this.handleChange}
+                        />
+                        {/* {!!errors.password ? <span className="help-block">{errors.password}</span> : ''} */}
+                    </InputGroup>
 
-                                <Row>
-                                    <Col xs="12" className="text-center" >
-                                        <Button color="primary" className="px-4 mb-4">Button2</Button>
-                                    </Col>
-                                </Row>
-                            </Form>
-                        </CardBody>
-                    </Card>
-                    {/* <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
-                        <CardBody className="text-center">
-                          <div>
-                            <h2>Sign up</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                              labore et dolore magna aliqua.</p>
-                            <Link to="/register">
-                              <Button color="primary" className="mt-3" active tabIndex={-1}>Register Now!</Button>
-                            </Link>
-                          </div>
-                        </CardBody>
-                      </Card> */}
-                </CardGroup>
-
-                {/* </Row>
-                </Container>
-              </div> */}
+                    <Row>
+                        <Col xs="12" className="text-center" >
+                            <Button color="primary" className="px-4 mb-4">Submit</Button>
+                        </Col>
+                    </Row>
+                </Form>
             </React.Fragment>
         );
-        const { tilesLoading } = this.props;
+        const { tilesLoading, markersLayerLoading, hotels, markersLayerError } = this.props;
 
         return (
             <div className="hotel-dashboard-body container-fluid">
@@ -435,8 +403,8 @@ class HotelDashboard extends Component {
                     </div>
                     <div className="hotel-dashboard-right hotel-dashboard-column col-md-5">
                         <div id="hotel-dashboard-listings" className="center">
-                            <CentrPageSpinner loading={tilesLoading} />
-                            {form2}
+                            <CentrPageSpinner loading={tilesLoading || markersLayerLoading || Object.keys(hotels).length === 0} />
+                            {markersLayerError || tilesError ? <ErrorIndicator /> : form2}
                         </div>
                     </div>
                 </div>
@@ -452,8 +420,16 @@ const mapStateToProps = (state) => {
         tilesLoading,
         tilesError
     } = state.weather;
+    const {
+        markersLayerLoading,
+        markersLayerError,
+        hotels
+    } = state.map;
     //console.log("state.weather",state.weather);
     return {
+        hotels,
+        markersLayerLoading,
+        markersLayerError,
         cityName,
         country,
         tilesLoading,
@@ -463,6 +439,7 @@ const mapStateToProps = (state) => {
 
 export default compose(
     withWeatherService(),
+    withMapService(),
     connect(mapStateToProps, null)
 )(HotelDashboard);
 

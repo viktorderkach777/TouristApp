@@ -1,6 +1,6 @@
 .hotel-dashboard-body{
     position: relative;    
-    height: calc(100vh - 200px);   
+    height: calc(100vh - 200px);     
 }
 
 #hotel-dashboard-map {
@@ -31,12 +31,17 @@
   /* } */
 
   .center {
-    margin: 0;
-    position: absolute;
+    margin: 5%;
+    /* position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
   }
+
+  .hotel-dashboard-right{
+    background-color: #f8f8f8;  
+    overflow: scroll; 
+}
 
 @media (max-width: 575px) { 
     .hotel-dashboard-right{

@@ -88,7 +88,7 @@ namespace TouristApp.Controllers
             _refreshToken.Token = Guid.NewGuid().ToString();
             _context.RefreshTokens.Update(_refreshToken);
             _context.SaveChanges();
-            Thread.Sleep(2000);
+            //Thread.Sleep(2000);
             return Ok(
             new {
                 token = _jWTTokenService.CreateToken( _refreshToken.User),

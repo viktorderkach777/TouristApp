@@ -95,7 +95,7 @@
   
   .listings {
     height: 100%;
-    overflow: auto;
+    /* overflow: sroll; */
     padding-bottom: 60px;
   }
   

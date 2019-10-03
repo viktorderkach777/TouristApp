@@ -1,6 +1,6 @@
 const initialState = {
     hotels: {},
-    markersLayerLoading: true,
+    markersLayerLoading: false,
     markersLayerError: null
 };
 

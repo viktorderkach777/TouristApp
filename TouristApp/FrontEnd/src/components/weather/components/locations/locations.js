@@ -38,7 +38,7 @@ class Locations extends Component {
     render() {
         const { markersLayerLoading, markersLayerError, hotels } = this.props;
         //console.log("this.props", this.props);
-        const locations = markersLayerLoading ? null : hotels.features.map((element, index) => {
+        const locations = markersLayerLoading || Object.keys(hotels).length === 0 ? null : hotels.features.map((element, index) => {
 
             // Shorten data.feature.properties to `prop` so we're not
             // writing this long form over and over again.
