@@ -15,6 +15,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "1",
               "country": "Egypt",
               "region": "Al Kharijah",
               "name": "HotelName 1",
@@ -34,6 +35,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "2",
               "country": "Egypt",
               "region": "Ash Shāţibī",
               "name": "HotelName 2",
@@ -53,6 +55,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "3",
               "country": "Egypt",
               "region": "Al Alamayn",
               "name": "HotelName 3",
@@ -72,6 +75,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "4",
               "country": "Turkey",
               "region": "Antalya",
               "name": "HotelName 4",
@@ -91,6 +95,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "5",
               "country": "Turkey",
               "region": "Alanya",
               "name": "HotelName 5",
@@ -110,6 +115,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "6",
               "country": "Turkey",
               "region": "Kemer",
               "name": "HotelName 6",
@@ -129,6 +135,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "7",
               "country": "Greece",
               "region": "Kavala",
               "name": "HotelName 7",
@@ -148,6 +155,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "8",
               "country": "Greece",
               "region": "Thessaloniki",
               "name": "HotelName 8",
@@ -167,6 +175,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "9",
               "country": "Greece",
               "region": "Athens",
               "name": "HotelName 9",
@@ -185,6 +194,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "10",
               "country": "Ukraine",
               "region": "Odesa",
               "name": "HotelName 10",
@@ -204,6 +214,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "11",
               "country": "Ukraine",
               "region": "Horodok",
               "name": "HotelName 11",
@@ -223,6 +234,7 @@ export default class MapService {
               ]
             },
             "properties": {
+              "id": "12",
               "country": "Ukraine",
               "region": "Kirilovka",
               "name": "HotelName 12",

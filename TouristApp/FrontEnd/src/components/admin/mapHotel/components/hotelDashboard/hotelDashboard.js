@@ -9,11 +9,18 @@ import compose from '../../../../../utils/compose';
 import withWeatherService from '../../../../weather/components/hoc';
 import withMapService from '../../../../map/components/hoc';
 import { markersLayerLoading, markersLayerError, markersLayerRequested } from '../../../../map/actions';
+import Select from 'react-select';
 import './hotelDashboard.css';
 
 const ErrorIndicator = React.lazy(() => import('../../../../errorIndicator'));
 const CentrPageSpinner = React.lazy(() => import('../../../../CentrPageSpinner'));
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ID;
+
+// const options = [
+//     { value: 'chocolate', label: 'Chocolate' },
+//     { value: 'strawberry', label: 'Strawberry' },
+//     { value: 'vanilla', label: 'Vanilla' },
+// ];
 
 class HotelDashboard extends Component {
     map;
@@ -37,7 +44,9 @@ class HotelDashboard extends Component {
         popup: null,
         currentCityName: "",
         statusText: "",
-        features: []
+        features: [],
+        selectedOption: null,
+        options: []
     };
 
     markerContainer;
@@ -119,14 +128,28 @@ class HotelDashboard extends Component {
             .then((hotels) => {
                 dispatch(markersLayerLoading(hotels))
                 console.log("hotels", hotels);
+                //this.locations(hotels);
                 this.setState({
-                    features: hotels.features
+                    features: hotels.features,
+                    options: this.locations(hotels)
                 });
 
             })
             .catch((err) => dispatch(markersLayerError(err)))
     }
 
+    locations = (hotels) => {
+
+        let arr = hotels.features.map((element) => {
+            const { id, name, region, country } = element.properties;
+            return ({
+                value: id,
+                label: name + '/ ' + region + '/ ' + country
+            })
+        })
+        //console.log('arr', arr);
+        return arr;
+    }
 
     createMarker() {
         const { marker, popup } = this.state;
@@ -134,7 +157,7 @@ class HotelDashboard extends Component {
 
         const coordX = this.state.lng;
         const coordY = this.state.lat;
-        //console.log("coordY", coordX, coordY);       
+        console.log("name create marker", name);       
 
         const descript =
             '<div>' +
@@ -156,7 +179,7 @@ class HotelDashboard extends Component {
             draggable: false,
         })
             .setLngLat([coordX, coordY])
-            .setPopup(popup)
+            .setPopup(newpopup)
             .addTo(this.map);
 
         newmarker.togglePopup();
@@ -246,12 +269,54 @@ class HotelDashboard extends Component {
         return e.key === "Enter" ? this._updateCity() : null
     }
 
+    selectHandleChange = selectedOption => {
+        this.setState({ selectedOption });
+
+        // let arr = hotels.features.map((element) => {
+        //     const { id, name, region, country } = element.properties;
+        //     return ({
+        //         value: id,
+        //         label: name + '/ ' + region + '/ ' + country
+        //     })
+        // })
+        const { hotels } = this.props;
+        //const {id, name, image} = hotels.;
+        const id = selectedOption.value;
+
+        const element = hotels.features.filter((el) => el.properties.id === id);
+
+        // const coordX = this.state.lng;
+        // const coordY = this.state.lat;
+
+        if (element) {
+            this.setState({
+                image: element[0].properties.image,
+                name: element[0].properties.name
+            })
+            // this.map.flyTo({
+            //     center: [
+            //         this.state.lng,
+            //         this.state.lat
+            //     ]
+            // });
+            //  const { marker, popup } = this.state;
+
+            // if (popup) popup.remove();
+            // if (marker) marker.remove();
+            //  this.createMarker();
+        }
+
+
+        console.log(`element:`, element);
+        console.log(`Option selected:`, selectedOption);
+    };
+
 
     render() {
         if (this.map) {
             this.map.resize();
         }
-
+        const { selectedOption, options } = this.state;
         const { lng, lat, cityType, cityName, currentCityName } = this.state;
         const { tilesError } = this.props;
 
@@ -289,7 +354,7 @@ class HotelDashboard extends Component {
                             className="px-4 mb-4"
                             value="&gt;"
                         >
-                       Search
+                            Search
                   </Button>
                     </Col>
                 </Row>
@@ -299,6 +364,12 @@ class HotelDashboard extends Component {
         const form2 = (
             <React.Fragment>
                 {form1}
+                <Select
+                    value={selectedOption}
+                    onChange={this.selectHandleChange}
+                    options={options}
+                    className="mb-4"
+                />
                 <Form onSubmit={this.onSubmitForm}>
                     {/* <h1>Login</h1>
                               <p className="text-muted">Sign In to your account</p> */}
