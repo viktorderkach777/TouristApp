@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
-import {Label,Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
+import {Label,Button, Card, CardBody, CardGroup, Col, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert, FormGroup } from 'reactstrap';
 import 'cropperjs/dist/cropper.css';
 //import { Redirect } from "react-router";
 import  AdminService from '../AdminService';
@@ -208,19 +208,19 @@ else {
     const form = (
       <React.Fragment>
       <div className="app flex-row align-items-center">
-        <Container>
-          <Row className="justify-content-center">
-            <Col md="6">
+        
+          <div className="justify-content-center">
+            <Col md="6" xs="12">
               <CardGroup>
-                <Card className="p-4">
+                <Card className="p-2">
                   <CardBody>
                     <Form onSubmit={this.onSubmitForm}>
                       <h1> Додати фото готеля</h1>
                       <p className="text-muted">Додайте фото готеля</p>
                   {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
-                  
+                  <FormGroup>
                   <Label>Вибір країни</Label>
-                  <InputGroup className="mb-3" >
+                  <InputGroup  >
                       <InputGroupAddon addonType="prepend">
                               <InputGroupText style={iconsColor}>
                               <i className="fa fa-globe" aria-hidden="true"></i>
@@ -234,9 +234,12 @@ else {
                               {countries.map(item => <option  key={item.id} value={item.id} >{item.name}</option>)} 
                                 </Input>
                    </InputGroup>
+                   </FormGroup>
                     <div hidden={!regionsLoad}>
+                  <FormGroup  >
+
                    <Label>Вибір курорту</Label>
-                   <InputGroup  className="mb-3" >
+                   <InputGroup  >
                   <InputGroupAddon addonType="prepend">
                           <InputGroupText style={iconsColor}>
                           <i className="fa fa-map-marker" aria-hidden="true"></i>
@@ -250,8 +253,10 @@ else {
                           {regions.map(item => <option  key={item.id} value={item.id} >{item.name}</option>)} 
                              </Input>
                    </InputGroup>
+                   </FormGroup>
                    </div>
                   <div  hidden={!hotelsLoad} >
+                    <FormGroup>
                    <Label>Вибір готеля</Label>
                    <InputGroup  className="mb-3">
                       <InputGroupAddon addonType="prepend">
@@ -267,10 +272,11 @@ else {
                               {hotels.map(item => <option  key={item.id} value={item.id} >{item.name}</option>)} 
                                 </Input>
                       </InputGroup>
+                      </FormGroup>
                       </div>  
-                      <div className='container' hidden={!hotelSelect}>
-                        <Row>
-                          <div className="form-group">
+                      <div hidden={!hotelSelect}>
+                        <div>
+                       
                             <label id="labelForInput" htmlFor="inputFile">
                               {
                                 !this.state.isLoadingPhoto ?
@@ -279,21 +285,25 @@ else {
                                     id="image"
                                     alt=""
                                     name="image"
-                                    style={{ marginLeft: '80px' }}
-                                    width="250" />
+                                    // style={{ marginLeft: '80px' }}
+                                     width="100%"
+                                     />
                                   : <p></p>
                               }
                               {!!errors.image ? <span className="help-block">{errors.image}</span> : ''}
                               <input type="file" id="inputFile" onChange={this.changeInput} ></input>
                             </label>
-                          </div>
+                          
 
-                          <div className={!this.state.isLoadingPhoto ? "div-hidden" : "div-visible form-group"} >
+                          <div className={!this.state.isLoadingPhoto ? "div-hidden" : "div-visible form-group"}>
+                             
                             <Cropper
-                              style={{ height: 400, width: 400, overflow: 'hidden' }}
+                          
                               aspectRatio={640 / 480}
+                             style ={{height:"auto"}}
                               preview=".img-preview"
                               guides={false}
+                              viewMode={1}
                               src={this.state.src}
                               ref={cropper => { this.cropper = cropper; }}
                             />
@@ -304,16 +314,16 @@ else {
                             <button type="button" onClick={e => this.operationImage(e, 'ROTARE_LEFT', 45)} className="btn btn-primary  btn-crop"><i className="fa fa-repeat" aria-hidden="true" /></button>
                             <button type="button" onClick={e => this.operationImage(e, 'ROTARE_RIGHT', 45)} className="btn btn-primary  btn-crop"><i className="fa fa-undo" aria-hidden="true" /></button>
                           </div>
-                        </Row>
+                        </div>
                       </div>
  
-                      <Row  className="justify-content-center">
-                        <Col xs="5">
-                          <Button type="submit" color="primary" className="px-4" disabled={isLoading}>Додати фото</Button>
+                      <Row  className="text-center">
+                        <Col md="6">
+                          <Button type="submit" color="primary" className="px-4  mb-4" disabled={isLoading}>Додати фото</Button>
                         </Col>
-                        <Col xs="2">
+                        <Col md="6">
                         <Link to={`/admin/`}>
-                        <Button   color="danger"   className="px-4" >Закрити</Button>
+                        <Button   color="danger"   className="px-4 mb-4" >Закрити</Button>
                           </Link>
                         </Col>
                       </Row>
@@ -323,8 +333,8 @@ else {
               
               </CardGroup>
             </Col>
-          </Row>
-        </Container>
+          </div>
+        
       </div>
       </React.Fragment>
       );

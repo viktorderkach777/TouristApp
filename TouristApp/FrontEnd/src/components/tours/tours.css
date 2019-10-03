@@ -48,8 +48,8 @@
 
     .CardImg {
         /* width: 150px; */
-        border-radius:10px;
-        margin:5px 0px 0px 5px;
+        border-radius:10px ;
+        /* padding: 5px; */
     }
     .iconColor
     {

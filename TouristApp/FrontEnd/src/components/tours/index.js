@@ -2,16 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import get from 'lodash.get';
 import { Link } from 'react-router-dom';
-//import { Col, Row } from 'react-bootstrap';
-//import axios from 'axios';
-//import { LinkContainer } from "react-router-bootstrap";
-//import classnames from 'classnames';
-//import styled from 'styled-components'
 import './tours.css';
-//import './custom.css';
-//import HotelService from "./hotelService";
-import * as tourAction from './tourReducer';
-//import SpinnerWidget from  "../../components/spinnerStep";
+import * as tourAction from '../../reducers/tourReducer';
 import {
   Modal,ModalHeader,ModalFooter,ModalBody,
   Form,
@@ -181,13 +173,13 @@ class ToursContainer extends Component {
       this.props.list.map(item => (
         <Card key={item.id} className="CardTours" >
           <Row>
-            <Col sm="4">
+            <Col sm="12" md="4">
               <Link to={`/views/${item.country}/${item.id}`}>
                 <CardImg className="CardImg" src={!!item.imagePath ? serverUrl+item.imagePath:'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
                 <div className="discount">
                   <span className="discount-title">
                     знижка 15% 
-                                                </span>
+                  </span>
                 </div>
               </Link>
               <CardLink href="#">
@@ -196,7 +188,7 @@ class ToursContainer extends Component {
                 </div>
               </CardLink>
             </Col>
-            <Col sm="6">
+            <Col sm="12" md="6">
               <CardBody>
                 <CardTitle className="CardTitle">
                   {item.name} {item.class}* 
@@ -234,7 +226,7 @@ class ToursContainer extends Component {
               </CardBody>
 
             </Col>
-            <Col sm="2" style={{ verticalAlign: 'bottom' }}>
+            <Col sm="12" md="2" style={{ verticalAlign: 'bottom' }}>
               <div className="price-block">
                 <div className="price">{item.price}
                   <span className="currency">₴</span>
@@ -257,10 +249,10 @@ class ToursContainer extends Component {
         <div className="container">
           <div className="row">
            {deleteDialogContent}
-            <div className="col-3">
+            <div className="col-12 col-md-3">
               {filterlist}
             </div>
-            <div className="col-9">
+            <div className="col-12 col-md-9">
               <span> Status: {isAuthenticated} {roles}</span>
               <SortToolbar />
               {toursList}

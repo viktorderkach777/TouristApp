@@ -2,7 +2,7 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { captchaReducer } from "../components/captcha/reducer";
-import { tours } from "../components/tours/tourReducer";
+import { tours } from "../reducers/tourReducer";
 import * as RefreshToken from '../components/RefreshToken/reducer';
 
 import {userReducer} from '../reducers/auth';
