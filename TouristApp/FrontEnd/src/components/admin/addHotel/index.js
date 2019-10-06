@@ -158,7 +158,7 @@ else {
                               id="selectedCountry" 
                               value={this.state.selectedCountry}
                               onChange={this.handleChangeSelect}>
-                          {countries.map(item => <option  key={item.id} value={item.id} >{item.name}</option>)} 
+                          {countries.map(item => <option  key={item.value} value={item.value} >{item.label}</option>)} 
                              </Input>
                    </InputGroup>
 

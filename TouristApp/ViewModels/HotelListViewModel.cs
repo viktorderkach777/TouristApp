@@ -12,6 +12,13 @@ namespace TouristApp.ViewModels
         public string SmallImage { get; set; }
     }
 
+    public class SelectViewModel
+    {
+        public string Value { get; set; }
+        public string Label { get; set; }
+    }
+
+
 
     public class HotelListViewModel
     {

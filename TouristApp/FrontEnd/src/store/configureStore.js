@@ -3,10 +3,12 @@ import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { captchaReducer } from "../components/captcha/reducer";
 import { tours } from "../reducers/tourReducer";
+import { countries } from "../reducers/countryReducer";
 import * as RefreshToken from '../components/RefreshToken/reducer';
 
 import {userReducer} from '../reducers/auth';
 import user from '../reducers/user';
+
 import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
 import {weatherReducer} from '../components/weather/reducers'
 
@@ -16,6 +18,7 @@ export default function configureStore (history, initialState) {
       auth:userReducer.reducer,
       userlist: user,
       tours:tours.reducer,
+      countries:countries.reducer,
       refreshToken: RefreshToken.refreshReducer,
       weather:weatherReducer
     };

@@ -35,10 +35,10 @@ namespace TouristApp.Controllers
             var model = await _context
                .Countries
                .OrderBy(c => c.Name)
-               .Select(u => new CountriesViewModel
+               .Select(u => new SelectViewModel
                {
-                   Id = u.Id,
-                   Name = u.Name
+                   Value = u.Id,
+                   Label = u.Name
                })
                .ToListAsync();
 
@@ -65,6 +65,8 @@ namespace TouristApp.Controllers
             return Ok(countries);
         }
 
+
+
         // PUT: api/Countries/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCountries([FromRoute] string id, [FromBody] CountriesEditViewModel model)
@@ -76,19 +78,16 @@ namespace TouristApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            Countries countries = new Countries
+            Countries country = new Countries
             {
                 Id = id,
                 Name = model.Name
 
             };
 
-            //if (id != countries.Id)
-            //{
-            //    return BadRequest();
-            //}
+            
 
-            _context.Entry(countries).State = EntityState.Modified;
+            _context.Entry(country).State = EntityState.Modified;
 
             try
             {
@@ -105,8 +104,13 @@ namespace TouristApp.Controllers
                     throw;
                 }
             }
+            var obj = new SelectViewModel
+            {
+                Value = country.Id,
+                Label = country.Name
+            };
 
-            return NoContent();
+            return Ok(obj);
         }
 
         // POST: api/Countries
@@ -117,15 +121,18 @@ namespace TouristApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _context.Countries.Add(new Countries
+
+            var country = new Countries
             {
                 Name = model.Name
-            });
+            };
+
+            _context.Countries.Add(country);
             
             
             await _context.SaveChangesAsync();
 
-            return Ok(model);
+            return Ok(new {country.Id, country.Name});
         }
 
         // DELETE: api/Country/5

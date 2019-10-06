@@ -1,26 +1,16 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
+import { Button, Card, CardBody, Col, Container, Form,  Row, Alert } from 'reactstrap';
 import { Link } from 'react-router-dom';
-//import { Redirect } from "react-router";
+
 import  AdminService from '../AdminService'
 import { notify } from '../../Notifications'
-
-const iconsColor = {
-    backgroundColor: '#00aced',
-    color: '#fff',
-    borderColor: '#00aced'
-}
+import Select from 'react-select';
 
 class CountryDelForm extends Component {
 
     state = {
-        countries: [
-            {
-                id: 7,
-                name: 'Australia'
-            }
-        ],
-        selectedCountry: '7',
+        countries: [],
+        selectedCountry: null,
         errors: {
         },
         done: false,
@@ -66,22 +56,32 @@ class CountryDelForm extends Component {
         this.setStateByErrors(e.target.name, e.target.value);
     };
 
+    handleChangeSelect = selectedCountry => {
+        this.setState({ selectedCountry });
+        if (!!this.state.errors["selectedCountry"]) {
+          //console.log('Errors',name);
+          let errors = Object.assign({}, this.state.errors);
+          delete errors["selectedCountry"];
+          this.setState({ errors });
+        }
+      };
 
     onSubmitForm = (e) => {
         e.preventDefault();
+        const { selectedCountry } = this.state;
         let errors = {};
         console.log('submit');
 
-        if (this.state.selectedCountry === '') errors.selectedCountry = " Can't be empty!"
         
+        if (selectedCountry === null) errors.selectedCountry = "Виберіть країну";
 
         const isValid = Object.keys(errors).length === 0
         if (isValid) {
             const { selectedCountry } = this.state;
             
             this.setState({ isLoading: true });
-            console.log('CountryDelete: validform', selectedCountry);
-                AdminService.deleteCountry(selectedCountry)
+            console.log('CountryDelete: validform', selectedCountry.value);
+                AdminService.deleteCountry(selectedCountry.value)
                 .then(
                     () => { this.setState({ done: true, isLoading: false },() => 
                     {
@@ -99,7 +99,7 @@ class CountryDelForm extends Component {
     };
 
     render() {
-        const { countries, errors, isLoading} = this.state;
+        const {selectedCountry, countries, errors, isLoading} = this.state;
         console.log('----Del Hotel---', this.state);
         const form = (
             <React.Fragment>
@@ -107,9 +107,9 @@ class CountryDelForm extends Component {
                 <div className="app flex-row align-items-center">
                     <Container>
                         <Row className="justify-content-center">
-                            <Col md="6">
-                                <CardGroup>
-                                    <Card className="p-4">
+                            <Col md="6" xs="12">
+                               
+                                    <Card >
                                         <CardBody>
                                             <Form onSubmit={this.onSubmitForm}>
                                                 {/* <img src={hotelimg} style={{ height: '100px' }} alt='hotel'></img> */}
@@ -117,21 +117,40 @@ class CountryDelForm extends Component {
                                                 <p className="text-muted">Видаліть вибрану країну</p>
                                                 {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 
-                                                <InputGroup className="mb-3" >
-                                                    <InputGroupAddon addonType="prepend">
-                                                        <InputGroupText style={iconsColor}>
-                                                            <i className="fa fa-globe" aria-hidden="true"></i>
-                                                        </InputGroupText>
-                                                    </InputGroupAddon>
-                                                    <Input type="select"
-                                                        name="selectedCountry"
-                                                        id="selectedCountry"
-                                                        value={this.state.selectedCountry}
-                                                        onChange={this.handleChange}>
-                                                        {countries.map(item => <option key={item.id} value={item.id} >{item.name}</option>)}
-                                                    </Input>
-                                                </InputGroup>
-                                                
+                                                {/* <div className="react-select-container">
+                                                    <InputGroup  >
+                                                        <InputGroupAddon addonType="prepend">
+                                                            <InputGroupText style={iconsColor}>
+                                                                <i className="fa fa-globe" aria-hidden="true"></i>
+                                                            </InputGroupText>
+                                                        </InputGroupAddon>
+                                                        <Select 
+                                                            
+                                                            value={selectedCountry}
+                                                            onChange={this.handleChangeSelect}
+                                                            options={countries}
+                                                        />
+                                                    {!!errors.selectedOption ?
+                                                            <div className="invalid-feedback d-block">
+                                                                {errors.selectedOption}
+                                                            </div> : ''}          
+                                                    </InputGroup>
+                                                </div> */}
+
+                                                <div className="form-group" >
+                                                    <label htmlFor="priority" className="">Країна</label>
+
+                                                        <Select
+                                                       value={selectedCountry}
+                                                       onChange={this.handleChangeSelect}
+                                                       options={countries}
+                                                        />
+                                                        {!!errors.selectedCountry ? <Alert color="danger">{errors.selectedCountry}</Alert> : ''}
+
+
+                                                    </div>          
+
+
                                                 <Row className="justify-content-center">
                                                     <Col xs="3">
                                                         <Button  type="submit" color="primary" className="px-4" disabled={isLoading}>Видалити</Button>
@@ -145,7 +164,7 @@ class CountryDelForm extends Component {
                                             </Form>
                                         </CardBody>
                                     </Card>
-                                </CardGroup>
+                                
                             </Col>
                         </Row>
                     </Container>

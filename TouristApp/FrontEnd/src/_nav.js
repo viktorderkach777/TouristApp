@@ -48,6 +48,14 @@ export default {
       url: '/admin/countryadd',
       icon: 'icon-pencil',
     },
+    {
+    name: 'Країни',
+    url: '/admin/countrymanager',
+    icon: 'icon-pencil',
+  },
+
+
+    
   ],
 },
 {
