@@ -65,8 +65,9 @@ export default class AdminService {
     }
 
     //-----------------OPERATION  PrivatBank---------------------------
-    static getKurs(date) {
-        return axios.get(`${serverUrl}api/SampleData/kurs/` + date);
+    static getKurs() {
+        console.log('----axios kurs---');
+        return axios.get(`${serverUrl}api/SampleData/kurs`);
     }
 
 

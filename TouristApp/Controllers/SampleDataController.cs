@@ -134,14 +134,14 @@ namespace TouristApp.Controllers
         }
 
 
-        [HttpGet("kurs/{date}")]
-        public async Task<IActionResult> Kurs(string date)
+        [HttpGet("kurs")]
+        public async Task<IActionResult> Kurs()
         {
             WebRequest request;
             WebResponse response;
             string data = "";
-            string _apiBase = "https://api.privatbank.ua/p24api/exchange_rates?json&date=";
-            string getData = _apiBase+date;
+            string _apiBase = " https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+            string getData = _apiBase;
 
             request = WebRequest.Create(getData);
             response = await request.GetResponseAsync();

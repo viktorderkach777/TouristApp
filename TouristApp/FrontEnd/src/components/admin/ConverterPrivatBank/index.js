@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
-import {Label, Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
+import { Label, CardHeader, FormGroup, Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
 //import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Notifications, { notify } from '../../Notifications'
@@ -10,7 +10,7 @@ import Notifications, { notify } from '../../Notifications'
 //import validateemail from '../../../helpers/validateEmail'; 
 import { Link } from 'react-router-dom';
 //import { Redirect } from "react-router";
-import  AdminService from '../AdminService'
+import AdminService from '../../../Services/AdminService'
 
 const iconsColor = {
     backgroundColor: '#00aced',
@@ -21,15 +21,15 @@ const iconsColor = {
 class KursForm extends Component {
 
     state = {
-        data: {},
-        currentDate:'',
+        data: [],
+        currentDate: '',
         errors: {
         },
         done: false,
         isLoading: false
     };
 
-    
+
 
     setStateByErrors = (name, value) => {
         if (!!this.state.errors[name]) {
@@ -57,24 +57,16 @@ class KursForm extends Component {
         e.preventDefault();
         let errors = {};
         console.log('submit');
-        if (this.state.countryName === '') errors.countryName = " Can't be empty!"
+        // if (this.state.countryName === '') errors.countryName = " Can't be empty!"
         const isValid = Object.keys(errors).length === 0
         if (isValid) {
-            const { currentDate} = this.state;
-                    this.setState({ isLoading: true });
-                    var DataArray = currentDate.split('-');    
-                    var convertDate= DataArray[2]+'.'+DataArray[1]+'.'+DataArray[0];
-                console.log('Current date', convertDate );
-                AdminService.getKurs(convertDate)
+            
+            AdminService.getKurs()
                 .then(res => {
                     const data = res.data;
-                    this.setState({ data, done: true, isLoading: false },() => notify(" Курси від Приватбанку отримано ", '#071'))})
-                .catch(() => {console.log('--failed--'); });
-                // .then(
-                //     () => { this.setState({ done: true, isLoading: false},() => notify(" Курси від Приватбанку отримано ", '#071'))},
-                //     (err) => this.setState({ errors: err.response.data, isLoading: false })
-                // )
-                // .catch(() => { console.log('--failed--'); });
+                    this.setState({ data, done: true, isLoading: false }, () => notify(" Курси від Приватбанку отримано ", '#071'))
+                })
+                .catch(() => { console.log('--failed--'); });
         }
         else {
             this.setState({ errors });
@@ -82,11 +74,51 @@ class KursForm extends Component {
     };
 
     render() {
-        const { errors, isLoading  } = this.state;
+        const { errors, isLoading } = this.state;
         console.log('----Курси валют---', this.state);
         const form = (
             <React.Fragment>
-                <Notifications />
+                <Row className="justify-content-center">
+                    <Col md="5">
+                        <Card>
+                            <CardHeader><i className="fa fa-align-justify"></i>Конвертер валют</CardHeader>
+                            <CardBody>
+                                <Form inline  onSubmit={this.onSubmitForm}>
+                                    <FormGroup className="m-2 mr-sm-2 mb-sm-0">
+                                        <Label for="grn" className="mr-sm-2">ГРН</Label>
+                                        <Input type="text" name="grn" id="grn" placeholder=" " />
+                                    </FormGroup>
+                                    <FormGroup className="m-2 mr-sm-2 mb-sm-0">
+                                        <Label for="rub" className="mr-sm-2">RUB</Label>
+                                        <Label for="rub" className="mr-sm-2">0.34</Label>
+                                        <Input type="text" name="rub" id="rub" placeholder=" " />
+                                    </FormGroup>
+                                    <FormGroup className="m-2 mr-sm-2 mb-sm-0">
+                                        <Label for="usd" className="mr-sm-2">USD</Label>
+                                        <Label for="usd" className="mr-sm-2">24.7</Label>
+                                        <Input style={{width:'55%'}} type="text" name="usd" id="usd" placeholder=" " />
+                                    </FormGroup>
+                                    <FormGroup className="m-2 mr-sm-2 mb-sm-0 justify-content-left" >
+                                        <Label for="eur" className="mr-sm-2">EUR</Label>
+                                        <Label for="eur" className="mr-sm-2">27.01</Label>
+                                        <Input style={{width:'55%'}} type="text" name="eur" id="eur" placeholder=" " />
+                                    </FormGroup>
+                                    <Button color ='primary' type="submit" >Submit</Button>
+                                </Form>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
+            </React.Fragment>
+        );
+        return form;// (done ? <Redirect to='/admin/countryadd' /> : form);
+    }
+}
+
+const KursWidget = KursForm;
+export default KursWidget;
+
+{/* <Notifications />
                 <div className="app flex-row align-items-center">
                     <Container>
                         <Row className="justify-content-center">
@@ -95,7 +127,7 @@ class KursForm extends Component {
                                     <Card className="p-4">
                                         <CardBody>
                                             <Form onSubmit={this.onSubmitForm}>
-                                                {/* <img src={hotelimg} style={{ height: '100px' }} alt='hotel'></img> */}
+                                                {/* <img src={hotelimg} style={{ height: '100px' }} alt='hotel'></img> }
                                                 
                                                 <h1> Курс валют</h1>
                                                 <p className="text-muted">Показує курс валют</p>
@@ -141,12 +173,4 @@ class KursForm extends Component {
                             </Col>
                         </Row>
                     </Container>
-                </div>
-            </React.Fragment>
-        );
-        return form;// (done ? <Redirect to='/admin/countryadd' /> : form);
-    }
-}
-
-const KursWidget = KursForm;
-export default KursWidget;
+                </div> */}
