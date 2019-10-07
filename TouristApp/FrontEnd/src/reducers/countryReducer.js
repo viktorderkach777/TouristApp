@@ -27,11 +27,51 @@ export const initialState = {
 
 };
 
+function compareIncrease(a, b) {
+    if (a.label < b.label) {
+        return -1;
+    }
+    if (a.label > b.label) {
+        return 1;
+    }
+    return 0;
+}
+
+function compareDecrease(a, b) {
+    if (a.label > b.label) {
+        return -1;
+    }
+    if (a.label < b.label) {
+        return 1;
+    }
+    return 0;
+}
+
 
 export const countries = createSlice({
     slice: 'Countries',
     initialState: initialState,
     reducers: {
+
+        //------------------SORTING --------------------------------------
+        sortCountries: (state, action) => {
+            let newState = state;
+            const typeSort = action.payload;
+            let data=[];
+            console.log('--typeSort--', typeSort);
+            if (typeSort===true )
+            {
+                data = state.list.data.sort(compareIncrease);
+            }
+            else 
+            if (typeSort===false )
+            {
+                data = state.list.data.sort(compareDecrease);
+            }
+            console.log('--data--', data);
+            newState = update.set(state, 'list.data', data);
+            return newState;
+        },
 
         //------------------LIST COUNTRY --------------------------------------
         getCountriesStarted: state => {
@@ -65,7 +105,6 @@ export const countries = createSlice({
         },
         deleteCountrySuccess: (state, action) => {
             let newState = state;
-            console.log("action.payload", action.payload);
             let data = state.list.data.filter(item => item.value !== action.payload.id);
             newState = update.set(state, 'delete.loading', false);
             newState = update.set(newState, 'delete.success', true);
@@ -88,14 +127,15 @@ export const countries = createSlice({
         },
         createCountrySuccess: (state, action) => {
             let newState = state;
-            let country={
-                value:action.payload.data.Id,
-                label:action.payload.data.Name
+            var country = {
+                value: action.payload.id,
+                label: action.payload.name
             };
-                console.log('--country--', country); 
+            console.log('--country--', country);
 
-            let data = state.list.data.push(country);
-            console.log('--data--', data); 
+            let data = state.list.data.concat(country);
+            console.log('--data--', data);
+
             newState = update.set(state, 'add.loading', false);
             newState = update.set(newState, 'add.success', true);
             newState = update.set(newState, 'list.data', data);
@@ -121,7 +161,7 @@ export const countries = createSlice({
                 if (item.value === action.payload.value) item = action.payload;
                 return item;
             });
-            
+
             newState = update.set(state, 'edit.loading', false);
             newState = update.set(newState, 'edit.success', true);
             newState = update.set(newState, 'list.data', data);
@@ -133,9 +173,6 @@ export const countries = createSlice({
             newState = update.set(newState, 'edit.error', true);
             return newState;
         }
-
-
-
     }
 });
 
@@ -149,7 +186,7 @@ export const getCountries = () => {
                 dispatch(countries.actions.getCountriesSuccess(response));
             })
             .catch(() => {
-                console.log('--failed--');
+                console.log('--failed get list--');
                 dispatch(countries.actions.getCountriesFailed());
             });
     }
@@ -167,24 +204,24 @@ export const deleteCountry = (countryId) => {
                 dispatch(countries.actions.deleteCountrySuccess(country_delete_Id));
             })
             .catch(() => {
-                console.log('--failed--');
+                console.log('--failed delete--');
                 dispatch(countries.actions.deleteCountryFailed());
             });
     }
 }
 
-export const editCountry = (Id,CountryModel) => {
+export const editCountry = (Id, CountryModel) => {
     return (dispatch) => {
         dispatch(countries.actions.editCountryStarted());
 
-        CountryService.editCountry(Id,CountryModel)
+        CountryService.editCountry(Id, CountryModel)
             .then((response) => {
                 console.log('--success edit--', response.data);
                 var countryId = response.data;
                 dispatch(countries.actions.editCountrySuccess(countryId));
             })
             .catch(() => {
-                console.log('--failed--');
+                console.log('--failed edit--');
                 dispatch(countries.actions.editCountryFailed());
             });
     }
@@ -201,10 +238,15 @@ export const createCountry = (CountryModel) => {
                 dispatch(countries.actions.createCountrySuccess(country));
             })
             .catch(() => {
-                console.log('--failed--');
+                console.log('--failed create--');
                 dispatch(countries.actions.createCountryFailed());
             });
     }
 }
 
 
+export const sortCountries = (TypeSort) => {
+    return (dispatch) => {
+        dispatch(countries.actions.sortCountries(TypeSort));
+    }
+}

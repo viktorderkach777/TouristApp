@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Label, Button, Modal, ModalHeader, ModalFooter, Card, CardBody, ModalBody,Form,
+    Label, Button, Modal, ModalHeader, ModalFooter, Card, CardBody, ModalBody, Form,
     Col, CardHeader, Table, Row, InputGroup, InputGroupAddon, InputGroupText, Input, FormGroup
 } from 'reactstrap';
 //import { Link } from 'react-router-dom';
@@ -33,7 +33,8 @@ class CountryForm extends Component {
         editDialog_isOpen: false,
         id_edit: 0,
         id_edit_name: '',
-        countryName: ''
+        countryName: '',
+        sortName:false
     };
 
 
@@ -55,11 +56,11 @@ class CountryForm extends Component {
         }
     };
 
-   
+
     componentDidMount() {
         console.log('---componentDiDMount----');
-          this.props.getCountries();
-        
+        this.props.getCountries();
+
     }
 
     handleChange = (e) => {
@@ -89,6 +90,16 @@ class CountryForm extends Component {
         });
     }
 
+    sortCountries = (e)=>{
+        e.preventDefault();
+        console.log('type sort:', this.state.sortName);
+        this.props.sortCountries(this.state.sortName);
+        this.setState({
+            sortName: !this.state.sortName
+        });
+
+
+    }
     onClickRemoveImageYes = () => {
         const { id_delete } = this.state;
         this.props.deleteCountry(id_delete);
@@ -98,15 +109,15 @@ class CountryForm extends Component {
 
     onClickEditImageYes = () => {
         const { id_edit, id_edit_name } = this.state;
-       var  model={
-            Name:id_edit_name
+        var model = {
+            Name: id_edit_name
         }
-        this.props.editCountry(id_edit,model);
+        this.props.editCountry(id_edit, model);
         console.log('edit country with id:', model);
         this.toggleDialogEdit();
     }
 
-    
+
     onSubmitForm = e => {
         e.preventDefault();
         const { countryName } = this.state;
@@ -118,24 +129,22 @@ class CountryForm extends Component {
 
         const isValid = Object.keys(errors).length === 0
         if (isValid) {
-            
-
             this.setState({ isLoading: true });
             console.log('CountryAdd: validform', countryName);
-           
-            this.props.createCountry({Name:countryName});
+
+            this.props.createCountry({ Name: countryName });
             notify(" Країну додано!", '#071')
         }
         else {
             console.log('errors');
             this.setState({ errors });
-            };
+        };
     };
 
     render() {
         console.log("--props CountryListPage---", this.props);
         console.log("--state CountryListPage---", this.state);
-    
+
         const { isloading, deleteDialog_isOpen, id_delete, editDialog_isOpen, id_edit_name, errors } = this.state;
 
         const deleteDialogContent = (deleteDialog_isOpen &&
@@ -187,39 +196,39 @@ class CountryForm extends Component {
                         <Card>
                             <CardHeader><i className="fa fa-align-justify"></i>Менеджер країн</CardHeader>
                             <CardBody>
-                             <Form onSubmit={this.onSubmitForm}>
-                                <FormGroup row>
-                                    <Col md="12">
-                                        <InputGroup >
-                                            <InputGroupAddon addonType="prepend">
-                                                <InputGroupText style={iconsColor}>
-                                                    <i className="fa fa-globe" aria-hidden="true"></i>
-                                                </InputGroupText>
-                                            </InputGroupAddon>
-                                            <Input
-                                                type="text"
-                                                placeholder="назва країни"
-                                                className={classnames('form-control', { 'is-invalid': !!errors.countryName })}
-                                                id="countryName"
-                                                name="countryName"
-                                                value={this.state.countryName}
-                                                onChange={this.handleChange}
-                                            />
-                                            <InputGroupAddon addonType="append">
-                                                <Button type="submit"  style={iconsColor}><i className="fa fa-plus"></i></Button>
-                                            </InputGroupAddon>
-                                            {!!errors.countryName ? <span className="help-block">{errors.countryName}</span> : ''}
+                                <Form onSubmit={this.onSubmitForm}>
+                                    <FormGroup row>
+                                        <Col md="12">
+                                            <InputGroup >
+                                                <InputGroupAddon addonType="prepend">
+                                                    <InputGroupText style={iconsColor}>
+                                                        <i className="fa fa-globe" aria-hidden="true"></i>
+                                                    </InputGroupText>
+                                                </InputGroupAddon>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="назва країни"
+                                                    className={classnames('form-control', { 'is-invalid': !!errors.countryName })}
+                                                    id="countryName"
+                                                    name="countryName"
+                                                    value={this.state.countryName}
+                                                    onChange={this.handleChange}
+                                                />
+                                                <InputGroupAddon addonType="append">
+                                                    <Button type="submit" style={iconsColor}><i className="fa fa-plus"></i></Button>
+                                                </InputGroupAddon>
+                                                {!!errors.countryName ? <span className="help-block">{errors.countryName}</span> : ''}
 
-                                        </InputGroup>
-                                    </Col>
-                                </FormGroup>
-                                </Form>   
+                                            </InputGroup>
+                                        </Col>
+                                    </FormGroup>
+                                </Form>
 
-                                <Table responsive hover striped>
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" className="d-none d-sm-block">Id</th>
-                                            <th scope="col">Name</th>
+                                <Table responsive hover striped >
+                                    <thead >
+                                        <tr >
+                                            <th scope="col" className="d-none d-sm-block">Id <Button color="default"  size="sm" onClick={e => this.sortCountries(e)}><i className="fa fa-sort"  aria-hidden="true"  ></i></Button></th>
+                                            <th scope="col">Name <Button color="default"  size="sm" onClick={e => this.sortCountries(e)}><i className="fa fa-sort"  aria-hidden="true"  ></i></Button></th>
                                             <th scope="col">Operations</th>
                                         </tr>
                                     </thead>
@@ -248,30 +257,33 @@ class CountryForm extends Component {
 
 const mapState = state => {
     return {
-      list: get(state, 'countries.list.data'),
-      isListLoading: get(state, 'countries.list.loading'),
-      isListError: get(state, 'countries.list.error'),
-      isAddCountry: get(state, 'countries.add.success'),
+        list: get(state, 'countries.list.data'),
+        isListLoading: get(state, 'countries.list.loading'),
+        isListError: get(state, 'countries.list.error'),
+        isAddCountry: get(state, 'countries.add.success'),
     };
-  };
-  
-  const mapDispatch = (dispatch) => {
+};
+
+const mapDispatch = (dispatch) => {
     return {
         getCountries: () => {
-        dispatch(countryAction.getCountries())
-      },
-      deleteCountry: (countryId) => {
-        dispatch(countryAction.deleteCountry(countryId))
-      },
-      editCountry: (id,model) => {
-        dispatch(countryAction.editCountry(id,model))
-      },
-      createCountry: (model) => {
-        dispatch(countryAction.createCountry(model))
-      }
-  
-    };
-  };
+            dispatch(countryAction.getCountries())
+        },
+        deleteCountry: (countryId) => {
+            dispatch(countryAction.deleteCountry(countryId))
+        },
+        editCountry: (id, model) => {
+            dispatch(countryAction.editCountry(id, model))
+        },
+        createCountry: (model) => {
+            dispatch(countryAction.createCountry(model))
+        },
+        sortCountries: (typeSort) => {
+            dispatch(countryAction.sortCountries(typeSort))
+        }
 
-const  CountryWidget = connect(mapState, mapDispatch)(CountryForm);
+    };
+};
+
+const CountryWidget = connect(mapState, mapDispatch)(CountryForm);
 export default CountryWidget;
