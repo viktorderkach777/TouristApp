@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TouristApp.Controllers
 {
@@ -15,6 +17,14 @@ namespace TouristApp.Controllers
         public int Id { get; set; }
         public string BigImage { get; set; }
         public string SmallImage { get; set; }
+    }
+
+    public class KursModel
+    {
+        public string ccy { get; set; }
+        public string base_ccy { get; set; }
+        public string buy { get; set; }
+        public string sale { get; set; }
     }
 
     public class ImageItemViewModelNext
@@ -139,7 +149,7 @@ namespace TouristApp.Controllers
         {
             WebRequest request;
             WebResponse response;
-            string data = "";
+            var json = "";
             string _apiBase = " https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
             string getData = _apiBase;
 
@@ -150,12 +160,17 @@ namespace TouristApp.Controllers
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    data = reader.ReadToEnd();
+                    json = reader.ReadToEnd();
                 }
             }
             response.Close();
 
-            return Ok(new { data });
+            List<KursModel> kurses = JsonConvert.DeserializeObject<List<KursModel>>(json);
+            //JObject obj = JObject.Parse(json);
+            //string RUR = (string)obj.SelectToken("[0].buy");
+
+
+            return Ok(new { json });
         }
 
 
