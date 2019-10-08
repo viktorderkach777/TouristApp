@@ -21,7 +21,11 @@ const iconsColor = {
 class KursForm extends Component {
 
     state = {
-        data: [],
+        kurs: [],
+        grn:'',
+        usd:'',
+        eur:'',
+        rur:'',
         currentDate: '',
         errors: {
         },
@@ -29,7 +33,18 @@ class KursForm extends Component {
         isLoading: false
     };
 
+    componentDidMount() {
+        console.log('---componentDiDMount----');
+        AdminService.getKurs()
+                .then(res => {
+                    const kurs = res.data.answer;
+                    this.setState({ kurs, done: true, isLoading: false })
+                })
+                .catch(() => { console.log('--failed--'); });
 
+    }
+
+   
 
     setStateByErrors = (name, value) => {
         if (!!this.state.errors[name]) {
@@ -52,6 +67,53 @@ class KursForm extends Component {
         this.setStateByErrors(e.target.name, e.target.value);
     };
 
+    changeKurs = (e,type) => {
+        e.preventDefault();
+   // this.setStateByErrors(e.target.name, e.target.value);
+        
+       // console.log('type',type);
+       const {kurs,grn,rur,usd,eur}=this.state;
+        switch (type) {
+
+            case 'grn':
+             this.setState({
+                grn: e.target.value,
+                rur:isNaN(e.target.value)?'0':(e.target.value/kurs.rur).toFixed(2),
+                usd:isNaN(e.target.value)?'0':(e.target.value/kurs.usd).toFixed(2),
+                eur:isNaN(e.target.value)?'0':(e.target.value/kurs.eur).toFixed(2)
+             });
+               break;
+            case 'rur':
+                    this.setState({
+                        rur: e.target.value,
+                        grn:isNaN(e.target.value)?'0':(e.target.value*kurs.rur).toFixed(2),
+                        usd:isNaN(e.target.value)?'0':(e.target.value*kurs.rur/kurs.usd).toFixed(2),
+                        eur:isNaN(e.target.value)?'0':(e.target.value*kurs.rur/kurs.eur).toFixed(2)
+                     });
+             
+              break;
+            case 'usd':
+                    this.setState({
+                        usd: e.target.value,
+                        grn:isNaN(e.target.value)?'0':(e.target.value*kurs.usd).toFixed(2),
+                        rur:isNaN(e.target.value)?'0':(e.target.value*kurs.usd/kurs.rur).toFixed(2),
+                        eur:isNaN(e.target.value)?'0':(e.target.value*kurs.usd/kurs.eur).toFixed(2)
+                     });
+              break;
+            case 'eur':
+                    this.setState({
+                        eur: e.target.value,
+                        grn:isNaN(e.target.value)?'0':(e.target.value*kurs.eur).toFixed(2),
+                        rur:isNaN(e.target.value)?'0':(e.target.value*kurs.eur/kurs.rur).toFixed(2),
+                        usd:isNaN(e.target.value)?'0':(e.target.value*kurs.eur/kurs.usd).toFixed(2)
+                     });
+              break;
+            default:
+     
+          }
+        
+    }
+
 
     onSubmitForm = (e) => {
         e.preventDefault();
@@ -63,8 +125,8 @@ class KursForm extends Component {
             
             AdminService.getKurs()
                 .then(res => {
-                    const data = res.data;
-                    this.setState({ data, done: true, isLoading: false }, () => notify(" Курси від Приватбанку отримано ", '#071'))
+                    const kurs = res.data.answer;
+                    this.setState({ kurs, done: true, isLoading: false }, () => notify(" Курси від Приватбанку отримано ", '#071'))
                 })
                 .catch(() => { console.log('--failed--'); });
         }
@@ -74,7 +136,7 @@ class KursForm extends Component {
     };
 
     render() {
-        const { errors, isLoading } = this.state;
+        const { errors, isLoading,kurs,grn,rur,usd,eur } = this.state;
         console.log('----Курси валют---', this.state);
         const form = (
             <React.Fragment>
@@ -86,24 +148,24 @@ class KursForm extends Component {
                                 <Form inline  onSubmit={this.onSubmitForm}>
                                     <FormGroup className="m-2 mr-sm-2 mb-sm-0">
                                         <Label for="grn" className="mr-sm-2">ГРН</Label>
-                                        <Input type="text" name="grn" id="grn" placeholder=" " />
+                                        <Input type="text" value={grn} name="grn" id="grn" placeholder=" "  onChange={e => this.changeKurs(e,'grn')} />
                                     </FormGroup>
                                     <FormGroup className="m-2 mr-sm-2 mb-sm-0">
                                         <Label for="rub" className="mr-sm-2">RUB</Label>
-                                        <Label for="rub" className="mr-sm-2">0.34</Label>
-                                        <Input type="text" name="rub" id="rub" placeholder=" " />
+                                        <Label for="rub" className="mr-sm-2">{kurs.rur}</Label>
+                                        <Input type="text"  value={rur} name="rub" id="rub" placeholder=" "  onChange={e => this.changeKurs(e,'rur')} />
                                     </FormGroup>
                                     <FormGroup className="m-2 mr-sm-2 mb-sm-0">
                                         <Label for="usd" className="mr-sm-2">USD</Label>
-                                        <Label for="usd" className="mr-sm-2">24.7</Label>
-                                        <Input style={{width:'55%'}} type="text" name="usd" id="usd" placeholder=" " />
+                                        <Label for="usd" className="mr-sm-2">{kurs.usd}</Label>
+                                        <Input style={{width:'55%'}} type="text" value={usd} name="usd" id="usd" placeholder=" " onChange={e => this.changeKurs(e,'usd')} />
                                     </FormGroup>
                                     <FormGroup className="m-2 mr-sm-2 mb-sm-0 justify-content-left" >
                                         <Label for="eur" className="mr-sm-2">EUR</Label>
-                                        <Label for="eur" className="mr-sm-2">27.01</Label>
-                                        <Input style={{width:'55%'}} type="text" name="eur" id="eur" placeholder=" " />
+                                        <Label for="eur" className="mr-sm-2">{kurs.eur}</Label>
+                                        <Input style={{width:'55%'}} type="text" value={eur} name="eur" id="eur" placeholder=" "  onChange={e => this.changeKurs(e,'eur')}/>
                                     </FormGroup>
-                                    <Button color ='primary' type="submit" >Submit</Button>
+                                    {/* <Button color ='primary' type="submit" >Submit</Button> */}
                                 </Form>
                             </CardBody>
                         </Card>

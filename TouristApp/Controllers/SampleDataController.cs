@@ -27,6 +27,15 @@ namespace TouristApp.Controllers
         public string sale { get; set; }
     }
 
+    public class KursListModel
+    {
+        public double RUR { get; set; }
+        public double USD { get; set; }
+        public double EUR { get; set; }
+        
+    }
+
+
     public class ImageItemViewModelNext
     {
         public int Id { get; set; }
@@ -166,11 +175,16 @@ namespace TouristApp.Controllers
             response.Close();
 
             List<KursModel> kurses = JsonConvert.DeserializeObject<List<KursModel>>(json);
-            //JObject obj = JObject.Parse(json);
-            //string RUR = (string)obj.SelectToken("[0].buy");
 
+            var answer = new KursListModel
+            {
+                USD = Convert.ToDouble(kurses[0].buy),
+                RUR = Convert.ToDouble(kurses[2].buy),
+                EUR = Convert.ToDouble(kurses[1].buy),
+               
+            };
 
-            return Ok(new { json });
+            return Ok(new { answer });
         }
 
 
