@@ -42,7 +42,7 @@ namespace TouristApp.Controllers
             var url = _configuration.GetValue<string>("ImagesHotelUrl");
 
             var query = await _context
-                .Tours
+                .Tours.AsQueryable()
                 .Include(s => s.Hotel)
                 .Include(s => s.Hotel.HotelImages)
                 .Include(d => d.Hotel.Region)

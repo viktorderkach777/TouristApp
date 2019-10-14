@@ -55,6 +55,34 @@ export const tours = createSlice({
       return newState;
     },
 
+
+//------------------POST LIST TOUR --------------------------------------
+postToursStarted: state => {
+  let newState = state;
+  newState = update.set(state, 'list.loading', true);
+  newState = update.set(newState, 'list.success', false);
+  return newState;
+},
+postToursSuccess: (state, action) => {
+  let newState = state;
+  const data = action.payload.data;
+  console.log("get list", data);
+  newState = update.set(state, 'list.loading', false);
+  newState = update.set(newState, 'list.success', true);
+  newState = update.set(newState, 'list.data', data.tours);
+  newState = update.set(newState, 'list.totalPages', data.totalPages);
+  newState = update.set(newState, 'list.currentPage', data.currentPage);
+  newState = update.set(newState, 'list.sortOrder', data.sortOrder);
+  return newState;
+},
+postToursFailed: state => {
+  let newState = state;
+  newState = update.set(state, 'list.loading', false);
+  newState = update.set(newState, 'list.error', true);
+  return newState;
+},
+
+
 //------------------DELETE TOUR --------------------------------------
 
     deleteTourStarted:state => {
@@ -76,10 +104,16 @@ export const tours = createSlice({
       newState = update.set(state, 'deleting.loading', false);
       newState = update.set(newState, 'deleting.error', true);
       return newState;
-    } 
+    }, 
 
-//------------------CREATE TOUR --------------------------------------
-
+//------------------SET TypeSort --------------------------------------
+      setTypeSort: (state, action) => {
+        let newState = state;
+        const typeSort = action.payload;
+        console.log('--typeSort--', typeSort);
+        newState = update.set(state, 'list.sortOrder', typeSort);
+        return newState;
+      } 
 
 
 
@@ -105,6 +139,24 @@ export const getListTours = (model) => {
   }
 };
 
+export const postListTours = (model) => {
+  return (dispatch) => {
+    dispatch(tours.actions.postToursStarted());
+
+    TourService.postListTours(model)
+      .then((response) => {
+        console.log('--success create--', response.data);
+        dispatch(tours.actions.postToursSuccess(response));
+      })
+      .catch(() => {
+        console.log('--failed--');
+        dispatch(tours.actions.postToursFailed());
+      });
+  }
+};
+
+
+
 
 export const deleteTour = (tourId) => {
   return (dispatch) => {
@@ -120,6 +172,12 @@ export const deleteTour = (tourId) => {
               console.log('--failed--');
               dispatch(tours.actions.deleteTourFailed());
           });
+  }
+}
+
+export const setTypeSort = (TypeSort) => {
+  return (dispatch) => {
+      dispatch(tours.actions.setTypeSort(TypeSort));
   }
 }
 

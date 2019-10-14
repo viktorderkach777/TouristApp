@@ -33,21 +33,24 @@ class ToursContainer extends Component {
     totalPages: null,
     sortOrder:'name',
     deleteDialog_isOpen: false,
-    id_delete:0
+    id_delete:0,
+    filter:''
   }
 
   componentDidMount() {
-    const { currentPage, totalPages } = this.props;
-    const { sortOrder  } = this.state;
+    const { currentPage, totalPages,filter, sortOrder} = this.props;
+    //const { sortOrder  } = this.state;
     const model = {
       currentPage:currentPage,
       sortOrder:sortOrder,
-      
+      filter:filter
     }
     console.log('---STEP1----',model);
     this.props.getListTours(model);
-    this.setState({ currentPage: currentPage });
-    this.setState({ totalPages: totalPages });
+    this.props.postListTours(model);
+    this.setState({ currentPage: currentPage,totalPages: totalPages,sortOrder: sortOrder});
+  //  this.setState({ });
+
   }
 
   deleteTour = (e, id)  =>{
@@ -71,10 +74,28 @@ class ToursContainer extends Component {
     this.toggleDialogDelete();
   }
 
+  onSortChanged = data => {
+    console.log('---sort Type ---- ',data);
+    this.props.setTypeSort(data);
+    this.getTour(1,data);
+    
+  } 
+
+  getTour = (currentPage,sortOrder) =>{
+    console.log('---sort order from props---- ',sortOrder );
+    const model = {
+      currentPage:currentPage,
+      sortOrder:sortOrder
+    }
+    this.props.getListTours(model);
+    this.setState({ currentPage: currentPage });
+  }
+
+
   onPageChanged = data => {
   
   console.log('---data from pagination',data);
-  const { sortOrder  } = this.state;
+  const { sortOrder  } = this.props;
   const model = {
     currentPage:data,
     sortOrder:sortOrder
@@ -90,7 +111,7 @@ class ToursContainer extends Component {
   render() {
     console.log('----State Tours -----', this.state);
     console.log('----Props Tours-----', this.props);
-    const { isAuthenticated, roles,  isListLoading, totalPages, currentPage } = this.props;
+    const {  roles,  isListLoading, totalPages, currentPage } = this.props;
     const {deleteDialog_isOpen,id_delete} =this.state;
 
     const deleteDialogContent = (deleteDialog_isOpen && 
@@ -253,8 +274,8 @@ class ToursContainer extends Component {
               {filterlist}
             </div>
             <div className="col-12 col-md-9">
-              <span> Status: {isAuthenticated} {roles}</span>
-              <SortToolbar />
+            
+              <SortToolbar on onSortChanged={this.onSortChanged} />
               {toursList}
                <SpinnerWidget loading={isListLoading} /> 
               <PaginationBar totalPages={totalPages} currentPage={currentPage} pageNeighbours={1} onPageChanged={this.onPageChanged}/>
@@ -273,6 +294,7 @@ const mapState = state => {
     isListLoading: get(state, 'tours.list.loading'),
     isListError: get(state, 'tours.list.error'),
     currentPage: get(state, 'tours.list.currentPage'),
+    sortOrder: get(state, 'tours.list.sortOrder'),
     totalPages: get(state, 'tours.list.totalPages'),
     isAuthenticated: get(state, 'auth.isAuthenticated'),
     roles: get(state, 'auth.user.roles')
@@ -284,10 +306,15 @@ const mapDispatch = (dispatch) => {
     getListTours: (model) => {
       dispatch(tourAction.getListTours(model))
     },
+    postListTours: (model) => {
+      dispatch(tourAction.postListTours(model))
+    },
     deleteTour: (tourId) => {
       dispatch(tourAction.deleteTour(tourId))
+    },
+    setTypeSort: (typeSort) => {
+      dispatch(tourAction.setTypeSort(typeSort))
     }
-
   };
 };
 

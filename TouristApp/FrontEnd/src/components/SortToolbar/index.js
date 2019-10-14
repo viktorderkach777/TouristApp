@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import {
     Card,
-    //CardTitle,
-    //CardText,
     Form,
     CardBody,
-    // CardSubtitle,
-    // Row,
     Dropdown,
     DropdownItem,
     DropdownMenu,
     DropdownToggle,
-    Col,
     Label,
-    //Input,
-    FormGroup
+    Input,
+    FormGroup,
+    InputGroup,
+    Button,
+    InputGroupAddon
 } from 'reactstrap';
 
 class SortToolbar extends Component {
@@ -22,14 +20,10 @@ class SortToolbar extends Component {
         modal: true,
         dropdownOpen: false,
         dropDownValue: 'по імені від А до Я',
-        // name: '',
-        // surname: '',
-        // phone: '',
-        initialDate: "2019-01-01",
-        lastDate: new Date(),
         sandFormSuccess: false,
         openModal: false,
         sortOrder: 'name',
+        findOrder: '',
         collapse: false,
         accordion: [true, false, false],
         custom: [true, false],
@@ -42,8 +36,10 @@ class SortToolbar extends Component {
     }
 
     sorting = (e) => {
+        const { onSortChanged = f => f } = this.props;
         const { type } = e.target.dataset;
-        this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type});
+        this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type }, () => onSortChanged(type));
+
     }
 
     callBackCloseDialog = () => {
@@ -60,35 +56,52 @@ class SortToolbar extends Component {
 
 
     render() {
-        console.log('--Sorting state----',this.state);
+        console.log('--Sorting state----', this.state);
+        const { findOrder } = this.state;
         return (
             <Card className="CardTours" >
                 <CardBody>
-                    <Form>
-                        <FormGroup row>
-                            <Label for="Select1" sm={2}>Сортування: </Label>
-                            <Col sm={6}>
 
-                                <Dropdown isOpen={this.state.dropdownOpen} toggle={() => { this.toggle(0); }} >
-                                    <DropdownToggle caret style={{ backgroundColor: 'white' }}>
-                                        {this.state.dropDownValue}
-                                    </DropdownToggle>
-                                    <DropdownMenu >
-                                        <DropdownItem onClick={this.sorting} data-type="name" >
-                                            по імені від А до Я
+                    <Form  className="ml-2">
+
+                        <FormGroup className="row">
+                            <div className="col-12 col-md-6 mb-2 ">
+                                <InputGroup >
+                                    <InputGroupAddon addonType="prepend">
+                                        <Button type="text" color="primary"><i className="fa fa-sort" aria-hidden="true"></i></Button>
+                                    </InputGroupAddon>
+                                    <Dropdown isOpen={this.state.dropdownOpen} toggle={() => { this.toggle(0); }} >
+                                        <DropdownToggle caret style={{ backgroundColor: 'white' }}>
+                                            {this.state.dropDownValue}
+                                        </DropdownToggle>
+                                        <DropdownMenu >
+                                            <DropdownItem onClick={this.sorting} data-type="name" >
+                                                по імені від А до Я
                                         </DropdownItem>
-                                        <DropdownItem onClick={this.sorting} data-type="name_desc">
-                                            по імені від Я до А
+                                            <DropdownItem onClick={this.sorting} data-type="name_desc">
+                                                по імені від Я до А
                                         </DropdownItem>
-                                        <DropdownItem onClick={this.sorting} data-type="rate">
-                                            по рейтингу ↑
+                                            <DropdownItem onClick={this.sorting} data-type="rate">
+                                                по рейтингу ↑
                                         </DropdownItem>
-                                        <DropdownItem onClick={this.sorting} data-type="rate_desc">
-                                            по рейтингу ↓
+                                            <DropdownItem onClick={this.sorting} data-type="rate_desc">
+                                                по рейтингу ↓
                                         </DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
-                            </Col>
+                                        </DropdownMenu>
+                                    </Dropdown>
+                                </InputGroup>
+                            </div>
+                            <div className="col-12 col-md-6  mb-2">
+                                <InputGroup >
+                                    <InputGroupAddon addonType="prepend">
+                                        <Button type="text" color="primary"><i className="fa fa-search" aria-hidden="true"></i></Button>
+                                    </InputGroupAddon>
+                                    <Input type="text" value={findOrder} name="findOrder" id="findOrder" placeholder=" Я шукаю ... " />
+                                    <InputGroupAddon addonType="append">
+                                        <Button type="button" color="primary"> Знайти </Button>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            </div>
                         </FormGroup>
                     </Form>
                 </CardBody>

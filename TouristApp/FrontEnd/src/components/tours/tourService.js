@@ -8,6 +8,12 @@ export default class TourService {
     return axios.get(`${serverUrl}api/tour/list/` + model.currentPage+"?sortOrder=" + model.sortOrder);
   }
 
+  static postListTours(model) {
+    console.log('---post list tour----',model);
+    return axios.post(`${serverUrl}api/tour/list`, model);
+  }
+
+
   static deleteTour (id) {
          return axios.delete (`${serverUrl}api/tour/`+id);
   }
