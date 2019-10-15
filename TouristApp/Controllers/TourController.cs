@@ -199,7 +199,7 @@ namespace TouristApp.Controllers
             ToursViewModel model = new ToursViewModel();
 
             var url = _configuration.GetValue<string>("ImagesHotelUrl");
-
+              
             var query = await _context
                 .Tours
                 .Include(s => s.Hotel)
@@ -226,7 +226,11 @@ namespace TouristApp.Controllers
 
                 }).ToListAsync();
 
-
+            if (!String.IsNullOrEmpty(filter.searchString))
+            {
+                query = query.Where(s => s.Name.Contains(filter.searchString)
+                                       || s.Region.Contains(filter.searchString)).ToList();
+            }
 
             switch (filter.sortOrder)
             {

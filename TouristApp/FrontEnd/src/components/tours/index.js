@@ -74,18 +74,20 @@ class ToursContainer extends Component {
     this.toggleDialogDelete();
   }
 
-  onSortChanged = data => {
+  onSortChanged = (data,search) => {
     console.log('---sort Type ---- ',data);
     this.props.setTypeSort(data);
-    this.getTour(1,data);
+    this.getTour(1,data,search);
     
   } 
 
-  getTour = (currentPage,sortOrder) =>{
+  getTour = (currentPage,sortOrder,search) =>{
     console.log('---sort order from props---- ',sortOrder );
     const model = {
       currentPage:currentPage,
-      sortOrder:sortOrder
+      sortOrder:sortOrder,
+      Filter:'',
+      searchString:search
     }
     this.props.getListTours(model);
     this.setState({ currentPage: currentPage });
@@ -275,7 +277,7 @@ class ToursContainer extends Component {
             </div>
             <div className="col-12 col-md-9">
             
-              <SortToolbar on onSortChanged={this.onSortChanged} />
+              <SortToolbar  onSortChanged={this.onSortChanged} />
               {toursList}
                <SpinnerWidget loading={isListLoading} /> 
               <PaginationBar totalPages={totalPages} currentPage={currentPage} pageNeighbours={1} onPageChanged={this.onPageChanged}/>

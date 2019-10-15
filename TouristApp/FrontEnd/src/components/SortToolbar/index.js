@@ -7,7 +7,6 @@ import {
     DropdownItem,
     DropdownMenu,
     DropdownToggle,
-    Label,
     Input,
     FormGroup,
     InputGroup,
@@ -37,10 +36,18 @@ class SortToolbar extends Component {
 
     sorting = (e) => {
         const { onSortChanged = f => f } = this.props;
+        const { findOrder  } = this.state;
         const { type } = e.target.dataset;
-        this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type }, () => onSortChanged(type));
+        this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type }, () => onSortChanged(type,findOrder));
 
     }
+
+    onSearchclick=()=>{
+        const { onSortChanged = f => f } = this.props;
+        const { findOrder,sortOrder  } = this.state;
+        onSortChanged(sortOrder,findOrder)
+      //  this.sorting();
+    } 
 
     callBackCloseDialog = () => {
         this.setState({ openModal: false });
@@ -96,9 +103,9 @@ class SortToolbar extends Component {
                                     <InputGroupAddon addonType="prepend">
                                         <Button type="text" color="primary"><i className="fa fa-search" aria-hidden="true"></i></Button>
                                     </InputGroupAddon>
-                                    <Input type="text" value={findOrder} name="findOrder" id="findOrder" placeholder=" Я шукаю ... " />
+                                    <Input type="text" value={findOrder} name="findOrder" id="findOrder" placeholder=" Я шукаю ... " onChange={this.handleChange} />
                                     <InputGroupAddon addonType="append">
-                                        <Button type="button" color="primary"> Знайти </Button>
+                                        <Button type="button" color="primary" onClick={this.onSearchclick}> Знайти </Button>
                                     </InputGroupAddon>
                                 </InputGroup>
                             </div>
