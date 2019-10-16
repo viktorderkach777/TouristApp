@@ -34,19 +34,21 @@ class ToursContainer extends Component {
     sortOrder:'name',
     deleteDialog_isOpen: false,
     id_delete:0,
-    filter:''
+    filter:'',
+    searchText:''
   }
 
   componentDidMount() {
-    const { currentPage, totalPages,filter, sortOrder} = this.props;
+    const { currentPage, totalPages,filter, sortOrder,searchText} = this.props;
     //const { sortOrder  } = this.state;
     const model = {
       currentPage:currentPage,
       sortOrder:sortOrder,
-      filter:filter
+      filter:filter,
+      searchString:searchText
     }
     console.log('---STEP1----',model);
-    this.props.getListTours(model);
+    //this.props.getListTours(model);
     this.props.postListTours(model);
     this.setState({ currentPage: currentPage,totalPages: totalPages,sortOrder: sortOrder});
   //  this.setState({ });
@@ -74,22 +76,25 @@ class ToursContainer extends Component {
     this.toggleDialogDelete();
   }
 
-  onSortChanged = (data,search) => {
+  onSortChanged = (data,searchText) => {
     console.log('---sort Type ---- ',data);
+    console.log('---search Text ---- ',searchText);
     this.props.setTypeSort(data);
-    this.getTour(1,data,search);
+    if (searchText!=='') this.props.setSearchText(searchText);
+    this.getTour(1,data,searchText);
     
   } 
 
-  getTour = (currentPage,sortOrder,search) =>{
+  getTour = (currentPage,sortOrder,searchText) =>{
     console.log('---sort order from props---- ',sortOrder );
     const model = {
       currentPage:currentPage,
       sortOrder:sortOrder,
       Filter:'',
-      searchString:search
+      searchString:searchText
     }
-    this.props.getListTours(model);
+    console.log('---model---- ',model);
+    this.props.postListTours(model);
     this.setState({ currentPage: currentPage });
   }
 
@@ -103,7 +108,7 @@ class ToursContainer extends Component {
     sortOrder:sortOrder
   }
   console.log('---STEP2----',model);
-  this.props.getListTours(model);
+   this.props.postListTours(model);
   this.setState({ currentPage: data });
   
   }
@@ -297,6 +302,7 @@ const mapState = state => {
     isListError: get(state, 'tours.list.error'),
     currentPage: get(state, 'tours.list.currentPage'),
     sortOrder: get(state, 'tours.list.sortOrder'),
+    searchText: get(state, 'tours.list.earchText'),
     totalPages: get(state, 'tours.list.totalPages'),
     isAuthenticated: get(state, 'auth.isAuthenticated'),
     roles: get(state, 'auth.user.roles')
@@ -316,6 +322,9 @@ const mapDispatch = (dispatch) => {
     },
     setTypeSort: (typeSort) => {
       dispatch(tourAction.setTypeSort(typeSort))
+    },
+    setSearchText: (searchText) => {
+      dispatch(tourAction.setSearchText(searchText))
     }
   };
 };

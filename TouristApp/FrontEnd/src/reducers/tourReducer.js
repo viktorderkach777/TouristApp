@@ -10,7 +10,8 @@ export const initialState = {
     loading: false,
     totalPages: null,
     currentPage: '1',
-    sortOrder:'name'
+    sortOrder:'name',
+    searchText:''
   },
   deleting: {
     error: false,
@@ -73,6 +74,7 @@ postToursSuccess: (state, action) => {
   newState = update.set(newState, 'list.totalPages', data.totalPages);
   newState = update.set(newState, 'list.currentPage', data.currentPage);
   newState = update.set(newState, 'list.sortOrder', data.sortOrder);
+  newState = update.set(newState, 'list.searchText', '');
   return newState;
 },
 postToursFailed: state => {
@@ -113,7 +115,16 @@ postToursFailed: state => {
         console.log('--typeSort--', typeSort);
         newState = update.set(state, 'list.sortOrder', typeSort);
         return newState;
-      } 
+      }, 
+
+  //------------------SET SearchText --------------------------------------
+        setSearchText: (state, action) => {
+          let newState = state;
+          const SearchText = action.payload;
+          console.log('--SearchText--', SearchText);
+          newState = update.set(state, 'list.searchText', SearchText);
+          return newState;
+        } 
 
 
 
@@ -178,6 +189,12 @@ export const deleteTour = (tourId) => {
 export const setTypeSort = (TypeSort) => {
   return (dispatch) => {
       dispatch(tours.actions.setTypeSort(TypeSort));
+  }
+}
+
+export const setSearchText = (SearchText) => {
+  return (dispatch) => {
+      dispatch(tours.actions.setSearchText(SearchText));
   }
 }
 

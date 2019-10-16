@@ -159,6 +159,8 @@ namespace TouristApp.ViewModels
         public IEnumerable<TourListViewModel> Tours { get; set; }
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; }
+
+        public string sortOrder { get; set; }
         //public SearchCountryViewModel Search { get; set; }
 
     }

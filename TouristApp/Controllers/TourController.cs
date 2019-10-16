@@ -258,7 +258,7 @@ namespace TouristApp.Controllers
                 .Take(pageSize).ToList();
 
             model.Tours = query;
-
+            model.sortOrder = filter.sortOrder;
             int count = _context.Tours.Count();
             model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
             model.CurrentPage = page;

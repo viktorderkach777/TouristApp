@@ -38,6 +38,7 @@ class SortToolbar extends Component {
         const { onSortChanged = f => f } = this.props;
         const { findOrder  } = this.state;
         const { type } = e.target.dataset;
+        console.log('--findOrder,type----', findOrder,type);
         this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type }, () => onSortChanged(type,findOrder));
 
     }
@@ -45,8 +46,10 @@ class SortToolbar extends Component {
     onSearchclick=()=>{
         const { onSortChanged = f => f } = this.props;
         const { findOrder,sortOrder  } = this.state;
-        onSortChanged(sortOrder,findOrder)
-      //  this.sorting();
+        console.log('--findOrder,sortOrder----', findOrder,sortOrder);
+        this.setState({findOrder: '' }, () => onSortChanged(sortOrder,findOrder));
+        
+
     } 
 
     callBackCloseDialog = () => {
