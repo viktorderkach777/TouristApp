@@ -37,7 +37,7 @@ class PaginationBar extends Component {
 
   handleClick = (page, evt) => {
     evt.preventDefault();
-    console.log('---gotopage---', page)
+   // console.log('---gotopage---', page)
     this.gotoPage(page);
   };
 
@@ -45,14 +45,14 @@ class PaginationBar extends Component {
   handleMoveLeft = evt => {
     evt.preventDefault();
     const { pageNeighbours } = this.props;
-    console.log('---LEFT to GO---', this.state.currentPage - pageNeighbours * 2 - 1);
+    //console.log('---LEFT to GO---', this.state.currentPage - pageNeighbours * 2 - 1);
     this.gotoPage(this.state.currentPage - pageNeighbours * 2 - 1);
   };
 
   handleMoveRight = evt => {
     evt.preventDefault();
     const { pageNeighbours } = this.props;
-    console.log('---RIGHT to GO---', this.state.currentPage + pageNeighbours * 2 + 1);
+   // console.log('---RIGHT to GO---', this.state.currentPage + pageNeighbours * 2 + 1);
     this.gotoPage(this.state.currentPage + pageNeighbours * 2 + 1);
   };
 
@@ -101,12 +101,13 @@ class PaginationBar extends Component {
 
   render() {
     const { currentPage } = this.props;
-    console.log('---Pagination props---', this.props);
+   // console.log('---Pagination props---', this.props);
     const pages = this.getPager();
     console.log('pages', pages);
 
     const pageList = (
-      pages.map(page => (
+      (pages.length>0)?
+      (pages.map(page => (
         (page === LEFT_PAGE) ? (
           <PaginationItem key={page}>
             <PaginationLink previous tag="button" onClick={e => this.handleMoveLeft(e)} />
@@ -122,10 +123,11 @@ class PaginationBar extends Component {
                 {page}
               </PaginationLink>
             </PaginationItem>)
-      )));
+      ))):(<h4 > Результат пошуку відсутній</h4>)
+      );
     return (
       <React.Fragment>
-        <Form>
+        <Form >
           <Pagination>
             {pageList}
           </Pagination>

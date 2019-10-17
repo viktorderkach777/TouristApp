@@ -192,7 +192,7 @@ namespace TouristApp.Controllers
 
         [HttpPost("list")]
         public async Task<ActionResult<IEnumerable<ToursViewModel>>> Post([FromBody] ToursListViewModel filter)
-        {
+         {
             int page = filter.CurrentPage;
             int pageSize = 2;
             int pageNo = page - 1;
@@ -253,13 +253,15 @@ namespace TouristApp.Controllers
                     break;
             }
 
+            int count = query.Count();
+
             query = query
                 .Skip(pageNo * pageSize)
                 .Take(pageSize).ToList();
 
             model.Tours = query;
             model.sortOrder = filter.sortOrder;
-            int count = _context.Tours.Count();
+            
             model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
             model.CurrentPage = page;
             return Ok(model);

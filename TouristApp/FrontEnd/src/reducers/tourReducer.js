@@ -11,7 +11,8 @@ export const initialState = {
     totalPages: null,
     currentPage: '1',
     sortOrder:'name',
-    searchText:''
+    searchText:'',
+    filter:null
   },
   deleting: {
     error: false,
@@ -74,7 +75,7 @@ postToursSuccess: (state, action) => {
   newState = update.set(newState, 'list.totalPages', data.totalPages);
   newState = update.set(newState, 'list.currentPage', data.currentPage);
   newState = update.set(newState, 'list.sortOrder', data.sortOrder);
-  newState = update.set(newState, 'list.searchText', '');
+  //newState = update.set(newState, 'list.searchText', '');
   return newState;
 },
 postToursFailed: state => {

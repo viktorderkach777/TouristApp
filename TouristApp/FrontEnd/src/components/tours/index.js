@@ -47,9 +47,9 @@ class ToursContainer extends Component {
       filter:filter,
       searchString:searchText
     }
-    console.log('---STEP1----',model);
+    console.log('---postListTours componentDidMount----',model);
     //this.props.getListTours(model);
-    this.props.postListTours(model);
+    //this.props.postListTours(model);
     this.setState({ currentPage: currentPage,totalPages: totalPages,sortOrder: sortOrder});
   //  this.setState({ });
 
@@ -76,38 +76,62 @@ class ToursContainer extends Component {
     this.toggleDialogDelete();
   }
 
-  onSortChanged = (data,searchText) => {
+  onSortChanged = (data) => {
     console.log('---sort Type ---- ',data);
-    console.log('---search Text ---- ',searchText);
     this.props.setTypeSort(data);
-    if (searchText!=='') this.props.setSearchText(searchText);
-    this.getTour(1,data,searchText);
+    const {searchText}= this.props;
+    const model = {
+      currentPage:1,
+      sortOrder:data,
+      filter:'',
+      searchString:searchText
+    }
+
+    this.props.postListTours(model);
     
   } 
 
-  getTour = (currentPage,sortOrder,searchText) =>{
-    console.log('---sort order from props---- ',sortOrder );
+  onSearchChanged = (searchText) => {
+    console.log('---Search text ---- ',searchText);
+    const { sortOrder } = this.props;
+    if (searchText!=='') this.props.setSearchText(searchText);
     const model = {
-      currentPage:currentPage,
+      currentPage:1,
       sortOrder:sortOrder,
-      Filter:'',
+      filter:'',
       searchString:searchText
     }
-    console.log('---model---- ',model);
     this.props.postListTours(model);
-    this.setState({ currentPage: currentPage });
-  }
+  } 
+
+  
+
+  // getTour = () =>{
+  //   const {currentPage,sortOrder,searchText}= this.props;
+  //  // console.log('---sort order from props---- ',sortOrder );
+  //   const model = {
+  //     currentPage:currentPage,
+  //     sortOrder:sortOrder,
+  //     filter:'',
+  //     searchString:searchText
+  //   }
+  //   console.log('---postListTours getTour----',model);
+  //   this.props.postListTours(model);
+  //   //this.setState({ currentPage: currentPage });
+  // }
 
 
   onPageChanged = data => {
   
-  console.log('---data from pagination',data);
-  const { sortOrder  } = this.props;
+ // console.log('---data from pagination',data);
+  const { sortOrder,searchText,filter } = this.props;
   const model = {
-    currentPage:data,
-    sortOrder:sortOrder
+      currentPage:data,
+      sortOrder:sortOrder,
+      filter:filter ,
+      searchString:searchText
   }
-  console.log('---STEP2----',model);
+  console.log('---postListTours onPageChanged----',model);
    this.props.postListTours(model);
   this.setState({ currentPage: data });
   
@@ -116,8 +140,8 @@ class ToursContainer extends Component {
 
 
   render() {
-    console.log('----State Tours -----', this.state);
-    console.log('----Props Tours-----', this.props);
+   // console.log('----State Tours -----', this.state);
+   // console.log('----Props Tours-----', this.props);
     const {  roles,  isListLoading, totalPages, currentPage } = this.props;
     const {deleteDialog_isOpen,id_delete} =this.state;
 
@@ -282,7 +306,7 @@ class ToursContainer extends Component {
             </div>
             <div className="col-12 col-md-9">
             
-              <SortToolbar  onSortChanged={this.onSortChanged} />
+              <SortToolbar  onSortChanged={this.onSortChanged} onSearchChanged={this.onSearchChanged} />
               {toursList}
                <SpinnerWidget loading={isListLoading} /> 
               <PaginationBar totalPages={totalPages} currentPage={currentPage} pageNeighbours={1} onPageChanged={this.onPageChanged}/>
@@ -302,8 +326,9 @@ const mapState = state => {
     isListError: get(state, 'tours.list.error'),
     currentPage: get(state, 'tours.list.currentPage'),
     sortOrder: get(state, 'tours.list.sortOrder'),
-    searchText: get(state, 'tours.list.earchText'),
+    searchText: get(state, 'tours.list.searchText'),
     totalPages: get(state, 'tours.list.totalPages'),
+
     isAuthenticated: get(state, 'auth.isAuthenticated'),
     roles: get(state, 'auth.user.roles')
   };

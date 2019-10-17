@@ -36,18 +36,17 @@ class SortToolbar extends Component {
 
     sorting = (e) => {
         const { onSortChanged = f => f } = this.props;
-        const { findOrder  } = this.state;
         const { type } = e.target.dataset;
-        console.log('--findOrder,type----', findOrder,type);
-        this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type }, () => onSortChanged(type,findOrder));
+        console.log('--type----',type);
+        this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type }, () => onSortChanged(type));
 
     }
 
     onSearchclick=()=>{
-        const { onSortChanged = f => f } = this.props;
-        const { findOrder,sortOrder  } = this.state;
-        console.log('--findOrder,sortOrder----', findOrder,sortOrder);
-        this.setState({findOrder: '' }, () => onSortChanged(sortOrder,findOrder));
+        const { onSearchChanged = f => f } = this.props;
+        const { findOrder } = this.state;
+        console.log('--findOrder ', findOrder);
+        this.setState({findOrder: '' }, () => onSearchChanged( findOrder));
         
 
     } 
