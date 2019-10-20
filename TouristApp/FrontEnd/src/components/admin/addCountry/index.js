@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
 //import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import Notifications, { notify } from '../../Notifications'
+import { notify } from '../../Notifications'
 //import { connect } from "react-redux";
 //import * as userAction from '../../../reducers/auth';
 //import get from 'lodash.get';
@@ -82,7 +82,7 @@ class CountryAddForm extends Component {
         console.log('----AddCountry---', this.state);
         const form = (
             <React.Fragment>
-                <Notifications />
+                
                 <div className="app flex-row align-items-center">
                     <Container>
                         <Row className="justify-content-center">
@@ -93,7 +93,7 @@ class CountryAddForm extends Component {
                                             <Form onSubmit={this.onSubmitForm}>
                                                 {/* <img src={hotelimg} style={{ height: '100px' }} alt='hotel'></img> */}
                                                 
-                                                <h1> Додати країну</h1>
+                                                <h1> Додати країну </h1>
                                                 <p className="text-muted">Додайте нову країну</p>
                                                 {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 

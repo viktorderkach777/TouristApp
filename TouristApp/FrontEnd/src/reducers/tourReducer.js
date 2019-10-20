@@ -12,7 +12,39 @@ export const initialState = {
     currentPage: '1',
     sortOrder:'name',
     searchText:'',
-    filter:null
+    filters: [
+      {
+          name: 'Країни',
+          filterId:'1',
+          data: [
+              { value: 'Іспанія', id: '1', isChecked: false },
+              { value: 'Франція', id: '2', isChecked: false },
+              { value: 'Єгипет', id: '3', isChecked: false },
+              { value: 'Кіпр', id: '4', isChecked: false }
+          ]
+      },
+      {
+          name: 'Місто відправлення',
+          filterId:'2',
+          data: [
+              { value: 'Київ', id: '5', isChecked: false },
+              { value: 'Львів', id: '6', isChecked: false },
+              { value: 'Одесса', id: '7', isChecked: false }
+          ]
+      },
+      {
+          name: 'Гроші',
+          filterId:'3',
+          data: [
+              { value: 'UA', id: '8', isChecked: false },
+              { value: 'RUS', id: '9', isChecked: false },
+              { value: 'EUR', id: '10', isChecked: false }
+          ]
+      },
+  ]
+
+
+
   },
   deleting: {
     error: false,
