@@ -163,7 +163,15 @@ postToursFailed: state => {
     console.log('--SearchText--', CurrentPage);
     newState = update.set(state, 'list.currentPage', CurrentPage);
     return newState;
-  }       
+  },
+   //------------------SET filters --------------------------------------
+   setFilters: (state, action) => {
+    let newState = state;
+    const filters = action.payload;
+    console.log('--filters--', filters);
+    newState = update.set(state, 'list.filters', filters);
+    return newState;
+  }              
 
   }
 });
@@ -237,3 +245,11 @@ export const setCurrentPage = (currentPage) => {
       dispatch(tours.actions.setCurrentPage(currentPage));
   }
 }
+
+export const setFilters = (filters) => {
+  return (dispatch) => {
+      dispatch(tours.actions.setFilters(filters));
+  }
+}
+
+

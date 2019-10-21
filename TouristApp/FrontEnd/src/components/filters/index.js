@@ -16,8 +16,10 @@ class Filters extends Component {
 
 handleCheckChieldElement =(value)=>{
 
+    const { handleCheckChieldElement = f => f } = this.props;
+    handleCheckChieldElement(value);
     // console.log('---value enter---',value)
-     let filters = this.state.filters;
+    //let filters = this.state.filters;
     // filters.forEach(filter => {
     //     filter.data.forEach(data=>{
     //         if (data.value === value) {
@@ -27,7 +29,7 @@ handleCheckChieldElement =(value)=>{
     //         }
     //     })     
     // })
-     this.setState({ filters: filters })
+    // this.setState({ filters: filters })
 
 }
 

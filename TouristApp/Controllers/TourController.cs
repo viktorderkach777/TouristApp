@@ -192,14 +192,14 @@ namespace TouristApp.Controllers
 
         [HttpPost("list")]
         public async Task<ActionResult<IEnumerable<ToursViewModel>>> Post([FromBody] ToursListViewModel filter)
-         {
+        {
             int page = filter.CurrentPage;
             int pageSize = 2;
             int pageNo = page - 1;
             ToursViewModel model = new ToursViewModel();
 
             var url = _configuration.GetValue<string>("ImagesHotelUrl");
-              
+
             var query = await _context
                 .Tours
                 .Include(s => s.Hotel)
@@ -225,6 +225,25 @@ namespace TouristApp.Controllers
                         f => f.HotelId == u.HotelId).HotelImageUrl,
 
                 }).ToListAsync();
+
+            if (filter.Filters.Count != 0)
+            {
+                List<string> countryFilter = new List<string>();
+                foreach (var item in filter.Filters[0].Data)
+                {
+                    if (item.isChecked)
+                    {
+                        countryFilter.Add(item.Value);
+                    }
+                }
+                if (countryFilter.Count != 0)
+                {
+                    query = query.Where(s => s.Country.Split('|')
+                             .Select(arrayElement => arrayElement.Trim())
+                              .Any(value => countryFilter.Contains(value)))
+                              .ToList();
+                }
+            }
 
             if (!String.IsNullOrEmpty(filter.searchString))
             {
@@ -261,7 +280,7 @@ namespace TouristApp.Controllers
 
             model.Tours = query;
             model.sortOrder = filter.sortOrder;
-            
+
             model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
             model.CurrentPage = page;
             return Ok(model);

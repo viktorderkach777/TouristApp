@@ -18,6 +18,21 @@ namespace TouristApp.ViewModels
         public string Label { get; set; }
     }
 
+    public class FilterItemCheckViewModel
+    {
+        public string Id { get; set; }
+        public string Value { get; set; } 
+        public bool isChecked { get; set; }
+    }
+
+    public class FilterItemViewModel
+    {
+        public string filterId { get; set; }
+        public string Name { get; set; }
+        public List<FilterItemCheckViewModel> Data { get; set; }
+    }
+
+   
 
 
     public class HotelListViewModel
@@ -169,7 +184,7 @@ namespace TouristApp.ViewModels
     {
         public int CurrentPage { get; set; }
         public string sortOrder { get; set; }
-        public string Filter { get; set; }
+        public List<FilterItemViewModel> Filters { get; set; }
         public string searchString { get; set; }
 
     }

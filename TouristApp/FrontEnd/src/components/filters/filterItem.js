@@ -53,13 +53,15 @@ class FilterItem extends Component {
 
         const { handleCheckChieldElement = f => f } = this.props;
         let value = event.target.value;
-        console.log('--value----', event.target.value);
-        let filter = this.state.filter;
-        filter.data.forEach(filter => {
-            if (filter.value === event.target.value)
-                filter.isChecked = event.target.checked
-        })
-        this.setState({ filter: filter }, () => handleCheckChieldElement(value));
+        handleCheckChieldElement(value);
+        // let value = event.target.value;
+        // console.log('--value----', event.target.value);
+        // let filter = this.state.filter;
+        // filter.data.forEach(filter => {
+        //     if (filter.value === event.target.value)
+        //         filter.isChecked = event.target.checked
+        // })
+        // this.setState({ filter: filter }, () => handleCheckChieldElement(value));
     }
 
     render() {

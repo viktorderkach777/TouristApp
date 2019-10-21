@@ -40,12 +40,12 @@ class ToursContainer extends Component {
   }
 
   componentDidMount() {
-    const { currentPage, totalPages,   sortOrder, searchText } = this.props;
+    const { currentPage,filters, totalPages, sortOrder, searchText } = this.props;
     //const { sortOrder  } = this.state;
     const model = {
       currentPage: currentPage,
       sortOrder: sortOrder,
-      filter: '',
+      filters: filters,
       searchString: searchText
     }
     console.log('---postListTours componentDidMount----', model);
@@ -126,11 +126,11 @@ class ToursContainer extends Component {
   onSortChanged = (data) => {
     console.log('---sort Type ---- ', data);
     this.props.setTypeSort(data);
-    const { searchText } = this.props;
+    const { searchText,filters } = this.props;
     const model = {
       currentPage: 1,
       sortOrder: data,
-      filter: '',
+      filters: filters,
       searchString: searchText
     }
 
@@ -138,14 +138,31 @@ class ToursContainer extends Component {
 
   }
 
+  handleCheckChieldElement =(value)=>{
+
+    console.log('---VALUE enter---',value)
+    let filters = this.state.filters;
+    filters.forEach(filter => {
+        filter.data.forEach(data=>{
+            if (data.value === value) {
+                console.log('---isChecked---',data.isChecked )   
+                  data.isChecked = !data.isChecked
+            }
+        })     
+    })
+    this.setState({ filters: filters });
+    this.props.setFilters(this.state.filters);
+
+}
+
   onSearchChanged = (searchText) => {
     console.log('---Search text ---- ', searchText);
-    const { sortOrder } = this.props;
+    const { sortOrder,filters } = this.props;
     this.props.setSearchText(searchText);
     const model = {
       currentPage: 1,
       sortOrder: sortOrder,
-      filter: '',
+      filters: filters,
       searchString: searchText
     }
     this.props.postListTours(model);
@@ -154,17 +171,16 @@ class ToursContainer extends Component {
   onPageChanged = data => {
     this.props.setCurrentPage(data);
     console.log('---data from pagination',data);
-    const { sortOrder, searchText } = this.props;
+    const { sortOrder, searchText,filters } = this.props;
     const model = {
       currentPage: data,
       sortOrder: sortOrder,
-      filter: '',
+      filters: filters,
       searchString: searchText
     }
     console.log('---postListTours onPageChanged----', model);
     this.props.postListTours(model);
     this.setState({ currentPage: data });
-
 
   }
 
@@ -272,7 +288,7 @@ class ToursContainer extends Component {
           <div className="row">
             {deleteDialogContent}
             <div className="col-12 col-md-3">
-              <FilterWidjet filters={this.props.filters} />
+              <FilterWidjet filters={this.props.filters} handleCheckChieldElement={this.handleCheckChieldElement}/>
             </div>
             <div className="col-12 col-md-9">
 
@@ -324,6 +340,9 @@ const mapDispatch = (dispatch) => {
     setCurrentPage: (currentPage) => {
       dispatch(tourAction.setCurrentPage(currentPage))
     },
+    setFilters: (filters) => {
+      dispatch(tourAction.setFilters(filters))
+    }
   };
 };
 
