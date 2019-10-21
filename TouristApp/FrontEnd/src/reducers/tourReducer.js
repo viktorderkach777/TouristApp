@@ -43,8 +43,6 @@ export const initialState = {
       },
   ]
 
-
-
   },
   deleting: {
     error: false,
@@ -88,7 +86,6 @@ export const tours = createSlice({
       newState = update.set(newState, 'list.error', true);
       return newState;
     },
-
 
 //------------------POST LIST TOUR --------------------------------------
 postToursStarted: state => {
@@ -157,12 +154,16 @@ postToursFailed: state => {
           console.log('--SearchText--', SearchText);
           newState = update.set(state, 'list.searchText', SearchText);
           return newState;
-        } 
+        }, 
 
-
-
-
-
+  //------------------SET CurrentPage --------------------------------------
+  setCurrentPage: (state, action) => {
+    let newState = state;
+    const CurrentPage = action.payload;
+    console.log('--SearchText--', CurrentPage);
+    newState = update.set(state, 'list.currentPage', CurrentPage);
+    return newState;
+  }       
 
   }
 });
@@ -231,3 +232,8 @@ export const setSearchText = (SearchText) => {
   }
 }
 
+export const setCurrentPage = (currentPage) => {
+  return (dispatch) => {
+      dispatch(tours.actions.setCurrentPage(currentPage));
+  }
+}

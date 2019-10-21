@@ -40,12 +40,12 @@ class ToursContainer extends Component {
   }
 
   componentDidMount() {
-    const { currentPage, totalPages, filters, sortOrder, searchText } = this.props;
+    const { currentPage, totalPages,   sortOrder, searchText } = this.props;
     //const { sortOrder  } = this.state;
     const model = {
       currentPage: currentPage,
       sortOrder: sortOrder,
-      filter: filters,
+      filter: '',
       searchString: searchText
     }
     console.log('---postListTours componentDidMount----', model);
@@ -55,6 +55,53 @@ class ToursContainer extends Component {
     //  this.setState({ });
 
   }
+
+
+  componentDidUpdate(prevProps) {
+  
+    // if (this.props.sortOrder !== prevProps.sortOrder)
+    // {
+    //   const {searchText } = this.props;
+    //     const model = {
+    //       currentPage: 1,
+    //       sortOrder: prevProps.sortOrder,
+    //       filter: '',
+    //       searchString: searchText
+    //     }
+    //     this.props.postListTours(model);
+    //     console.log('---CHANGE PROPS----', model );
+    // } 
+    // else if (this.props.searchText !== prevProps.searchText)
+    // {
+    //   const {  sortOrder } = this.props;
+    //     const model = {
+    //       currentPage: 1,
+    //       sortOrder: sortOrder,
+    //       filter: '',
+    //       searchString: prevProps.searchText
+    //     }
+    //     this.props.postListTours(model);
+    //     console.log('---CHANGE PROPS----', model );
+    // }
+    // else if (this.props.currentPage !== prevProps.currentPage)
+    // {
+    //   const { searchText, sortOrder } = this.props;
+    //     const model = {
+    //       currentPage: prevProps.currentPage,
+    //       sortOrder: sortOrder,
+    //       filter: '',
+    //       searchString:searchText
+    //     }
+    //     this.props.postListTours(model);
+    //     console.log('---CHANGE PROPS----', model );
+    // }
+  
+          
+          
+    
+  }
+
+
 
   deleteTour = (e, id) => {
 
@@ -94,7 +141,7 @@ class ToursContainer extends Component {
   onSearchChanged = (searchText) => {
     console.log('---Search text ---- ', searchText);
     const { sortOrder } = this.props;
-    if (searchText !== '') this.props.setSearchText(searchText);
+    this.props.setSearchText(searchText);
     const model = {
       currentPage: 1,
       sortOrder: sortOrder,
@@ -105,18 +152,19 @@ class ToursContainer extends Component {
   }
 
   onPageChanged = data => {
-
-    // console.log('---data from pagination',data);
-    const { sortOrder, searchText, filter } = this.props;
+    this.props.setCurrentPage(data);
+    console.log('---data from pagination',data);
+    const { sortOrder, searchText } = this.props;
     const model = {
       currentPage: data,
       sortOrder: sortOrder,
-      filter: filter,
+      filter: '',
       searchString: searchText
     }
     console.log('---postListTours onPageChanged----', model);
     this.props.postListTours(model);
     this.setState({ currentPage: data });
+
 
   }
 
@@ -272,7 +320,10 @@ const mapDispatch = (dispatch) => {
     },
     setSearchText: (searchText) => {
       dispatch(tourAction.setSearchText(searchText))
-    }
+    },
+    setCurrentPage: (currentPage) => {
+      dispatch(tourAction.setCurrentPage(currentPage))
+    },
   };
 };
 
