@@ -155,6 +155,14 @@ class ToursContainer extends Component {
     })
     this.setState({ filters: filters });
     this.props.setFilters(this.state.filters);
+    const { sortOrder, searchText } = this.props;
+    const model = {
+      currentPage: 1,
+      sortOrder: sortOrder,
+      filters: filters,
+      searchString: searchText
+    }
+    this.props.postListTours(model);
 
   }
 
