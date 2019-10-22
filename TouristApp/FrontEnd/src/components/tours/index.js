@@ -27,38 +27,41 @@ class ToursContainer extends Component {
   constructor(props) {
     super(props);
 
+
     //initializing state 
     this.state = {
-      currentPage: !this.props.currentPage ? "" : this.props.currentPage,
+      currentPage: 1,
       totalPages: null,
-      sortOrder: 'name',
       deleteDialog_isOpen: false,
       id_delete: 0,
-      filters: !this.props.filters ? "" : this.props.filters,
+      sortOrder: 'name',
+      filters: null,
       searchText: ''
     };
   }
 
   componentDidMount() {
-    const { currentPage,filters, totalPages, sortOrder, searchText } = this.props;
-    //const { sortOrder  } = this.state;
+    const { currentPage, filters, totalPages, sortOrder, searchText } = this.props;
     const model = {
-      currentPage: currentPage,
+      currentPage: 1,
       sortOrder: sortOrder,
       filters: filters,
       searchString: searchText
     }
-    console.log('---postListTours componentDidMount----', model);
-    //this.props.getListTours(model);
-    //this.props.postListTours(model);
-    this.setState({ currentPage: currentPage, totalPages: totalPages, sortOrder: sortOrder });
-    //  this.setState({ });
+
+    this.props.postListTours(model);
+    this.setState({
+      currentPage: currentPage,
+      totalPages: totalPages,
+      sortOrder: sortOrder,
+      filters:filters
+    });
+
 
   }
 
 
   componentDidUpdate(prevProps) {
-  
     // if (this.props.sortOrder !== prevProps.sortOrder)
     // {
     //   const {searchText } = this.props;
@@ -95,10 +98,10 @@ class ToursContainer extends Component {
     //     this.props.postListTours(model);
     //     console.log('---CHANGE PROPS----', model );
     // }
-  
-          
-          
-    
+
+
+
+
   }
 
 
@@ -126,7 +129,7 @@ class ToursContainer extends Component {
   onSortChanged = (data) => {
     console.log('---sort Type ---- ', data);
     this.props.setTypeSort(data);
-    const { searchText,filters } = this.props;
+    const { searchText, filters } = this.props;
     const model = {
       currentPage: 1,
       sortOrder: data,
@@ -138,26 +141,26 @@ class ToursContainer extends Component {
 
   }
 
-  handleCheckChieldElement =(value)=>{
+  handleCheckChieldElement = (value) => {
 
-    console.log('---VALUE enter---',value)
+    console.log('---VALUE enter---', value)
     let filters = this.state.filters;
     filters.forEach(filter => {
-        filter.data.forEach(data=>{
-            if (data.value === value) {
-                console.log('---isChecked---',data.isChecked )   
-                  data.isChecked = !data.isChecked
-            }
-        })     
+      filter.data.forEach(data => {
+        if (data.value === value) {
+          console.log('---isChecked---', data.isChecked)
+          data.isChecked = !data.isChecked
+        }
+      })
     })
     this.setState({ filters: filters });
     this.props.setFilters(this.state.filters);
 
-}
+  }
 
   onSearchChanged = (searchText) => {
     console.log('---Search text ---- ', searchText);
-    const { sortOrder,filters } = this.props;
+    const { sortOrder, filters } = this.props;
     this.props.setSearchText(searchText);
     const model = {
       currentPage: 1,
@@ -170,8 +173,8 @@ class ToursContainer extends Component {
 
   onPageChanged = data => {
     this.props.setCurrentPage(data);
-    console.log('---data from pagination',data);
-    const { sortOrder, searchText,filters } = this.props;
+    console.log('---data from pagination', data);
+    const { sortOrder, searchText, filters } = this.props;
     const model = {
       currentPage: data,
       sortOrder: sortOrder,
@@ -288,7 +291,7 @@ class ToursContainer extends Component {
           <div className="row">
             {deleteDialogContent}
             <div className="col-12 col-md-3">
-              <FilterWidjet filters={this.props.filters} handleCheckChieldElement={this.handleCheckChieldElement}/>
+              <FilterWidjet filters={this.props.filters} handleCheckChieldElement={this.handleCheckChieldElement} />
             </div>
             <div className="col-12 col-md-9">
 
