@@ -97,7 +97,7 @@ postToursStarted: state => {
 postToursSuccess: (state, action) => {
   let newState = state;
   const data = action.payload.data;
-  console.log("get list", data);
+  //console.log("post list", data);
   newState = update.set(state, 'list.loading', false);
   newState = update.set(newState, 'list.success', true);
   newState = update.set(newState, 'list.data', data.tours);
@@ -144,6 +144,7 @@ postToursFailed: state => {
         const typeSort = action.payload;
         console.log('--typeSort--', typeSort);
         newState = update.set(state, 'list.sortOrder', typeSort);
+        newState = update.set(newState, 'list.currentPage', 1);
         return newState;
       }, 
 
@@ -153,6 +154,7 @@ postToursFailed: state => {
           const SearchText = action.payload;
           console.log('--SearchText--', SearchText);
           newState = update.set(state, 'list.searchText', SearchText);
+          newState = update.set(newState, 'list.currentPage', 1);
           return newState;
         }, 
 
@@ -160,7 +162,7 @@ postToursFailed: state => {
   setCurrentPage: (state, action) => {
     let newState = state;
     const CurrentPage = action.payload;
-    console.log('--SearchText--', CurrentPage);
+    console.log('--CurrentPage--', CurrentPage);
     newState = update.set(state, 'list.currentPage', CurrentPage);
     return newState;
   },
@@ -170,6 +172,7 @@ postToursFailed: state => {
     const filters = action.payload;
     console.log('--filters--', filters);
     newState = update.set(state, 'list.filters', filters);
+    newState = update.set(newState, 'list.currentPage', 1);
     return newState;
   }              
 
@@ -198,7 +201,7 @@ export const postListTours = (model) => {
 
     TourService.postListTours(model)
       .then((response) => {
-        console.log('--success create--', response.data);
+        //console.log('--success create--', response.data);
         dispatch(tours.actions.postToursSuccess(response));
       })
       .catch(() => {

@@ -30,13 +30,16 @@ class ToursContainer extends Component {
 
     //initializing state 
     this.state = {
+      tours: [],
       currentPage: 1,
       totalPages: null,
-      deleteDialog_isOpen: false,
-      id_delete: 0,
       sortOrder: 'name',
       filters: null,
-      searchText: ''
+      searchText: '',
+
+      deleteDialog_isOpen: false,
+      id_delete: 0
+
     };
   }
 
@@ -54,14 +57,40 @@ class ToursContainer extends Component {
       currentPage: currentPage,
       totalPages: totalPages,
       sortOrder: sortOrder,
-      filters:filters
+      filters: filters
     });
 
 
   }
 
+  static getDerivedStateFromProps = (props, state) => {
+ 
+    console.log('---getDerivedStateFromProps---' );
+
+    return {
+      tours: props.list,
+      currentPage: props.currentPage,
+      totalPages: props.totalPages,
+      sortOrder: props.sortOrder,
+      searchText: props.searchText,
+      filters: props.filters
+    };
+  }
+
 
   componentDidUpdate(prevProps) {
+
+    if (this.props.sortOrder !== prevProps.sortOrder ||
+      this.props.currentPage !== prevProps.currentPage ||
+      this.props.totalPages !== prevProps.totalPages ||
+      this.props.searchText !== prevProps.searchText ||
+      this.props.filters !== prevProps.filters 
+      ){
+        this.postListTours();
+
+    }
+
+
     // if (this.props.sortOrder !== prevProps.sortOrder)
     // {
     //   const {searchText } = this.props;
@@ -99,12 +128,7 @@ class ToursContainer extends Component {
     //     console.log('---CHANGE PROPS----', model );
     // }
 
-
-
-
   }
-
-
 
   deleteTour = (e, id) => {
 
@@ -126,18 +150,33 @@ class ToursContainer extends Component {
     this.toggleDialogDelete();
   }
 
-  onSortChanged = (data) => {
-    console.log('---sort Type ---- ', data);
-    this.props.setTypeSort(data);
-    const { searchText, filters } = this.props;
+  postListTours= () =>{
+
+    const { searchText,sortOrder, filters,currentPage } = this.state;
     const model = {
-      currentPage: 1,
-      sortOrder: data,
+      currentPage: currentPage,
+      sortOrder: sortOrder,
       filters: filters,
       searchString: searchText
     }
-
+    
+    console.log('---componentDidUpdate---- ', model);
     this.props.postListTours(model);
+  }
+
+
+  onSortChanged = (data) => {
+    console.log('---sort Type ---- ', data);
+    this.props.setTypeSort(data);
+    // const { searchText, filters } = this.props;
+    // const model = {
+    //   currentPage: 1,
+    //   sortOrder: data,
+    //   filters: filters,
+    //   searchString: searchText
+    // }
+
+    //this.props.postListTours(model);
 
   }
 
@@ -148,13 +187,13 @@ class ToursContainer extends Component {
     filters.forEach(filter => {
       filter.data.forEach(data => {
         if (data.value === value) {
-          console.log('---isChecked---', data.isChecked)
+         // console.log('---isChecked---', data.isChecked)
           data.isChecked = !data.isChecked
         }
       })
     })
-    this.setState({ filters: filters });
-    this.props.setFilters(this.state.filters);
+   // this.setState({ filters: filters });
+    this.props.setFilters(filters);
     const { sortOrder, searchText } = this.props;
     const model = {
       currentPage: 1,
@@ -162,7 +201,7 @@ class ToursContainer extends Component {
       filters: filters,
       searchString: searchText
     }
-    this.props.postListTours(model);
+    //this.props.postListTours(model);
 
   }
 
@@ -176,7 +215,7 @@ class ToursContainer extends Component {
       filters: filters,
       searchString: searchText
     }
-    this.props.postListTours(model);
+    //this.props.postListTours(model);
   }
 
   onPageChanged = data => {
@@ -190,7 +229,7 @@ class ToursContainer extends Component {
       searchString: searchText
     }
     console.log('---postListTours onPageChanged----', model);
-    this.props.postListTours(model);
+   //this.props.postListTours(model);
     this.setState({ currentPage: data });
 
   }

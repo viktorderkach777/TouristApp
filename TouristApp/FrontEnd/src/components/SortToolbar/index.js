@@ -37,7 +37,7 @@ class SortToolbar extends Component {
     sorting = (e) => {
         const { onSortChanged = f => f } = this.props;
         const { type } = e.target.dataset;
-        console.log('--type----',type);
+      //  console.log('--type----',type);
         this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type }, () => onSortChanged(type));
 
     }
@@ -45,7 +45,7 @@ class SortToolbar extends Component {
     onSearchclick=()=>{
         const { onSearchChanged = f => f } = this.props;
         const { findOrder } = this.state;
-        console.log('--findOrder ', findOrder);
+      //  console.log('--findOrder ', findOrder);
         this.setState({findOrder: '' }, () => onSearchChanged( findOrder));
         
 
@@ -65,7 +65,7 @@ class SortToolbar extends Component {
 
 
     render() {
-        console.log('--Sorting state----', this.state);
+      //  console.log('--Sorting state----', this.state);
         const { findOrder } = this.state;
         return (
             <Card className="CardTours" >
