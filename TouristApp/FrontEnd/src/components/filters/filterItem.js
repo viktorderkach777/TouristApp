@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 import { Collapse, Button, CardBody, Card, FormGroup, Label, Input } from 'reactstrap';
 
 const propTypes = {
-    // filterData:PropTypes.oneOfType(
-    //      PropTypes.string,
-    //      PropTypes.string,
-    //      PropTypes.array
-          
 
-    // ),
     filterData:PropTypes.object.isRequired,
     handleCheckChieldElement: PropTypes.func.isRequired
 };
@@ -42,10 +36,6 @@ const FilterHeader = (props) => {
 
 class FilterItem extends Component {
     state = {
-        filter: {
-            name: '',
-            data: []
-        },
         collapse: false
     }
 
@@ -65,14 +55,16 @@ class FilterItem extends Component {
 
     render() {
        // console.log('filterItem.pros:', this.props);
-        const { filter, collapse } = this.state;
+        const { collapse } = this.state;
+        const { filterData } = this.props;
+        let filter=filterData.data;
         return (
             <div>
-                <FilterHeader {...filter} collapse  onClick={this.toggle}/>
+                <FilterHeader {...filterData} collapse  onClick={this.toggle}/>
                  <Collapse isOpen={collapse}>
                     <Card>
                         <CardBody>
-                            {filter.data.map(filterItem =><FilterCheckBox {...filterItem} key={filterItem.id} handleCheckChieldElement={this.handleCheckChieldElement} />)}
+                            {filter.dalength!==0 ? (filter.map(filterItem =><FilterCheckBox {...filterItem} key={filterItem.id} handleCheckChieldElement={this.handleCheckChieldElement}/>)):('')}
                         </CardBody>
                     </Card>
                 </Collapse>
