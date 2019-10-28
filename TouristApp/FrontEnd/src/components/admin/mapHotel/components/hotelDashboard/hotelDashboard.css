@@ -19,23 +19,10 @@
   img.hotel-dashboard-image {
     height: 100px;
     width: auto;
-  }
-
-  /* #hotel-dashboard-listings  { */
-    /* display: block; */
-    /* border-bottom: 1px solid #eee;
-    padding: 10px;
-    text-decoration: none; */
-    /* background-color: #f8f8f8; */
-    /* background-color: aqua; */
-  /* } */
+  } 
 
   .center {
-    margin: 5%;
-    /* position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
+    margin: 5%;    
   }
 
   .hotel-dashboard-right{
@@ -53,6 +40,7 @@
         display: none;
     }
  }
+
  @media (min-width: 576px) and (max-width: 767px){
     .hotel-dashboard-left{
         /* background-color: aqua; */
@@ -77,3 +65,104 @@
         height: calc(100vh - 200px);       
     }
  }
+
+ div.img-hover-zoom{
+  padding: 0px !important;
+  background: deepskyblue;
+}
+
+/* [1] The container */
+.img-hover-zoom {
+/* height: 300px; [1.1] Set it as per your need */
+overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+}
+
+/* [2] Transition property for smooth transformation of images */
+.img-hover-zoom img {
+transition: transform .5s ease;
+cursor: pointer;
+}
+
+/* [3] Finally, transforming the image when container gets hovered */
+.img-hover-zoom:hover img {
+transform: scale(1.4);
+}
+
+.mapboxgl-popup-content {
+  font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+  padding: 0;
+  width: 180px;
+}
+
+.mapboxgl-popup-content-wrapper {
+  padding: 1%;
+}
+
+.mapboxgl-popup-content h3 {   
+  background: deepskyblue;
+  color: #fff;
+  margin: 0;
+  display: block;
+  padding: 10px;
+  /* border-radius: 3px 3px 0 0; */
+  border-radius: 10px 10px 0 0;
+  /* font-weight: 700; */
+  font-size: 14px;
+  margin-top: -15px;
+  text-align: center;
+}
+
+.mapboxgl-popup-content h4 {
+  background: deepskyblue;
+  color: #fff;
+  margin: 0;
+  display: block;
+  padding: 10px;   
+  /* font-weight: 400; */
+  text-align: center;
+  font-size: 14px;
+  border-radius:  0 0 10px 10px;
+}
+
+.mapboxgl-popup-content .stars {
+  background: deepskyblue;
+  color: #fff;
+  margin: 0;
+  display: block;
+  padding: 10px;   
+  /* font-weight: 400; */
+  text-align: center;
+  font-size: 14px;
+  
+}
+
+.mapboxgl-popup-content img {
+  height: 150px;
+  width: auto;
+}  
+
+.mapboxgl-popup-content div {
+  padding: 10px;
+}
+
+.mapboxgl-container .leaflet-marker-icon {
+  cursor: pointer;
+}
+
+.mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+  margin-top: 15px;
+}
+
+.mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+  border-bottom-color: deepskyblue;
+}
+
+
+/* .mapboxgl-popup {
+  padding-bottom: 29px;
+} */
+
+
+.checked {
+  color: orange;
+}  

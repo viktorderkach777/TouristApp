@@ -32,8 +32,11 @@ class HotelDashboard extends Component {
         zoom: 7.5,
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMi0QnVvJROe-0oXg0a29J9mJLk2c9JMnuC3F893xeKMa2R_ou",
         name: 'Hotel Name',
-        email: '',
-        password: '',
+        // email: '',
+        // password: '',
+        country: 'Ukraine',
+        region: 'Rivne',
+        rate: 5,
         errors: {
         },
         done: false,
@@ -113,9 +116,7 @@ class HotelDashboard extends Component {
                 else {
                     this.map.getCanvas().style.cursor = 'grab';
                     placeType = "";
-
                 }
-
             }
         });
 
@@ -139,7 +140,6 @@ class HotelDashboard extends Component {
     }
 
     locations = (hotels) => {
-
         let arr = hotels.features.map((element) => {
             const { id, name, region, country } = element.properties;
             return ({
@@ -147,38 +147,40 @@ class HotelDashboard extends Component {
                 label: name + '/ ' + region + '/ ' + country
             })
         })
-        //console.log('arr', arr);
         return arr;
     }
 
     createMarker() {
-        const { marker, popup } = this.state;
-        const { image, name } = this.state;
+        const { marker, popup, image, name, lng, lat, country, region, rate } = this.state;
 
-        const coordX = this.state.lng;
-        const coordY = this.state.lat;
-        console.log("name create marker", name);       
+        // const descript =
+        //     '<div>' +
+        //     '<h2 style="text-align: center">' + name + '</h2>' +
+        //     '<img class="hotel-dashboard-image" alt="marker" + src="' + image + '"/>'
+        //     + '</div>';
 
-        const descript =
-            '<div>' +
-            '<h2 style="text-align: center">' + name + '</h2>' +
-            '<img class="hotel-dashboard-image" alt="marker" + src="' + image + '"/>'
-            + '</div>';
+            const descript =
+            '<h3 >' + name + '</h2>' +
+            '<div class="img-hover-zoom">'+
+            '<img alt="marker" + src="' + image + '" />' +
+            '</div>' +
+            '<div class="stars" style="padding-bottom: 0px;">' + this.setStars(rate) + '</div>' +
+            '<h4 style="padding-top: 0px;">' + country + ', ' + region + '</h4>';
+
         if (popup) popup.remove();
 
         const newpopup = new mapboxgl.Popup({ offset: [0, -5] })
-            .setLngLat([coordX, coordY])
+            .setLngLat([lng, lat])
             .setHTML(
                 descript
             )
             .addTo(this.map);
 
-
         if (marker) marker.remove();
         const newmarker = new mapboxgl.Marker(this.markerRef, {
             draggable: false,
         })
-            .setLngLat([coordX, coordY])
+            .setLngLat([lng, lat])
             .setPopup(newpopup)
             .addTo(this.map);
 
@@ -188,7 +190,6 @@ class HotelDashboard extends Component {
             popup: newpopup,
             marker: newmarker
         })
-
     }
 
     setStateByErrors = (name, value) => {
@@ -207,7 +208,6 @@ class HotelDashboard extends Component {
                 { [name]: value })
         }
     };
-
 
     handleChange = (e) => {
         this.setStateByErrors(e.target.name, e.target.value);
@@ -230,17 +230,14 @@ class HotelDashboard extends Component {
         });
         //console.log("city", city);
         if (city.length !== 0) {
-            //this.props.fetchTiles(city);
             // console.log("this.props_updateCity", this.props);
             const { dispatch, weatherService } = this.props;
             dispatch(tilesRequested());
             weatherService.getTiles(city)
                 .then((tiles) => {
                     dispatch(tilesLoaded(tiles))
-
                     // console.log("tiles", tiles.cityCoord);
                     const { lat, lon } = tiles.cityCoord;
-
                     this.setState({
                         lat: lat,
                         lng: lon,
@@ -252,7 +249,6 @@ class HotelDashboard extends Component {
                         center: [lon, lat]
                     });
 
-                    // this.map.resize();
                     this.createMarker();
 
                 })
@@ -272,44 +268,38 @@ class HotelDashboard extends Component {
     selectHandleChange = selectedOption => {
         this.setState({ selectedOption });
 
-        // let arr = hotels.features.map((element) => {
-        //     const { id, name, region, country } = element.properties;
-        //     return ({
-        //         value: id,
-        //         label: name + '/ ' + region + '/ ' + country
-        //     })
-        // })
-        const { hotels } = this.props;
-        //const {id, name, image} = hotels.;
         const id = selectedOption.value;
-
+        const { hotels } = this.props;
         const element = hotels.features.filter((el) => el.properties.id === id);
 
-        // const coordX = this.state.lng;
-        // const coordY = this.state.lat;
-
         if (element) {
+            const { image, name, country, region, rate } = element[0].properties
             this.setState({
-                image: element[0].properties.image,
-                name: element[0].properties.name
+                image,
+                name,
+                country,
+                region,
+                rate
             })
-            // this.map.flyTo({
-            //     center: [
-            //         this.state.lng,
-            //         this.state.lat
-            //     ]
-            // });
-            //  const { marker, popup } = this.state;
-
-            // if (popup) popup.remove();
-            // if (marker) marker.remove();
-            //  this.createMarker();
         }
-
-
         console.log(`element:`, element);
         console.log(`Option selected:`, selectedOption);
     };
+
+    setStars(stars) {
+        let nstars = parseInt(stars, 10);
+
+        let text = '';
+        for (let i = 0; i < 5; i++) {
+            if (i <= nstars - 1) {
+                text = text + '<span class="fa fa-star checked"></span>';
+            }
+            else {
+                text = text + '<span class="fa fa-star"></span>';
+            }
+        }
+        return text;
+    }
 
 
     render() {
