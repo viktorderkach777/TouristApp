@@ -153,7 +153,7 @@ namespace TouristApp
                 }
             });
 
-            SeederDB.SeedDataByAS(app.ApplicationServices);
+            SeederDB.SeedDataByAS(app.ApplicationServices, env, this.Configuration);
         }
     }
 }
