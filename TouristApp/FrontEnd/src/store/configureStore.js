@@ -10,10 +10,12 @@ import user from '../reducers/user';
 import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
 import {weatherReducer} from '../components/weather/reducers'
 import {mapReducer} from '../components/map/reducers'
+import { loginReducer } from "../views/Pages/Login/reducer";
 
 export default function configureStore (history, initialState) {
     const reducers = {
       captcha: captchaReducer,
+      login: loginReducer,
       auth:userReducer.reducer,
       userlist: user,
       tours:tours.reducer,
