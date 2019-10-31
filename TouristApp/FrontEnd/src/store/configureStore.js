@@ -1,6 +1,5 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { captchaReducer } from "../components/captcha/reducer";
 import { tours } from "../components/tours/tourReducer";
 import * as RefreshToken from '../components/RefreshToken/reducer';
@@ -11,6 +10,13 @@ import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
 import {weatherReducer} from '../components/weather/reducers'
 import {mapReducer} from '../components/map/reducers'
 import { loginReducer } from "../views/Pages/Login/reducer";
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+//import { createBrowserHistory } from 'history';
+import createHistory from 'history/createHashHistory';
+
+// Create browser history to use in the Redux store
+const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+export const history = createHistory({ basename: baseUrl });
 
 export default function configureStore (history, initialState) {
     const reducers = {
@@ -39,7 +45,7 @@ export default function configureStore (history, initialState) {
 
     const rootReducer = combineReducers({
       ...reducers,
-      routing: routerReducer
+      router: connectRouter(history)
     });
 
     return createStore(

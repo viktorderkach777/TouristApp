@@ -3,6 +3,7 @@ import LoginService from './loginService';
 import isEmpty from 'lodash/isEmpty';
 import setAuthorizationToken from '../../../utils/setAuthorizationToken';
 import jwt from 'jsonwebtoken';
+import { push } from 'connected-react-router';
 
 export const LOGIN_POST_STARTED = "login/LOGIN_POST_STARTED";
 export const LOGIN_POST_SUCCESS = "login/LOGIN_POST_SUCCESS";
@@ -67,7 +68,7 @@ export const loginReducer = (state = initialState, action) => {
     return newState;
 }
 
-export const loginPost = (model, history) => {
+export const loginPost = (model) => {
     return (dispatch) => {
         dispatch(loginActions.started());
         LoginService.login(model)
@@ -75,7 +76,7 @@ export const loginPost = (model, history) => {
                 dispatch(loginActions.success());
                 loginByJWT(response.data, dispatch);   
                 console.log('register');             
-                history.push('/tours');
+                
             }, err=> { throw err; })
             .catch(err=> {
                 dispatch(loginActions.failed(err.response));
@@ -128,6 +129,7 @@ export const loginByJWT = (tokens, dispatch) => {
     localStorage.setItem('refreshToken', refToken);
     setAuthorizationToken(token);
     dispatch(loginActions.setCurrentUser(user));
+    dispatch(push('/tours'));
 }
 
 export const logoutByJWT = (dispatch) => {
