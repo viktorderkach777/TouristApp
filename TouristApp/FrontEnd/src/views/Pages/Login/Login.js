@@ -90,7 +90,8 @@ class Login extends Component {
     console.log('---FormLogin state----', this.state);
     const form = (
       <React.Fragment>
-        {loading && <CentralPageSpinner loading={true}/>}
+        {/* {loading && <CentralPageSpinner loading={true}/>} */}
+        <CentralPageSpinner loading={loading}/>
 
         <div className="app flex-row align-items-center">
           <Container>
