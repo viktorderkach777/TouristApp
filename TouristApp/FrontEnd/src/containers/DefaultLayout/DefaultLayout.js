@@ -5,7 +5,7 @@ import { Container } from 'reactstrap';
 import { connect } from 'react-redux'
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
-import * as userAction from '../../reducers/auth';
+//import * as userAction from '../../reducers/auth';
 
 import {
   AppAside,
@@ -24,6 +24,8 @@ import navigation from '../../_nav';
 // routes config
 import routes from '../../routes/routes';
 
+import { logout } from '../../views/Pages/Login/reducer';
+
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
@@ -35,7 +37,6 @@ class DefaultLayoutContainer extends Component {
   signOut(e) {
     e.preventDefault();
     this.props.logout();
-    this.props.history.push('/login')
   }
 
   render() {
@@ -47,9 +48,13 @@ class DefaultLayoutContainer extends Component {
 
 
     if (isAuthenticated === true) {
-      if (roles === "User") {
-        isAccess = true;
-        //console.log('DefaultLayout access: ', isAccess);
+      for(let i=0;i<roles.length;i++)
+      {
+        if(roles[i]==="User")
+        {
+          isAccess = true;
+          break;
+        }
       }
     }
 
@@ -125,21 +130,16 @@ DefaultLayoutContainer.propTypes =
 
 const mapStateToProps = state => {
   return {
-    auth: get(state, 'auth'),
+    //auth: get(state, 'auth'),
+    auth: get(state, 'login'),
     loading: get(state, 'refreshToken.loading')
     // isAuthenticated: get(state, 'auth.isAuthenticated'),
     // roles: get(state, 'auth.user.roles')
   };
 };
 
-const mapDispatch = dispatch => {
-  return {
-    logout: () =>
-      dispatch(userAction.logout())
 
-  };
-};
 
 const DefaultLayout =
-  connect(mapStateToProps, mapDispatch)(DefaultLayoutContainer);
+  connect(mapStateToProps, {logout})(DefaultLayoutContainer);
 export default DefaultLayout;

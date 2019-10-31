@@ -75,7 +75,7 @@ export const loginPost = (model, history) => {
                 dispatch(loginActions.success());
                 loginByJWT(response.data, dispatch);   
                 console.log('register');             
-                history.push('/register');
+                history.push('/tours');
             }, err=> { throw err; })
             .catch(err=> {
                 dispatch(loginActions.failed(err.response));

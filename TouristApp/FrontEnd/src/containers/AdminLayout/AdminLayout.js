@@ -5,7 +5,7 @@ import { Container } from 'reactstrap';
 import { connect } from 'react-redux'
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
-import * as userAction from '../../reducers/auth';
+import { logout } from '../../views/Pages/Login/reducer';
 import {
   AppAside,
   AppFooter,
@@ -34,7 +34,6 @@ class AdminLayoutContainer extends Component {
   signOut(e) {
     e.preventDefault();
     this.props.logout();
-    this.props.history.push('/login')
   }
 
   render() {
@@ -42,9 +41,13 @@ class AdminLayoutContainer extends Component {
     var isAccess = false;
 
     if (isAuthenticated === true) {
-      if (roles === "Admin") {
-        isAccess = true;
-        console.log('AdminLayout access: ', isAccess);
+      for(let i=0;i<roles.length;i++)
+      {
+        if(roles[i]==="Admin")
+        {
+          isAccess = true;
+          break;
+        }
       }
     }
     const form = (
@@ -115,20 +118,14 @@ AdminLayoutContainer.propTypes =
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: get(state, 'auth.isAuthenticated'),
-    roles: get(state, 'auth.user.roles')
+    isAuthenticated: get(state, 'login.isAuthenticated'),
+    roles: get(state, 'login.user.roles')
   };
 };
 
-const mapDispatch = dispatch => {
-  return {
-     logout: () =>
-          dispatch(userAction.logout())
 
-  };
-};
 
 const AdminLayout =
-  connect(mapStateToProps, mapDispatch)(AdminLayoutContainer);
+  connect(mapStateToProps, {logout})(AdminLayoutContainer);
 
 export default AdminLayout;

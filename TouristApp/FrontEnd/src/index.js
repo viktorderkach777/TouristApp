@@ -11,9 +11,8 @@ import configureStore from './store/configureStore';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import jwt from 'jsonwebtoken';
-import setAuthorizationToken from './utils/setAuthorizationToken';
-import {userReducer} from './reducers/auth';
+// import {userReducer} from './reducers/auth';
+import * as loginActions from './views/Pages/Login/reducer';
 window.devToolsExtension = window.__REDUX_DEVTOOLS_EXTENSION__;
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -23,12 +22,17 @@ const history = createBrowserHistory({ basename: baseUrl });
 const initialState = window.initialReduxState;
 const store = configureStore(history, initialState);
 
+// if(localStorage.jwtToken) {
+//     let token=localStorage.jwtToken;
+//     let user=jwt.decode(token);
+//     setAuthorizationToken(token);
+//     store.dispatch(userReducer.actions.setCurrentUser(user));
+//   }
+
 if(localStorage.jwtToken) {
-    let token=localStorage.jwtToken;
-    let user=jwt.decode(token);
-    setAuthorizationToken(token);
-    store.dispatch(userReducer.actions.setCurrentUser(user));
-  }
+    let data = {token: localStorage.jwtToken, refToken: localStorage.refreshToken};
+    loginActions.loginByJWT(data, store.dispatch);
+}
 
 
 const rootElement = document.getElementById('root');

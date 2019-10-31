@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import * as loginActions from './reducer';
 import get from 'lodash.get';
 //import validateemail from '../../../helpers/validateEmail'; 
+import CentralPageSpinner from '../../../components/CentrPageSpinner';
 
 
 
@@ -30,8 +31,7 @@ class Login extends Component {
     password: '',
     errors: {
     },
-    done: false,
-    isLoading: false
+    loading: false
   };
 
   setStateByErrors = (name, value) => {
@@ -50,21 +50,6 @@ class Login extends Component {
         { [name]: value })
     }
   };
-
-  // getUrlToRedirect = () => {
-  //   let auth = this.props.auth;
-  //   console.log('---getUrlToRedirect----', auth);
-  //   if (auth.isAuthenticated) {
-  //     let roles = auth.user.roles;
-  //     if (roles === "User") {
-  //       this.setState({ profileUrl: "/tours" });
-  //     }
-  //     else if (roles === "Admin") {
-  //       this.setState({ profileUrl: "/admin/dashboard" });
-  //     }
-  //   }
-  //   console.log('---profileUrl----', this.state.profileUrl);
-  // };
 
   handleChange = (e) => {
     this.setStateByErrors(e.target.name, e.target.value);
@@ -86,14 +71,7 @@ class Login extends Component {
         Email: email,
         Password: password
       };
-      //this.setState({ isLoading: true });
-      // console.log('----login---', this.props);
       this.props.login(model, this.props.history);
-      // this.props.login({ Email: email, Password: password })
-      //   .then(
-      //     () =>{this.setState({ done: true },this.getUrlToRedirect());},
-      //     (err) => this.setState({ errors: err.response.data, isLoading: false })
-      //   );
     }
     else {
       this.setState({ errors });
@@ -108,10 +86,12 @@ class Login extends Component {
   }
 
   render() {
-    const { errors, errorsServer, loading, done } = this.state;
+    const { errors, errorsServer, loading } = this.state;
     console.log('---FormLogin state----', this.state);
     const form = (
       <React.Fragment>
+        {loading && <CentralPageSpinner loading={true}/>}
+
         <div className="app flex-row align-items-center">
           <Container>
             <Row className="justify-content-center">
@@ -194,6 +174,7 @@ class Login extends Component {
             </Row>
           </Container>
         </div>
+
       </React.Fragment>
     );
     return (form);
