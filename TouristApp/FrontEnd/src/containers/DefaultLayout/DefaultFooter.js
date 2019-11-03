@@ -50,7 +50,7 @@ class DefaultFooter extends Component {
             <div>
             <span><a href="https://coreui.io">CoreUI</a> &copy; 2019 RIVNE STEP.</span>
 
-            <span className="text-center"> Powered by group students Step Academy  </span>
+            <span className="text-center"> Powered by group of Step Academy students </span>
             </div>
           </div>
         </div>

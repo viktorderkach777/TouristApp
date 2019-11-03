@@ -84,6 +84,22 @@ export const loginPost = (model) => {
     }
 }
 
+export const googleLoginPost = (model) => {
+    return (dispatch) => {
+        dispatch(loginActions.started());
+        LoginService.google_enter(model)
+            .then((response) => {    
+                dispatch(loginActions.success());
+                loginByJWT(response.data, dispatch);   
+                console.log('googleLoginPost');             
+                
+            }, err=> { throw err; })
+            .catch(err=> {
+                dispatch(loginActions.failed(err.response));
+            });
+    }
+}
+
 export const loginActions = {
     started: () => {
         return {

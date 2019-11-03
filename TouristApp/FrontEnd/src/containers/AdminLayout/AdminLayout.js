@@ -113,7 +113,7 @@ AdminLayoutContainer.propTypes =
     logout: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     isAuthenticated:PropTypes.bool.isRequired,
-    roles: PropTypes.string.isRequired
+    roles: PropTypes.array.isRequired
   }
 
 const mapStateToProps = state => {

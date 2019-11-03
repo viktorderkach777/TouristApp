@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Redirect, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
@@ -70,8 +70,8 @@ class Login extends Component {
       const model = {
         Email: email,
         Password: password
-      };
-      this.props.login(model, this.props.history);
+      };      
+      this.props.login(model);
     }
     else {
       this.setState({ errors });
@@ -192,8 +192,8 @@ const mapState = (state) => {
 }
 
 const mapDispatch = {
-  login: (model, history) => {
-    return loginActions.loginPost(model, history);
+  login: (model) => {
+    return loginActions.loginPost(model);
   }
 }
 
