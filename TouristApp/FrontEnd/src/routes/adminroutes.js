@@ -39,7 +39,7 @@ const Widgets = React.lazy(() => import('../views/Widgets/Widgets'));
 const Users = React.lazy(() => import('../views/Users/Users'));
 const User = React.lazy(() => import('../views/Users/User'));
 const SinglePage = React.lazy(() => import('../components/client/tours/singleTour/SingleTour'));
-const Salo = React.lazy(() => import("../components/client/Salo"))
+//const Salo = React.lazy(() => import("../components/client/Salo"))
 const TourWidget = React.lazy(() => import("../components/tours/index"))
 const HotelAddWidget = React.lazy(() => import("../components/admin/addHotel"))
 const RegionAddWidget = React.lazy(() => import("../components/admin/addRegion"))
@@ -51,6 +51,7 @@ const TourAddWidget = React.lazy(() => import("../components/admin/addTour"))
 const PhotoHotelAddWidget = React.lazy(() => import("../components/admin/addPhotoHotel"))
 const KursWidget = React.lazy(() => import("../components/admin/ConverterPrivatBank"))
 const CountryWidget = React.lazy(() => import("../components/admin/country"))
+const MapHotelWidget = React.lazy(() => import("../components/admin/mapHotel"))
 
 const routes=[
   { path: '/admin/', exact: true, name: 'Home' },
@@ -66,7 +67,7 @@ const routes=[
   { path: '/admin/touradd', exact: true, name: 'Тур додавання', component: TourAddWidget},
   { path: '/admin/singlepage', exact: true, name: 'Готель', component: SinglePage },
   { path: '/admin/tours', exact: true, name: 'Тури', component: TourWidget },
-  { path: "/admin/ss", exact: true, name: "ss", component: Salo },
+  //{ path: "/admin/ss", exact: true, name: "ss", component: Salo },
   { path: '/admin/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/admin/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/admin/theme/colors', name: 'Colors', component: Colors },
