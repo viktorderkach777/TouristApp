@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using TouristApp.DAL.Entities;
+using TouristApp.Helpers;
 using TouristApp.ViewModels;
 
 namespace TouristApp.Controllers
@@ -190,6 +191,97 @@ namespace TouristApp.Controllers
             return Ok(model);
         }
 
+
+
+        private List<FNameViewModel> GetListFilters(EFContext context)
+        {
+            var queryName = from f in context.FilterNames.AsQueryable()
+                            select f;
+            var queryGroup = from g in context.FilterNameGroups.AsQueryable()
+                             select g;
+
+            //Отримуємо загальну множину значень
+            var query = from u in queryName
+                        join g in queryGroup on u.Id equals g.FilterNameId into ua
+                        from aEmp in ua.DefaultIfEmpty()
+                        select new
+                        {
+                            FNameId = u.Id,
+                            FName = u.Name,
+                            FValueId = aEmp != null ? aEmp.FilterValueId : "0",
+                            FValue = aEmp != null ? aEmp.FilterValueOf.Name : null,
+                        };
+
+            //Групуємо по іменам і сортуємо по спаданню імен
+            var groupNames = (from f in query
+                              group f by new
+                              {
+                                  Id = f.FNameId,
+                                  Name = f.FName
+                              } into g
+                              //orderby g.Key.Name
+                              select g).OrderByDescending(g => g.Key.Name);
+
+            //По групах отримуємо
+            var result = from fName in groupNames
+                         select
+                         new FNameViewModel
+                         {
+                             Id = fName.Key.Id,
+                             Name = fName.Key.Name,
+                             Children = (from v in fName
+                                         group v by new FValueViewModel
+                                         {
+                                             Id = v.FValueId,
+                                             Name = v.FValue
+                                         } into g
+                                         select g.Key)
+                                         .OrderBy(l => l.Name).ToList()
+                         };
+
+            return result.ToList();
+        }
+
+        private List<ToursViewModel> GetToursByFilter(string[] values, List<FNameViewModel> filtersList)
+        {
+            string[] filterValueSearchList = values;
+            var query = _context
+                .Tours
+                .Include(f => f.Filtres)
+                .AsQueryable();
+            foreach (var fName in filtersList)
+            {
+                int count = 0; //Кількість співпадінь у даній групі фільтрів
+                var predicate = PredicateBuilder.False<Tours>();
+                foreach (var fValue in fName.Children)
+                {
+                    for (int i = 0; i < filterValueSearchList.Length; i++)
+                    {
+                        var idV = fValue.Id;
+                        if (filterValueSearchList[i] == idV)
+                        {
+                            predicate = predicate
+                                .Or(p => p.Filtres
+                                    .Any(f => f.FilterValueId == idV));
+                            count++;
+                        }
+                    }
+                }
+                if (count != 0)
+                    query = query.Where(predicate);
+            }
+            var listProductSearch = query.Select(p => new ToursViewModel
+            {
+                //Id = p.Id,
+                //Price = p.Price
+                CurrentPage=10
+            }).ToList();
+            return listProductSearch;
+
+            //return null;
+        }
+
+        //version 1
         [HttpPost("list")]
         public async Task<ActionResult<IEnumerable<ToursViewModel>>> Post([FromBody] ToursListViewModel filter)
         {
@@ -259,7 +351,6 @@ namespace TouristApp.Controllers
                 case "name_desc":
                     query = query.OrderByDescending(c => c.Name).ToList();
                     break;
-
                 case "rate":
                     query = query.OrderBy(c => c.Rate).ToList();
                     break;
@@ -285,6 +376,106 @@ namespace TouristApp.Controllers
             model.CurrentPage = page;
             return Ok(model);
         }
+
+
+        //version 2
+        //[HttpPost("list")]
+        //public async Task<ActionResult<List<ToursViewModel>>> Post([FromBody] ToursListViewModel parameters)
+        //{
+        //    int page = parameters.CurrentPage;
+        //    int pageSize = 2;
+        //    int pageNo = page - 1;
+        //    ToursViewModel model = new ToursViewModel();
+
+        //    var url = _configuration.GetValue<string>("ImagesHotelUrl");
+
+        //    var query = _context
+        //        .Tours
+        //        .Include(s => s.Hotel)
+        //            .ThenInclude(hotel => hotel.Name)
+        //        .Include(d => d.Hotel.Region)
+        //            .ThenInclude(region => region.Name)
+        //        .Include(f => f.Hotel.Region.Country)
+        //            .ThenInclude(country => country.Name)
+        //        .Include(s => s.Hotel.HotelImages)
+        //        .Include(z => z.CityDeparture)
+        //        .AsQueryable();
+
+        //    //if (parameters.Filters.Count != 0)
+        //    //{
+        //    //    List<string> countryFilter = new List<string>();
+        //    //    foreach (var item in parameters.Filters[0].Data)
+        //    //    {
+        //    //        if (item.isChecked)
+        //    //        {
+        //    //            countryFilter.Add(item.Value);
+        //    //        }
+        //    //    }
+        //    //    if (countryFilter.Count != 0)
+        //    //    {
+        //    //        query = query.Where(s => s.Hotel.Region.Country.Name.Split('|')
+        //    //                 .Select(arrayElement => arrayElement.Trim())
+        //    //                  .Any(value => countryFilter.Contains(value)));
+        //    //    }
+        //    //}
+
+        //    if (!String.IsNullOrEmpty(parameters.searchString))
+        //    {
+        //        query = query.Where(s => s.Hotel.Name.Contains(parameters.searchString)
+        //                               || s.Hotel.Region.Name.Contains(parameters.searchString));
+        //    }
+
+        //    switch (parameters.sortOrder)
+        //    {
+        //        case "name":
+        //            query = query.OrderBy(c => c.Hotel.Name);
+        //            break;
+        //        case "name_desc":
+        //            query = query.OrderByDescending(c => c.Hotel.Name);
+        //            break;
+
+        //        case "rate":
+        //            query = query.OrderBy(c => c.Hotel.Rate);
+        //            break;
+        //        case "rate_desc":
+        //            query = query.OrderByDescending(c => c.Hotel.Rate);
+        //            break;
+
+        //        default:
+        //            query = query.OrderBy(c => c.Hotel.Name);
+        //            break;
+        //    }
+
+        //    int count = query.Count();
+
+        //    var result =query.Select(u => new TourListViewModel
+        //        {
+        //            Id = u.Id,
+        //            СityDeparture = "Київ",
+        //            Name = u.Hotel.Name,
+        //            Region = u.Hotel.Region.Name,
+        //            Country = u.Hotel.Region.Country.Name,
+        //            Description = u.Hotel.Description,
+        //            Price = u.Price * u.DaysCount,
+        //            Rate = u.Hotel.Rate,
+        //            Class = u.Hotel.Class,
+        //            FromData = u.FromData,
+        //            Date = u.FromData.ToString().Substring(0, 10),
+        //            DaysCount = u.DaysCount,
+        //            ImagePath = url + "/1200_" + u.Hotel.HotelImages.FirstOrDefault(
+        //                f => f.HotelId == u.HotelId).HotelImageUrl,
+        //        })
+        //        .Skip(pageNo * pageSize)
+        //        .Take(pageSize).ToList();
+
+        //    model.Tours = result;
+        //    model.sortOrder = parameters.sortOrder;
+
+        //    model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
+        //    model.CurrentPage = page;
+        //    return Ok(model);
+        //}
+
 
 
         [HttpGet("images/{id}")]
@@ -348,11 +539,6 @@ namespace TouristApp.Controllers
             return tour;
         }
 
-
-
-
-
-
         // DELETE: api/Tour/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTours([FromRoute] string id)
@@ -378,5 +564,8 @@ namespace TouristApp.Controllers
         {
             return _context.Tours.Any(e => e.Id == id);
         }
+
+
+
     }
 }

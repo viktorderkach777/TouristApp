@@ -171,7 +171,7 @@ namespace TouristApp.ViewModels
 
     public class ToursViewModel
     {
-        public IEnumerable<TourListViewModel> Tours { get; set; }
+        public List<TourListViewModel> Tours { get; set; }
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; }
 
