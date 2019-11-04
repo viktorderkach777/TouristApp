@@ -10,8 +10,7 @@ using System.Net.Http;
 using TouristApp.Domain.Models.FacebookModels;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
+
 
 namespace TouristApp.Controllers
 {
@@ -68,7 +67,7 @@ namespace TouristApp.Controllers
 
             if (user == null)
             {
-                string path = _fileService.UploadFacebookImage(userInfo.Picture.Data.Url);
+                string path = _fileService.UploadAccountImage(userInfo.Picture.Data.Url);
 
                 user = new DbUser
                 {
@@ -98,17 +97,12 @@ namespace TouristApp.Controllers
 
                 if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
 
-            }
+            }           
             else
-            {               
-                user = await _userManager.FindByEmailAsync(userInfo.Email);
-
-                if (user == null)
-                {                    
-                    return BadRequest(new { invalid = "Failed to create local user account." });
-                }
+            {
+                _fileService.UploadAccountImageIfNotExists(user, userInfo.Picture.Data.Url);
             }
-            
+
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(

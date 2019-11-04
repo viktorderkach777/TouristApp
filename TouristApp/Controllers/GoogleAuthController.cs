@@ -8,6 +8,7 @@ using TouristApp.DAL.Entities;
 using TouristApp.Domain.Interfaces;
 using Google.Apis.Auth;
 
+
 namespace TouristApp.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -17,7 +18,8 @@ namespace TouristApp.Controllers
         readonly RoleManager<DbRole> _roleManager;
         readonly SignInManager<DbUser> _signInManager;    
         readonly IFileService _fileService;
-        readonly IJWTTokenService _jWTTokenService;        
+        readonly IJWTTokenService _jWTTokenService;
+       
 
         public GoogleAuthController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
@@ -29,7 +31,8 @@ namespace TouristApp.Controllers
             _signInManager = signInManager;
             _fileService = fileService;                           
             _roleManager = roleManager;
-            _jWTTokenService = jWTTokenService;           
+            _jWTTokenService = jWTTokenService;
+          
         }
 
         // POST api/googleauth/google
@@ -42,7 +45,7 @@ namespace TouristApp.Controllers
 
             if (user == null)
             {
-                string path = _fileService.UploadFacebookImage(userInfo.Picture);
+                string path = _fileService.UploadAccountImage(userInfo.Picture);
 
                 user = new DbUser
                 {
@@ -71,6 +74,10 @@ namespace TouristApp.Controllers
                 result = _userManager.AddToRoleAsync(user, roleName).Result;               
 
                 if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
+            }
+            else
+            {
+                _fileService.UploadAccountImageIfNotExists(user, userInfo.Picture);
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);

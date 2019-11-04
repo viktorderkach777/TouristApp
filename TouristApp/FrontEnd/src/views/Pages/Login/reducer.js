@@ -100,6 +100,22 @@ export const googleLoginPost = (model) => {
     }
 }
 
+export const facebookLoginPost = (model) => {
+    return (dispatch) => {
+        dispatch(loginActions.started());
+        LoginService.facebook_enter(model)
+            .then((response) => {    
+                dispatch(loginActions.success());
+                loginByJWT(response.data, dispatch);   
+                console.log('facebookLoginPost');             
+                
+            }, err=> { throw err; })
+            .catch(err=> {
+                dispatch(loginActions.failed(err.response));
+            });
+    }
+}
+
 export const loginActions = {
     started: () => {
         return {
