@@ -1,0 +1,27 @@
+.spinnermodal {
+    /* background-color: rgba(11, 229, 236, 0.822); */
+    background-color: rgba(246, 248, 246, 0.722);
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000000;
+    }
+    .spinnermodal.open {
+    display: block;
+    }
+    
+    .spinnermodal .position-center {
+    position: fixed;
+    /* background-color: #fff; */ 
+    width: 175px; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    }
+    .spinnermodal .position-center i {
+    font-size: 150px;
+    color:dimgray;
+    }

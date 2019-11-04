@@ -1,35 +1,61 @@
-﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
-import * as Counter from './Counter';
-import * as WeatherForecasts from './WeatherForecasts';
+import { captchaReducer } from "../components/captcha/reducer";
+import { tours } from "../reducers/tourReducer";
+import { countries } from "../reducers/countryReducer";
+import * as RefreshToken from '../components/RefreshToken/reducer';
 
-export default function configureStore(history, initialState) {
-  const reducers = {
-    counter: Counter.reducer,
-    weatherForecasts: WeatherForecasts.reducer
-  };
+import {userReducer} from '../reducers/auth';
+import user from '../reducers/user';
 
-  const middleware = [
-    thunk,
-    routerMiddleware(history)
-  ];
+import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
+import {weatherReducer} from '../components/weather/reducers'
+import {mapReducer} from '../components/map/reducers'
+import { loginReducer } from "../views/Pages/Login/reducer";
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+//import { createBrowserHistory } from 'history';
+//import createHistory from 'history/createHashHistory';
+import * as createHistory from "history";
 
-  // In development, use the browser's Redux dev tools extension if installed
-  const enhancers = [];
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
-    enhancers.push(window.devToolsExtension());
+// Create browser history to use in the Redux store
+const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+export const history = createHistory.createHashHistory({ basename: baseUrl });
+//export const history = createHistory({ basename: baseUrl });
+
+export default function configureStore (history, initialState) {
+    const reducers = {
+      captcha: captchaReducer,
+      login: loginReducer,
+      auth:userReducer.reducer,
+      userlist: user,
+      tours:tours.reducer,
+      countries:countries.reducer,
+      refreshToken: RefreshToken.refreshReducer,
+      weather:weatherReducer,
+      map:mapReducer
+    };
+
+    const middleware = [
+      refreshTokenMiddleware(),
+      thunk,
+      routerMiddleware(history)
+    ];
+
+    // In development, use the browser's Redux dev tools extension if installed
+    const enhancers = [];
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
+      enhancers.push(window.devToolsExtension());
+    }
+
+    const rootReducer = combineReducers({
+      ...reducers,
+      router: connectRouter(history)
+    });
+
+    return createStore(
+      rootReducer,
+      initialState,
+      compose(applyMiddleware(...middleware), ...enhancers)
+    );
   }
-
-  const rootReducer = combineReducers({
-    ...reducers,
-    routing: routerReducer
-  });
-
-  return createStore(
-    rootReducer,
-    initialState,
-    compose(applyMiddleware(...middleware), ...enhancers)
-  );
-}
