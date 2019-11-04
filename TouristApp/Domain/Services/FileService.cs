@@ -8,6 +8,7 @@ using TouristApp.Helpers;
 using System.Drawing.Imaging;
 using System.Net;
 using TouristApp.DAL.Entities;
+using System.Collections.Generic;
 
 namespace TouristApp.Domain.Services
 {
@@ -27,6 +28,10 @@ namespace TouristApp.Domain.Services
             _context = context;
             _fileDestDir = _env.ContentRootPath + _configuration.GetValue<string>(USER_IMAGE_PATH);
         }
+
+        
+
+
 
         public string UploadImage(string base64)
         {           

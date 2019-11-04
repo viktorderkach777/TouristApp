@@ -22,56 +22,98 @@ export default {
       name: 'Додавання',
       url: '/base',
       icon: 'icon-plus',
-      children: [
-        {
-          name: 'Додати готель',
-          url: '/admin/hoteladd',
-          icon: 'icon-pencil',
-        },
-        {
-          name: 'Додати фото готеля',
-          url: '/admin/hoteladd',
-          icon: 'icon-pencil',
-        },
-        {
-          name: 'Додати регіон',
-          url: '/admin/regionadd',
-          icon: 'icon-pencil',
-        },
-        {
-          name: 'Додати тур',
-          url: '/admin/hoteladd',
-          icon: 'icon-pencil',
-        },
-        {
-          name: 'Додати країну',
-          url: '/admin/countryadd',
-          icon: 'icon-pencil',
-        },
-      ],
+      children: [  
+    {
+      name: 'Додати готель',
+      url: '/admin/hoteladd',
+      icon: 'icon-pencil',
     },
     {
-      name: 'Видалення',
-      url: '/base',
-      icon: 'icon-minus',
-      children: [
-        {
-          name: 'Видалити готель',
-          url: '/admin/hoteladd',
-          icon: 'icon-pencil',
-        },
-        {
-          name: 'Видалити тур',
-          url: '/admin/hoteladd',
-          icon: 'icon-pencil',
-        },
-        {
-          name: 'Видалити країну',
-          url: '/admin/hoteladd',
-          icon: 'icon-pencil',
-        },
-      ],
+      name: 'Додати фото готеля',
+      url: '/admin/photohoteladd',
+      icon: 'icon-pencil',
     },
+    {
+      name: 'Додати регіон',
+      url: '/admin/regionadd',
+      icon: 'icon-pencil',
+    },
+    {
+      name: 'Додати тур',
+      url: '/admin/touradd',
+      icon: 'icon-pencil',
+    },
+    {
+      name: 'Додати країну',
+      url: '/admin/countryadd',
+      icon: 'icon-pencil',
+    },
+    {
+    name: 'Країни',
+    url: '/admin/countrymanager',
+    icon: 'icon-pencil',
+  },
+
+
+    
+  ],
+},
+{
+  name: 'Видалення',
+  url: '/base',
+  icon: 'icon-minus',
+  children: [  
+{
+  name: 'Видалити готель',
+  url: '/admin/hoteladd',
+  icon: 'icon-pencil',
+},
+{
+  name: 'Видалити країну',
+  url: '/admin/countrydel',
+  icon: 'icon-pencil',
+},
+{
+  name: 'Видалити регіон',
+  url: '/admin/regiondel',
+  icon: 'icon-pencil',
+},
+],
+},
+{
+  name: 'Редагування',
+  url: '/base',
+  icon: 'icon-pencil',
+  children: [  
+{
+  name: 'Редагувати готель',
+  url: '/admin/hoteladd',
+  icon: 'icon-pencil',
+},
+{
+  name: 'Редагувати тур',
+  url: '/admin/hoteladd',
+  icon: 'icon-pencil',
+},
+{
+  name: 'Редагувати країну',
+  url: '/admin/countryedit',
+  icon: 'icon-pencil',
+},
+],
+},
+{
+  name: 'Приватбанк',
+  url: '/base',
+  icon: 'icon-pencil',
+  children: [  
+{
+  name: 'Курси валют',
+  url: '/admin/kurs',
+  icon: 'icon-pencil',
+},
+],
+},
     {
       name: 'Карти',
       url: '/base',

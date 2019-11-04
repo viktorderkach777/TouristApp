@@ -119,6 +119,13 @@ namespace TouristApp
                 FileProvider = new PhysicalFileProvider(pathRoot),
                 RequestPath = new PathString("/" + Configuration.GetValue<string>("ImagesUrl"))
             });
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(pathRoot),
+                RequestPath = new PathString("/" + Configuration.GetValue<string>("ImagesHotelUrl"))
+            });
+
             #endregion;
 
             app.UseStaticFiles(new StaticFileOptions()
@@ -127,6 +134,7 @@ namespace TouristApp
                 RequestPath = new PathString("/UserImages")
             });
 
+          
 
             app.UseMvc(routes =>
             {
@@ -145,7 +153,7 @@ namespace TouristApp
                 }
             });
 
-            SeederDB.SeedDataByAS(app.ApplicationServices);
+            SeederDB.SeedDataByAS(app.ApplicationServices, env, this.Configuration);
         }
     }
 }

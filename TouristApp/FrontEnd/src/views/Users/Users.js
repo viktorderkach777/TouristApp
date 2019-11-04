@@ -89,8 +89,8 @@ UsersContainer.propTypes = {
 const mapState = state => {
   return {
     users: get(state, 'userlist.list'),
-    // isListLoading: get(state, 'tours.list.loading'),
-    //   isListError: get(state, 'tours.list.error'),
+    isListUsersLoading: get(state, 'userlist.loading'),
+    isListUsersError: get(state, 'userlist.error'),
 
   };
 };

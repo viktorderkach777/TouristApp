@@ -275,6 +275,64 @@ namespace TouristApp.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("TouristApp.DAL.Entities.Filter", b =>
+                {
+                    b.Property<string>("TourId");
+
+                    b.Property<string>("FilterValueId");
+
+                    b.Property<string>("FilterNameId");
+
+                    b.HasKey("TourId", "FilterValueId", "FilterNameId");
+
+                    b.HasAlternateKey("FilterNameId", "FilterValueId", "TourId");
+
+                    b.HasIndex("FilterValueId");
+
+                    b.ToTable("tblFilters");
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.FilterName", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblFilterNames");
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.FilterNameGroup", b =>
+                {
+                    b.Property<string>("FilterValueId");
+
+                    b.Property<string>("FilterNameId");
+
+                    b.HasKey("FilterValueId", "FilterNameId");
+
+                    b.HasAlternateKey("FilterNameId", "FilterValueId");
+
+                    b.ToTable("tblFilterNameGroups");
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.FilterValue", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tblFilterValues");
+                });
+
             modelBuilder.Entity("TouristApp.DAL.Entities.HotelImages", b =>
                 {
                     b.Property<string>("Id")
@@ -499,6 +557,37 @@ namespace TouristApp.Migrations
                     b.HasOne("TouristApp.DAL.Entities.DbUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.Filter", b =>
+                {
+                    b.HasOne("TouristApp.DAL.Entities.FilterName", "FilterNameOf")
+                        .WithMany("Filtres")
+                        .HasForeignKey("FilterNameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TouristApp.DAL.Entities.FilterValue", "FilterValueOf")
+                        .WithMany("Filtres")
+                        .HasForeignKey("FilterValueId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TouristApp.DAL.Entities.Tours", "TourOf")
+                        .WithMany("Filtres")
+                        .HasForeignKey("TourId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.FilterNameGroup", b =>
+                {
+                    b.HasOne("TouristApp.DAL.Entities.FilterName", "FilterNameOf")
+                        .WithMany("FilterNameGroups")
+                        .HasForeignKey("FilterNameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TouristApp.DAL.Entities.FilterValue", "FilterValueOf")
+                        .WithMany("FilterNameGroups")
+                        .HasForeignKey("FilterValueId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

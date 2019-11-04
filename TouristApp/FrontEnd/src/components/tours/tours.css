@@ -47,9 +47,9 @@
     }
 
     .CardImg {
-        
-        border-radius:10px;
-        margin:15px 5px 0px 15px;
+        /* width: 150px; */
+        border-radius:10px ;
+        /* padding: 5px; */
     }
     .iconColor
     {
@@ -69,6 +69,14 @@
     .Heart{
         position:absolute;
         top:25px;
+        right: 20px;
+        color:#FFF;
+        
+    }
+
+    .DeleteTour{
+        position:absolute;
+        top:5px;
         right: 20px;
         color:#FFF;
         
@@ -113,3 +121,4 @@
         display: block;
     }
 
+    @import "~react-image-gallery/styles/css/image-gallery.css";

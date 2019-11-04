@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 //import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
-import PropTypes from 'prop-types';
+
 import classnames from 'classnames';
-import { connect } from "react-redux";
-import * as userAction from '../../../reducers/auth';
-import get from 'lodash.get';
-//import validateemail from '../../../helpers/validateEmail'; 
+
+
 import { Redirect } from "react-router";
-import axios from 'axios';
-import { serverUrl } from '../../../config';
 import hotelimg from '../addHotel/hotel.png';
+import  AdminService from '../AdminService'
+
 const iconsColor = {
   backgroundColor: '#00aced',
   color: '#fff',
@@ -19,7 +17,6 @@ const iconsColor = {
 
 class HotelAddForm extends Component {
   
-
     state = {
       countries: [
         {
@@ -35,16 +32,14 @@ class HotelAddForm extends Component {
          selectedClass:'2',
       hotelname: '',
       description:'',
+      countroom:'',
       price: '',
-      profileUrl:'',
       errors: {
       },
       done: false,
       isLoading: false
     };
 
- 
-  
 
   setStateByErrors = (name, value) => {
     if (!!this.state.errors[name]) {
@@ -63,60 +58,75 @@ class HotelAddForm extends Component {
     }
   };
 
- 
+
 
   componentDidMount() {
     console.log('---componentDiDMount----');
-    axios.get(`${serverUrl}api/Hotel/countries`)
+    AdminService.getCountries()
       .then(res => {
         const countries = res.data;
         this.setState({ countries });
       })
-     .catch(() => {console.log('--failed--'); });
+    .catch(() => {console.log('--failed--'); });
     }
 
   handleChange = (e) => {
     this.setStateByErrors(e.target.name, e.target.value);
   };
+
   handleChangeSelect = (e) => {
-  
+   
     this.setStateByErrors(e.target.name, e.target.value);
     console.log('--region id--', e.target.value);
-    axios.get(`${serverUrl}api/Hotel/regions/`+e.target.value)
+   
+    //axios.get(`${serverUrl}api/Hotel/regions/`+e.target.value)
+    AdminService.getRegiones(e.target.value)
     .then(res => {
       const regions = res.data;
       this.setState({ regions, regionsLoad:true });
-     
+    
     })
-   .catch(() => {console.log('--failed--'); });
+  .catch(() => {console.log('--failed--'); });
   };
 
 
   onSubmitForm = (e) => {
     e.preventDefault();
     let errors = {};
-    console.log('submit');
-    //if (!validateemail(this.state.email)) errors.email = "Enter valid email"
-    if (this.state.email === '') errors.email = "Can't be empty!"
-    if (this.state.password === '') errors.password = "Can't be empty!"
+    console.log('submit hotel');
+    
+    if (this.state.hotelname === '') errors.hotelname = "Can't be empty!"
+    if (this.state.description === '') errors.description = "Can't be empty!"
+    if (this.state.price === '') errors.price = "Can't be empty!"
+    if (this.state.selectedCountry === '') errors.selectedCountry = "Can't be empty!"
+    if (this.state.selectedRegion === '') errors.selectedRegion = "Can't be empty!"
+    if (this.state.selectedClass === '') errors.selectedClass = "Can't be empty!"
 
     const isValid = Object.keys(errors).length === 0
     if (isValid)
     {
-      const { email, password } = this.state;
-      console.log('validform',email, password);
+      const { selectedRegion,countroom,price, hotelname, description,selectedClass } = this.state;
+      const model = {
+        name: hotelname,
+        description:description,
+        class:selectedClass,
+        price:price,
+        RoomsCount:countroom,
+        RegionId:selectedRegion
+    };
+      console.log('validform addhotel', model);
+     
       this.setState({ isLoading: true });
-      console.log('----login---', this.props);
-      this.props.login({ Email: email, Password: password })
-        .then(
-          () =>{this.setState({ done: true })},
+      AdminService.addHotel(model)
+      .then(
+          () => { this.setState({ done: true, isLoading: false}, )},
           (err) => this.setState({ errors: err.response.data, isLoading: false })
-        );
-    }
-    else 
-    {
-      this.setState({ errors });
-    }
+      )
+      .catch(() => { console.log('--failed--'); });
+}
+else {
+  this.setState({ errors });
+}
   };
 
   render() {
@@ -148,7 +158,7 @@ class HotelAddForm extends Component {
                               id="selectedCountry" 
                               value={this.state.selectedCountry}
                               onChange={this.handleChangeSelect}>
-                          {countries.map(item => <option  key={item.id} value={item.id} >{item.name}</option>)} 
+                          {countries.map(item => <option  key={item.value} value={item.value} >{item.label}</option>)} 
                              </Input>
                    </InputGroup>
 
@@ -235,7 +245,7 @@ class HotelAddForm extends Component {
                           className={classnames('form-control', { 'is-invalid': !!errors.countroom})}
                           id="countroom"
                           name="countroom"
-                          value={this.state.pcountroom}
+                          value={this.state.countroom}
                           onChange={this.handleChange}
                           />
                          
@@ -284,29 +294,10 @@ class HotelAddForm extends Component {
       </div>
       </React.Fragment>
       );
-      return ( done ? <Redirect to= 'a'/> : form );
+      return ( done ? <Redirect to= '/admin/'/> : form );
   }
 }
 
-HotelAddForm.propTypes =
-  {
-    login: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
-  }
 
-  const mapState = state => {
-    return {
-        auth: get(state, 'auth'),
-    };
-  };
-  
-  const mapDispatch = dispatch => {
-    return {
-        login: (model) =>
-            dispatch(userAction.login(model))
-
-    };
-};
-  const HotelAdd = connect(mapState , mapDispatch)(HotelAddForm);
+  const HotelAdd = HotelAddForm;
   export default HotelAdd;

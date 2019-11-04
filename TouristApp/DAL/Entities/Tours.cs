@@ -41,5 +41,7 @@ namespace TouristApp.DAL.Entities
         public virtual CityDepartures CityDeparture { get; set; }
         public virtual Hotels Hotel { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }
+
+        public virtual ICollection<Filter> Filtres { get; set; }
     }
 }
