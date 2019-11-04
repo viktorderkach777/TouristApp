@@ -191,7 +191,13 @@ namespace TouristApp.Controllers
             return Ok(model);
         }
 
+        [HttpGet("filters")]
+        public List<FNameViewModel> GetFilters()
+        {
+            var result = GetListFilters(_context);
 
+            return result;
+        }
 
         private List<FNameViewModel> GetListFilters(EFContext context)
         {
@@ -285,6 +291,7 @@ namespace TouristApp.Controllers
         [HttpPost("list")]
         public async Task<ActionResult<IEnumerable<ToursViewModel>>> Post([FromBody] ToursListViewModel filter)
         {
+            var newfilters = GetListFilters(_context);
             int page = filter.CurrentPage;
             int pageSize = 2;
             int pageNo = page - 1;
@@ -302,7 +309,7 @@ namespace TouristApp.Controllers
                 .Select(u => new TourListViewModel
                 {
                     Id = u.Id,
-                    СityDeparture = "Київ",
+                    СityDeparture = u.CityDeparture.Name,
                     Name = u.Hotel.Name,
                     Region = u.Hotel.Region.Name,
                     Country = u.Hotel.Region.Country.Name,

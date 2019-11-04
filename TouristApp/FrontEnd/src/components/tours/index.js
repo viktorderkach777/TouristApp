@@ -51,8 +51,9 @@ class ToursContainer extends Component {
       filters: filters,
       searchString: searchText
     }
-
+    this.props.getListFilters();
     this.props.postListTours(model);
+
     this.setState({
       currentPage: currentPage,
       totalPages: totalPages,
@@ -60,7 +61,7 @@ class ToursContainer extends Component {
       filters: filters
     });
 
-
+   
   }
 
   static getDerivedStateFromProps = (props, state) => {
@@ -73,7 +74,7 @@ class ToursContainer extends Component {
       totalPages: props.totalPages,
       sortOrder: props.sortOrder,
       searchText: props.searchText,
-      filters: props.filters
+      filters: props.filterlist
     };
   }
 
@@ -87,7 +88,7 @@ class ToursContainer extends Component {
       this.props.filters !== prevProps.filters 
       ){
         this.postListTours();
-
+        this.props.getListFilters();
     }
 
 
@@ -358,6 +359,7 @@ class ToursContainer extends Component {
 const mapState = state => {
   return {
     list: get(state, 'tours.list.data'),
+    filterlist:get(state, 'tours.filterlist.data'),
     isListLoading: get(state, 'tours.list.loading'),
     isListError: get(state, 'tours.list.error'),
     currentPage: get(state, 'tours.list.currentPage'),
@@ -372,8 +374,8 @@ const mapState = state => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getListTours: (model) => {
-      dispatch(tourAction.getListTours(model))
+    getListFilters: () => {
+      dispatch(tourAction.getListFilters())
     },
     postListTours: (model) => {
       dispatch(tourAction.postListTours(model))

@@ -13,6 +13,11 @@ export default class TourService {
     return axios.post(`${serverUrl}api/tour/list`, model);
   }
 
+  static getListFilters() {    
+    console.log('---get list filters service----' ); 
+    return axios.get(`${serverUrl}api/tour/filters`);
+  }
+
 
   static deleteTour(id) {
     return axios.delete(`${serverUrl}api/tour/` + id);
