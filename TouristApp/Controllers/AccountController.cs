@@ -12,6 +12,7 @@ using TouristApp.ViewModels.AccountViewModels;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace TouristApp.Controllers
 {
@@ -106,13 +107,13 @@ namespace TouristApp.Controllers
                 return BadRequest(errors);
             }
 
-            //if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
-            //  model.CaptchaText))
-            //{
-            //    var invalid = new Dictionary<string, string>();
-            //    invalid.Add("captchaText", "Помилка вводу зображення на фото");
-            //    return BadRequest(invalid);
-            //}
+            if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
+              model.CaptchaText))
+            {
+                var invalid = new Dictionary<string, string>();
+                invalid.Add("captchaText", "Помилка вводу зображення на фото");
+                return BadRequest(invalid);
+            }
 
             string path = _fileService.UploadImage(model.ImageBase64);
 

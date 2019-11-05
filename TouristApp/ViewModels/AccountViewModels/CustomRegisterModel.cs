@@ -31,8 +31,8 @@ namespace TouristApp.ViewModels.AccountViewModels
         [CustomDateTime(ErrorMessage = "Date is out of Range")]
         public DateTime DateOfBirth { get; set; }
 
-        //[Required(ErrorMessage = "Поле не може бути пустим!")]
-        //public string CaptchaText { get; set; }
-        //public string CaptchaKey { get; set; }
+        [Required(ErrorMessage = "Поле не може бути пустим!")]
+        public string CaptchaText { get; set; }
+        public string CaptchaKey { get; set; }
     }
 }

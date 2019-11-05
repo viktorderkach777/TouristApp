@@ -27,7 +27,7 @@ const iconsColor = {
 class RegisterForm extends Component {
 
   state = {
-    profileUrl:'/',
+    profileUrl: '/',
     email: '',
     password: '',
     confirmPassword: '',
@@ -44,7 +44,8 @@ class RegisterForm extends Component {
     dateOfBirth: '',
     captchaText: "",
     captchaDone: false,
-    captchaIsLoading: false
+    captchaIsLoading: false,
+    imageError: true
   };
 
   componentDidMount() {
@@ -58,19 +59,18 @@ class RegisterForm extends Component {
     let auth = this.props.auth;
     console.log('---getUrlToRedirect----', auth);
     if (auth.isAuthenticated) {
-        let roles = auth.user.roles;
-        if (roles=== "User") {
-            this.setState({ profileUrl: "/tours" });
-        }
-        else if (roles==="Admin") {
-            this.setState({ profileUrl: "/admin/dashboard" });
-        }
-        else 
-         {
-          this.setState({ profileUrl: "/" });
-         }
+      let roles = auth.user.roles;
+      if (roles === "User") {
+        this.setState({ profileUrl: "/tours" });
+      }
+      else if (roles === "Admin") {
+        this.setState({ profileUrl: "/admin/dashboard" });
+      }
+      else {
+        this.setState({ profileUrl: "/" });
+      }
     }
-    console.log('---profileUrl:',this.state.profileUrl);
+    console.log('---profileUrl:', this.state.profileUrl);
   };
 
 
@@ -109,6 +109,8 @@ class RegisterForm extends Component {
     this.setState({ imageBase64: this.cropper.getCroppedCanvas().toDataURL() });
     this.setState({ isLoadingPhoto: false });
     this.setState({ src: '' });
+    this.setState({ imageError: false });
+
   }
 
   setStateByErrors = (name, value) => {
@@ -128,26 +130,6 @@ class RegisterForm extends Component {
     this.setStateByErrors(e.target.name, e.target.value);
   };
 
-  captchaSetStateByErrors = (name, value) => {
-    if (!!this.state.errors[name]) {
-      let errors = Object.assign({}, this.state.errors);
-      delete errors[name];
-      this.setState(
-        {
-          [name]: value,
-          errors
-        }
-      )
-    }
-    else {
-      this.setState(
-        { [name]: value })
-    }
-  };
-
-  captchaHandleChange = e => {
-    this.captchaSetStateByErrors(e.target.name, e.target.value);
-  };
 
   operationImage = (e, type, value) => {
     e.preventDefault();
@@ -183,16 +165,22 @@ class RegisterForm extends Component {
     if (this.state.password === '') errors.password = "Cant't be empty";
     if (this.state.confirmPassword === '') errors.confirmPassword = "Cant't be empty";
     if (this.state.confirmPassword !== this.state.password) errors.confirmPassword = "Passwords do not match";
+    if (this.state.firstName === '') errors.firstName = "Cant't be empty";
+    if (this.state.lastName === '') errors.lastName = "Cant't be empty";
+    if (this.state.dateOfBirth === '') errors.dateOfBirth = "Cant't be empty";
+    if (this.state.captchaText === '') errors.captchaText = "Cant't be empty";
+    if (this.state.imageBase64 === defaultPath) errors.imageBase64 = "Download your image";
 
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
       console.log('this.props.captcha', this.props.captcha);
       console.log('this.state', this.state);
+
+
       const { keyValue } = this.props.captcha;
       const { email, password, confirmPassword, imageBase64,
         firstName, middleName, lastName, dateOfBirth, captchaText } = this.state;
-
 
       this.setState({
         isLoading: true, captchaIsLoading: true
@@ -204,7 +192,7 @@ class RegisterForm extends Component {
         captchaKey: keyValue
       })
         .then(
-          () => this.setState({ done: true, captchaDone: true },this.getUrlToRedirect()),
+          () => this.setState({ done: true, captchaDone: true }, this.getUrlToRedirect()),
           (err) => {
             this.setState({ errors: err.response.data, isLoading: false });
           }
@@ -218,6 +206,7 @@ class RegisterForm extends Component {
   render() {
     console.log('---FormRegister state----', this.state);
     console.log('---FormRegister props----', this.props);
+    console.log("=====", this.state.imageBase64 === defaultPath)
     const { errors,
       isLoading,
       email,
@@ -367,6 +356,7 @@ class RegisterForm extends Component {
                       </InputGroup>
 
                       <div className='container'>
+                        {!!errors.imageBase64 && this.state.imageError ? <Alert color="danger" className="d-flex justify-content-center">{errors.imageBase64}</Alert> : ''}
                         <Row>
                           <div className="form-group">
                             <label id="labelForInput" htmlFor="inputFile">
@@ -382,7 +372,6 @@ class RegisterForm extends Component {
                                     width="250" />
                                   : <p></p>
                               }
-                              {!!errors.image ? <span className="help-block">{errors.image}</span> : ''}
                               <input type="file" id="inputFile" onChange={this.changeInput} ></input>
                             </label>
                           </div>
@@ -405,24 +394,39 @@ class RegisterForm extends Component {
                           </div>
                         </Row>
                       </div>
-                      <span className="input-group-text">
-                        <CaptchaWidget {...captcha} />
-                      </span>
-                      <div className="mb-3 input-group">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text">
-                            <i className="fa fa-pencil" aria-hidden="true"></i>
-                          </span>
-                        </div>
-                        <input id="captchaText"
-                          name="captchaText"
-                          type="text"
-                          className="form-control "
-                          value={this.state.captchaText}
-                          onChange={this.captchaHandleChange} />
+                      <div className="input-group-text" >
+                        {/* <Button className="img-fluid" style={{ height: "70px", width: "70px" }}> */}
+                        <img
+                          src="http://simpleicon.com/wp-content/uploads/refresh.png"
+                          className="img-fluid rounded"
+                          id="image"
+                          alt=""
+                          name="image"
+                          style={{ height: "30px", width: "30px" }}
+                        />
+                        {/* </Button> */}
+                        <span className="mx-auto d-block">
+                          <CaptchaWidget {...captcha} />
+                        </span>
                       </div>
+                      <InputGroup className="mb-4 mt-4">
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText style={iconsColor}>
+                            <i className="fa fa-pencil"></i>
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input type="text"
+                          className={classnames('form-control', { 'is-invalid': !!errors.captchaText })}
+                          placeholder="Captcha Text"
+                          autoComplete="captchaText"
+                          id="captchaText"
+                          name="captchaText"
+                          value={this.state.captchaText}
+                          onChange={this.handleChange} />
+                        {!!errors.captchaText ? <span className="help-block">{errors.captchaText}</span> : ''}
+                      </InputGroup>
 
-                      <Button  color="success" block disabled={isLoading} >Create Account</Button>
+                      <Button color="success" block disabled={isLoading} >Create Account</Button>
 
                     </Form>
                   </CardBody>
@@ -479,5 +483,5 @@ RegisterForm.propTypes =
     // isKeyLoading:PropTypes.bool.isRequired,
     // isSuccess:PropTypes.bool.isRequired
   }
-  const Register = connect(mapState , mapDispatch)(RegisterForm);
-  export default Register;
+const Register = connect(mapState, mapDispatch)(RegisterForm);
+export default Register;
