@@ -1,0 +1,243 @@
+#body {
+    color: #404040;
+    font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;    
+  }
+
+
+  div.img-hover-zoom{
+    padding: 0px !important;
+    background: deepskyblue;
+  }
+
+  /* [1] The container */
+.img-hover-zoom {
+  /* height: 300px; [1.1] Set it as per your need */
+  overflow: hidden; /* [1.2] Hide the overflowing of child elements */
+}
+
+/* [2] Transition property for smooth transformation of images */
+.img-hover-zoom img {
+  transition: transform .5s ease;
+}
+
+/* [3] Finally, transforming the image when container gets hovered */
+.img-hover-zoom:hover img {
+  transform: scale(1.4);
+}
+  
+  /* * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  } */
+  
+  #body .heading h1 {
+    font-size: 22px;
+    margin: 0;
+    font-weight: 400;
+    line-height: 20px;
+    padding: 20px 2px;
+  }
+  
+  /* a {
+    color: #404040;
+    text-decoration: none;
+    cursor: pointer;
+  } */
+  
+  /* a:hover {
+    color: #101010;
+  } */
+
+    .item span.title{
+    color: #404040;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .mysidebar {
+    position: absolute;
+    width: 25%;
+    /* height: 100%; */
+    top: 8%;
+    bottom: 20%;
+    left: 75%;
+    overflow: hidden;
+    border-right: 1px solid rgba(0, 0, 0, 0.25);
+  }
+  
+  /* #map.map .pad2 {
+    padding: 20px;
+  } */
+  
+  #body #map.map {
+    position: absolute;
+    left: 0;
+    width: 75%;
+    top: 9%;
+    bottom: 20%;
+  }
+  
+  .heading {
+    color: #404040;
+    border-bottom: 1px solid #eee;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 10px;
+  }
+  
+  .listings {
+    height: 100%;
+    /* overflow: sroll; */
+    padding-bottom: 60px;
+  }
+  
+  .listings .item {
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    text-decoration: none;
+  }
+  
+  .listings .item:last-child { border-bottom: none; }
+  
+  .listings .item .title {
+    display: block;   
+    color: blue;
+    font-weight: 700;
+  }
+  
+  .listings .item .title small { font-weight: 400; }
+  
+  /* .listings .item.active .title,  */
+  .listings .item .title:hover,
+  .item .title:hover { color: mediumvioletred; }
+  
+  .listings .item.active {
+    background-color: #f8f8f8;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+    border-left: 0;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: none;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: deepskyblue;
+    border-radius: 0;
+  }
+  
+  .clearfix { display: block; }
+  
+  .clearfix::after {
+    content: '.';
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+
+  /* Marker tweaks */
+.mapboxgl-popup-close-button {
+    display: none;
+  }
+  
+  .mapboxgl-popup-content {
+    font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    padding: 0;
+    width: 180px;
+  }
+  
+  .mapboxgl-popup-content-wrapper {
+    padding: 1%;
+  }
+  
+  .mapboxgl-popup-content h3 {   
+    background: deepskyblue;
+    color: #fff;
+    margin: 0;
+    display: block;
+    padding: 10px;
+    /* border-radius: 3px 3px 0 0; */
+    border-radius: 10px 10px 0 0;
+    /* font-weight: 700; */
+    font-size: 14px;
+    margin-top: -15px;
+    text-align: center;
+  }
+  
+  .mapboxgl-popup-content h4 {
+    background: deepskyblue;
+    color: #fff;
+    margin: 0;
+    display: block;
+    padding: 10px;   
+    /* font-weight: 400; */
+    text-align: center;
+    font-size: 14px;
+    border-radius:  0 0 10px 10px;
+  }
+
+  .mapboxgl-popup-content .stars {
+    background: deepskyblue;
+    color: #fff;
+    margin: 0;
+    display: block;
+    padding: 10px;   
+    /* font-weight: 400; */
+    text-align: center;
+    font-size: 14px;
+    
+  }
+
+  .mapboxgl-popup-content img {
+    height: 150px;
+    width: auto;
+  }  
+  
+  .mapboxgl-popup-content div {
+    padding: 10px;
+  }
+  
+  .mapboxgl-container .leaflet-marker-icon {
+    cursor: pointer;
+  }
+  
+  /* .mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+    margin-top: 15px;
+  } */
+  
+  /* .mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+    border-bottom-color: #91c949;
+  } */
+
+  .map-marker {
+    border: none;
+    cursor: pointer;    
+    height: 48px;
+    width: 48px;   
+    background-image: url(./hotel.ico);
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  .mapboxgl-popup {
+    padding-bottom: 29px;
+  }
+
+
+  .checked {
+    color: orange;
+  }  

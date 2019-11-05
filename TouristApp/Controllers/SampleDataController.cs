@@ -102,7 +102,7 @@ namespace TouristApp.Controllers
         }
 
 
-        [HttpGet("weather/{region}")]       
+        [HttpGet("weather/{region}")]
         public async Task<IActionResult> Weather(string region)
         {
             WebRequest request;
@@ -110,19 +110,15 @@ namespace TouristApp.Controllers
             string data = "";
             string _apiBase = "https://api.openweathermap.org/data/2.5/forecast";
             string getData = "";
+            string appid = _configuration.GetValue<string>("WheatherId");
 
-            //string st = "coords-50.6196-26.2513"; //lat: 55.7507, lon: 37.6177
-
-            if (region.StartsWith("coords-"))
+            if (region.StartsWith("coords;"))
             {
-                String[] breakApart = region.Split('-');
+                String[] breakApart = region.Split(';');
 
                 if (breakApart.Length > 2)
                 {
-                    string latitude = breakApart[1];
-                    string longitude = breakApart[2];
-                   
-                    getData = $"{_apiBase}?lat={latitude}&lon={longitude}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";                   
+                    getData = $"{_apiBase}?lat={breakApart[1]}&lon={breakApart[2]}&units=metric&appid={appid}";
                 }
                 else
                 {
@@ -131,25 +127,31 @@ namespace TouristApp.Controllers
             }
             else
             {
-                getData = $"{_apiBase}?q={region}&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";
-            }         
-           
-
-           // string getDataByCity = "https://api.openweathermap.org/data/2.5/forecast?q=Rivne&units=metric&appid=fbf712a5a83d7305c3cda4ca8fe7ef29";
+                getData = $"{_apiBase}?q={region}&units=metric&appid={appid}";
+            }
 
             request = WebRequest.Create(getData);
-            response = await request.GetResponseAsync();
-           
+
+            try
+            {
+                response = await request.GetResponseAsync();
+            }
+            catch (Exception e)
+            {
+                string s = e.Message;               
+                return BadRequest(new { invalid = s });
+            }
+
             using (Stream stream = response.GetResponseStream())
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    data = reader.ReadToEnd();                    
+                    data = reader.ReadToEnd();
                 }
             }
             response.Close();
 
-            return Ok(new{data });
+            return Ok( new { data });
         }
 
 

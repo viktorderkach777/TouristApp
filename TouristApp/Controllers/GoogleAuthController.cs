@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using TouristApp.DAL.Entities;
 using TouristApp.Domain.Interfaces;
 using Google.Apis.Auth;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
-using System.Threading;
+
 
 namespace TouristApp.Controllers
 {
@@ -21,27 +19,20 @@ namespace TouristApp.Controllers
         readonly SignInManager<DbUser> _signInManager;    
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;
-        readonly IConfiguration _configuration;
-        readonly IUserService _userService;
-        private readonly EFContext _db;
+       
 
         public GoogleAuthController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
             SignInManager<DbUser> signInManager,
             IFileService fileService,
-            IJWTTokenService jWTTokenService,
-            IConfiguration configuration,
-            IUserService userService,
-             EFContext db)
+            IJWTTokenService jWTTokenService)           
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _fileService = fileService;                           
             _roleManager = roleManager;
             _jWTTokenService = jWTTokenService;
-            _configuration = configuration;
-            _userService = userService;
-            _db = db;
+          
         }
 
         // POST api/googleauth/google
@@ -54,7 +45,7 @@ namespace TouristApp.Controllers
 
             if (user == null)
             {
-                string path = _fileService.UploadFacebookImage(userInfo.Picture);
+                string path = _fileService.UploadAccountImage(userInfo.Picture);
 
                 user = new DbUser
                 {
@@ -84,14 +75,18 @@ namespace TouristApp.Controllers
 
                 if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
             }
+            else
+            {
+                _fileService.UploadAccountImageIfNotExists(user, userInfo.Picture);
+            }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(
             new
             {
-                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
-                refToken = _jWTTokenService.CreateRefreshToken(_configuration, _userService, user, _userManager, _db)
+                token = _jWTTokenService.CreateToken(user),
+                refToken = _jWTTokenService.CreateRefreshToken(user)
             });
         }       
     }

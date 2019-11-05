@@ -1,0 +1,20 @@
+#navigation-body {
+    color: #404040;
+    font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    -webkit-font-smoothing: antialiased;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;    
+  }  
+  
+  #navigation-map {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 9%;
+    bottom: 20%;
+    cursor: pointer;
+  }

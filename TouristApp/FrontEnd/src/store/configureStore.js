@@ -1,6 +1,5 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { captchaReducer } from "../components/captcha/reducer";
 import { tours } from "../reducers/tourReducer";
 import { countries } from "../reducers/countryReducer";
@@ -11,16 +10,29 @@ import user from '../reducers/user';
 
 import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
 import {weatherReducer} from '../components/weather/reducers'
+import {mapReducer} from '../components/map/reducers'
+import { loginReducer } from "../views/Pages/Login/reducer";
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+//import { createBrowserHistory } from 'history';
+//import createHistory from 'history/createHashHistory';
+import * as createHistory from "history";
+
+// Create browser history to use in the Redux store
+const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+export const history = createHistory.createHashHistory({ basename: baseUrl });
+//export const history = createHistory({ basename: baseUrl });
 
 export default function configureStore (history, initialState) {
     const reducers = {
-      captcha: captchaReducer,//.reducer,
+      captcha: captchaReducer,
+      login: loginReducer,
       auth:userReducer.reducer,
       userlist: user,
       tours:tours.reducer,
       countries:countries.reducer,
       refreshToken: RefreshToken.refreshReducer,
-      weather:weatherReducer
+      weather:weatherReducer,
+      map:mapReducer
     };
 
     const middleware = [
@@ -38,7 +50,7 @@ export default function configureStore (history, initialState) {
 
     const rootReducer = combineReducers({
       ...reducers,
-      routing: routerReducer
+      router: connectRouter(history)
     });
 
     return createStore(

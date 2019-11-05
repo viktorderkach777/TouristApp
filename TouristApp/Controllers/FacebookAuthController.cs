@@ -10,8 +10,7 @@ using System.Net.Http;
 using TouristApp.Domain.Models.FacebookModels;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
+
 
 namespace TouristApp.Controllers
 {
@@ -22,10 +21,7 @@ namespace TouristApp.Controllers
         readonly RoleManager<DbRole> _roleManager;
         readonly SignInManager<DbUser> _signInManager;             
         readonly IFileService _fileService;
-        readonly IJWTTokenService _jWTTokenService;
-        readonly IConfiguration _configuration;
-        readonly IUserService _userService;
-        private readonly EFContext _db;
+        readonly IJWTTokenService _jWTTokenService;       
         private readonly FacebookAuthSettings _fbAuthSettings;       
         private static readonly HttpClient Client = new HttpClient();
 
@@ -33,21 +29,16 @@ namespace TouristApp.Controllers
             RoleManager<DbRole> roleManager,
             SignInManager<DbUser> signInManager,
             IFileService fileService,                     
-            IJWTTokenService jWTTokenService,
-            IConfiguration configuration,
-            IUserService userService,
-            IOptions<FacebookAuthSettings> fbAuthSettingsAccessor,
-            EFContext db)
+            IJWTTokenService jWTTokenService,            
+            IOptions<FacebookAuthSettings> fbAuthSettingsAccessor)
+            
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _fileService = fileService;                            
             _roleManager = roleManager;
             _fbAuthSettings = fbAuthSettingsAccessor.Value;
-            _jWTTokenService = jWTTokenService;
-            _configuration = configuration;
-            _userService = userService;
-            _db = db;
+            _jWTTokenService = jWTTokenService;           
         }
 
         // POST api/externalauth/facebook
@@ -76,7 +67,7 @@ namespace TouristApp.Controllers
 
             if (user == null)
             {
-                string path = _fileService.UploadFacebookImage(userInfo.Picture.Data.Url);
+                string path = _fileService.UploadAccountImage(userInfo.Picture.Data.Url);
 
                 user = new DbUser
                 {
@@ -102,29 +93,23 @@ namespace TouristApp.Controllers
 
                 }).Result;
 
-                result = _userManager.AddToRoleAsync(user, roleName).Result;
-                //await _signInManager.SignInAsync(user, isPersistent: false);
+                result = _userManager.AddToRoleAsync(user, roleName).Result;              
 
                 if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
 
-            }
+            }           
             else
-            {               
-                user = await _userManager.FindByEmailAsync(userInfo.Email);
-
-                if (user == null)
-                {                    
-                    return BadRequest(new { invalid = "Failed to create local user account." });
-                }
+            {
+                _fileService.UploadAccountImageIfNotExists(user, userInfo.Picture.Data.Url);
             }
-            
+
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(
             new
             {
-                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
-                refToken = _jWTTokenService.CreateRefreshToken(_configuration, _userService, user, _userManager, _db)
+                token = _jWTTokenService.CreateToken(user),
+                refToken = _jWTTokenService.CreateRefreshToken(user)
             });
         }        
     }

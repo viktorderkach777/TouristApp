@@ -4,25 +4,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using TouristApp.DAL.Entities;
 using TouristApp.Domain.Interfaces;
 using TouristApp.Domain.Models.AccountModels;
 using TouristApp.Helpers;
 using TouristApp.ViewModels.AccountViewModels;
 using System.Linq;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace TouristApp.Controllers
-{ 
-
-
+{
     [Produces("application/json")]
     [Route("api/Account")]
     //[RequireHttps]
@@ -34,10 +27,7 @@ namespace TouristApp.Controllers
         readonly IEmailSender _emailSender;
         readonly IFileService _fileService;
         readonly IJWTTokenService _jWTTokenService;       
-        readonly IConfiguration _configuration;
-        readonly IUserService _userService;
-        private readonly EFContext _db;
-
+        private readonly EFContext _context;
 
         public AccountController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
@@ -45,27 +35,22 @@ namespace TouristApp.Controllers
             IFileService fileService,           
             IEmailSender emailSender,
             IJWTTokenService jWTTokenService,           
-            IConfiguration configuration,
-            IUserService userService,
-            EFContext db)
+            EFContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _fileService = fileService;         
             _emailSender = emailSender;
             _roleManager = roleManager;
-            _jWTTokenService = jWTTokenService;
-            _configuration = configuration;
-            _userService = userService;
-            _db = db;
+            _jWTTokenService = jWTTokenService;            
+            _context = context;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]Domain.Models.AccountModels.Credentials credentials)
         {
             if (!ModelState.IsValid)
-            {
-                
+            {                
                 return BadRequest(new { invalid="Problem validation" });
             }
 
@@ -80,49 +65,37 @@ namespace TouristApp.Controllers
 
             var user = await _userManager.FindByEmailAsync(credentials.Email);
             await _signInManager.SignInAsync(user, isPersistent: false);
-
+            
             return Ok(
             new
             {
-                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
-                refToken = _jWTTokenService.CreateRefreshToken(_configuration, _userService, user, _userManager,_db)
+                token = _jWTTokenService.CreateToken(user),
+                refToken = _jWTTokenService.CreateRefreshToken(user)
             });            
         }
 
         [HttpPost("refresh/{refreshToken}")]
         public IActionResult RefreshToken([FromRoute]string refreshToken)
         {
-            var _refreshToken = _db.RefreshTokens
+            var _refreshToken = _context.RefreshTokens
                 .Include(u=>u.User)
                 .SingleOrDefault(m => m.Token == refreshToken);
 
             if (_refreshToken == null)
             {
                 return NotFound("Refresh token not found");
-            }
-            //var userclaim = new[] { new Claim(ClaimTypes.Name, _refreshToken.User.FirstName) };
-            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecretPhrase"]));//(_configuration["SecretKey"]));
-            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            //var token = new JwtSecurityToken(
-            //    //issuer: "https://localhost:5001",
-            //    //audience: "https://localhost:5001",
-            //    claims: userclaim,
-            //    expires: DateTime.Now.AddMinutes(10),
-            //    signingCredentials: creds);
+            }           
 
             _refreshToken.Token = Guid.NewGuid().ToString();
-            _db.RefreshTokens.Update(_refreshToken);
-            _db.SaveChanges();
-
+            _context.RefreshTokens.Update(_refreshToken);
+            _context.SaveChanges();
+            //Thread.Sleep(2000);
             return Ok(
             new {
-                token = _jWTTokenService.CreateToken(_configuration, _userService, _refreshToken.User, _userManager),
+                token = _jWTTokenService.CreateToken( _refreshToken.User),
                 refToken = _refreshToken.Token
             });
         }
-
-
 
 
         [HttpPost("register")]
@@ -134,13 +107,13 @@ namespace TouristApp.Controllers
                 return BadRequest(errors);
             }
 
-            //if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
-            //  model.CaptchaText))
-            //{
-            //    var invalid = new Dictionary<string, string>();
-            //    invalid.Add("captchaText", "Помилка вводу зображення на фото");
-            //    return BadRequest(invalid);
-            //}
+            if (!CaptchaHelper.VerifyAndExpireSolution(this.HttpContext, model.CaptchaKey,
+              model.CaptchaText))
+            {
+                var invalid = new Dictionary<string, string>();
+                invalid.Add("captchaText", "Помилка вводу зображення на фото");
+                return BadRequest(invalid);
+            }
 
             string path = _fileService.UploadImage(model.ImageBase64);
 
@@ -179,8 +152,8 @@ namespace TouristApp.Controllers
             return Ok(
             new
             {
-                token = _jWTTokenService.CreateToken(_configuration, _userService, user, _userManager),
-                refToken = _jWTTokenService.CreateRefreshToken(_configuration, _userService, user, _userManager,_db)
+                token = _jWTTokenService.CreateToken(user),
+                refToken = _jWTTokenService.CreateRefreshToken(user)
             });
         }
 
