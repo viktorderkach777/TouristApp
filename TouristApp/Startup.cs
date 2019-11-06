@@ -128,13 +128,16 @@ namespace TouristApp
 
             #endregion;
 
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"UserImages")))
+            {
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"UserImages"));
+            }
+
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"UserImages")),
                 RequestPath = new PathString("/UserImages")
-            });
-
-          
+            });          
 
             app.UseMvc(routes =>
             {
