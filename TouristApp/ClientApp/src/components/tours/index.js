@@ -263,7 +263,7 @@ class ToursContainer extends Component {
           <Row>
             <Col sm="12" md="4">
               <Link to={`/views/${item.country}/${item.id}`}>
-                <CardImg left="true" height="100%" className="p-2" src={!!item.imagePath ? serverUrl + item.imagePath : 'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
+                <CardImg left="true" height="100%" className="CardImg p-2" src={!!item.imagePath ? serverUrl + item.imagePath : 'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
                 <div className="discount">
                   <span className="discount-title">
                     знижка 15%
@@ -277,7 +277,7 @@ class ToursContainer extends Component {
               </CardLink>
             </Col>
 
-            <Col sm="12" md="4">
+            <Col sm="12" md="6">
               <CardBody>
                 <CardTitle className="CardTitle">
                   {item.name} {item.class}*
@@ -312,9 +312,9 @@ class ToursContainer extends Component {
               </CardBody>
 
             </Col>
-            <Col sm="12" md="2" >
-              <Row className="d-flex  justify-content-center align-items-bottom">
-                <h5>{item.price}</h5>
+            <Col sm="12" md="2" className="d-flex  justify-content-center align-items-center">
+              <Row>
+                <h5>{item.price}<span className="currency">₴</span></h5>
                 <Link   to={`/views/${item.country}/${item.id}`}>
 
                   <Button className="buttonHotel">Дивитись тур</Button>

@@ -42,7 +42,7 @@ class Filters extends Component {
                     <CardBody>
                         <CardHeader>217 знайдено</CardHeader>
                         {filters.map(filterItem =>
-                            <FilterItem filterData={filterItem} key={filterItem.filterId} handleCheckChieldElement={this.handleCheckChieldElement} />
+                            <FilterItem filterData={filterItem} key={filterItem.Id} handleCheckChieldElement={this.handleCheckChieldElement} />
                         )}
                         <Row >
                             <Col  className="d-flex justify-content-center">

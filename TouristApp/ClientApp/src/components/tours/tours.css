@@ -48,7 +48,7 @@
 
     .CardImg {
         /* width: 150px; */
-        border-radius:10px ;
+        border-radius:20px ;
         /* padding: 5px; */
     }
     .iconColor
@@ -76,8 +76,8 @@
 
     .DeleteTour{
         position:absolute;
-        top:5px;
-        right: 20px;
+        top:10px;
+        right: 30px;
         color:#FFF;
         
     }

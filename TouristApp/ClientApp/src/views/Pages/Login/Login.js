@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert } from 'reactstrap';
+import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert,FormFeedback } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from "react-redux";
@@ -119,13 +119,14 @@ class Login extends Component {
                             type="text"
                             placeholder="Username"
                             autoComplete="username"
-                            className={classnames('form-control', { 'is-invalid': !!errors.email })}
+                            className="form-control"
+                            invalid={!!errors.email}
                             id="email"
                             name="email"
                             value={this.state.email}
                             onChange={this.handleChange}
                           />
-                          {!!errors.email ? <span className="help-block">{errors.email}</span> : ''}
+                          <FormFeedback>{errors.email}</FormFeedback>
                         </InputGroup>
 
                         <InputGroup className="mb-4">
@@ -138,13 +139,15 @@ class Login extends Component {
                             type="password"
                             placeholder="Password"
                             autoComplete="current-password"
-                            className={classnames('form-control', { 'is-invalid': !!errors.password })}
+                            className="form-control"
+                            invalid={!!errors.password }
+
                             id="password"
                             name="password"
                             value={this.state.password}
                             onChange={this.handleChange}
                           />
-                          {!!errors.password ? <span className="help-block">{errors.password}</span> : ''}
+                          <FormFeedback>{errors.password}</FormFeedback>
                         </InputGroup>
 
                         <Row>

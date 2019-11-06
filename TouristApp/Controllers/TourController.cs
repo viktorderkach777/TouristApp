@@ -239,10 +239,10 @@ namespace TouristApp.Controllers
                                          group v by new FValueViewModel
                                          {
                                              Id = v.FValueId,
-                                             Name = v.FValue
+                                             Value = v.FValue
                                          } into g
                                          select g.Key)
-                                         .OrderBy(l => l.Name).ToList()
+                                         .OrderBy(l => l.Value).ToList()
                          };
 
             return result.ToList();

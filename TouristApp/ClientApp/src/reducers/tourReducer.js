@@ -15,7 +15,7 @@ export const initialState = {
     filters: [
       {
           name: 'Країни',
-          filterId:'1',
+           Id:'1',
           data: [
               { value: 'Іспанія', id: '1', isChecked: false },
               { value: 'Франція', id: '2', isChecked: false },
@@ -25,7 +25,7 @@ export const initialState = {
       },
       {
           name: 'Місто відправлення',
-          filterId:'2',
+          Id:'2',
           data: [
               { value: 'Київ', id: '5', isChecked: false },
               { value: 'Львів', id: '6', isChecked: false },
@@ -34,7 +34,7 @@ export const initialState = {
       },
       {
           name: 'Гроші',
-          filterId:'3',
+          Id:'3',
           data: [
               { value: 'UA', id: '8', isChecked: false },
               { value: 'RUS', id: '9', isChecked: false },
