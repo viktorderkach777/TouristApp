@@ -60,7 +60,7 @@ class FilterItem extends Component {
         let filter=filterData.data;
         return (
             <div>
-                <FilterHeader {...filterData} collapse  onClick={this.toggle}/>
+                <FilterHeader {...filterData} collapse={collapse}  onClick={this.toggle}/>
                  <Collapse isOpen={collapse}>
                     <Card>
                         <CardBody>

@@ -64,8 +64,8 @@ class ToursContainer extends Component {
   }
 
   static getDerivedStateFromProps = (props, state) => {
- 
-    console.log('---getDerivedStateFromProps---' );
+
+    console.log('---getDerivedStateFromProps---');
 
     return {
       tours: props.list,
@@ -84,9 +84,9 @@ class ToursContainer extends Component {
       this.props.currentPage !== prevProps.currentPage ||
       this.props.totalPages !== prevProps.totalPages ||
       this.props.searchText !== prevProps.searchText ||
-      this.props.filters !== prevProps.filters 
-      ){
-        this.postListTours();
+      this.props.filters !== prevProps.filters
+    ) {
+      this.postListTours();
 
     }
 
@@ -150,16 +150,16 @@ class ToursContainer extends Component {
     this.toggleDialogDelete();
   }
 
-  postListTours= () =>{
+  postListTours = () => {
 
-    const { searchText,sortOrder, filters,currentPage } = this.state;
+    const { searchText, sortOrder, filters, currentPage } = this.state;
     const model = {
       currentPage: currentPage,
       sortOrder: sortOrder,
       filters: filters,
       searchString: searchText
     }
-    
+
     console.log('---componentDidUpdate---- ', model);
     this.props.postListTours(model);
   }
@@ -187,14 +187,14 @@ class ToursContainer extends Component {
     filters.forEach(filter => {
       filter.data.forEach(data => {
         if (data.value === value) {
-         // console.log('---isChecked---', data.isChecked)
+          // console.log('---isChecked---', data.isChecked)
           data.isChecked = !data.isChecked
         }
       })
     })
-   // this.setState({ filters: filters });
+    // this.setState({ filters: filters });
     this.props.setFilters(filters);
-   // const { sortOrder, searchText } = this.props;
+    // const { sortOrder, searchText } = this.props;
     // const model = {
     //   currentPage: 1,
     //   sortOrder: sortOrder,
@@ -207,7 +207,7 @@ class ToursContainer extends Component {
 
   onSearchChanged = (searchText) => {
     console.log('---Search text ---- ', searchText);
-   // const { sortOrder, filters } = this.props;
+    // const { sortOrder, filters } = this.props;
     this.props.setSearchText(searchText);
     // const model = {
     //   currentPage: 1,
@@ -229,7 +229,7 @@ class ToursContainer extends Component {
     //   searchString: searchText
     // }
     //console.log('---postListTours onPageChanged----', model);
-   //this.props.postListTours(model);
+    //this.props.postListTours(model);
     //this.setState({ currentPage: data });
 
   }
@@ -263,7 +263,7 @@ class ToursContainer extends Component {
           <Row>
             <Col sm="12" md="4">
               <Link to={`/views/${item.country}/${item.id}`}>
-                <CardImg className="CardImg" src={!!item.imagePath ? serverUrl + item.imagePath : 'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
+                <CardImg left="true" height="100%" className="p-2" src={!!item.imagePath ? serverUrl + item.imagePath : 'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
                 <div className="discount">
                   <span className="discount-title">
                     знижка 15%
@@ -272,17 +272,16 @@ class ToursContainer extends Component {
               </Link>
               <CardLink href="#">
                 <div className="Heart">
-                  <i className="fa fa-heart" aria-hidden="true"></i>
+                  <i className="fa  fa-heart" aria-hidden="true"></i>
                 </div>
               </CardLink>
             </Col>
-            <Col sm="12" md="6">
+
+            <Col sm="12" md="4">
               <CardBody>
                 <CardTitle className="CardTitle">
                   {item.name} {item.class}*
-
-
-                                </CardTitle>
+      </CardTitle>
                 <CardSubtitle className="CardSubTitle">
                   <small> <i className="fa fa-map-marker" aria-hidden="true"></i>{item.country}, {item.region}</small>
                 </CardSubtitle>
@@ -310,19 +309,18 @@ class ToursContainer extends Component {
                     2-ох дорослих
                                     </li>
                 </CardText>
-
               </CardBody>
 
             </Col>
-            <Col sm="12" md="2" style={{ verticalAlign: 'bottom' }}>
-              <div className="price-block">
-                <div className="price">{item.price}
-                  <span className="currency">₴</span>
-                </div>
-              </div>
-              <Link to={`/views/${item.country}/${item.id}`}>
-                <Button size="sm" className="buttonHotel">Дивитись тур</Button>
-              </Link>
+            <Col sm="12" md="2" >
+              <Row className="d-flex  justify-content-center align-items-bottom">
+                <h5>{item.price}</h5>
+                <Link   to={`/views/${item.country}/${item.id}`}>
+
+                  <Button className="buttonHotel">Дивитись тур</Button>
+                </Link>
+
+              </Row>
               <Button color="primary" className="DeleteTour" size="sm" hidden={roles !== "Admin"} onClick={e => this.deleteTour(e, item.id)}><i className="fa fa-trash" aria-hidden="true" /></Button>
             </Col>
           </Row>
@@ -341,13 +339,11 @@ class ToursContainer extends Component {
               <FilterWidjet filters={this.props.filters} handleCheckChieldElement={this.handleCheckChieldElement} />
             </div>
             <div className="col-12 col-md-9">
-
               <SortToolbar onSortChanged={this.onSortChanged} onSearchChanged={this.onSearchChanged} />
               {toursList}
               <SpinnerWidget loading={isListLoading} />
               <PaginationBar totalPages={totalPages} currentPage={currentPage} pageNeighbours={1} onPageChanged={this.onPageChanged} />
             </div>
-
           </div>
         </div>
       </React.Fragment>
