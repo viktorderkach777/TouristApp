@@ -16,6 +16,7 @@ import {
 
 class SortToolbar extends Component {
     state = {
+        list: [{ value: 'по імені від А до Я', data: 'name' }, { value: 'по імені від Я до А', data: 'name_desc' }, { value: 'по рейтингу ↑', data: 'rate' }, { value: 'по рейтингу ↓', data: 'rate_desc' }],
         modal: true,
         dropdownOpen: false,
         dropDownValue: 'по імені від А до Я',
@@ -37,19 +38,19 @@ class SortToolbar extends Component {
     sorting = (e) => {
         const { onSortChanged = f => f } = this.props;
         const { type } = e.target.dataset;
-      //  console.log('--type----',type);
+        //  console.log('--type----',type);
         this.setState({ dropDownValue: e.currentTarget.textContent, sortOrder: type }, () => onSortChanged(type));
 
     }
 
-    onSearchclick=()=>{
+    onSearchclick = () => {
         const { onSearchChanged = f => f } = this.props;
         const { findOrder } = this.state;
-      //  console.log('--findOrder ', findOrder);
-        this.setState({findOrder: '' }, () => onSearchChanged( findOrder));
-        
+        //  console.log('--findOrder ', findOrder);
+        this.setState({ findOrder: '' }, () => onSearchChanged(findOrder));
 
-    } 
+
+    }
 
     callBackCloseDialog = () => {
         this.setState({ openModal: false });
@@ -65,16 +66,14 @@ class SortToolbar extends Component {
 
 
     render() {
-      //  console.log('--Sorting state----', this.state);
-        const { findOrder } = this.state;
+        //  console.log('--Sorting state----', this.state);
+        const { findOrder, list } = this.state;
         return (
             <Card className="CardTours" >
                 <CardBody>
-
-                    <Form  className="ml-2">
-
+                    <Form className="ml-2">
                         <FormGroup className="row">
-                            <div className="col-12 col-md-6 mb-2 ">
+                            <div className="col-12 col-md-6">
                                 <InputGroup >
                                     <InputGroupAddon addonType="prepend">
                                         <Button type="text" color="primary"><i className="fa fa-sort" aria-hidden="true"></i></Button>
@@ -84,23 +83,14 @@ class SortToolbar extends Component {
                                             {this.state.dropDownValue}
                                         </DropdownToggle>
                                         <DropdownMenu >
-                                            <DropdownItem onClick={this.sorting} data-type="name" >
-                                                по імені від А до Я
-                                        </DropdownItem>
-                                            <DropdownItem onClick={this.sorting} data-type="name_desc">
-                                                по імені від Я до А
-                                        </DropdownItem>
-                                            <DropdownItem onClick={this.sorting} data-type="rate">
-                                                по рейтингу ↑
-                                        </DropdownItem>
-                                            <DropdownItem onClick={this.sorting} data-type="rate_desc">
-                                                по рейтингу ↓
-                                        </DropdownItem>
+                                            {list.map(item => (
+                                                <DropdownItem onClick={this.sorting} data-type={item.data}>{item.value}</DropdownItem>
+                                            ))}
                                         </DropdownMenu>
                                     </Dropdown>
                                 </InputGroup>
                             </div>
-                            <div className="col-12 col-md-6  mb-2">
+                            <div className="col-12 col-md-6">
                                 <InputGroup >
                                     <InputGroupAddon addonType="prepend">
                                         <Button type="text" color="primary"><i className="fa fa-search" aria-hidden="true"></i></Button>

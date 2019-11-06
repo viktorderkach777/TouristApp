@@ -27,7 +27,7 @@ namespace TouristApp.ViewModels
 
     public class FilterItemViewModel
     {
-        public string filterId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public List<FilterItemCheckViewModel> Data { get; set; }
     }

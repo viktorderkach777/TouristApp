@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row,FormFeedback } from 'reactstrap';
 import { connect } from "react-redux";
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
@@ -239,7 +239,8 @@ class RegisterForm extends Component {
                           <InputGroupText style={iconsColor}>@</InputGroupText>
                         </InputGroupAddon>
                         <Input
-                          className={classnames('form-control', { 'is-invalid': !!errors.email })}
+                          className="form-control"
+                          invalid={!!errors.email}
                           type="text"
                           placeholder="Email"
                           autoComplete="Email"
@@ -248,7 +249,8 @@ class RegisterForm extends Component {
                           value={email}
                           onChange={this.handleChange}
                         />
-                        {!!errors.email ? <span className="help-block">{errors.email}</span> : ''}
+                        <FormFeedback>{errors.email}</FormFeedback>
+                        
                       </InputGroup>
 
 
@@ -259,14 +261,15 @@ class RegisterForm extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="password"
-                          className={classnames('form-control', { 'is-invalid': !!errors.password })}
+                          className="form-control"
+                          invalid={!!errors.password}
                           placeholder="Password"
                           autoComplete="new-password"
                           id="password"
                           name="password"
                           value={password}
                           onChange={this.handleChange} />
-                        {!!errors.password ? <span className="help-block">{errors.password}</span> : ''}
+                        <FormFeedback>{errors.password}</FormFeedback>
                       </InputGroup>
 
                       <InputGroup className="mb-4">
@@ -276,14 +279,15 @@ class RegisterForm extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="password"
-                          className={classnames('form-control', { 'is-invalid': !!errors.confirmPassword })}
+                          className="form-control"
+                          invalid={!!errors.confirmPassword}
                           placeholder="Confirm password"
                           autoComplete="confirmPassword"
                           id="confirmPassword"
                           name="confirmPassword"
                           value={confirmPassword}
                           onChange={this.handleChange} />
-                        {!!errors.confirmPassword ? <span className="help-block">{errors.confirmPassword}</span> : ''}
+                        <FormFeedback>{errors.password}</FormFeedback>
                       </InputGroup>
 
                       <InputGroup className="mb-4">
@@ -293,14 +297,15 @@ class RegisterForm extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text"
-                          className={classnames('form-control', { 'is-invalid': !!errors.firstName })}
+                          className="form-control"
+                          invalid={!!errors.firstName}
                           placeholder="First Name"
                           autoComplete="first name"
                           id="firstName"
                           name="firstName"
                           value={firstName}
                           onChange={this.handleChange} />
-                        {!!errors.firstName ? <span className="help-block">{errors.firstName}</span> : ''}
+                        <FormFeedback>{errors.firstName}</FormFeedback>
                       </InputGroup>
 
                       <InputGroup className="mb-4">
@@ -310,14 +315,15 @@ class RegisterForm extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text"
-                          className={classnames('form-control', { 'is-invalid': !!errors.middleName })}
+                          className="form-control"
+                          invalid={!!errors.middleName}
                           placeholder="Middle Name"
                           autoComplete="middleName"
                           id="middleName"
                           name="middleName"
                           value={middleName}
                           onChange={this.handleChange} />
-                        {!!errors.middleName ? <span className="help-block">{errors.middleName}</span> : ''}
+                        <FormFeedback>{errors.middleName}</FormFeedback>
                       </InputGroup>
 
 
@@ -328,14 +334,15 @@ class RegisterForm extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text"
-                          className={classnames('form-control', { 'is-invalid': !!errors.lastName })}
+                          className="form-control"
+                          invalid={!!errors.lastName}
                           placeholder="Last Name"
                           autoComplete="lastName"
                           id="lastName"
                           name="lastName"
                           value={lastName}
                           onChange={this.handleChange} />
-                        {!!errors.lastName ? <span className="help-block">{errors.lastName}</span> : ''}
+                        <FormFeedback>{errors.lastName}</FormFeedback>
                       </InputGroup>
 
                       <InputGroup className="mb-4">
@@ -345,20 +352,21 @@ class RegisterForm extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="date"
-                          className={classnames('form-control', { 'is-invalid': !!errors.dateOfBirth })}
+                           className="form-control"
+                           invalid={!!errors.dateOfBirth}
                           placeholder="Date Of birth "
                           autoComplete="dateOfBirth"
                           id="dateOfBirth"
                           name="dateOfBirth"
                           value={dateOfBirth}
                           onChange={this.handleChange} />
-                        {!!errors.dateOfBirth ? <span className="help-block">{errors.dateOfBirth}</span> : ''}
+                        <FormFeedback>{errors.dateOfBirth}</FormFeedback>
                       </InputGroup>
 
-                      <div className='container'>
-                        {!!errors.imageBase64 && this.state.imageError ? <Alert color="danger" className="d-flex justify-content-center">{errors.imageBase64}</Alert> : ''}
+                      <div className='container d-flex justify-content-center'>
+                        {!!errors.imageBase64 && this.state.imageError ? <Alert color="danger" >{errors.imageBase64}</Alert> : ''}
                         <Row>
-                          <div className="form-group">
+                          <div className="form-group ">
                             <label id="labelForInput" htmlFor="inputFile">
                               {
                                 !this.state.isLoadingPhoto ?
@@ -368,7 +376,6 @@ class RegisterForm extends Component {
                                     id="image"
                                     alt=""
                                     name="image"
-                                    style={{ marginLeft: '80px' }}
                                     width="250" />
                                   : <p></p>
                               }
