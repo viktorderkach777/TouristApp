@@ -12,7 +12,6 @@ import 'cropperjs/dist/cropper.css';
 import Google from '../../../components/google';
 import Facebook from '../../../components/facebook';
 //import CaptchaService from '../../../components/captcha/captchaService';
-import * as registerActions from './reducer';
 import * as captchaActions from '../../../components/captcha/reducer';
 //import axios from 'axios';
 import CaptchaWidget from '../../../components/captcha';
@@ -35,7 +34,7 @@ class RegisterForm extends Component {
     errors: {
     },
     done: false,
-    loading: false,
+    isLoading: false,
     isLoadingPhoto: false,
     src: '',
     imageBase64: defaultPath,
@@ -184,7 +183,7 @@ class RegisterForm extends Component {
         firstName, middleName, lastName, dateOfBirth, captchaText } = this.state;
 
       this.setState({
-        loading: true, captchaIsLoading: true
+        isLoading: true, captchaIsLoading: true
       });
 
       this.props.register({
@@ -195,7 +194,7 @@ class RegisterForm extends Component {
         .then(
           () => this.setState({ done: true, captchaDone: true }, this.getUrlToRedirect()),
           (err) => {
-            this.setState({ errors: err.response.data, loading: false });
+            this.setState({ errors: err.response.data, isLoading: false });
           }
         );
     }
@@ -214,7 +213,7 @@ class RegisterForm extends Component {
     console.log('---FormRegister props----', this.props);
     console.log("=====", this.state.imageBase64 === defaultPath)
     const { errors,
-      loading,
+      isLoading,
       email,
       password,
       confirmPassword,
@@ -442,7 +441,7 @@ class RegisterForm extends Component {
                         {/* {!!errors.captchaText ? <span className="help-block">{errors.captchaText}</span> : ''} */}
                       </InputGroup>
 
-                      <Button color="success" block disabled={loading} >Create Account</Button>
+                      <Button color="success" block disabled={isLoading} >Create Account</Button>
 
                     </Form>
                   </CardBody>

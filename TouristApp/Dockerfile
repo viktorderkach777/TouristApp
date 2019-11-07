@@ -5,7 +5,9 @@ EXPOSE 80
 
 #RUN apk --no-cache add nodejs nodejs-npm
 RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs \
+    && apt-get install -y --allow-unauthenticated libc6-dev libgdiplus libx11-dev 
+    
 
 COPY *.csproj .
 RUN dotnet restore

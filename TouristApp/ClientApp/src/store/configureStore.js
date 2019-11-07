@@ -12,6 +12,7 @@ import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
 import {weatherReducer} from '../components/weather/reducers'
 import {mapReducer} from '../components/map/reducers'
 import { loginReducer } from "../views/Pages/Login/reducer";
+import { registerReducer } from "../views/Pages/Register/reducer";
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 //import { createBrowserHistory } from 'history';
 //import createHistory from 'history/createHashHistory';
@@ -32,7 +33,8 @@ export default function configureStore (history, initialState) {
       countries:countries.reducer,
       refreshToken: RefreshToken.refreshReducer,
       weather:weatherReducer,
-      map:mapReducer
+      map:mapReducer,
+      register:registerReducer
     };
 
     const middleware = [
