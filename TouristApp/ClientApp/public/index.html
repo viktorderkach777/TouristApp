@@ -46,6 +46,27 @@
     // React.js ID
     gtag('config', 'UA-118965717-6');
   </script>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '{728838114238593}',
+        cookie     : true,
+        xfbml      : true,
+        version    : '{v5.0}'
+      });
+        
+      FB.AppEvents.logPageView();   
+        
+    };
+  
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
 </head>
 
 <!-- BODY options, add following classes to body to change options
