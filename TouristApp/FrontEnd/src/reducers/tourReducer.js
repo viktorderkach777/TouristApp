@@ -54,6 +54,13 @@ export const initialState = {
     loading: false,
     success: false
 }
+,
+ filterlist: {
+  data: [],
+  error: false,
+  success: false,
+  loading: false,
+ }
 
 };
 
@@ -174,7 +181,33 @@ postToursFailed: state => {
     newState = update.set(state, 'list.filters', filters);
     newState = update.set(newState, 'list.currentPage', 1);
     return newState;
-  }              
+  },
+  //------------------GET FILTERS LIST--------------------------------------
+  getFiltersStarted: state => {
+    let newState = state;
+    newState = update.set(state, 'filterlist.loading', true);
+    newState = update.set(newState, 'filterlist.success', false);
+    return newState;
+  },
+  getFiltersSuccess: (state, action) => {
+    let newState = state;
+    const data = action.payload.data;
+    console.log("get list", data);
+    newState = update.set(state, 'filterlist.loading', false);
+    newState = update.set(newState, 'filterlist.success', true);
+    newState = update.set(newState, 'filterlist.data', data );
+    return newState;
+  },
+  getFiltersFailed: state => {
+    let newState = state;
+    newState = update.set(state, 'filterlist.loading', false);
+    newState = update.set(newState, 'filterlist.error', true);
+    return newState;
+  },     
+  
+  
+
+
 
   }
 });
@@ -211,6 +244,22 @@ export const postListTours = (model) => {
   }
 };
 
+
+export const getListFilters = () => {
+  return (dispatch) => {
+    dispatch(tours.actions.getFiltersStarted());
+
+    TourService.getListFilters()
+      .then((response) => {
+        console.log('-filters get--', response.data);
+        dispatch(tours.actions.getFiltersSuccess(response));
+      })
+      .catch(() => {
+        console.log('--failed--');
+        dispatch(tours.actions.getFiltersFailed());
+      });
+  }
+};
 
 
 

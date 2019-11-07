@@ -3,9 +3,8 @@ import { serverUrl } from '../../config';
 
 export default class TourService {
 
-  static getListTours(model) {
-    console.log('---STEP3----', model);
-    return axios.get(`${serverUrl}api/tour/list/` + model.currentPage + "?sortOrder=" + model.sortOrder);
+  static getListFilters() {
+    return axios.get(`${serverUrl}api/tour/filters`);
   }
 
   static postListTours(model) {
@@ -13,10 +12,12 @@ export default class TourService {
     return axios.post(`${serverUrl}api/tour/list`, model);
   }
 
-
   static deleteTour(id) {
     return axios.delete(`${serverUrl}api/tour/` + id);
   }
 
+  static likeTour(id) {
+    return axios.post(`${serverUrl}api/tour/like` + id);
+  }
 
 }

@@ -99,34 +99,37 @@ namespace TouristApp.DAL.Entities
             //    }
             //}
             #endregion
-        //    #region tblFilters - Фільтри
-        //    Filter[] filters =
-        //    {
-        //        new Filter { FilterNameId = "1", FilterValueId="1", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },
-        //        new Filter { FilterNameId = "2", FilterValueId="1", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },
-        //        new Filter { FilterNameId = "3", FilterValueId="3", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },
+            #region tblFilters - Фільтри
+            Filter[] filters =
+            {
+                    new Filter { FilterNameId = "1c57a39c-165f-459d-852e-8275b290520e", FilterValueId="daf3b4a5-b084-426f-9cc5-a219a861ad8d", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },  //клас готелю
+                    new Filter { FilterNameId = "b4b2c278-cbbd-4242-9e05-85db3ef47055", FilterValueId="3919924e-0493-4b02-9cf8-7c6b420f3ed2", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },  // країна
+                    new Filter { FilterNameId = "bd265235-e90e-4a6a-945f-2d379a5455f2", FilterValueId="1e62f01f-5461-45e2-934f-c545166b330b", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },  // місто вильоту
 
-        //        new Filter { FilterNameId = "1", FilterValueId="1", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
-        //        new Filter { FilterNameId = "2", FilterValueId="2", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
-        //        new Filter { FilterNameId = "3", FilterValueId="3", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
+                    new Filter { FilterNameId = "1c57a39c-165f-459d-852e-8275b290520e", FilterValueId="daf3b4a5-b084-426f-9cc5-a219a861ad8d", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
+                    new Filter { FilterNameId = "b4b2c278-cbbd-4242-9e05-85db3ef47055", FilterValueId="2a5a2de1-80c0-4303-a2b3-4c7d5a373cd8", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
+                    new Filter { FilterNameId = "bd265235-e90e-4a6a-945f-2d379a5455f2", FilterValueId="1e62f01f-5461-45e2-934f-c545166b330b", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
 
-        //        new Filter { FilterNameId = "1", FilterValueId="1", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
-        //        new Filter { FilterNameId = "2", FilterValueId="2", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
-        //        new Filter { FilterNameId = "3", FilterValueId="3", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
+                    new Filter { FilterNameId = "1c57a39c-165f-459d-852e-8275b290520e", FilterValueId="daf3b4a5-b084-426f-9cc5-a219a861ad8d", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
+                    new Filter { FilterNameId = "b4b2c278-cbbd-4242-9e05-85db3ef47055", FilterValueId="3919924e-0493-4b02-9cf8-7c6b420f3ed2", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
+                    new Filter { FilterNameId = "bd265235-e90e-4a6a-945f-2d379a5455f2", FilterValueId="1e62f01f-5461-45e2-934f-c545166b330b", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
 
-        //    };
-        //    foreach (var item in filters)
-        //    {
-        //        context.Filters.Add(new Filter { FilterNameId = item.FilterNameId, FilterValueId = item.FilterValueId, TourId = item.TourId });
-        //        context.SaveChanges();
-        //    }
-        //    #endregion
+                };
+            foreach (var item in filters)
+            {
+                if (context.Filters.FirstOrDefault(f => f.FilterNameId == item.FilterNameId &&  f.FilterValueId == item.FilterValueId && f.TourId == item.TourId) == null)
+                {
+                    context.Filters.Add(new Filter { FilterNameId = item.FilterNameId, FilterValueId = item.FilterValueId, TourId = item.TourId });
+                    context.SaveChanges();
+                }
+            }
+            #endregion
         }
 
-        
 
 
-            public static void SeedUsers(UserManager<DbUser> userManager,
+
+        public static void SeedUsers(UserManager<DbUser> userManager,
            RoleManager<DbRole> roleManager)
         {
             var email = "admin@gmail.com";
@@ -156,7 +159,7 @@ namespace TouristApp.DAL.Entities
                 result = userManager.AddToRoleAsync(user, roleName).Result;
             }
 
-            
+
         }
         public static void SeedDataByAS(IServiceProvider services, IHostingEnvironment env,
             IConfiguration config)
