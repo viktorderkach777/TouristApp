@@ -7,27 +7,24 @@ class CaptchaWidgetContainer extends Component {
         keyValue: null
     };
 
-    componentWillReceiveProps(nextProps) {
-        if (this.props.keyValue !== nextProps.keyValue) {
-            console.log('componentWillReceiveProps:keyValue', nextProps.keyValue);
-            this.setState({ keyValue: nextProps.keyValue });
-        }
-    }
-
-    //static getDerivedStateFromProps(nextProps, prevState) {
-    //    console.log('asss');
-    //    if(nextProps.keyValue!==prevState.keyValue) {
-    //      return { keyValue: nextProps.keyValue};
-    //   }
-    //   else return null;
+    // componentWillReceiveProps(nextProps) {
+    //     if (this.props.keyValue !== nextProps.keyValue) {            
+    //         this.setState({ keyValue: nextProps.keyValue });
+    //     }
     // }
+
+    static getDerivedStateFromProps(nextProps, prevState) {       
+       if(nextProps.keyValue!==prevState.keyValue) {
+         return { keyValue: nextProps.keyValue};
+      }
+      else return null;
+    }
 
 
     render() {
-        const { isKeyLoading } = this.props;
-        console.log('-----Captcha props-----', this.props);
+        const { isKeyLoading } = this.props;        
         const { keyValue } = this.state;
-        console.log('----Capthca state----', this.state);
+       
         const url = `${serverUrl}api/captchaImage/get-captcha/${keyValue}`;
       
         const content = (

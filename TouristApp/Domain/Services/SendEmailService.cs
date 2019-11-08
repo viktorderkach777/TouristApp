@@ -38,14 +38,14 @@ namespace TouristApp.Domain.Services
                 }
                 body = body.Replace("{UserName}", name);
                 body = body.Replace("{Title}", "Cайт максефект");
-                body = body.Replace("{Url}", "https://maxeffect.in.ua/");
+                body = body.Replace("{Url}", "https://touristapp.dp.ua/");
                 body = body.Replace("{Description}", text);
 
                 string command = $"echo '{body}' | " +
                     $"mail " +
                     $"-a \"Content-type: text/html;\" " +
-                    $"-s \"{title} - https://maxeffect.in.ua/\" " +
-                    $"{adminEmail}  -aFrom:noreply@maxeffect.in.ua";
+                    $"-s \"{title} - https://touristapp.dp.ua/\" " +
+                    $"{adminEmail}  -aFrom:noreply@touristapp.dp.ua";
 
                 Console.WriteLine($"Send email to Admin {command}");
                 var output = command.Bash();
