@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
-import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, FormFeedback } from 'reactstrap';
+import { Alert, Button, Card, CardBody, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, FormFeedback } from 'reactstrap';
 import { connect } from "react-redux";
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
-import defaultPath from './default-user.png'
-import * as userAction from '../../../reducers/auth';
-import classnames from 'classnames';
 import Cropper from 'react-cropper';
-import 'cropperjs/dist/cropper.css';
-import Google from '../../../components/google';
-import Facebook from '../../../components/facebook';
-//import CaptchaService from '../../../components/captcha/captchaService';
+import { Link } from 'react-router-dom';
 import * as registerActions from './reducer';
 import * as captchaActions from '../../../components/captcha/reducer';
-//import axios from 'axios';
 import CaptchaWidget from '../../../components/captcha';
+import CentralPageSpinner from '../../../components/CentrPageSpinner';
+import defaultPath from './default-user.png'
+import 'cropperjs/dist/cropper.css';
 
 const iconsColor = {
   backgroundColor: '#00aced',
@@ -28,7 +23,6 @@ const iconsColor = {
 class RegisterForm extends Component {
 
   state = {
-    profileUrl: '/',
     email: '',
     password: '',
     confirmPassword: '',
@@ -44,35 +38,30 @@ class RegisterForm extends Component {
     lastName: '',
     dateOfBirth: '',
     captchaText: "",
-    captchaDone: false,
-    captchaIsLoading: false,
-    imageError: true
+    imageError: true,
+    errorsServer: {
+    },
   };
 
   componentDidMount() {
-    // CaptchaService.postNewKey();
-    // this.props.dispatch({type: 'captcha/KEY_POST_STARTED'});
     this.props.createNewKeyCaptcha();
-
   }
 
-  getUrlToRedirect = () => {
-    let auth = this.props.auth;
-    console.log('---getUrlToRedirect----', auth);
-    if (auth.isAuthenticated) {
-      let roles = auth.user.roles;
-      if (roles === "User") {
-        this.setState({ profileUrl: "/tours" });
-      }
-      else if (roles === "Admin") {
-        this.setState({ profileUrl: "/admin/dashboard" });
-      }
-      else {
-        this.setState({ profileUrl: "/" });
-      }
+  static getDerivedStateFromProps(props, state) {
+    if (props.loading !== state.loading || props.errors !== state.errorsServer || props.captcha !== state.captcha) {
+      return { loading: props.loading, errorsServer: props.errors, captcha: props.captcha };
     }
-    console.log('---profileUrl:', this.state.profileUrl);
-  };
+
+    // Return null if the state hasn't changed
+    return null;
+  }
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   if(nextProps!==prevState) {
+  //   return { loading: nextProps.loading, errorsServer: nextProps.errors, captcha: nextProps.captcha };
+  //   }
+  //   //else return null;
+  // }
 
 
   changeInput = (e) => {
@@ -107,11 +96,13 @@ class RegisterForm extends Component {
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
-    this.setState({ imageBase64: this.cropper.getCroppedCanvas().toDataURL() });
-    this.setState({ isLoadingPhoto: false });
-    this.setState({ src: '' });
-    this.setState({ imageError: false });
 
+    this.setState({
+      imageBase64: this.cropper.getCroppedCanvas().toDataURL(),
+      isLoadingPhoto: false,
+      src: '',
+      imageError: false
+    });
   }
 
   setStateByErrors = (name, value) => {
@@ -154,65 +145,59 @@ class RegisterForm extends Component {
     }
   };
 
-
   onSubmitForm = (e) => {
     e.preventDefault();
-
     let errors = {};
+    const {
+      email,
+      password,
+      confirmPassword,
+      firstName,
+      lastName,
+      dateOfBirth,
+      captchaText,
+      imageBase64
+    } = this.state;
 
-    if (this.state.email === '') errors.email = "Cant't be empty";
-
-    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$/.test(this.state.password)) errors.password = "Password must be at least 6 characters and contain digits, upper and lower case"
-    if (this.state.password === '') errors.password = "Cant't be empty";
-    if (this.state.confirmPassword === '') errors.confirmPassword = "Cant't be empty";
-    if (this.state.confirmPassword !== this.state.password) errors.confirmPassword = "Passwords do not match";
-    if (this.state.firstName === '') errors.firstName = "Cant't be empty";
-    if (this.state.lastName === '') errors.lastName = "Cant't be empty";
-    if (this.state.dateOfBirth === '') errors.dateOfBirth = "Cant't be empty";
-    if (this.state.captchaText === '') errors.captchaText = "Cant't be empty";
-    if (this.state.imageBase64 === defaultPath) errors.imageBase64 = "Download your image";
+    if (email === '') errors.email = "Cant't be empty";
+    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$/.test(password)) errors.password = "Password must be at least 6 characters and contain digits, upper and lower case"
+    if (password === '') errors.password = "Cant't be empty";
+    if (confirmPassword === '') errors.confirmPassword = "Cant't be empty";
+    if (confirmPassword !== password) errors.confirmPassword = "Passwords do not match";
+    if (firstName === '') errors.firstName = "Cant't be empty";
+    if (lastName === '') errors.lastName = "Cant't be empty";
+    if (dateOfBirth === '') errors.dateOfBirth = "Cant't be empty";
+    if (captchaText === '') errors.captchaText = "Cant't be empty";
+    if (imageBase64 === defaultPath) errors.imageBase64 = "Download your image";
 
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
-      console.log('this.props.captcha', this.props.captcha);
-      console.log('this.state', this.state);
-
-
       const { keyValue } = this.props.captcha;
       const { email, password, confirmPassword, imageBase64,
         firstName, middleName, lastName, dateOfBirth, captchaText } = this.state;
 
-      this.setState({
-        loading: true, captchaIsLoading: true
-      });
-
-      this.props.register({
+      const model = {
         email, password, confirmPassword, imageBase64,
         firstName, middleName, lastName, dateOfBirth, captchaText,
         captchaKey: keyValue
-      })
-        .then(
-          () => this.setState({ done: true, captchaDone: true }, this.getUrlToRedirect()),
-          (err) => {
-            this.setState({ errors: err.response.data, loading: false });
-          }
-        );
+      };
+
+      this.props.register(model)
     }
     else {
       this.setState({ errors });
     }
   };
 
-  captchaUpdate = (e) =>{
+  captchaUpdate = (e) => {
     e.preventDefault()
     this.props.createNewKeyCaptcha();
   }
 
   render() {
-    console.log('---FormRegister state----', this.state);
-    console.log('---FormRegister props----', this.props);
-    console.log("=====", this.state.imageBase64 === defaultPath)
+    // console.log('---FormRegister state----', this.state);
+    // console.log('---FormRegister props----', this.props);
     const { errors,
       loading,
       email,
@@ -222,12 +207,15 @@ class RegisterForm extends Component {
       middleName,
       lastName,
       dateOfBirth,
-      imageBase64 } = this.state;
-
-    const { captcha } = this.props;
+      imageBase64,
+      captcha,
+      errorsServer,
+      imageError,
+      isLoadingPhoto } = this.state;
 
     const form = (
       <React.Fragment>
+        <CentralPageSpinner loading={loading} />
         <div className="app flex-row ">
           <Container>
             <Row className="justify-content-center">
@@ -235,9 +223,17 @@ class RegisterForm extends Component {
                 <Card className="mx-4">
                   <CardBody className="p-4">
                     <Form onSubmit={this.onSubmitForm}>
-
                       <h1>Register</h1>
-                      <p className="text-muted">Create your account</p>
+                      <Row>
+                        <Col xs="6">
+                          {/* <p className="text-muted">Create your account</p> */}
+                        </Col>
+                        <Col xs="6" className="text-right">
+                          <Link to="/login">
+                            <Button color="link" className="px-0" active tabIndex={-1}>Already singed in?</Button>
+                          </Link>
+                        </Col>
+                      </Row>
                       {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 
                       <InputGroup className="mb-3">
@@ -246,7 +242,7 @@ class RegisterForm extends Component {
                         </InputGroupAddon>
                         <Input
                           className="form-control"
-                          invalid={!!errors.email}
+                          invalid={!!errors.email || !!errorsServer.email}
                           type="text"
                           placeholder="Email"
                           autoComplete="Email"
@@ -256,9 +252,8 @@ class RegisterForm extends Component {
                           onChange={this.handleChange}
                         />
                         <FormFeedback>{errors.email}</FormFeedback>
-
+                        {!!errorsServer.email ? <FormFeedback>{'User with this email already exists!'}</FormFeedback> : ''}
                       </InputGroup>
-
 
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
@@ -293,7 +288,7 @@ class RegisterForm extends Component {
                           name="confirmPassword"
                           value={confirmPassword}
                           onChange={this.handleChange} />
-                        <FormFeedback>{errors.password}</FormFeedback>
+                        <FormFeedback>{errors.confirmPassword}</FormFeedback>
                       </InputGroup>
 
                       <InputGroup className="mb-4">
@@ -332,7 +327,6 @@ class RegisterForm extends Component {
                         <FormFeedback>{errors.middleName}</FormFeedback>
                       </InputGroup>
 
-
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText style={iconsColor}>
@@ -359,7 +353,7 @@ class RegisterForm extends Component {
                         </InputGroupAddon>
                         <Input type="date"
                           className="form-control"
-                          invalid={!!errors.dateOfBirth}
+                          invalid={!!errors.dateOfBirth || !!errorsServer.dateOfBirth}
                           placeholder="Date Of birth "
                           autoComplete="dateOfBirth"
                           id="dateOfBirth"
@@ -367,15 +361,16 @@ class RegisterForm extends Component {
                           value={dateOfBirth}
                           onChange={this.handleChange} />
                         <FormFeedback>{errors.dateOfBirth}</FormFeedback>
+                        {!!errorsServer.dateOfBirth ? <FormFeedback>{'Invalid date of birth!'}</FormFeedback> : ''}
                       </InputGroup>
 
-                      {!!errors.imageBase64 && this.state.imageError ? <Alert color="danger" className="d-flex justify-content-center" >{errors.imageBase64}</Alert> : ''}
+                      {!!errors.imageBase64 && imageError ? <Alert color="danger" className="d-flex justify-content-center" >{errors.imageBase64}</Alert> : ''}
                       <div className='container d-flex justify-content-center'>
                         <Row>
                           <div className="form-group ">
                             <label id="labelForInput" htmlFor="inputFile">
                               {
-                                !this.state.isLoadingPhoto ?
+                                !isLoadingPhoto ?
                                   <img
                                     src={imageBase64}
                                     className="img-circle"
@@ -408,7 +403,6 @@ class RegisterForm extends Component {
                         </Row>
                       </div>
                       <div className="input-group-text" >
-                        {/* <Button className="img-fluid" style={{ height: "70px", width: "70px" }}> */}
                         <span onClick={e => this.captchaUpdate(e)}>
                           <img
                             src="http://simpleicon.com/wp-content/uploads/refresh.png"
@@ -419,7 +413,6 @@ class RegisterForm extends Component {
                             style={{ height: "30px", width: "30px" }}
                           />
                         </span>
-                        {/* </Button> */}
                         <span className="mx-auto d-block">
                           <CaptchaWidget {...captcha} />
                         </span>
@@ -431,7 +424,8 @@ class RegisterForm extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text"
-                          className={classnames('form-control', { 'is-invalid': !!errors.captchaText })}
+                          className="form-control"
+                          invalid={!!errors.captchaText || !!errorsServer.captchaText}
                           placeholder="Captcha Text"
                           autoComplete="captchaText"
                           id="captchaText"
@@ -439,23 +433,13 @@ class RegisterForm extends Component {
                           value={this.state.captchaText}
                           onChange={this.handleChange} />
                         <FormFeedback>{errors.captchaText}</FormFeedback>
-                        {/* {!!errors.captchaText ? <span className="help-block">{errors.captchaText}</span> : ''} */}
+                        <FormFeedback>{errorsServer.captchaText}</FormFeedback>
                       </InputGroup>
 
                       <Button color="success" block disabled={loading} >Create Account</Button>
 
                     </Form>
                   </CardBody>
-                  <CardFooter className="p-4">
-                    <Row>
-                      <Col xs="12" sm="6">
-                        <Facebook />
-                      </Col>
-                      <Col xs="12" sm="6">
-                        <Google />
-                      </Col>
-                    </Row>
-                  </CardFooter>
                 </Card>
               </Col>
             </Row>
@@ -463,29 +447,29 @@ class RegisterForm extends Component {
         </div>
       </React.Fragment>
     );
-    return (
-      this.state.done ?
-        <Redirect to="/" /> : form
-    );
+    return form;
   }
 }
 
 const mapState = (state) => {
   return {
-    auth: get(state, 'auth'),
     captcha: {
       keyValue: get(state, 'captcha.key.data'),
       isKeyLoading: get(state, 'captcha.key.loading'),
       isKeyError: get(state, 'captcha.key.error'),
       isSuccess: get(state, 'captcha.key.success')
-    }
+    },
+    loading: get(state, 'register.post.loading'),
+    failed: get(state, 'register.post.failed'),
+    success: get(state, 'register.post.success'),
+    errors: get(state, 'register.post.errors'),
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
     register: (model) =>
-      dispatch(userAction.register(model)),
+      dispatch(registerActions.registerPost(model)),
     createNewKeyCaptcha: () => {
       dispatch(captchaActions.createNewKey());
     }

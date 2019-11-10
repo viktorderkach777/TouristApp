@@ -23,6 +23,7 @@ import navigation from '../../_nav';
 // routes config
 import routes from '../../routes/adminroutes';
 //import Notifications from '../../Notifications'
+const CentrPageSpinner = React.lazy(() => import('../../components/CentrPageSpinner'));
 
 const AdminAside = React.lazy(() => import('./AdminAside'));
 const AdminFooter = React.lazy(() => import('./AdminFooter'));
@@ -32,7 +33,7 @@ const Notifications = React.lazy(() => import('../../components/Notifications'))
 
 class AdminLayoutContainer extends Component {
 
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
+  loading = () => <CentrPageSpinner loading/>//<div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   signOut(e) {
     e.preventDefault();

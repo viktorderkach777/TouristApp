@@ -25,6 +25,7 @@ import navigation from '../../_nav';
 import routes from '../../routes/routes';
 
 import { logout } from '../../views/Pages/Login/reducer';
+const CentrPageSpinner = React.lazy(() => import('../../components/CentrPageSpinner'));
 
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
@@ -32,7 +33,7 @@ const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayoutContainer extends Component {
 
-  loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
+  loading = () => <CentrPageSpinner loading/>//<div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   signOut(e) {
     e.preventDefault();

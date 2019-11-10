@@ -1,7 +1,7 @@
 import update from '../../../helpers/update';
 import RegisterService from './registerService';
-import isEmpty from 'lodash/isEmpty';
-//import { push } from 'connected-react-router';
+//import isEmpty from 'lodash/isEmpty';
+import { push } from 'connected-react-router';
 
 export const REGISTER_POST_STARTED = "register/REGISTER_POST_STARTED";
 export const REGISTER_POST_SUCCESS = "register/REGISTER_POST_SUCCESS";
@@ -71,6 +71,7 @@ export const registerPost = (model) => {
         RegisterService.register(model)
             .then((response) => {    
                 dispatch(registerActions.success());
+                dispatch(push('/tours'));
                 //registerByJWT(response.data, dispatch);   
                 console.log('register');             
                 

@@ -7,14 +7,14 @@ import MapService from '../map/services/mapService';
 import { MapServiceProvider } from '../map/components/mapServiceContext';
 const WeatherDashboard = lazy(() => import('./components/weatherDashBoard'));
 const ErrorBoundry = lazy(() => import('../../components/errorBoundry'));
-
+const CentrPageSpinner = React.lazy(() => import('../../components/CentrPageSpinner'));
 const weatherService = new WeatherService();
 const mapService = new MapService();
 
 export default function Wheather(props) {
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<CentrPageSpinner loading/>}>
             <ErrorBoundry>
                 <MapServiceProvider value={mapService}>
                     <WeatherServiceProvider value={weatherService}>

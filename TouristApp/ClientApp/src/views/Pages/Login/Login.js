@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert,FormFeedback } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { Button, Card, CardBody, CardFooter, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert, FormFeedback } from 'reactstrap';
 import PropTypes from 'prop-types';
-//import classnames from 'classnames';
 import { connect } from "react-redux";
-// import * as userAction from '../../../reducers/auth';
 import * as loginActions from './reducer';
 import get from 'lodash.get';
-//import validateemail from '../../../helpers/validateEmail'; 
 import CentralPageSpinner from '../../../components/CentrPageSpinner';
-
+import Google from '../../../components/google';
+import Facebook from '../../../components/facebook';
 
 
 const propTypes = {
@@ -58,19 +56,17 @@ class Login extends Component {
   onSubmitForm = (e) => {
     e.preventDefault();
     let errors = {};
-    console.log('submit');
-    //if (!validateemail(this.state.email)) errors.email = "Enter valid email"
+    
     if (this.state.email === '') errors.email = "Can't be empty!"
     if (this.state.password === '') errors.password = "Can't be empty!"
 
     const isValid = Object.keys(errors).length === 0
     if (isValid) {
-      const { email, password } = this.state;
-      //console.log('validform', email, password);
+      const { email, password } = this.state;     
       const model = {
         Email: email,
         Password: password
-      };      
+      };
       this.props.login(model);
     }
     else {
@@ -87,11 +83,10 @@ class Login extends Component {
 
   render() {
     const { errors, errorsServer, loading } = this.state;
-    console.log('---FormLogin state----', this.state);
+    //console.log('---FormLogin state----', this.state);
     const form = (
       <React.Fragment>
-        {/* {loading && <CentralPageSpinner loading={true}/>} */}
-        <CentralPageSpinner loading={loading}/>
+        <CentralPageSpinner loading={loading} />
 
         <div className="app flex-row align-items-center">
           <Container>
@@ -103,10 +98,21 @@ class Login extends Component {
                       <Form onSubmit={this.onSubmitForm}>
                         <h1>Login</h1>
                         {!!errorsServer.invalid ?
-                                <div className="invalid-feedback d-block">
-                                    {errorsServer.invalid}
-                                </div> : ''}
-                        <p className="text-muted">Sign In to your account</p>
+                          <div className="invalid-feedback d-block">
+                            {errorsServer.invalid}
+                          </div> : ''}
+
+                        <Row>
+                          <Col xs="6">
+                            {/* <p className="text-muted">Sign In to your account</p> */}
+                          </Col>
+                          <Col xs="6" className="text-right">
+                            <Link to="/register">
+                              <Button color="link" className="px-0" active tabIndex={-1}>Register Now!</Button>
+                            </Link>
+                          </Col>
+                        </Row>
+
                         {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 
                         <InputGroup className="mb-3">
@@ -140,7 +146,7 @@ class Login extends Component {
                             placeholder="Password"
                             autoComplete="current-password"
                             className="form-control"
-                            invalid={!!errors.password }
+                            invalid={!!errors.password}
 
                             id="password"
                             name="password"
@@ -160,8 +166,18 @@ class Login extends Component {
                         </Row>
                       </Form>
                     </CardBody>
+                    <CardFooter className="p-4">
+                      <Row>
+                        <Col xs="12" sm="6">
+                          <Facebook />
+                        </Col>
+                        <Col xs="12" sm="6">
+                          <Google />
+                        </Col>
+                      </Row>
+                    </CardFooter>
                   </Card>
-                  <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
+                  {/* <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
                     <CardBody className="text-center">
                       <div>
                         <h2>Sign up</h2>
@@ -172,7 +188,7 @@ class Login extends Component {
                         </Link>
                       </div>
                     </CardBody>
-                  </Card>
+                  </Card> */}
                 </CardGroup>
               </Col>
             </Row>
@@ -203,4 +219,4 @@ const mapDispatch = {
 Login.propTypes = propTypes;
 Login.defaultProps = defaultProps;
 
-export default withRouter(connect(mapState, mapDispatch)(Login));;
+export default connect(mapState, mapDispatch)(Login);;
