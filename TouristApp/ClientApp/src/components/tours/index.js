@@ -38,7 +38,6 @@ class ToursContainer extends Component {
       sortOrder: 'name',
       filters: null,
       searchText: '',
-
       deleteDialog_isOpen: false,
       id_delete: 0
 
@@ -84,50 +83,19 @@ class ToursContainer extends Component {
 
     if (this.props.sortOrder !== prevProps.sortOrder ||
       this.props.currentPage !== prevProps.currentPage ||
-      this.props.totalPages !== prevProps.totalPages ||
       this.props.searchText !== prevProps.searchText ||
       this.props.filtersIdList !== prevProps.filtersIdList
     ) {
-      this.postListTours();
+      const model = {
+        currentPage: this.props.currentPage,
+        sortOrder: this.props.sortOrder,
+        filters: this.props.filtersIdList,
+        searchString: this.props.searchText
+      }
+
+      this.postListTours(model);
+      
     }
-
-
-    // if (this.props.sortOrder !== prevProps.sortOrder)
-    // {
-    //   const {searchText } = this.props;
-    //     const model = {
-    //       currentPage: 1,
-    //       sortOrder: prevProps.sortOrder,
-    //       filter: '',
-    //       searchString: searchText
-    //     }
-    //     this.props.postListTours(model);
-    //     console.log('---CHANGE PROPS----', model );
-    // } 
-    // else if (this.props.searchText !== prevProps.searchText)
-    // {
-    //   const {  sortOrder } = this.props;
-    //     const model = {
-    //       currentPage: 1,
-    //       sortOrder: sortOrder,
-    //       filter: '',
-    //       searchString: prevProps.searchText
-    //     }
-    //     this.props.postListTours(model);
-    //     console.log('---CHANGE PROPS----', model );
-    // }
-    // else if (this.props.currentPage !== prevProps.currentPage)
-    // {
-    //   const { searchText, sortOrder } = this.props;
-    //     const model = {
-    //       currentPage: prevProps.currentPage,
-    //       sortOrder: sortOrder,
-    //       filter: '',
-    //       searchString:searchText
-    //     }
-    //     this.props.postListTours(model);
-    //     console.log('---CHANGE PROPS----', model );
-    // }
 
   }
 
@@ -369,14 +337,11 @@ const mapState = state => {
 
 const mapDispatch = (dispatch) => {
   return {
-    getListTours: (model) => {
-      dispatch(tourAction.getListTours(model))
+    postListTours: (model) => {
+      dispatch(tourAction.postListTours(model))
     },
     getListFilters: () => {
       dispatch(filtersAction.getListFilters())
-    },
-    postListTours: (model) => {
-      dispatch(tourAction.postListTours(model))
     },
     deleteTour: (tourId) => {
       dispatch(tourAction.deleteTour(tourId))
