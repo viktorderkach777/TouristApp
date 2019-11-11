@@ -49,8 +49,8 @@ class FilterItem extends Component {
 
     handleCheckChieldElement = (event) => {
         const { handleCheckChieldElement = f => f } = this.props;
-        let value = event.target.value;
-        handleCheckChieldElement(value);
+        let filterId = event.target.id;
+        handleCheckChieldElement(filterId);
     }
 
     render() {

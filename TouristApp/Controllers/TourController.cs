@@ -289,10 +289,12 @@ namespace TouristApp.Controllers
 
         //version 1
         [HttpPost("list")]
-        public async Task<ActionResult<IEnumerable<ToursViewModel>>> Post([FromBody] ToursListViewModel filter)
+        public async Task<ActionResult<IEnumerable<ToursViewModel>>> Post([FromBody] ToursListViewModel parameters)
         {
-            var newfilters = GetListFilters(_context);
-            int page = filter.CurrentPage;
+            var filtersList = GetListFilters(_context); // list існуючих фільтрів
+            string[] filterValueSearchList = parameters.filters; //масив ID вибраних фільтрів
+
+            int page = parameters.CurrentPage;
             int pageSize = 2;
             int pageNo = page - 1;
             ToursViewModel model = new ToursViewModel();
@@ -325,32 +327,38 @@ namespace TouristApp.Controllers
 
                 }).ToListAsync();
 
-            //if (filter.Filters.Count != 0)
-            //{
-            //    List<string> countryFilter = new List<string>();
-            //    foreach (var item in filter.Filters[0].Data)
-            //    {
-            //        if (item.isChecked)
-            //        {
-            //            countryFilter.Add(item.Value);
-            //        }
-            //    }
-            //    if (countryFilter.Count != 0)
-            //    {
-            //        query = query.Where(s => s.Country.Split('|')
-            //                 .Select(arrayElement => arrayElement.Trim())
-            //                  .Any(value => countryFilter.Contains(value)))
-            //                  .ToList();
-            //    }
-            //}
-
-            if (!String.IsNullOrEmpty(filter.searchString))
+            if (parameters.filters.Length != 0)
             {
-                query = query.Where(s => s.Name.Contains(filter.searchString)
-                                       || s.Region.Contains(filter.searchString)).ToList();
+                //foreach (var fName in filtersList)
+                //{
+                //    int countFilter = 0; //Кількість співпадінь у даній групі фільтрів
+                //    var predicate = PredicateBuilder.False<Tours>();
+                //    foreach (var fValue in fName.Children)
+                //    {
+                //        for (int i = 0; i < filterValueSearchList.Length; i++)
+                //        {
+                //            var idV = fValue.Id;
+                //            if (filterValueSearchList[i] == idV)
+                //            {
+                //                predicate = predicate
+                //                    .Or(p => p.Filtres
+                //                        .Any(f => f.FilterValueId == idV));
+                //                countFilter++;
+                //            }
+                //        }
+                //    }
+                //    if (countFilter != 0)
+                //        query = query.Where(predicate);
+                //}
             }
 
-            switch (filter.sortOrder)
+            if (!String.IsNullOrEmpty(parameters.searchString))
+            {
+                query = query.Where(s => s.Name.Contains(parameters.searchString)
+                                       || s.Region.Contains(parameters.searchString)).ToList();
+            }
+
+            switch (parameters.sortOrder)
             {
                 case "name":
                     query = query.OrderBy(c => c.Name).ToList();
@@ -377,7 +385,7 @@ namespace TouristApp.Controllers
                 .Take(pageSize).ToList();
 
             model.Tours = query;
-            model.sortOrder = filter.sortOrder;
+            model.sortOrder = parameters.sortOrder;
 
             model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
             model.CurrentPage = page;

@@ -32,6 +32,7 @@ class ToursContainer extends Component {
     //initializing state 
     this.state = {
       tours: [],
+      filtersIdList:[],
       currentPage: 1,
       totalPages: null,
       sortOrder: 'name',
@@ -45,11 +46,11 @@ class ToursContainer extends Component {
   }
 
   componentDidMount() {
-    const { currentPage, filters, totalPages, sortOrder, searchText } = this.props;
+    const { currentPage, filtersIdList, totalPages, sortOrder, searchText } = this.props;
     const model = {
       currentPage: 1,
       sortOrder: sortOrder,
-      filters: filters,
+      filters: filtersIdList,
       searchString: searchText
     }
     this.props.getListFilters();
@@ -58,7 +59,7 @@ class ToursContainer extends Component {
       currentPage: currentPage,
       totalPages: totalPages,
       sortOrder: sortOrder,
-      filters: filters
+      filtersIdList: filtersIdList
     });
 
 
@@ -74,7 +75,7 @@ class ToursContainer extends Component {
       totalPages: props.totalPages,
       sortOrder: props.sortOrder,
       searchText: props.searchText,
-      filters: props.filters
+      filtersIdList: props.filtersIdList
     };
   }
 
@@ -84,7 +85,8 @@ class ToursContainer extends Component {
     if (this.props.sortOrder !== prevProps.sortOrder ||
       this.props.currentPage !== prevProps.currentPage ||
       this.props.totalPages !== prevProps.totalPages ||
-      this.props.searchText !== prevProps.searchText 
+      this.props.searchText !== prevProps.searchText ||
+      this.props.filtersIdList !== prevProps.filtersIdList
     ) {
       this.postListTours();
     }
@@ -151,11 +153,11 @@ class ToursContainer extends Component {
 
   postListTours = () => {
 
-    const { searchText, sortOrder, filters, currentPage } = this.state;
+    const { searchText, sortOrder, filtersIdList, currentPage } = this.state;
     const model = {
       currentPage: currentPage,
       sortOrder: sortOrder,
-      filters: filters,
+      filters: filtersIdList,
       searchString: searchText
     }
 
@@ -179,18 +181,19 @@ class ToursContainer extends Component {
 
   }
 
-  handleCheckChieldElement = (value) => {
+  handleCheckChieldElement = (filterId) => {
 
-    console.log('---VALUE enter---', value)
-    let filters = this.state.filters;
-    filters.forEach(filter => {
-      filter.children.forEach(item => {
-        if (item.value === value) {
-          // console.log('---isChecked---', data.isChecked)
-        //  item.isChecked = !item.isChecked
-        }
-      })
-    })
+    console.log('---filterId enter---', filterId)
+    this.props.setFilterId(filterId);
+    // let filters = this.state.filters;
+    // filters.forEach(filter => {
+    //   filter.children.forEach(item => {
+    //     if (item.id === filterId) {
+    //        console.log('---isChecked---', data.isChecked)
+    //       item.isChecked = !item.isChecked
+    //     }
+    //   })
+    // })
     // this.setState({ filters: filters });
     //this.props.setFilters(filters);
     // const { sortOrder, searchText } = this.props;
@@ -217,7 +220,7 @@ class ToursContainer extends Component {
     //this.props.postListTours(model);
   }
 
-  onPageChanged = data => {
+  onPageChanged = (data) => {
     this.props.setCurrentPage(data);
     console.log('---data from pagination', data);
     // const { sortOrder, searchText, filters } = this.props;
@@ -315,10 +318,8 @@ class ToursContainer extends Component {
               <Row>
                 <h5>{item.price}<span className="currency">₴</span></h5>
                 <Link   to={`/views/${item.country}/${item.id}`}>
-
                   <Button className="buttonHotel">Дивитись тур</Button>
                 </Link>
-
               </Row>
               <Button color="primary" className="DeleteTour" size="sm" hidden={roles !== "Admin"} onClick={e => this.deleteTour(e, item.id)}><i className="fa fa-trash" aria-hidden="true" /></Button>
             </Col>
@@ -359,6 +360,7 @@ const mapState = state => {
     sortOrder: get(state, 'tours.list.sortOrder'),
     searchText: get(state, 'tours.list.searchText'),
     filters: get(state, 'filters.list.filters'),
+    filtersIdList: get(state, 'tours.list.filters'),
     totalPages: get(state, 'tours.list.totalPages'),
     isAuthenticated: get(state, 'auth.isAuthenticated'),
     roles: get(state, 'auth.user.roles')
@@ -388,9 +390,9 @@ const mapDispatch = (dispatch) => {
     setCurrentPage: (currentPage) => {
       dispatch(tourAction.setCurrentPage(currentPage))
     },
-    setFilters: (filters) => {
-      dispatch(tourAction.setFilters(filters))
-    }
+    setFilterId: (filterId) => {
+      dispatch(tourAction.setFilterId(filterId))
+    },
   };
 };
 

@@ -184,7 +184,7 @@ namespace TouristApp.ViewModels
     {
         public int CurrentPage { get; set; }
         public string sortOrder { get; set; }
-        public List<FilterItemViewModel> Filters { get; set; }
+        public string[] filters { get; set; }
         public string searchString { get; set; }
 
     }
