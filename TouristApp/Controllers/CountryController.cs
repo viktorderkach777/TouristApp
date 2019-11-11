@@ -122,7 +122,7 @@ namespace TouristApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var country = new Countries
+            var country = new Countries  
             {
                 Name = model.Name
             };

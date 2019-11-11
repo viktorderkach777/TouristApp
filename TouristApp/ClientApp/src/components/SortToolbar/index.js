@@ -73,7 +73,7 @@ class SortToolbar extends Component {
                 <CardBody>
                     <Form className="ml-2">
                         <FormGroup className="row">
-                            <div className="col-12 col-md-6">
+                            <div className="col-12 col-md-6 mb-2">
                                 <InputGroup >
                                     <InputGroupAddon addonType="prepend">
                                         <Button type="text" color="primary"><i className="fa fa-sort" aria-hidden="true"></i></Button>
@@ -84,7 +84,7 @@ class SortToolbar extends Component {
                                         </DropdownToggle>
                                         <DropdownMenu >
                                             {list.map(item => (
-                                                <DropdownItem onClick={this.sorting} data-type={item.data}>{item.value}</DropdownItem>
+                                                <DropdownItem key={item.data} onClick={this.sorting} data-type={item.data}>{item.value}</DropdownItem>
                                             ))}
                                         </DropdownMenu>
                                     </Dropdown>

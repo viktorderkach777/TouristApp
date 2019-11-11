@@ -14,7 +14,7 @@ namespace TouristApp.DAL.Entities
         private static void SeedFilters(EFContext context)
         {
             #region tblFilterNames - Назви фільтрів
-            string[] filterNames = { "Країни", "Город вильоту", "Клас готелю" };
+            string[] filterNames = { "Країни", "Місто вильоту", "Клас готелю" };
             foreach (var type in filterNames)
             {
                 if (context.FilterNames.SingleOrDefault(f => f.Name == type) == null)
@@ -31,7 +31,7 @@ namespace TouristApp.DAL.Entities
 
             #region tblFilterValues - Значення фільтрів
             List<string[]> filterValues = new List<string[]> {
-                new string [] { "Кіпр", "Єгипет", "Туніс","Іспанія"},
+                new string [] { "Кіпр", "Єгипет", "Туніс","Іспанія","Португалія"},
                 new string [] { "Київ", "Львів", "Одеса"},
                 new string [] {"2*","3*","4*","5*"}
             };

@@ -2,6 +2,7 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { captchaReducer } from "../components/captcha/reducer";
 import { tours } from "../reducers/tourReducer";
+import { filters } from "../reducers/filterReducer";
 import { countries } from "../reducers/countryReducer";
 import * as RefreshToken from '../components/RefreshToken/reducer';
 
@@ -29,6 +30,7 @@ export default function configureStore (history, initialState) {
       auth:userReducer.reducer,
       userlist: user,
       tours:tours.reducer,
+      filters:filters.reducer,
       countries:countries.reducer,
       refreshToken: RefreshToken.refreshReducer,
       weather:weatherReducer,

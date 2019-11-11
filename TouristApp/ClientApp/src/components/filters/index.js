@@ -4,14 +4,7 @@ import { Button, Form, Card, CardHeader, CardBody, Row,Col } from 'reactstrap';
 
 
 class Filters extends Component {
-    constructor(props) {
-        super(props);
-
-        //initializing state 
-        this.state = {
-            filters: !this.props.filters ? "" : this.props.filters,
-        };
-    }
+   
 
 
     handleCheckChieldElement = (value) => {
@@ -34,7 +27,7 @@ class Filters extends Component {
     }
 
     render() {
-        const { filters } = this.state;
+        const { filters } = this.props;
         console.log('---MAIN:filters---', filters)
         return (
             <Form>
@@ -42,7 +35,7 @@ class Filters extends Component {
                     <CardBody>
                         <CardHeader>217 знайдено</CardHeader>
                         {filters.map(filterItem =>
-                            <FilterItem filterData={filterItem} key={filterItem.Id} handleCheckChieldElement={this.handleCheckChieldElement} />
+                            <FilterItem filterData={filterItem} key={filterItem.id} handleCheckChieldElement={this.handleCheckChieldElement} />
                         )}
                         <Row >
                             <Col  className="d-flex justify-content-center">

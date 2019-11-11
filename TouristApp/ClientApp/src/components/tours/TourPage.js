@@ -52,7 +52,7 @@ export default class Hotel extends Component {
             <React.Fragment>
                 <div className="app flex-row align-items-top">
                     <Container>
-                        <Card className="CardTours text-center" style={{ height: '70px', padding: '20px' }}>
+                        <Card className="CardTours text-center" style={{ height: 'auto', padding: '20px' }}>
                             <CardText tag="h4">
                                 Зареєструйся до <b>1 жовтня</b> отримай бонус 250 гривень на оплату туру від нашого агентства!
                             </CardText>

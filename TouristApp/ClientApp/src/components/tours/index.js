@@ -4,6 +4,7 @@ import get from 'lodash.get';
 import { Link } from 'react-router-dom';
 import './tours.css';
 import * as tourAction from '../../reducers/tourReducer';
+import * as filtersAction from '../../reducers/filterReducer';
 import {
   Modal, ModalHeader, ModalFooter, ModalBody,
   Card,
@@ -51,7 +52,7 @@ class ToursContainer extends Component {
       filters: filters,
       searchString: searchText
     }
-
+    this.props.getListFilters();
     this.props.postListTours(model);
     this.setState({
       currentPage: currentPage,
@@ -83,11 +84,9 @@ class ToursContainer extends Component {
     if (this.props.sortOrder !== prevProps.sortOrder ||
       this.props.currentPage !== prevProps.currentPage ||
       this.props.totalPages !== prevProps.totalPages ||
-      this.props.searchText !== prevProps.searchText ||
-      this.props.filters !== prevProps.filters
+      this.props.searchText !== prevProps.searchText 
     ) {
       this.postListTours();
-
     }
 
 
@@ -185,15 +184,15 @@ class ToursContainer extends Component {
     console.log('---VALUE enter---', value)
     let filters = this.state.filters;
     filters.forEach(filter => {
-      filter.data.forEach(data => {
-        if (data.value === value) {
+      filter.children.forEach(item => {
+        if (item.value === value) {
           // console.log('---isChecked---', data.isChecked)
-          data.isChecked = !data.isChecked
+        //  item.isChecked = !item.isChecked
         }
       })
     })
     // this.setState({ filters: filters });
-    this.props.setFilters(filters);
+    //this.props.setFilters(filters);
     // const { sortOrder, searchText } = this.props;
     // const model = {
     //   currentPage: 1,
@@ -241,7 +240,7 @@ class ToursContainer extends Component {
     console.log('----Props Tours-----', this.props);
     const { roles, isListLoading, totalPages, currentPage } = this.props;
     const { deleteDialog_isOpen, id_delete } = this.state;
-
+    
     const deleteDialogContent = (deleteDialog_isOpen &&
       <Modal isOpen={true}>
         <form >
@@ -359,7 +358,7 @@ const mapState = state => {
     currentPage: get(state, 'tours.list.currentPage'),
     sortOrder: get(state, 'tours.list.sortOrder'),
     searchText: get(state, 'tours.list.searchText'),
-    filters: get(state, 'tours.list.filters'),
+    filters: get(state, 'filters.list.filters'),
     totalPages: get(state, 'tours.list.totalPages'),
     isAuthenticated: get(state, 'auth.isAuthenticated'),
     roles: get(state, 'auth.user.roles')
@@ -370,6 +369,9 @@ const mapDispatch = (dispatch) => {
   return {
     getListTours: (model) => {
       dispatch(tourAction.getListTours(model))
+    },
+    getListFilters: () => {
+      dispatch(filtersAction.getListFilters())
     },
     postListTours: (model) => {
       dispatch(tourAction.postListTours(model))

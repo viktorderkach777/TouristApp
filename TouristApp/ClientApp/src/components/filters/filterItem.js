@@ -27,7 +27,7 @@ const FilterHeader = (props) => {
         onClick={props.onClick}
         className="mt-2 col">
         {props.name}{' ('}
-        {props.data.length}{')'}
+        {props.children.length}{')'}
         {props.collapse ? <i className="fa fa-chevron-up float-right" aria-hidden="true" /> : <i className="fa fa-chevron-down float-right" aria-hidden="true" />}
 
     </Button>
@@ -54,17 +54,17 @@ class FilterItem extends Component {
     }
 
     render() {
-       // console.log('filterItem.pros:', this.props);
+      //  console.log('filterItem.pros:', this.props);
         const { collapse } = this.state;
         const { filterData } = this.props;
-        let filter=filterData.data;
+        let filter=filterData.children;
         return (
             <div>
                 <FilterHeader {...filterData} collapse={collapse}  onClick={this.toggle}/>
                  <Collapse isOpen={collapse}>
                     <Card>
                         <CardBody>
-                            {filter.dalength!==0 ? (filter.map(filterItem =><FilterCheckBox {...filterItem} key={filterItem.id} handleCheckChieldElement={this.handleCheckChieldElement}/>)):('')}
+                            {filter.length!==0 ? (filter.map(filterItem =><FilterCheckBox {...filterItem} key={filterItem.id} handleCheckChieldElement={this.handleCheckChieldElement}/>)):('')}
                         </CardBody>
                     </Card>
                 </Collapse>

@@ -325,24 +325,24 @@ namespace TouristApp.Controllers
 
                 }).ToListAsync();
 
-            if (filter.Filters.Count != 0)
-            {
-                List<string> countryFilter = new List<string>();
-                foreach (var item in filter.Filters[0].Data)
-                {
-                    if (item.isChecked)
-                    {
-                        countryFilter.Add(item.Value);
-                    }
-                }
-                if (countryFilter.Count != 0)
-                {
-                    query = query.Where(s => s.Country.Split('|')
-                             .Select(arrayElement => arrayElement.Trim())
-                              .Any(value => countryFilter.Contains(value)))
-                              .ToList();
-                }
-            }
+            //if (filter.Filters.Count != 0)
+            //{
+            //    List<string> countryFilter = new List<string>();
+            //    foreach (var item in filter.Filters[0].Data)
+            //    {
+            //        if (item.isChecked)
+            //        {
+            //            countryFilter.Add(item.Value);
+            //        }
+            //    }
+            //    if (countryFilter.Count != 0)
+            //    {
+            //        query = query.Where(s => s.Country.Split('|')
+            //                 .Select(arrayElement => arrayElement.Trim())
+            //                  .Any(value => countryFilter.Contains(value)))
+            //                  .ToList();
+            //    }
+            //}
 
             if (!String.IsNullOrEmpty(filter.searchString))
             {
