@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, Card, CardBody, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, FormFeedback } from 'reactstrap';
+import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, FormFeedback } from 'reactstrap';
 import { connect } from "react-redux";
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
@@ -10,6 +10,7 @@ import * as captchaActions from '../../../components/captcha/reducer';
 import CaptchaWidget from '../../../components/captcha';
 import CentralPageSpinner from '../../../components/CentrPageSpinner';
 import defaultPath from './default-user.png'
+import refreshPng from './refresh.png'
 import 'cropperjs/dist/cropper.css';
 
 const iconsColor = {
@@ -18,7 +19,9 @@ const iconsColor = {
   borderColor: '#00aced'
 }
 
-//const imageMaxSize = 3000;
+const IMAGE_MIN_SIZE = 3000;
+const IMAGE_MAX_SIZE = 10000000;
+
 
 class RegisterForm extends Component {
 
@@ -72,27 +75,40 @@ class RegisterForm extends Component {
     } else if (e.target) {
       files = e.target.files;
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.setState({ src: reader.result });
-    };
-
-    reader.readAsDataURL(files[0]);
-    this.setState({ isLoadingPhoto: true });
-
-    // const currentFile = files[0];
-    // const currentFileSize = currentFile.size;
-    // if (currentFileSize>imageMaxSize ){
-    //     reader.readAsDataURL(currentFile);
-    //     this.setState({ isLoadingPhoto: true });
-    // }
-    // else{
-    //     alert("Фото має бути більше 3Мb");
-
-    // };
+    if (files && files[0]) {
+      const currentFile = files[0];
+      const currentFileSize = currentFile.size;
+      //alert(currentFileSize);
+      if (!currentFile.type.match(/^image\//)) {
+        alert("Error file type");
+      }
+      else if (currentFileSize > IMAGE_MAX_SIZE) {
+        alert("The image size must be less than 10Mb");
+      }
+      else if (currentFileSize < IMAGE_MIN_SIZE) {
+        alert("The image size must be more than 3Kb");
+      } else {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.toggle(e);
+          this.setState({ src: reader.result });
+        };
+        reader.readAsDataURL(currentFile);
+      }
+    } else {
+      alert("Select an image, please");
+    }
   };
 
-  cropImage = () => {
+  toggle = e => {
+    //e.preventDefault();
+    this.setState(prevState => ({
+      isLoadingPhoto: !prevState.isLoadingPhoto
+    }));
+  };
+
+  cropImage = (e) => {
+    e.preventDefault();
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
@@ -123,25 +139,21 @@ class RegisterForm extends Component {
   };
 
 
-  operationImage = (e, type, value) => {
+  optionCropImage = (e, option, value) => {
     e.preventDefault();
+    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
+      return;
+    }
 
-    switch (type) {
-
-      case 'ROTARE_LEFT':
+    switch (option) {
+      case "rotate":
         this.cropper.rotate(value);
         break;
-      case 'ROTARE_RIGHT':
-        this.cropper.rotate(-value);
-        break;
-      case 'ZOOM+':
-        this.cropper.zoom(value);
-        break;
-      case 'ZOOM-':
+      case "zoom":
         this.cropper.zoom(value);
         break;
       default:
-
+        break;
     }
   };
 
@@ -366,46 +378,80 @@ class RegisterForm extends Component {
 
                       {!!errors.imageBase64 && imageError ? <Alert color="danger" className="d-flex justify-content-center" >{errors.imageBase64}</Alert> : ''}
                       <div className='container d-flex justify-content-center'>
-                        <Row>
-                          <div className="form-group ">
-                            <label id="labelForInput" htmlFor="inputFile">
-                              {
-                                !isLoadingPhoto ?
-                                  <img
-                                    src={imageBase64}
-                                    className="img-circle"
-                                    id="image"
-                                    alt=""
-                                    name="image"
-                                    width="250" />
-                                  : <p></p>
-                              }
-                              <input type="file" id="inputFile" onChange={this.changeInput} ></input>
-                            </label>
-                          </div>
+                        <div className="form-group ">
+                          <label id="labelForInput" htmlFor="inputFile">
+                            {
+                              !isLoadingPhoto ?
+                                <img
+                                  src={imageBase64}
+                                  className="img-circle"
+                                  id="image"
+                                  alt=""
+                                  name="image"
+                                  width="250" />
+                                : <p></p>
+                            }
+                            <input type="file" id="inputFile" onChange={this.changeInput} ></input>
+                          </label>
+                        </div>
 
-                          <div className={!this.state.isLoadingPhoto ? "div-hidden" : "div-visible form-group"} >
-                            <Cropper
-                              style={{ height: 400, width: 400, overflow: 'hidden' }}
-                              aspectRatio={1 / 1}
-                              preview=".img-preview"
-                              guides={false}
-                              src={this.state.src}
-                              ref={cropper => { this.cropper = cropper; }}
-                            />
-                            <p></p>
-                            <button type="button" onClick={this.cropImage} className="btn btn-primary">Crop Image</button>
-                            <button type="button" onClick={e => this.operationImage(e, 'ZOOM+', 0.1)} className="btn btn-primary  btn-crop"><i className="fa fa-search-plus" aria-hidden="true" /></button>
-                            <button type="button" onClick={e => this.operationImage(e, 'ZOOM-', -0.1)} className="btn btn-primary  btn-crop"><i className="fa fa-search-minus" aria-hidden="true" /></button>
-                            <button type="button" onClick={e => this.operationImage(e, 'ROTARE_LEFT', 45)} className="btn btn-primary  btn-crop"><i className="fa fa-repeat" aria-hidden="true" /></button>
-                            <button type="button" onClick={e => this.operationImage(e, 'ROTARE_RIGHT', 45)} className="btn btn-primary  btn-crop"><i className="fa fa-undo" aria-hidden="true" /></button>
+                        <div className={!this.state.isLoadingPhoto ? "div-hidden" : "div-visible form-group"} >
+                          <div className="fluid-container d-flex justify-content-center">
+                            <div className="col-12 ">
+                              <Card>
+                                <CardBody>
+                                  <div style={{ width: "100%" }}>
+                                    <Cropper
+                                      // style={{ height: 400, width: 400, overflow: 'hidden' }}
+                                      style={{ height: 400, width: "100%" }}
+                                      aspectRatio={1 / 1}
+                                      preview=".img-preview"
+                                      guides={false}
+                                      viewMode={1}
+                                      dragMode="move"
+                                      src={this.state.src}
+                                      ref={cropper => { this.cropper = cropper; }}
+                                    />
+                                  </div>
+                                </CardBody>
+                                <CardFooter>
+                                  <div className="row">
+                                    <div className="col">
+                                      <button className="btn btn-success" onClick={e => this.cropImage(e)}>
+                                        Crop
+                                      </button>
+                                      <button className="btn btn-danger" onClick={e => this.toggle(e)}>
+                                        Cancel
+                                      </button>
+                                    </div>
+                                    <div className="order-last">
+                                      <div>
+                                        <button className="btn btn-info" onClick={e => this.optionCropImage(e, "rotate", -90)}>
+                                          <i className="fa fa-rotate-left" />
+                                        </button>
+                                        <button className="btn btn-info" onClick={e => this.optionCropImage(e, "rotate", 90)}>
+                                          <i className="fa fa-rotate-right" />
+                                        </button>
+
+                                        <button className="btn btn-info" onClick={e => this.optionCropImage(e, "zoom", 0.1)}>
+                                          <i className="fa fa-search-plus" />
+                                        </button>
+                                        <button className="btn btn-info" onClick={e => this.optionCropImage(e, "zoom", -0.1)}>
+                                          <i className="fa fa-search-minus" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </CardFooter>
+                              </Card>
+                            </div>
                           </div>
-                        </Row>
+                        </div>
                       </div>
                       <div className="input-group-text" >
                         <span onClick={e => this.captchaUpdate(e)}>
                           <img
-                            src="http://simpleicon.com/wp-content/uploads/refresh.png"
+                            src={refreshPng}
                             className="img-fluid rounded"
                             id="image"
                             alt=""

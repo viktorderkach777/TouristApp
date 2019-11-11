@@ -75,7 +75,7 @@ export const loginPost = (model) => {
             .then((response) => {    
                 dispatch(loginActions.success());
                 loginByJWT(response.data, dispatch);   
-                console.log('register');             
+                //console.log('register');             
                 
             }, err=> { throw err; })
             .catch(err=> {
@@ -155,13 +155,19 @@ export const loginByJWT = (tokens, dispatch) => {
     var user = jwt.decode(token);
     if (!Array.isArray(user.roles)) {
         user.roles = Array.of(user.roles);
-    }
-    //console.log('Hello app', user);
+    }    
+    
     localStorage.setItem('jwtToken', token);
     localStorage.setItem('refreshToken', refToken);
     setAuthorizationToken(token);
     dispatch(loginActions.setCurrentUser(user));
-    dispatch(push('/tours'));
+   
+    if(user.roles.includes('Admin')){
+        dispatch(push('/admin/tours'));
+    }
+    else if(user.roles.includes('User')){
+        dispatch(push('/tours'));
+    }
 }
 
 export const logoutByJWT = (dispatch) => {

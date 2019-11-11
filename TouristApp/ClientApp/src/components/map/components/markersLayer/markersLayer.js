@@ -64,10 +64,9 @@ class MarkersLayer extends Component {
     createAllMarkers = () => {        
         const { hotels, markersLayerLoading } = this.props;       
 
-        const res = markersLayerLoading ? null : (hotels.features.map((element, index) => {
-            this.createMarker(index);            
-            // return res;
-        }))
+        const res = markersLayerLoading ? null : (hotels.features.forEach((element, index)=>{
+            this.createMarker(index)
+        }));        
         
         return res;
     }

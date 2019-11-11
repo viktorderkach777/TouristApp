@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge, UncontrolledDropdown, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem } from 'reactstrap';
 import PropTypes from 'prop-types';
-import { AppNavbarBrand } from '@coreui/react';
+import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.png'
 import sygnet from '../../assets/img/brand/logo.png'
 import CentralPageSpinner from '../../components/CentrPageSpinner';
@@ -17,25 +17,25 @@ class DefaultHeader extends Component {
   render() {
 
     // eslint-disable-next-line
-    const {loading, user, children, ...attributes } = this.props;
+    const { loading, user, children, ...attributes } = this.props;
 
     return (
       <React.Fragment>
-        {/* <AppSidebarToggler className="d-lg-none" display="md" mobile />
-        <AppSidebarToggler className="d-md-down-none" display="lg" /> */}
+        <AppSidebarToggler className="d-md-down-none" display="lg" />
+        <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
+          className="d-md-down-none menuText"
           full={{ src: logo, width: 30, height: 30, alt: 'CoreUI Logo' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         />
-        
-        <h2 style={{fontFamily:"cursive"}}> <sup>&copy;</sup>TouristApp </h2>
-       
+        <h2 className="d-xs-down-none menuText" style={{ fontFamily: "cursive" }}> <sup>&copy;</sup>TouristApp </h2>
+
         <Nav className="d-md-down-none menuText" navbar>
           {/* <NavItem className="px-3">
             <NavLink to="/admin/dashboard" className="nav-link" >Dashboard</NavLink>
           </NavItem> */}
           <NavItem className="px-3">
-          <Link to="/tours" className="nav-link">Tours</Link>
+            <Link to="/tours" className="nav-link">Tours</Link>
           </NavItem>
           {/* <NavItem className="px-3">
             <NavLink to="#" className="nav-link">Settings</NavLink>
@@ -57,7 +57,8 @@ class DefaultHeader extends Component {
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav className="menuUserName">
               <img src={user.image} className="img-avatar" alt="admin@bootstrapmaster.com" />
-              {user.name}
+              {/* <span className=".d-none .d-md-block">{user.name}</span> */}
+              <strong className="d-sm-down-none">{user.name}</strong>
             </DropdownToggle>
             <DropdownMenu right>
               <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
@@ -78,7 +79,7 @@ class DefaultHeader extends Component {
         </Nav>
         {/* <AppAsideToggler className="d-md-down-none" /> */}
         {/*<AppAsideToggler className="d-lg-none" mobile />*/}
-       <CentralPageSpinner loading={loading}/>
+        <CentralPageSpinner loading={loading} />
       </React.Fragment>
     );
   }
