@@ -21,7 +21,7 @@ const BrandButtons = React.lazy(() => import('../views/Buttons/BrandButtons/Bran
 const ButtonDropdowns = React.lazy(() => import('../views/Buttons/ButtonDropdowns/ButtonDropdowns'));
 const ButtonGroups = React.lazy(() => import('../views/Buttons/ButtonGroups/ButtonGroups'));
 const Buttons = React.lazy(() => import('../views/Buttons/Buttons/Buttons'));
-const Charts = React.lazy(() => import('../views/Charts/Charts'));
+//const Charts = React.lazy(() => import('../views/Charts/Charts'));
 const Dashboard = React.lazy(() => import('../views/Dashboard/Dashboard'));
 const CoreUIIcons = React.lazy(() => import('../views/Icons/CoreUIIcons/CoreUIIcons'));
 const Flags = React.lazy(() => import('../views/Icons/Flags/Flags'));
@@ -87,7 +87,7 @@ const routes = [
   { path: '/notifications/badges', name: 'Badges', component: Badges },
   { path: '/notifications/modals', name: 'Modals', component: Modals },
   { path: '/widgets', name: 'Widgets', component: Widgets },
-  { path: '/charts', name: 'Charts', component: Charts },
+  //{ path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/views/:country/:id', exact: true, name: 'User Details', component: SimplyTour },

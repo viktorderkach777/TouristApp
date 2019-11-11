@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -90,6 +91,10 @@ namespace TouristApp
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
             //app.UseCors(
             //  builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
@@ -104,7 +109,7 @@ namespace TouristApp
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseSession();
@@ -128,13 +133,16 @@ namespace TouristApp
 
             #endregion;
 
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"UserImages")))
+            {
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"UserImages"));
+            }
+
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"UserImages")),
                 RequestPath = new PathString("/UserImages")
-            });
-
-          
+            });          
 
             app.UseMvc(routes =>
             {
@@ -154,6 +162,7 @@ namespace TouristApp
             });
 
             SeederDB.SeedDataByAS(app.ApplicationServices, env, this.Configuration);
+            SendEmailService.SendInfoStartApp(Configuration, env);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace TouristApp.Domain.Services
             _configuration = configuration;
             _env = env;
             _context = context;
-            _fileDestDir = _env.ContentRootPath + _configuration.GetValue<string>(USER_IMAGE_PATH);
+            _fileDestDir = Path.Combine(_env.ContentRootPath, _configuration.GetValue<string>(USER_IMAGE_PATH));
         }
 
         

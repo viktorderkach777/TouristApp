@@ -111,7 +111,7 @@ namespace TouristApp.Controllers
               model.CaptchaText))
             {
                 var invalid = new Dictionary<string, string>();
-                invalid.Add("captchaText", "Помилка вводу зображення на фото");
+                invalid.Add("captchaText", "Error captcha text. Renew captcha and repeat again.");
                 return BadRequest(invalid);
             }
 

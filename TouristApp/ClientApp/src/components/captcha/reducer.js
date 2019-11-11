@@ -1,7 +1,5 @@
 import update from '../../helpers/update';
 import CaptchaService from './captchaService';
-//import { createSlice } from 'redux-starter-kit';
-
 
 export const KEY_POST_STARTED = "captcha/KEY_POST_STARTED";
 export const KEY_POST_SUCCESS = "captcha/KEY_POST_SUCCESS";
@@ -14,78 +12,69 @@ const initialState = {
         loading: false,
         success: false
     }
-    // image: {
-    //     url: 'default-image.jpg'
-    // }
 };
-
 
 export const captchaReducer = (state = initialState, action) => {
     let newState = state;
 
-     switch (action.type) {
-
-         case KEY_POST_STARTED: {
+    switch (action.type) {
+        case KEY_POST_STARTED: {
             newState = update.set(state, 'key.loading', true);
             newState = update.set(newState, 'key.success', false);
             newState = update.set(newState, 'key.data', null);
             break;
         }
-
-         case KEY_POST_SUCCESS: {
+        case KEY_POST_SUCCESS: {
             newState = update.set(state, 'key.loading', false);
             newState = update.set(newState, 'key.success', true);
             newState = update.set(newState, 'key.data', action.payload.data);
             break;
         }
-
-         case KEY_POST_FAILED: {
+        case KEY_POST_FAILED: {
             newState = update.set(state, 'key.loading', false);
             newState = update.set(newState, 'key.data', null);
             newState = update.set(newState, 'key.error', true);
             break;
         }
-
-
-         default: {
+        default: {
             return newState;
         }
     }
 
-     return newState;
+    return newState;
 }
 
- export const createNewKey = () => {
+export const createNewKey = () => {
     return (dispatch) => {
         dispatch(keyCaptchaActions.started());
 
-         CaptchaService.postNewKey()
+        CaptchaService.postNewKey()
             .then((response) => {
-                console.log("captcha-responce", response);
+                //console.log("captcha-responce", response);
                 dispatch(keyCaptchaActions.success(response));
             })
             .catch((err) => {
-                console.log("captcha-err", err);
+                //console.log("captcha-err", err);
                 dispatch(keyCaptchaActions.failed());
             });
     }
 }
 
- export const keyCaptchaActions = {
+export const keyCaptchaActions = {
     started: () => {
         return {
             type: KEY_POST_STARTED
         }
     },
 
-     success: (data) => {
+    success: (data) => {
         return {
             type: KEY_POST_SUCCESS,
             payload: data
         }
     },
 
-     failed: (error) => {
+    failed: (error) => {
         return {
             type: KEY_POST_FAILED
         }
@@ -151,7 +140,7 @@ export const captchaReducer = (state = initialState, action) => {
 //     switch (action.type) {
 
 //         case KEY_POST_STARTED: {
-            
+
 //             // const key = {
 //             //     data: null,
 //             //     success: false,

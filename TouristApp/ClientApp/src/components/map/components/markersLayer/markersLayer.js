@@ -24,6 +24,7 @@ class MarkersLayer extends Component {
         mapService.getMarkersLayer()
             .then((hotels) => {
                 dispatch(markersLayerLoading(hotels))                
+
                 this.map = new mapboxgl.Map({
                     container: this.mapContainer,
                     style: 'mapbox://styles/mapbox/streets-v10',                   
@@ -60,13 +61,14 @@ class MarkersLayer extends Component {
             .addTo(this.map);
     }
 
-    createAllMarkers = () => {
+    createAllMarkers = () => {        
         const { hotels, markersLayerLoading } = this.props;       
 
-        const res = markersLayerLoading ? null : (hotels.features.map((element, index) => {
-            this.createMarker(index);
-            return res;
-        }))
+        const res = markersLayerLoading ? null : (hotels.features.forEach((element, index)=>{
+            this.createMarker(index)
+        }));        
+        
+        return res;
     }
 
     flyToMarker(center, zoom) {
@@ -124,8 +126,8 @@ class MarkersLayer extends Component {
 
     render() {
 
-        const { markersLayerLoading, markersLayerError, hotels } = this.props;
-        const locations = markersLayerLoading ? null : hotels.features.map((element, index) => {
+        const { markersLayerLoading, markersLayerError, hotels } = this.props;        
+        const locations = markersLayerLoading || hotels === undefined || Object.keys(hotels).length === 0 ? null : hotels.features.map((element, index) => {
 
             // Shorten data.feature.properties to `prop` so we're not
             // writing this long form over and over again.
@@ -161,7 +163,7 @@ class MarkersLayer extends Component {
 
 
 const mapStateToProps = (state) => {
-    const { markersLayerLoading, markersLayerError, hotels } = state.map;   
+    const { markersLayerLoading, markersLayerError, hotels } = state.map;     
     return {
         hotels,
         markersLayerLoading,

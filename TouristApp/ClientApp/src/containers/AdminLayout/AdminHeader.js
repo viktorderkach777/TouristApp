@@ -21,11 +21,14 @@ class AdminHeader extends Component {
 
     return (
       <React.Fragment>
+        <AppSidebarToggler className="d-md-down-none" display="lg" />
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
+          className="d-md-down-none menuText"
           full={{ src: logo, width: 30, height: 30, alt: 'CoreUI Logo' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         />
+        {/* <h2 className="d-xs-down-none menuText" style={{ fontFamily: "cursive" }}> <sup>&copy;</sup>TouristApp </h2> */}
         {/* <AppSidebarToggler className="d-md-down-none" display="lg" /> */}
 
         <Nav className="d-md-down-none menuText" navbar>

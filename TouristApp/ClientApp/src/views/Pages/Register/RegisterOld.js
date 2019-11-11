@@ -3,15 +3,18 @@ import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input,
 import { connect } from "react-redux";
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
-import Cropper from 'react-cropper';
-import { Link } from 'react-router-dom';
-import * as registerActions from './reducer';
-import * as captchaActions from '../../../components/captcha/reducer';
-import CaptchaWidget from '../../../components/captcha';
-import CentralPageSpinner from '../../../components/CentrPageSpinner';
+import { Redirect } from 'react-router-dom';
 import defaultPath from './default-user.png'
-import refreshPng from './refresh.png'
+import * as userAction from '../../../reducers/auth';
+import classnames from 'classnames';
+import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
+import Google from '../../../components/google';
+import Facebook from '../../../components/facebook';
+//import CaptchaService from '../../../components/captcha/captchaService';
+import * as captchaActions from '../../../components/captcha/reducer';
+//import axios from 'axios';
+import CaptchaWidget from '../../../components/captcha';
 
 const iconsColor = {
   backgroundColor: '#00aced',
@@ -19,20 +22,19 @@ const iconsColor = {
   borderColor: '#00aced'
 }
 
-const IMAGE_MIN_SIZE = 3000;
-const IMAGE_MAX_SIZE = 10000000;
-
+//const imageMaxSize = 3000;
 
 class RegisterForm extends Component {
 
   state = {
+    profileUrl: '/',
     email: '',
     password: '',
     confirmPassword: '',
     errors: {
     },
     done: false,
-    loading: false,
+    isLoading: false,
     isLoadingPhoto: false,
     src: '',
     imageBase64: defaultPath,
@@ -41,30 +43,35 @@ class RegisterForm extends Component {
     lastName: '',
     dateOfBirth: '',
     captchaText: "",
-    imageError: true,
-    errorsServer: {
-    },
+    captchaDone: false,
+    captchaIsLoading: false,
+    imageError: true
   };
 
   componentDidMount() {
+    // CaptchaService.postNewKey();
+    // this.props.dispatch({type: 'captcha/KEY_POST_STARTED'});
     this.props.createNewKeyCaptcha();
+
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.loading !== state.loading || props.errors !== state.errorsServer || props.captcha !== state.captcha) {
-      return { loading: props.loading, errorsServer: props.errors, captcha: props.captcha };
+  getUrlToRedirect = () => {
+    let auth = this.props.auth;
+    console.log('---getUrlToRedirect----', auth);
+    if (auth.isAuthenticated) {
+      let roles = auth.user.roles;
+      if (roles === "User") {
+        this.setState({ profileUrl: "/tours" });
+      }
+      else if (roles === "Admin") {
+        this.setState({ profileUrl: "/admin/dashboard" });
+      }
+      else {
+        this.setState({ profileUrl: "/" });
+      }
     }
-
-    // Return null if the state hasn't changed
-    return null;
-  }
-
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if(nextProps!==prevState) {
-  //   return { loading: nextProps.loading, errorsServer: nextProps.errors, captcha: nextProps.captcha };
-  //   }
-  //   //else return null;
-  // }
+    console.log('---profileUrl:', this.state.profileUrl);
+  };
 
 
   changeInput = (e) => {
@@ -75,50 +82,35 @@ class RegisterForm extends Component {
     } else if (e.target) {
       files = e.target.files;
     }
-    if (files && files[0]) {
-      const currentFile = files[0];
-      const currentFileSize = currentFile.size;
-      //alert(currentFileSize);
-      if (!currentFile.type.match(/^image\//)) {
-        alert("Error file type");
-      }
-      else if (currentFileSize > IMAGE_MAX_SIZE) {
-        alert("The image size must be less than 10Mb");
-      }
-      else if (currentFileSize < IMAGE_MIN_SIZE) {
-        alert("The image size must be more than 3Kb");
-      } else {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.toggle(e);
-          this.setState({ src: reader.result });
-        };
-        reader.readAsDataURL(currentFile);
-      }
-    } else {
-      alert("Select an image, please");
-    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({ src: reader.result });
+    };
+
+    reader.readAsDataURL(files[0]);
+    this.setState({ isLoadingPhoto: true });
+
+    // const currentFile = files[0];
+    // const currentFileSize = currentFile.size;
+    // if (currentFileSize>imageMaxSize ){
+    //     reader.readAsDataURL(currentFile);
+    //     this.setState({ isLoadingPhoto: true });
+    // }
+    // else{
+    //     alert("Фото має бути більше 3Мb");
+
+    // };
   };
 
-  toggle = e => {
-    //e.preventDefault();
-    this.setState(prevState => ({
-      isLoadingPhoto: !prevState.isLoadingPhoto
-    }));
-  };
-
-  cropImage = (e) => {
-    e.preventDefault();
+  cropImage = () => {
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
+    this.setState({ imageBase64: this.cropper.getCroppedCanvas().toDataURL() });
+    this.setState({ isLoadingPhoto: false });
+    this.setState({ src: '' });
+    this.setState({ imageError: false });
 
-    this.setState({
-      imageBase64: this.cropper.getCroppedCanvas().toDataURL(),
-      isLoadingPhoto: false,
-      src: '',
-      imageError: false
-    });
   }
 
   setStateByErrors = (name, value) => {
@@ -139,79 +131,89 @@ class RegisterForm extends Component {
   };
 
 
-  optionCropImage = (e, option, value) => {
+  operationImage = (e, type, value) => {
     e.preventDefault();
-    if (typeof this.cropper.getCroppedCanvas() === "undefined") {
-      return;
-    }
 
-    switch (option) {
-      case "rotate":
+    switch (type) {
+
+      case 'ROTARE_LEFT':
         this.cropper.rotate(value);
         break;
-      case "zoom":
+      case 'ROTARE_RIGHT':
+        this.cropper.rotate(-value);
+        break;
+      case 'ZOOM+':
+        this.cropper.zoom(value);
+        break;
+      case 'ZOOM-':
         this.cropper.zoom(value);
         break;
       default:
-        break;
+
     }
   };
 
+
   onSubmitForm = (e) => {
     e.preventDefault();
-    let errors = {};
-    const {
-      email,
-      password,
-      confirmPassword,
-      firstName,
-      lastName,
-      dateOfBirth,
-      captchaText,
-      imageBase64
-    } = this.state;
 
-    if (email === '') errors.email = "Cant't be empty";
-    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$/.test(password)) errors.password = "Password must be at least 6 characters and contain digits, upper and lower case"
-    if (password === '') errors.password = "Cant't be empty";
-    if (confirmPassword === '') errors.confirmPassword = "Cant't be empty";
-    if (confirmPassword !== password) errors.confirmPassword = "Passwords do not match";
-    if (firstName === '') errors.firstName = "Cant't be empty";
-    if (lastName === '') errors.lastName = "Cant't be empty";
-    if (dateOfBirth === '') errors.dateOfBirth = "Cant't be empty";
-    if (captchaText === '') errors.captchaText = "Cant't be empty";
-    if (imageBase64 === defaultPath) errors.imageBase64 = "Download your image";
+    let errors = {};
+
+    if (this.state.email === '') errors.email = "Cant't be empty";
+
+    if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{6,24}$/.test(this.state.password)) errors.password = "Password must be at least 6 characters and contain digits, upper and lower case"
+    if (this.state.password === '') errors.password = "Cant't be empty";
+    if (this.state.confirmPassword === '') errors.confirmPassword = "Cant't be empty";
+    if (this.state.confirmPassword !== this.state.password) errors.confirmPassword = "Passwords do not match";
+    if (this.state.firstName === '') errors.firstName = "Cant't be empty";
+    if (this.state.lastName === '') errors.lastName = "Cant't be empty";
+    if (this.state.dateOfBirth === '') errors.dateOfBirth = "Cant't be empty";
+    if (this.state.captchaText === '') errors.captchaText = "Cant't be empty";
+    if (this.state.imageBase64 === defaultPath) errors.imageBase64 = "Download your image";
 
     const isValid = Object.keys(errors).length === 0
 
     if (isValid) {
+      console.log('this.props.captcha', this.props.captcha);
+      console.log('this.state', this.state);
+
+
       const { keyValue } = this.props.captcha;
       const { email, password, confirmPassword, imageBase64,
         firstName, middleName, lastName, dateOfBirth, captchaText } = this.state;
 
-      const model = {
+      this.setState({
+        isLoading: true, captchaIsLoading: true
+      });
+
+      this.props.register({
         email, password, confirmPassword, imageBase64,
         firstName, middleName, lastName, dateOfBirth, captchaText,
         captchaKey: keyValue
-      };
-
-      this.props.register(model)
+      })
+        .then(
+          () => this.setState({ done: true, captchaDone: true }, this.getUrlToRedirect()),
+          (err) => {
+            this.setState({ errors: err.response.data, isLoading: false });
+          }
+        );
     }
     else {
       this.setState({ errors });
     }
   };
 
-  captchaUpdate = (e) => {
+  captchaUpdate = (e) =>{
     e.preventDefault()
     this.props.createNewKeyCaptcha();
   }
 
   render() {
-    // console.log('---FormRegister state----', this.state);
-    // console.log('---FormRegister props----', this.props);
+    console.log('---FormRegister state----', this.state);
+    console.log('---FormRegister props----', this.props);
+    console.log("=====", this.state.imageBase64 === defaultPath)
     const { errors,
-      loading,
+      isLoading,
       email,
       password,
       confirmPassword,
@@ -219,15 +221,12 @@ class RegisterForm extends Component {
       middleName,
       lastName,
       dateOfBirth,
-      imageBase64,
-      captcha,
-      errorsServer,
-      imageError,
-      isLoadingPhoto } = this.state;
+      imageBase64 } = this.state;
+
+    const { captcha } = this.props;
 
     const form = (
       <React.Fragment>
-        <CentralPageSpinner loading={loading} />
         <div className="app flex-row ">
           <Container>
             <Row className="justify-content-center">
@@ -235,17 +234,9 @@ class RegisterForm extends Component {
                 <Card className="mx-4">
                   <CardBody className="p-4">
                     <Form onSubmit={this.onSubmitForm}>
+
                       <h1>Register</h1>
-                      <Row>
-                        <Col xs="6">
-                          {/* <p className="text-muted">Create your account</p> */}
-                        </Col>
-                        <Col xs="6" className="text-right">
-                          <Link to="/login">
-                            <Button color="link" className="px-0" active tabIndex={-1}>Already singed in?</Button>
-                          </Link>
-                        </Col>
-                      </Row>
+                      <p className="text-muted">Create your account</p>
                       {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 
                       <InputGroup className="mb-3">
@@ -254,7 +245,7 @@ class RegisterForm extends Component {
                         </InputGroupAddon>
                         <Input
                           className="form-control"
-                          invalid={!!errors.email || !!errorsServer.email}
+                          invalid={!!errors.email}
                           type="text"
                           placeholder="Email"
                           autoComplete="Email"
@@ -264,8 +255,9 @@ class RegisterForm extends Component {
                           onChange={this.handleChange}
                         />
                         <FormFeedback>{errors.email}</FormFeedback>
-                        {!!errorsServer.email ? <FormFeedback>{'User with this email already exists!'}</FormFeedback> : ''}
+
                       </InputGroup>
+
 
                       <InputGroup className="mb-3">
                         <InputGroupAddon addonType="prepend">
@@ -300,7 +292,7 @@ class RegisterForm extends Component {
                           name="confirmPassword"
                           value={confirmPassword}
                           onChange={this.handleChange} />
-                        <FormFeedback>{errors.confirmPassword}</FormFeedback>
+                        <FormFeedback>{errors.password}</FormFeedback>
                       </InputGroup>
 
                       <InputGroup className="mb-4">
@@ -339,6 +331,7 @@ class RegisterForm extends Component {
                         <FormFeedback>{errors.middleName}</FormFeedback>
                       </InputGroup>
 
+
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText style={iconsColor}>
@@ -365,7 +358,7 @@ class RegisterForm extends Component {
                         </InputGroupAddon>
                         <Input type="date"
                           className="form-control"
-                          invalid={!!errors.dateOfBirth || !!errorsServer.dateOfBirth}
+                          invalid={!!errors.dateOfBirth}
                           placeholder="Date Of birth "
                           autoComplete="dateOfBirth"
                           id="dateOfBirth"
@@ -373,85 +366,51 @@ class RegisterForm extends Component {
                           value={dateOfBirth}
                           onChange={this.handleChange} />
                         <FormFeedback>{errors.dateOfBirth}</FormFeedback>
-                        {!!errorsServer.dateOfBirth ? <FormFeedback>{'Invalid date of birth!'}</FormFeedback> : ''}
                       </InputGroup>
 
-                      {!!errors.imageBase64 && imageError ? <Alert color="danger" className="d-flex justify-content-center" >{errors.imageBase64}</Alert> : ''}
+                      {!!errors.imageBase64 && this.state.imageError ? <Alert color="danger" className="d-flex justify-content-center" >{errors.imageBase64}</Alert> : ''}
                       <div className='container d-flex justify-content-center'>
-                        <div className="form-group ">
-                          <label id="labelForInput" htmlFor="inputFile">
-                            {
-                              !isLoadingPhoto ?
-                                <img
-                                  src={imageBase64}
-                                  className="img-circle"
-                                  id="image"
-                                  alt=""
-                                  name="image"
-                                  width="250" />
-                                : <p></p>
-                            }
-                            <input type="file" id="inputFile" onChange={this.changeInput} ></input>
-                          </label>
-                        </div>
-
-                        <div className={!this.state.isLoadingPhoto ? "div-hidden" : "div-visible form-group"} >
-                          <div className="fluid-container d-flex justify-content-center">
-                            <div className="col-12 ">
-                              <Card>
-                                <CardBody>
-                                  <div style={{ width: "100%" }}>
-                                    <Cropper
-                                      // style={{ height: 400, width: 400, overflow: 'hidden' }}
-                                      style={{ height: 400, width: "100%" }}
-                                      aspectRatio={1 / 1}
-                                      preview=".img-preview"
-                                      guides={false}
-                                      viewMode={1}
-                                      dragMode="move"
-                                      src={this.state.src}
-                                      ref={cropper => { this.cropper = cropper; }}
-                                    />
-                                  </div>
-                                </CardBody>
-                                <CardFooter>
-                                  <div className="row">
-                                    <div className="col">
-                                      <button className="btn btn-success" onClick={e => this.cropImage(e)}>
-                                        Crop
-                                      </button>
-                                      <button className="btn btn-danger" onClick={e => this.toggle(e)}>
-                                        Cancel
-                                      </button>
-                                    </div>
-                                    <div className="order-last">
-                                      <div>
-                                        <button className="btn btn-info" onClick={e => this.optionCropImage(e, "rotate", -90)}>
-                                          <i className="fa fa-rotate-left" />
-                                        </button>
-                                        <button className="btn btn-info" onClick={e => this.optionCropImage(e, "rotate", 90)}>
-                                          <i className="fa fa-rotate-right" />
-                                        </button>
-
-                                        <button className="btn btn-info" onClick={e => this.optionCropImage(e, "zoom", 0.1)}>
-                                          <i className="fa fa-search-plus" />
-                                        </button>
-                                        <button className="btn btn-info" onClick={e => this.optionCropImage(e, "zoom", -0.1)}>
-                                          <i className="fa fa-search-minus" />
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </CardFooter>
-                              </Card>
-                            </div>
+                        <Row>
+                          <div className="form-group ">
+                            <label id="labelForInput" htmlFor="inputFile">
+                              {
+                                !this.state.isLoadingPhoto ?
+                                  <img
+                                    src={imageBase64}
+                                    className="img-circle"
+                                    id="image"
+                                    alt=""
+                                    name="image"
+                                    width="250" />
+                                  : <p></p>
+                              }
+                              <input type="file" id="inputFile" onChange={this.changeInput} ></input>
+                            </label>
                           </div>
-                        </div>
+
+                          <div className={!this.state.isLoadingPhoto ? "div-hidden" : "div-visible form-group"} >
+                            <Cropper
+                              style={{ height: 400, width: 400, overflow: 'hidden' }}
+                              aspectRatio={1 / 1}
+                              preview=".img-preview"
+                              guides={false}
+                              src={this.state.src}
+                              ref={cropper => { this.cropper = cropper; }}
+                            />
+                            <p></p>
+                            <button type="button" onClick={this.cropImage} className="btn btn-primary">Crop Image</button>
+                            <button type="button" onClick={e => this.operationImage(e, 'ZOOM+', 0.1)} className="btn btn-primary  btn-crop"><i className="fa fa-search-plus" aria-hidden="true" /></button>
+                            <button type="button" onClick={e => this.operationImage(e, 'ZOOM-', -0.1)} className="btn btn-primary  btn-crop"><i className="fa fa-search-minus" aria-hidden="true" /></button>
+                            <button type="button" onClick={e => this.operationImage(e, 'ROTARE_LEFT', 45)} className="btn btn-primary  btn-crop"><i className="fa fa-repeat" aria-hidden="true" /></button>
+                            <button type="button" onClick={e => this.operationImage(e, 'ROTARE_RIGHT', 45)} className="btn btn-primary  btn-crop"><i className="fa fa-undo" aria-hidden="true" /></button>
+                          </div>
+                        </Row>
                       </div>
                       <div className="input-group-text" >
+                        {/* <Button className="img-fluid" style={{ height: "70px", width: "70px" }}> */}
                         <span onClick={e => this.captchaUpdate(e)}>
                           <img
-                            src={refreshPng}
+                            src="http://simpleicon.com/wp-content/uploads/refresh.png"
                             className="img-fluid rounded"
                             id="image"
                             alt=""
@@ -459,6 +418,7 @@ class RegisterForm extends Component {
                             style={{ height: "30px", width: "30px" }}
                           />
                         </span>
+                        {/* </Button> */}
                         <span className="mx-auto d-block">
                           <CaptchaWidget {...captcha} />
                         </span>
@@ -470,8 +430,7 @@ class RegisterForm extends Component {
                           </InputGroupText>
                         </InputGroupAddon>
                         <Input type="text"
-                          className="form-control"
-                          invalid={!!errors.captchaText || !!errorsServer.captchaText}
+                          className={classnames('form-control', { 'is-invalid': !!errors.captchaText })}
                           placeholder="Captcha Text"
                           autoComplete="captchaText"
                           id="captchaText"
@@ -479,13 +438,23 @@ class RegisterForm extends Component {
                           value={this.state.captchaText}
                           onChange={this.handleChange} />
                         <FormFeedback>{errors.captchaText}</FormFeedback>
-                        <FormFeedback>{errorsServer.captchaText}</FormFeedback>
+                        {/* {!!errors.captchaText ? <span className="help-block">{errors.captchaText}</span> : ''} */}
                       </InputGroup>
 
-                      <Button color="success" block disabled={loading} >Create Account</Button>
+                      <Button color="success" block disabled={isLoading} >Create Account</Button>
 
                     </Form>
                   </CardBody>
+                  <CardFooter className="p-4">
+                    <Row>
+                      <Col xs="12" sm="6">
+                        <Facebook />
+                      </Col>
+                      <Col xs="12" sm="6">
+                        <Google />
+                      </Col>
+                    </Row>
+                  </CardFooter>
                 </Card>
               </Col>
             </Row>
@@ -493,29 +462,29 @@ class RegisterForm extends Component {
         </div>
       </React.Fragment>
     );
-    return form;
+    return (
+      this.state.done ?
+        <Redirect to="/" /> : form
+    );
   }
 }
 
 const mapState = (state) => {
   return {
+    auth: get(state, 'auth'),
     captcha: {
       keyValue: get(state, 'captcha.key.data'),
       isKeyLoading: get(state, 'captcha.key.loading'),
       isKeyError: get(state, 'captcha.key.error'),
       isSuccess: get(state, 'captcha.key.success')
-    },
-    loading: get(state, 'register.post.loading'),
-    failed: get(state, 'register.post.failed'),
-    success: get(state, 'register.post.success'),
-    errors: get(state, 'register.post.errors'),
+    }
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
     register: (model) =>
-      dispatch(registerActions.registerPost(model)),
+      dispatch(userAction.register(model)),
     createNewKeyCaptcha: () => {
       dispatch(captchaActions.createNewKey());
     }
