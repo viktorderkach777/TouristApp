@@ -5,13 +5,18 @@ import get from 'lodash.get';
 import PropTypes from 'prop-types';
 import Cropper from 'react-cropper';
 import { Link } from 'react-router-dom';
-import * as registerActions from './reducer';
+import {registerPost} from './reducer';
 import * as captchaActions from '../../../components/captcha/reducer';
 import CaptchaWidget from '../../../components/captcha';
 import CentralPageSpinner from '../../../components/CentrPageSpinner';
 import defaultPath from './default-user.png'
 import refreshPng from './refresh.png'
 import 'cropperjs/dist/cropper.css';
+
+const propTypes = {
+  register: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired
+};
 
 const iconsColor = {
   backgroundColor: '#00aced',
@@ -23,7 +28,7 @@ const IMAGE_MIN_SIZE = 3000;
 const IMAGE_MAX_SIZE = 10000000;
 
 
-class RegisterForm extends Component {
+class Register extends Component {
 
   state = {
     email: '',
@@ -33,6 +38,7 @@ class RegisterForm extends Component {
     },
     done: false,
     loading: false,
+    //loading: this.props.loading,
     isLoadingPhoto: false,
     src: '',
     imageBase64: defaultPath,
@@ -42,22 +48,31 @@ class RegisterForm extends Component {
     dateOfBirth: '',
     captchaText: "",
     imageError: true,
-    errorsServer: {
-    },
+    // errorsServer: {
+    // },
   };
 
   componentDidMount() {
     this.props.createNewKeyCaptcha();
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.loading !== state.loading || props.errors !== state.errorsServer || props.captcha !== state.captcha) {
-      return { loading: props.loading, errorsServer: props.errors, captcha: props.captcha };
-    }
+  // static getDerivedStateFromProps(props, state) {
+  //   if (props.loading !== state.loading || props.errors !== state.errorsServer || props.captcha !== state.captcha) {
+  //     return { loading: props.loading, errorsServer: props.errors, captcha: props.captcha };
+  //   }
 
-    // Return null if the state hasn't changed
-    return null;
-  }
+  //   // Return null if the state hasn't changed
+  //   return null;
+  // }
+
+  UNSAFE_componentWillReceiveProps = (nextProps) => {
+    console.log('Change props ');
+    this.setState({
+        loading: nextProps.loading,
+        errors: nextProps.errors,
+        captcha: nextProps.captcha
+    });
+}
 
   // static getDerivedStateFromProps(nextProps, prevState) {
   //   if(nextProps!==prevState) {
@@ -208,8 +223,8 @@ class RegisterForm extends Component {
   }
 
   render() {
-    // console.log('---FormRegister state----', this.state);
-    // console.log('---FormRegister props----', this.props);
+    //  console.log('---FormRegister state----', this.state);
+    //  console.log('---FormRegister props----', this.props);
     const { errors,
       loading,
       email,
@@ -221,7 +236,7 @@ class RegisterForm extends Component {
       dateOfBirth,
       imageBase64,
       captcha,
-      errorsServer,
+      //errorsServer,
       imageError,
       isLoadingPhoto } = this.state;
 
@@ -254,7 +269,7 @@ class RegisterForm extends Component {
                         </InputGroupAddon>
                         <Input
                           className="form-control"
-                          invalid={!!errors.email || !!errorsServer.email}
+                          invalid={!!errors.email}
                           type="text"
                           placeholder="Email"
                           autoComplete="Email"
@@ -264,7 +279,7 @@ class RegisterForm extends Component {
                           onChange={this.handleChange}
                         />
                         <FormFeedback>{errors.email}</FormFeedback>
-                        {!!errorsServer.email ? <FormFeedback>{'User with this email already exists!'}</FormFeedback> : ''}
+                        {/* {!!errorsServer.email ? <FormFeedback>{'User with this email already exists!'}</FormFeedback> : ''} */}
                       </InputGroup>
 
                       <InputGroup className="mb-3">
@@ -365,7 +380,7 @@ class RegisterForm extends Component {
                         </InputGroupAddon>
                         <Input type="date"
                           className="form-control"
-                          invalid={!!errors.dateOfBirth || !!errorsServer.dateOfBirth}
+                          invalid={!!errors.dateOfBirth}
                           placeholder="Date Of birth "
                           autoComplete="dateOfBirth"
                           id="dateOfBirth"
@@ -373,7 +388,7 @@ class RegisterForm extends Component {
                           value={dateOfBirth}
                           onChange={this.handleChange} />
                         <FormFeedback>{errors.dateOfBirth}</FormFeedback>
-                        {!!errorsServer.dateOfBirth ? <FormFeedback>{'Invalid date of birth!'}</FormFeedback> : ''}
+                        {/* {!!errorsServer.dateOfBirth ? <FormFeedback>{'Invalid date of birth!'}</FormFeedback> : ''} */}
                       </InputGroup>
 
                       {!!errors.imageBase64 && imageError ? <Alert color="danger" className="d-flex justify-content-center" >{errors.imageBase64}</Alert> : ''}
@@ -471,15 +486,14 @@ class RegisterForm extends Component {
                         </InputGroupAddon>
                         <Input type="text"
                           className="form-control"
-                          invalid={!!errors.captchaText || !!errorsServer.captchaText}
+                          invalid={!!errors.captchaText}
                           placeholder="Captcha Text"
                           autoComplete="captchaText"
                           id="captchaText"
                           name="captchaText"
                           value={this.state.captchaText}
                           onChange={this.handleChange} />
-                        <FormFeedback>{errors.captchaText}</FormFeedback>
-                        <FormFeedback>{errorsServer.captchaText}</FormFeedback>
+                        <FormFeedback>{errors.captchaText}</FormFeedback>                       
                       </InputGroup>
 
                       <Button color="success" block disabled={loading} >Create Account</Button>
@@ -505,29 +519,31 @@ const mapState = (state) => {
       isKeyError: get(state, 'captcha.key.error'),
       isSuccess: get(state, 'captcha.key.success')
     },
-    loading: get(state, 'register.post.loading'),
-    failed: get(state, 'register.post.failed'),
-    success: get(state, 'register.post.success'),
-    errors: get(state, 'register.post.errors'),
+    //loading: get(state, 'register.post.loading'),
+    //failed: get(state, 'register.post.failed'),
+    //success: get(state, 'register.post.success'),
+    //errors: get(state, 'register.post.errors'),
+    loading: state.register.loading,
+    errors: state.register.errors,
   }
 }
 
 const mapDispatch = (dispatch) => {
   return {
     register: (model) =>
-      dispatch(registerActions.registerPost(model)),
+      dispatch(registerPost(model)),
     createNewKeyCaptcha: () => {
       dispatch(captchaActions.createNewKey());
     }
   };
 }
 
-RegisterForm.propTypes =
-  {
-    register: PropTypes.func.isRequired
-    // isKeyError:PropTypes.bool.isRequired,
-    // isKeyLoading:PropTypes.bool.isRequired,
-    // isSuccess:PropTypes.bool.isRequired
-  }
-const Register = connect(mapState, mapDispatch)(RegisterForm);
-export default Register;
+Register.propTypes = propTypes;
+  // {
+  //   register: PropTypes.func.isRequired
+  //   // isKeyError:PropTypes.bool.isRequired,
+  //   // isKeyLoading:PropTypes.bool.isRequired,
+  //   // isSuccess:PropTypes.bool.isRequired
+  // }
+  
+export default connect(mapState, mapDispatch)(Register);
