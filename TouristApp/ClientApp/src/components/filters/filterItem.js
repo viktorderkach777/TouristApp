@@ -4,7 +4,7 @@ import { Collapse, Button, CardBody, Card, FormGroup, Label, Input } from 'react
 
 const propTypes = {
 
-    filterData:PropTypes.object.isRequired,
+    filterData: PropTypes.object.isRequired,
     handleCheckChieldElement: PropTypes.func.isRequired
 };
 
@@ -12,25 +12,25 @@ const defaultProps = {};
 
 
 const FilterCheckBox = (props) => {
-   // console.log('--FilterCheckBox props----', props);
+    // console.log('--FilterCheckBox props----', props);
     return (
-         <FormGroup check className='align-text-bottom' >
+        <FormGroup check className='align-text-bottom' >
             <Label check>
-                <Input key={props.id} type="checkbox" onClick={props.handleCheckChieldElement} id={props.id} value={props.value} />{' '}<h5> {props.value} </h5>
+                <Input key={props.id}  type="checkbox" onClick={props.handleCheckChieldElement} id={props.id} value={props.value} />{' '}<h5> {props.value} </h5>
             </Label>
         </FormGroup>)
 }
 const FilterHeader = (props) => {
     return (
         <Button
-        color="info"
-        onClick={props.onClick}
-        className="mt-2 col">
-        {props.name}{' ('}
-        {props.children.length}{')'}
-        {props.collapse ? <i className="fa fa-chevron-up float-right" aria-hidden="true" /> : <i className="fa fa-chevron-down float-right" aria-hidden="true" />}
+            color="info"
+            onClick={props.onClick}
+            className="mt-2 col">
+            {props.name}{' ('}
+            {props.children.length}{')'}
+            {props.collapse ? <i className="fa fa-chevron-up float-right" aria-hidden="true" /> : <i className="fa fa-chevron-down float-right" aria-hidden="true" />}
 
-    </Button>
+        </Button>
     )
 }
 
@@ -54,17 +54,17 @@ class FilterItem extends Component {
     }
 
     render() {
-      //  console.log('filterItem.pros:', this.props);
+        //  console.log('filterItem.pros:', this.props);
         const { collapse } = this.state;
         const { filterData } = this.props;
-        let filter=filterData.children;
+        let filter = filterData.children;
         return (
             <div>
-                <FilterHeader {...filterData} collapse={collapse}  onClick={this.toggle}/>
-                 <Collapse isOpen={collapse}>
+                <FilterHeader {...filterData} collapse={collapse} onClick={this.toggle} />
+                <Collapse isOpen={collapse}>
                     <Card>
                         <CardBody>
-                            {filter.length!==0 ? (filter.map(filterItem =><FilterCheckBox {...filterItem} key={filterItem.id} handleCheckChieldElement={this.handleCheckChieldElement}/>)):('')}
+                            {filter.length !== 0 ? (filter.map(filterItem => <FilterCheckBox {...filterItem} key={filterItem.id} handleCheckChieldElement={this.handleCheckChieldElement} />)) : ('')}
                         </CardBody>
                     </Card>
                 </Collapse>
