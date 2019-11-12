@@ -385,7 +385,7 @@ namespace TouristApp.Controllers
                 .Take(pageSize).ToList();
 
             model.Tours = query;
-            model.sortOrder = parameters.sortOrder;
+           // model.sortOrder = parameters.sortOrder;
 
             model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
             model.CurrentPage = page;
@@ -395,7 +395,7 @@ namespace TouristApp.Controllers
 
        // version 2
         [HttpPost("list2")]
-        public async Task<ActionResult<List<ToursViewModel>>> Post2([FromBody] ToursListViewModel parameters)
+        public async Task<ActionResult<ToursViewModel>> Post2([FromBody] ToursListViewModel parameters)
         {
             var filtersList = GetListFilters(_context); // list існуючих фільтрів
             string[] filterValueSearchList = parameters.filters; //масив ID вибраних фільтрів
@@ -494,10 +494,11 @@ namespace TouristApp.Controllers
                 .Take(pageSize).ToListAsync();
 
             model.Tours = result;
-            model.sortOrder = parameters.sortOrder;
+            //model.sortOrder = parameters.sortOrder;
 
             model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
             model.CurrentPage = page;
+            model.CountItem = count;
             return Ok(model);
         }
 
