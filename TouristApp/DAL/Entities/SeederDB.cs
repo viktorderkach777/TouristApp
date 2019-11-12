@@ -80,25 +80,8 @@ namespace TouristApp.DAL.Entities
             }
             #endregion
 
-            #region tblCars - Автомобілі
-            //List<string> cars = new List<string>{
-            // "154muv2f", "154m2fas"
-            //};
-            //foreach (var item in cars)
-            //{
-            //    if (context.Cars.SingleOrDefault(f => f.UniqueName == item) == null)
-            //    {
-            //        context.Cars.Add(
-            //            new Car
-            //            {
-            //                UniqueName = item,
-            //                Date = DateTime.Now,
-            //                Price = 20000
-            //            });
-            //        context.SaveChanges();
-            //    }
-            //}
-            #endregion
+            
+            
             #region tblFilters - Фільтри
             Filter[] filters =
             {

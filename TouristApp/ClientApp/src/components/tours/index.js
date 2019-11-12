@@ -74,7 +74,8 @@ class ToursContainer extends Component {
       totalPages: props.totalPages,
       sortOrder: props.sortOrder,
       searchText: props.searchText,
-      filtersIdList: props.filtersIdList
+      filtersIdList: props.filtersIdList,
+      countTours:props.countTours
     };
   }
 
@@ -209,7 +210,7 @@ class ToursContainer extends Component {
   render() {
     console.log('----State Tours -----', this.state);
     console.log('----Props Tours-----', this.props);
-    const { roles, isListLoading, totalPages, currentPage } = this.props;
+    const { roles, isListLoading, totalPages, currentPage,countTours } = this.props;
     const { deleteDialog_isOpen, id_delete } = this.state;
     
     const deleteDialogContent = (deleteDialog_isOpen &&
@@ -304,7 +305,7 @@ class ToursContainer extends Component {
           <div className="row">
             {deleteDialogContent}
             <div className="col-12 col-md-3">
-              <FilterWidjet filters={this.props.filters} handleCheckChieldElement={this.handleCheckChieldElement} />
+              <FilterWidjet filters={this.props.filters} count={countTours} handleCheckChieldElement={this.handleCheckChieldElement} />
             </div>
             <div className="col-12 col-md-9">
               <SortToolbar onSortChanged={this.onSortChanged} onSearchChanged={this.onSearchChanged} />
@@ -330,6 +331,7 @@ const mapState = state => {
     filters: get(state, 'filters.list.filters'),
     filtersIdList: get(state, 'tours.list.filters'),
     totalPages: get(state, 'tours.list.totalPages'),
+    countTours:get(state, 'tours.list.countItem'),
     isAuthenticated: get(state, 'auth.isAuthenticated'),
     roles: get(state, 'auth.user.roles')
   };

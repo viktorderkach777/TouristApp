@@ -175,7 +175,8 @@ namespace TouristApp.ViewModels
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; }
 
-        public string sortOrder { get; set; }
+        public int CountItem { get; set; }
+        //public string sortOrder { get; set; }
         //public SearchCountryViewModel Search { get; set; }
 
     }

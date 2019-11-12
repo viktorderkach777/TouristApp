@@ -27,19 +27,19 @@ class Filters extends Component {
     }
 
     render() {
-        const { filters } = this.props;
+        const { filters, count } = this.props;
         console.log('---MAIN:filters---', filters)
         return (
             <Form>
                 <Card className="CardTours">
                     <CardBody>
-                        <CardHeader>217 знайдено</CardHeader>
+                        <CardHeader ><b className="YColor">{count}</b> знайдено</CardHeader>
                         {filters.map(filterItem =>
                             <FilterItem filterData={filterItem} key={filterItem.id} handleCheckChieldElement={this.handleCheckChieldElement} />
                         )}
                         <Row >
                             <Col  className="d-flex justify-content-center">
-                                <Button className='mt-2 buttonHotel' >Знайти</Button>
+                                <Button className='mt-2 buttonHotel'>Знайти</Button>
                             </Col>
                         </Row>
                     </CardBody>
