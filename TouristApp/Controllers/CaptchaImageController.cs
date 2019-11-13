@@ -1,9 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing;
-using Microsoft.Extensions.Configuration;
 using System.Drawing.Drawing2D;
 using TouristApp.Helpers;
 using System.IO;
@@ -24,9 +22,7 @@ namespace TouristApp.Controllers
         private const Double xAmp = WarpFactory * ImageWidth / 150;
         private const Double yAmp = WarpFactory * ImageHight / 60;
         private const Double xFreq = 2.0 * Math.PI / ImageWidth;
-        private const Double yFreq = 2.0 * Math.PI / ImageHight;
-        private readonly IConfiguration _configuration;
-        private readonly IEmailSender _emailSender;
+        private const Double yFreq = 2.0 * Math.PI / ImageHight;        
 
         private GraphicsPath DeformPath(GraphicsPath path)
         {
@@ -43,13 +39,6 @@ namespace TouristApp.Controllers
                 deformed[i] = new PointF(original.X + xOffset, original.Y + yOffset);
             }
             return new GraphicsPath(deformed, path.PathTypes);
-        }
-
-        public CaptchaImageController(IConfiguration configuration,
-            IEmailSender emailSender)
-        {
-            _configuration = configuration;
-            _emailSender = emailSender;
         }
 
         [HttpPost("post-guid-captcha")]
@@ -97,7 +86,6 @@ namespace TouristApp.Controllers
                     {
                         path.AddString(solution, new FontFamily(FontFamily), 0,
                             bestFontSize, textTopLeft, StringFormat.GenericDefault);
-                        //
                         //g.DrawLine()
                         g.SmoothingMode = SmoothingMode.HighQuality;
                         g.FillPath(Foreground, DeformPath(path));

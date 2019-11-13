@@ -40,7 +40,7 @@ class Google extends Component {
             <React.Fragment>
                 {!!errorsServer.invalid ?
                     <div className="invalid-feedback d-block">
-                        {errorsServer.invalid}
+                        {errorsServer.googleInvalid}
                     </div> : ''}
                 <GoogleLogin
                     clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}

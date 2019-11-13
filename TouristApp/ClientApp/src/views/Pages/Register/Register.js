@@ -217,6 +217,10 @@ class Register extends Component {
     }
   };
 
+  _onkeyPress = e => {
+    return e.key === "Enter" ? this.onSubmitForm(e) : null
+  }
+
   captchaUpdate = (e) => {
     e.preventDefault()
     this.props.createNewKeyCaptcha();
@@ -277,6 +281,7 @@ class Register extends Component {
                           name="email"
                           value={email}
                           onChange={this.handleChange}
+                          onKeyPress={this._onkeyPress}
                         />
                         <FormFeedback>{errors.email}</FormFeedback>
                         {/* {!!errorsServer.email ? <FormFeedback>{'User with this email already exists!'}</FormFeedback> : ''} */}
@@ -296,7 +301,8 @@ class Register extends Component {
                           id="password"
                           name="password"
                           value={password}
-                          onChange={this.handleChange} />
+                          onChange={this.handleChange}
+                          onKeyPress={this._onkeyPress} />
                         <FormFeedback>{errors.password}</FormFeedback>
                       </InputGroup>
 
@@ -314,7 +320,8 @@ class Register extends Component {
                           id="confirmPassword"
                           name="confirmPassword"
                           value={confirmPassword}
-                          onChange={this.handleChange} />
+                          onChange={this.handleChange}
+                          onKeyPress={this._onkeyPress} />
                         <FormFeedback>{errors.confirmPassword}</FormFeedback>
                       </InputGroup>
 
@@ -332,7 +339,8 @@ class Register extends Component {
                           id="firstName"
                           name="firstName"
                           value={firstName}
-                          onChange={this.handleChange} />
+                          onChange={this.handleChange}
+                          onKeyPress={this._onkeyPress} />
                         <FormFeedback>{errors.firstName}</FormFeedback>
                       </InputGroup>
 
@@ -350,7 +358,8 @@ class Register extends Component {
                           id="middleName"
                           name="middleName"
                           value={middleName}
-                          onChange={this.handleChange} />
+                          onChange={this.handleChange}
+                          onKeyPress={this._onkeyPress} />
                         <FormFeedback>{errors.middleName}</FormFeedback>
                       </InputGroup>
 
@@ -368,7 +377,8 @@ class Register extends Component {
                           id="lastName"
                           name="lastName"
                           value={lastName}
-                          onChange={this.handleChange} />
+                          onChange={this.handleChange}
+                          onKeyPress={this._onkeyPress} />
                         <FormFeedback>{errors.lastName}</FormFeedback>
                       </InputGroup>
 
@@ -386,7 +396,8 @@ class Register extends Component {
                           id="dateOfBirth"
                           name="dateOfBirth"
                           value={dateOfBirth}
-                          onChange={this.handleChange} />
+                          onChange={this.handleChange}
+                          onKeyPress={this._onkeyPress} />
                         <FormFeedback>{errors.dateOfBirth}</FormFeedback>
                         {/* {!!errorsServer.dateOfBirth ? <FormFeedback>{'Invalid date of birth!'}</FormFeedback> : ''} */}
                       </InputGroup>
@@ -492,7 +503,8 @@ class Register extends Component {
                           id="captchaText"
                           name="captchaText"
                           value={this.state.captchaText}
-                          onChange={this.handleChange} />
+                          onChange={this.handleChange}
+                          onKeyPress={this._onkeyPress} />
                         <FormFeedback>{errors.captchaText}</FormFeedback>                       
                       </InputGroup>
 

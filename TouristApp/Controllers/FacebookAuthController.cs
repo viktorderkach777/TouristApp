@@ -10,7 +10,7 @@ using System.Net.Http;
 using TouristApp.Domain.Models.FacebookModels;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-
+using System.Collections.Generic;
 
 namespace TouristApp.Controllers
 {
@@ -93,9 +93,14 @@ namespace TouristApp.Controllers
 
                 }).Result;
 
-                result = _userManager.AddToRoleAsync(user, roleName).Result;              
+                result = _userManager.AddToRoleAsync(user, roleName).Result;
 
-                if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
+                var invalid = new Dictionary<string, string>
+                {
+                    { "facebookInvalid", "Error facebook login." }
+                };
+
+                if (!result.Succeeded) return BadRequest(invalid);
 
             }           
             else

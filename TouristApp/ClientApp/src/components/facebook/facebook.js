@@ -40,7 +40,7 @@ class Facebook extends Component {
             <React.Fragment>
                 {!!errorsServer.invalid ?
                     <div className="invalid-feedback d-block">
-                        {errorsServer.invalid}
+                        {errorsServer.facebookInvalid}
                     </div> : ''}
                 <FacebookLogin
                     appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}

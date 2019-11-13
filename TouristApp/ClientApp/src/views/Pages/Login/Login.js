@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, CardFooter, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, Alert, FormFeedback } from 'reactstrap';
 import PropTypes from 'prop-types';
-//import classnames from 'classnames';
 import { connect } from "react-redux";
 import * as loginActions from './reducer';
 import get from 'lodash.get';
@@ -57,13 +56,13 @@ class Login extends Component {
   onSubmitForm = (e) => {
     e.preventDefault();
     let errors = {};
-    
+
     if (this.state.email === '') errors.email = "Can't be empty!"
     if (this.state.password === '') errors.password = "Can't be empty!"
 
     const isValid = Object.keys(errors).length === 0
     if (isValid) {
-      const { email, password } = this.state;     
+      const { email, password } = this.state;
       const model = {
         Email: email,
         Password: password
@@ -75,17 +74,28 @@ class Login extends Component {
     }
   };
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    // if(nextProps.loading!==prevState.loading) {
-    return { loading: nextProps.loading, errorsServer: nextProps.errors };
-    //}
-    //else return null;
+  _onkeyPress = e => {
+    return e.key === "Enter" ? this.onSubmitForm(e) : null
+  }
+
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   // if(nextProps.loading!==prevState.loading) {
+  //   return { loading: nextProps.loading, errorsServer: nextProps.errors };
+  //   //}
+  //   //else return null;
+  // }
+
+  UNSAFE_componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      loading: nextProps.loading,
+      errors: nextProps.errors
+    });
   }
 
   render() {
-    const { errors, errorsServer, loading } = this.state;
-    //console.log('---FormLogin state----', this.state);
-    const form = (
+    const { errors, loading } = this.state;
+
+    return (
       <React.Fragment>
         <CentralPageSpinner loading={loading} />
 
@@ -98,9 +108,9 @@ class Login extends Component {
                     <CardBody>
                       <Form onSubmit={this.onSubmitForm}>
                         <h1>Login</h1>
-                        {!!errorsServer.invalid ?
+                        {!!errors.invalid ?
                           <div className="invalid-feedback d-block">
-                            {errorsServer.invalid}
+                            {errors.invalid}
                           </div> : ''}
 
                         <Row>
@@ -113,8 +123,6 @@ class Login extends Component {
                             </Link>
                           </Col>
                         </Row>
-
-                        {!!errors.invalid ? <Alert color="danger">{errors.invalid}</Alert> : ''}
 
                         <InputGroup className="mb-3">
                           <InputGroupAddon addonType="prepend">
@@ -132,6 +140,7 @@ class Login extends Component {
                             name="email"
                             value={this.state.email}
                             onChange={this.handleChange}
+                            onKeyPress={this._onkeyPress}
                           />
                           <FormFeedback>{errors.email}</FormFeedback>
                         </InputGroup>
@@ -153,6 +162,7 @@ class Login extends Component {
                             name="password"
                             value={this.state.password}
                             onChange={this.handleChange}
+                            onKeyPress={this._onkeyPress}
                           />
                           <FormFeedback>{errors.password}</FormFeedback>
                         </InputGroup>
@@ -178,18 +188,6 @@ class Login extends Component {
                       </Row>
                     </CardFooter>
                   </Card>
-                  {/* <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
-                    <CardBody className="text-center">
-                      <div>
-                        <h2>Sign up</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                        <Link to="/register">
-                          <Button color="primary" className="mt-3" active tabIndex={-1}>Register Now!</Button>
-                        </Link>
-                      </div>
-                    </CardBody>
-                  </Card> */}
                 </CardGroup>
               </Col>
             </Row>
@@ -198,7 +196,6 @@ class Login extends Component {
 
       </React.Fragment>
     );
-    return (form);
   }
 }
 

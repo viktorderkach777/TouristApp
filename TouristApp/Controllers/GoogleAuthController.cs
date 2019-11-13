@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using TouristApp.DAL.Entities;
 using TouristApp.Domain.Interfaces;
 using Google.Apis.Auth;
-
+using System.Collections.Generic;
 
 namespace TouristApp.Controllers
 {
@@ -71,9 +71,14 @@ namespace TouristApp.Controllers
 
                 }).Result;
 
-                result = _userManager.AddToRoleAsync(user, roleName).Result;               
+                result = _userManager.AddToRoleAsync(user, roleName).Result;
 
-                if (!result.Succeeded) return BadRequest(new { invalid = "We can't create user" });
+                var invalid = new Dictionary<string, string>
+                {
+                    { "googleInvalid", "Error google login." }
+                };
+
+                if (!result.Succeeded) return BadRequest(invalid);
             }
             else
             {
