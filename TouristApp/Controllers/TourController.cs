@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,24 +22,24 @@ namespace TouristApp.Controllers
     {
         private readonly EFContext _context;
         private readonly IConfiguration _configuration;
-
+        const string IMAGES_PATH = "ImagesPath";
+        private readonly string _url;
+        
         public TourController(EFContext context, IConfiguration configuration)
         {
             _context = context;
-            _configuration = configuration;
+            _configuration = configuration;          
+            _url = _configuration.GetValue<string>(IMAGES_PATH);
         }
 
         // GET: api/Tour/list/id
-
         [HttpGet("list/{currentPage}")]
         public async Task<ActionResult<IEnumerable<ToursViewModel>>> Get([FromRoute] int currentPage, string sortOrder)
         {
             int page = currentPage;
             int pageSize = 2;
             int pageNo = page - 1;
-            ToursViewModel model = new ToursViewModel();
-
-            var url = _configuration.GetValue<string>("ImagesHotelUrl");
+            ToursViewModel model = new ToursViewModel();           
 
             var query = await _context
                 .Tours.AsQueryable()
@@ -63,16 +62,15 @@ namespace TouristApp.Controllers
                     FromData = u.FromData,
                     Date = u.FromData.ToString().Substring(0, 10),
                     DaysCount = u.DaysCount,
-                    ImagePath = url + "/1200_" + u.Hotel.HotelImages.FirstOrDefault(
-                        f => f.HotelId == u.HotelId).HotelImageUrl,
+                    ImagePath = Path.Combine(_url, "1200_" + u.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.HotelId).HotelImageUrl)
 
-                    //Images = u.Hotel.HotelImages.Where(
-                    //    f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
-                    //{
-                    //    Name= $"{url}/1200_{x.HotelImageUrl}"  
-                    //}).ToList()
+            //Images = u.Hotel.HotelImages.Where(
+            //    f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
+            //{
+            //    Name= $"{url}/1200_{x.HotelImageUrl}"  
+            //}).ToList()
 
-                }).ToListAsync();
+        }).ToListAsync();
 
 
 
@@ -297,9 +295,7 @@ namespace TouristApp.Controllers
             int page = parameters.CurrentPage;
             int pageSize = 2;
             int pageNo = page - 1;
-            ToursViewModel model = new ToursViewModel();
-
-            var url = _configuration.GetValue<string>("ImagesHotelUrl");
+            ToursViewModel model = new ToursViewModel();            
 
             var query = await _context
                 .Tours
@@ -321,9 +317,8 @@ namespace TouristApp.Controllers
                     Class = u.Hotel.Class,
                     FromData = u.FromData,
                     Date = u.FromData.ToString().Substring(0, 10),
-                    DaysCount = u.DaysCount,
-                    ImagePath = url + "/1200_" + u.Hotel.HotelImages.FirstOrDefault(
-                        f => f.HotelId == u.HotelId).HotelImageUrl,
+                    DaysCount = u.DaysCount,                    
+                    ImagePath = Path.Combine(_url, "1200_" + u.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.HotelId).HotelImageUrl)
 
                 }).ToListAsync();
 
@@ -403,9 +398,7 @@ namespace TouristApp.Controllers
             int page = parameters.CurrentPage;
             int pageSize = 2;
             int pageNo = page - 1;
-            ToursViewModel model = new ToursViewModel();
-
-            var url = _configuration.GetValue<string>("ImagesHotelUrl");
+            ToursViewModel model = new ToursViewModel();           
 
             var query = _context
                 .Tours
@@ -486,9 +479,8 @@ namespace TouristApp.Controllers
                 Class = u.Hotel.Class,
                 FromData = u.FromData,
                 Date = u.FromData.ToString().Substring(0, 10),
-                DaysCount = u.DaysCount,
-                ImagePath = url + "/1200_" + u.Hotel.HotelImages.FirstOrDefault(
-                         f => f.HotelId == u.HotelId).HotelImageUrl,
+                DaysCount = u.DaysCount,               
+                ImagePath = Path.Combine(_url, "1200_" + u.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.HotelId).HotelImageUrl)
             })
                 .Skip(pageNo * pageSize)
                 .Take(pageSize).ToListAsync();
@@ -507,17 +499,14 @@ namespace TouristApp.Controllers
         [HttpGet("images/{id}")]
         public IEnumerable<ImageItemViewModelNext2> Images(string id)
         {
-            var serverUrl = "http://localhost:44318/";
-            var url = _configuration.GetValue<string>("ImagesHotelUrl");
-
-            var HotelId = _context.Tours.FirstOrDefault(f => f.Id == id).HotelId;
+           var HotelId = _context.Tours.FirstOrDefault(f => f.Id == id).HotelId;
 
             var images = _context.HotelImages.Where(
                 f => f.HotelId == HotelId).Select(x => new ImageItemViewModelNext2
                 {
                     Id = x.Id,
-                    original = $"{serverUrl}{url}/1200_{x.HotelImageUrl}",
-                    thumbnail = $"{serverUrl}{url}/268_{x.HotelImageUrl}"
+                    original = Path.Combine(_url, "1200_" + x.HotelImageUrl),
+                    thumbnail = Path.Combine(_url, "268_" + x.HotelImageUrl)                    
                 }).ToList();
 
             return images;
@@ -525,10 +514,7 @@ namespace TouristApp.Controllers
 
         [HttpGet("single/{id}")]
         public async Task<ActionResult<SingleTourViewModel>> Get([FromRoute] string id)
-        {
-
-            var url = _configuration.GetValue<string>("ImagesHotelUrl");
-            var serverUrl = "http://localhost:44318/";
+        {            
             var tour = await _context
                 .Tours
                 .Where(a => a.Id == id)
@@ -551,15 +537,12 @@ namespace TouristApp.Controllers
                     FromData = u.FromData,
                     Date = u.FromData.ToString().Substring(0, 10),
                     DaysCount = u.DaysCount,
-                    //ImagePath = url + "/1200_" + u.Hotel.HotelImages.FirstOrDefault(
-                    //    f => f.HotelId == u.HotelId).HotelImageUrl,
-
                     Images = u.Hotel.HotelImages.Where(
                         f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
                         {
                             Id = x.Id,
-                            original = $"{serverUrl}{url}/1200_{x.HotelImageUrl}",
-                            thumbnail = $"{serverUrl}{url}/268_{x.HotelImageUrl}"
+                            original = Path.Combine(_url, "1200_" + x.HotelImageUrl),
+                            thumbnail = Path.Combine(_url, "268_" + x.HotelImageUrl),                           
                         }).ToList()
                 }).SingleAsync();
             return tour;
@@ -590,8 +573,5 @@ namespace TouristApp.Controllers
         {
             return _context.Tours.Any(e => e.Id == id);
         }
-
-
-
     }
 }

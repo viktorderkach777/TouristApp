@@ -142,7 +142,21 @@ namespace TouristApp
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"UserImages")),
                 RequestPath = new PathString("/UserImages")
-            });          
+            });
+
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"Uploaded")))
+            {
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"Uploaded"));
+            }
+
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Uploaded")),
+                RequestPath = "/Uploaded"
+            });
+
 
             app.UseMvc(routes =>
             {
