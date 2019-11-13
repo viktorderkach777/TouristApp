@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, FormFeedback } from 'reactstrap';
+import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, FormFeedback, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { connect } from "react-redux";
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
 import Cropper from 'react-cropper';
 import { Link } from 'react-router-dom';
-import {registerPost} from './reducer';
+import { registerPost } from './reducer';
 import * as captchaActions from '../../../components/captcha/reducer';
 import CaptchaWidget from '../../../components/captcha';
 import CentralPageSpinner from '../../../components/CentrPageSpinner';
@@ -48,6 +48,8 @@ class Register extends Component {
     dateOfBirth: '',
     captchaText: "",
     imageError: true,
+    danger: false,
+    modalText: ''
     // errorsServer: {
     // },
   };
@@ -68,11 +70,17 @@ class Register extends Component {
   UNSAFE_componentWillReceiveProps = (nextProps) => {
     console.log('Change props ');
     this.setState({
-        loading: nextProps.loading,
-        errors: nextProps.errors,
-        captcha: nextProps.captcha
+      loading: nextProps.loading,
+      errors: nextProps.errors,
+      captcha: nextProps.captcha
     });
-}
+  }
+
+  toggleDanger = () => {
+    this.setState({
+      danger: !this.state.danger,
+    });
+  }
 
   // static getDerivedStateFromProps(nextProps, prevState) {
   //   if(nextProps!==prevState) {
@@ -93,15 +101,23 @@ class Register extends Component {
     if (files && files[0]) {
       const currentFile = files[0];
       const currentFileSize = currentFile.size;
-      //alert(currentFileSize);
       if (!currentFile.type.match(/^image\//)) {
-        alert("Error file type");
+        this.toggleDanger();
+        this.setState({
+          modalText: "Error file type!",
+        });
       }
       else if (currentFileSize > IMAGE_MAX_SIZE) {
-        alert("The image size must be less than 10Mb");
+        this.toggleDanger();
+        this.setState({
+          modalText: "The image size must be less than 10Mb!",
+        });
       }
       else if (currentFileSize < IMAGE_MIN_SIZE) {
-        alert("The image size must be more than 3Kb");
+        this.toggleDanger();
+        this.setState({
+          modalText: "The image size must be more than 3Kb!",
+        });
       } else {
         const reader = new FileReader();
         reader.onload = () => {
@@ -111,7 +127,10 @@ class Register extends Component {
         reader.readAsDataURL(currentFile);
       }
     } else {
-      alert("Select an image, please");
+      this.toggleDanger();
+      this.setState({
+        modalText: "Select an image, please!",
+      });
     }
   };
 
@@ -240,15 +259,28 @@ class Register extends Component {
       dateOfBirth,
       imageBase64,
       captcha,
-      //errorsServer,
       imageError,
-      isLoadingPhoto } = this.state;
+      isLoadingPhoto,
+      modalText
+    } = this.state;
 
     const form = (
       <React.Fragment>
         <CentralPageSpinner loading={loading} />
         <div className="app flex-row ">
           <Container>
+            <Row>
+              <Modal isOpen={this.state.danger} toggle={this.toggleDanger}
+                className={'modal-danger ' + this.props.className}>
+                <ModalHeader toggle={this.toggleDanger}>Warning!</ModalHeader>
+                <ModalBody>
+                  {modalText}
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="secondary" onClick={this.toggleDanger}>Cancel</Button>
+                </ModalFooter>
+              </Modal>
+            </Row>
             <Row className="justify-content-center">
               <Col md="9" lg="7" xl="6">
                 <Card className="mx-4">
@@ -505,7 +537,7 @@ class Register extends Component {
                           value={this.state.captchaText}
                           onChange={this.handleChange}
                           onKeyPress={this._onkeyPress} />
-                        <FormFeedback>{errors.captchaText}</FormFeedback>                       
+                        <FormFeedback>{errors.captchaText}</FormFeedback>
                       </InputGroup>
 
                       <Button color="success" block disabled={loading} >Create Account</Button>
@@ -551,11 +583,11 @@ const mapDispatch = (dispatch) => {
 }
 
 Register.propTypes = propTypes;
-  // {
-  //   register: PropTypes.func.isRequired
-  //   // isKeyError:PropTypes.bool.isRequired,
-  //   // isKeyLoading:PropTypes.bool.isRequired,
-  //   // isSuccess:PropTypes.bool.isRequired
-  // }
-  
+// {
+//   register: PropTypes.func.isRequired
+//   // isKeyError:PropTypes.bool.isRequired,
+//   // isKeyLoading:PropTypes.bool.isRequired,
+//   // isSuccess:PropTypes.bool.isRequired
+// }
+
 export default connect(mapState, mapDispatch)(Register);
