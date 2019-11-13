@@ -394,6 +394,7 @@ namespace TouristApp.Controllers
         {
             var filtersList = GetListFilters(_context); // list існуючих фільтрів
             string[] filterValueSearchList = parameters.filters; //масив ID вибраних фільтрів
+            var url = _configuration.GetValue<string>("ImagesHotelUrl");
 
             int page = parameters.CurrentPage;
             int pageSize = 2;
@@ -410,6 +411,8 @@ namespace TouristApp.Controllers
                     .ThenInclude(country => country.Name)
                 .Include(s => s.Hotel.HotelImages)
                 .Include(z => z.CityDeparture)
+                    .ThenInclude(city => city.Name)
+                .Include(t => t.Filtres)
                 .AsQueryable();
 
             if (parameters.filters.Length != 0)
@@ -469,7 +472,7 @@ namespace TouristApp.Controllers
             var result =await query.Select(u => new TourListViewModel
             {
                 Id = u.Id,
-                СityDeparture = "Київ",
+                СityDeparture = u.CityDeparture.Name,
                 Name = u.Hotel.Name,
                 Region = u.Hotel.Region.Name,
                 Country = u.Hotel.Region.Country.Name,
@@ -479,8 +482,10 @@ namespace TouristApp.Controllers
                 Class = u.Hotel.Class,
                 FromData = u.FromData,
                 Date = u.FromData.ToString().Substring(0, 10),
-                DaysCount = u.DaysCount,               
-                ImagePath = Path.Combine(_url, "1200_" + u.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.HotelId).HotelImageUrl)
+                DaysCount = u.DaysCount,
+                ImagePath = url + "/1200_" + u.Hotel.HotelImages.FirstOrDefault(
+                        f => f.HotelId == u.HotelId).HotelImageUrl
+               
             })
                 .Skip(pageNo * pageSize)
                 .Take(pageSize).ToListAsync();
