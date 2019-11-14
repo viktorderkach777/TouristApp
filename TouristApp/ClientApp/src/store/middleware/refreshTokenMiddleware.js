@@ -10,7 +10,7 @@ export default function refreshTokenMiddleware(){
             if (token && refreshThreshold > token.exp) {
                 refreshToken(dispatch).then(() => {
                     return next(action)
-                })
+                }, (err)=> { return next(action); });
             }
             else{
                 return next(action);

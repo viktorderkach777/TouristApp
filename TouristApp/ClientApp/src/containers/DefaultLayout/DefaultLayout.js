@@ -60,7 +60,7 @@ class DefaultLayoutContainer extends Component {
       <React.Fragment>
         <div className="app">
           <AppHeader fixed >
-            <Suspense fallback={<CentrPageSpinner loading={loading} />}>
+            <Suspense fallback={<CentrPageSpinner loading={true} />}>
               <DefaultHeader onLogout={e => this.signOut(e)} user={user} loading={loading} />
             </Suspense>
           </AppHeader>
@@ -79,7 +79,7 @@ class DefaultLayoutContainer extends Component {
             <main className="main">
               <AppBreadcrumb appRoutes={routes} router={router} />
               <Container fluid>
-                <Suspense fallback={<CentrPageSpinner loading={loading} />}>
+                <Suspense fallback={<CentrPageSpinner loading={true} />}>
                   <Switch>
                     {routes.map((route, idx) => {
                       return route.component ? (
@@ -99,14 +99,14 @@ class DefaultLayoutContainer extends Component {
               </Container>
             </main>
             <AppAside fixed>
-              <Suspense fallback={<CentrPageSpinner loading={loading} />}>
+              <Suspense fallback={<CentrPageSpinner loading={true} />}>
                 <DefaultAside />
               </Suspense>
             </AppAside>
           </div>
 
           <AppFooter>
-            <Suspense fallback={<CentrPageSpinner loading={loading} />}>
+            <Suspense fallback={<CentrPageSpinner loading={true} />}>
               <DefaultFooter />
             </Suspense>
           </AppFooter>
