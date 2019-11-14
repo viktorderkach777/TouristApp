@@ -31,9 +31,7 @@ const AdminHeader = React.lazy(() => import('./AdminHeader'));
 const Notifications = React.lazy(() => import('../../components/Notifications'));
 
 
-class AdminLayoutContainer extends Component {
-
-  loading = () => <CentrPageSpinner loading/>//<div className="animated fadeIn pt-1 text-center">Loading...</div>
+class AdminLayoutContainer extends Component {  
 
   signOut(e) {
     e.preventDefault();
@@ -41,8 +39,13 @@ class AdminLayoutContainer extends Component {
   }
 
   render() {
-    const { roles, isAuthenticated } = this.props;
+
+    //console.log("AdminLayoutContainer props", this.props);
+    const { isAuthenticated } = this.props.auth;
+    const { roles } = this.props.auth.user;
     var isAccess = false;
+    const {loading} = this.props.loading;
+    //const loading = () => <CentrPageSpinner loading={loading}/>
 
     if (isAuthenticated === true) {
       for(let i=0;i<roles.length;i++)
@@ -59,8 +62,8 @@ class AdminLayoutContainer extends Component {
           <Notifications/>
       <div className="app">
         <AppHeader fixed>
-          <Suspense  fallback={this.loading()}>
-            <AdminHeader onLogout={e=>this.signOut(e)}/>
+          <Suspense  fallback={<CentrPageSpinner loading={loading}/>}>
+            <AdminHeader onLogout={e => this.signOut(e)} loading={loading}/>
           </Suspense>
         </AppHeader>
         <div className="app-body">
@@ -76,7 +79,7 @@ class AdminLayoutContainer extends Component {
           <main className="main">
             <AppBreadcrumb appRoutes={routes} router={router}/>
             <Container fluid>
-              <Suspense fallback={this.loading()}>
+              <Suspense fallback={<CentrPageSpinner loading={loading}/>}>
                 <Switch>
                   {routes.map((route, idx) => {
                     return route.component ? (
@@ -96,13 +99,13 @@ class AdminLayoutContainer extends Component {
             </Container>
           </main>
           <AppAside fixed>
-            <Suspense fallback={this.loading()}>
+            <Suspense fallback={<CentrPageSpinner loading={loading}/>}>
               <AdminAside />
             </Suspense>
           </AppAside>
         </div>
         <AppFooter>
-          <Suspense fallback={this.loading()}>
+          <Suspense fallback={<CentrPageSpinner loading={loading}/>}>
             <AdminFooter />
           </Suspense>
         </AppFooter>
@@ -116,19 +119,16 @@ class AdminLayoutContainer extends Component {
 AdminLayoutContainer.propTypes =
   {
     logout: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
-    isAuthenticated:PropTypes.bool.isRequired,
-    roles: PropTypes.array.isRequired
+    auth: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired    
   }
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: get(state, 'login.isAuthenticated'),
-    roles: get(state, 'login.user.roles')
+    auth: get(state, 'login'),
+    loading: get(state, 'refreshToken.loading')   
   };
 };
-
-
 
 const AdminLayout =
   connect(mapStateToProps, {logout})(AdminLayoutContainer);

@@ -17,7 +17,7 @@ import {
   AppSidebarHeader,
   AppSidebarMinimizer,
   AppBreadcrumb2 as AppBreadcrumb,
-   AppSidebarNav2 as AppSidebarNav,
+  AppSidebarNav2 as AppSidebarNav,
 } from '@coreui/react';
 // sidebar nav config
 import navigation from '../../_nav';
@@ -33,7 +33,7 @@ const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayoutContainer extends Component {
 
-  loading = () => <CentrPageSpinner loading/>//<div className="animated fadeIn pt-1 text-center">Loading...</div>
+  //loading = () => <CentrPageSpinner loading={loading} />
 
   signOut(e) {
     e.preventDefault();
@@ -41,18 +41,15 @@ class DefaultLayoutContainer extends Component {
   }
 
   render() {
+    //console.log("DefaultLayoutContainer props", this.props);
     const { isAuthenticated, user } = this.props.auth;
-    const { roles } = this.props.auth.user;//||"User";
+    const { roles } = this.props.auth.user;
     var isAccess = false;
-    const {loading} = this.props.loading;
-    //console.log('DefaultLayout props: ', this.props);
-
+    const { loading } = this.props.loading;
 
     if (isAuthenticated === true) {
-      for(let i=0;i<roles.length;i++)
-      {
-        if(roles[i]==="User")
-        {
+      for (let i = 0; i < roles.length; i++) {
+        if (roles[i] === "User") {
           isAccess = true;
           break;
         }
@@ -63,26 +60,26 @@ class DefaultLayoutContainer extends Component {
       <React.Fragment>
         <div className="app">
           <AppHeader fixed >
-            <Suspense fallback={this.loading()}>
-              <DefaultHeader onLogout={e => this.signOut(e)} user={user} loading={loading}/>
+            <Suspense fallback={<CentrPageSpinner loading={loading} />}>
+              <DefaultHeader onLogout={e => this.signOut(e)} user={user} loading={loading} />
             </Suspense>
           </AppHeader>
           <div className="app-body">
 
             <AppSidebar fixed display="lg">
-            <AppSidebarHeader />
-            <AppSidebarForm />
-            <Suspense>
-            <AppSidebarNav navConfig={navigation} {...this.props} router={router}/>
-            </Suspense>
-            <AppSidebarFooter />
-            <AppSidebarMinimizer />
-          </AppSidebar>
+              <AppSidebarHeader />
+              <AppSidebarForm />
+              <Suspense>
+                <AppSidebarNav navConfig={navigation} {...this.props} router={router} />
+              </Suspense>
+              <AppSidebarFooter />
+              <AppSidebarMinimizer />
+            </AppSidebar>
 
             <main className="main">
               <AppBreadcrumb appRoutes={routes} router={router} />
               <Container fluid>
-                <Suspense fallback={this.loading()}>
+                <Suspense fallback={<CentrPageSpinner loading={loading} />}>
                   <Switch>
                     {routes.map((route, idx) => {
                       return route.component ? (
@@ -102,14 +99,14 @@ class DefaultLayoutContainer extends Component {
               </Container>
             </main>
             <AppAside fixed>
-              <Suspense fallback={this.loading()}>
+              <Suspense fallback={<CentrPageSpinner loading={loading} />}>
                 <DefaultAside />
               </Suspense>
             </AppAside>
           </div>
 
           <AppFooter>
-            <Suspense fallback={this.loading()}>
+            <Suspense fallback={<CentrPageSpinner loading={loading} />}>
               <DefaultFooter />
             </Suspense>
           </AppFooter>
@@ -120,27 +117,23 @@ class DefaultLayoutContainer extends Component {
   }
 }
 
+// DefaultLayoutContainer.defaultprops = {
+//   loading: true
+// }
+
 DefaultLayoutContainer.propTypes =
   {
-    logout: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired
-    // isAuthenticated:PropTypes.bool.isRequired,
-    // roles: PropTypes.string.isRequired
+    auth: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired
   }
 
 const mapStateToProps = state => {
   return {
-    //auth: get(state, 'auth'),
     auth: get(state, 'login'),
     loading: get(state, 'refreshToken.loading')
-    // isAuthenticated: get(state, 'auth.isAuthenticated'),
-    // roles: get(state, 'auth.user.roles')
   };
 };
 
-
-
 const DefaultLayout =
-  connect(mapStateToProps, {logout})(DefaultLayoutContainer);
+  connect(mapStateToProps, { logout })(DefaultLayoutContainer);
 export default DefaultLayout;

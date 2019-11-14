@@ -150,11 +150,12 @@ namespace TouristApp.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(
-            new
-            {
-                token = _jWTTokenService.CreateToken(user),
-                refToken = _jWTTokenService.CreateRefreshToken(user)
-            });
+            //new
+            //{
+            //    token = _jWTTokenService.CreateToken(user),
+            //    refToken = _jWTTokenService.CreateRefreshToken(user)
+            //}
+            );
         }
 
         [HttpPost("ChangePassword")]

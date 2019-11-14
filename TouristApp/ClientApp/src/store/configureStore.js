@@ -6,7 +6,7 @@ import { filters } from "../reducers/filterReducer";
 import { countries } from "../reducers/countryReducer";
 import * as RefreshToken from '../components/RefreshToken/reducer';
 
-import {userReducer} from '../reducers/auth';
+//import {userReducer} from '../reducers/auth';
 import user from '../reducers/user';
 
 import refreshTokenMiddleware from './middleware/refreshTokenMiddleware'
@@ -28,7 +28,7 @@ export default function configureStore (history, initialState) {
     const reducers = {
       captcha: captchaReducer,
       login: loginReducer,
-      auth:userReducer.reducer,
+      //auth:userReducer.reducer,
       userlist: user,
       tours:tours.reducer,
       filters:filters.reducer,

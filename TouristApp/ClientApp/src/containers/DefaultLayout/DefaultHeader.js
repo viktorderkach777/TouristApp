@@ -9,9 +9,13 @@ import CentralPageSpinner from '../../components/CentrPageSpinner';
 
 const propTypes = {
   children: PropTypes.node,
+  loading: PropTypes.bool.isRequired,
+  user: PropTypes.object.isRequired
 };
 
-const defaultProps = {};
+const defaultProps = {
+  loading:false
+};
 
 class DefaultHeader extends Component {
   render() {

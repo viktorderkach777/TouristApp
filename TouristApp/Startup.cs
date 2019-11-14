@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -74,7 +73,6 @@ namespace TouristApp
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ClockSkew = TimeSpan.Zero //вирубаємо похибку
-
                 };
             });
 
@@ -148,7 +146,6 @@ namespace TouristApp
             {
                 Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"Uploaded"));
             }
-
 
             app.UseStaticFiles(new StaticFileOptions
             {
