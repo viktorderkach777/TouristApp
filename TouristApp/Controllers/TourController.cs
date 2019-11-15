@@ -397,7 +397,7 @@ namespace TouristApp.Controllers
             var url = _configuration.GetValue<string>("ImagesHotelUrl");
 
             int page = parameters.CurrentPage;
-            int pageSize = 2;
+            int pageSize = 4;
             int pageNo = page - 1;
             ToursViewModel model = new ToursViewModel();
 
