@@ -30,7 +30,7 @@ const CentrPageSpinner = React.lazy(() => import('../../components/CentrPageSpin
 const DefaultAside = React.lazy(() => import('./DefaultAside'));
 const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
-const ChatBtn = React.lazy(() => import('../../components/chatButton'));
+//const ChatBtn = React.lazy(() => import('../../components/chatButton'));
 
 class DefaultLayoutContainer extends Component {
 
@@ -69,7 +69,7 @@ class DefaultLayoutContainer extends Component {
             </Suspense>
           </AppHeader>
           <div className="app-body">
-          <ChatBtn/>>
+          {/* <ChatBtn/>> */}
             <AppSidebar fixed display="lg">
             <AppSidebarHeader />
             <AppSidebarForm />

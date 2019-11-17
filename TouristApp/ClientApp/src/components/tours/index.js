@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 import './tours.css';
 import * as tourAction from '../../reducers/tourReducer';
 import * as filtersAction from '../../reducers/filterReducer';
+
 import {
-  Modal, ModalHeader, ModalFooter, ModalBody,
-  Card,
-  Button,
+  Modal, ModalHeader, ModalFooter, ModalBody, FormGroup,
+  Card, Label, Input,
+  Button, InputGroup, InputGroupAddon,
   CardTitle,
   CardText,
   CardImg,
@@ -23,7 +24,7 @@ const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
 const SortToolbar = React.lazy(() => import('../SortToolbar'));
 const PaginationBar = React.lazy(() => import('../Pagination'));
 const FilterWidjet = React.lazy(() => import('../filters'));
-
+const ChatBtn = React.lazy(() => import('../chatButton'));
 class ToursContainer extends Component {
   constructor(props) {
     super(props);
@@ -32,14 +33,15 @@ class ToursContainer extends Component {
     //initializing state 
     this.state = {
       tours: [],
-      filtersIdList:[],
+      filtersIdList: [],
       currentPage: 1,
       totalPages: null,
       sortOrder: 'name',
       filters: null,
       searchText: '',
       deleteDialog_isOpen: false,
-      id_delete: 0
+      id_delete: 0,
+      chatDialog_isOpen: false
 
     };
   }
@@ -75,7 +77,7 @@ class ToursContainer extends Component {
       sortOrder: props.sortOrder,
       searchText: props.searchText,
       filtersIdList: props.filtersIdList,
-      countTours:props.countTours
+      countTours: props.countTours
     };
   }
 
@@ -95,7 +97,7 @@ class ToursContainer extends Component {
       }
 
       this.postListTours(model);
-      
+
     }
 
   }
@@ -111,6 +113,13 @@ class ToursContainer extends Component {
   toggleDialogDelete = () => {
     this.setState({
       deleteDialog_isOpen: !this.state.deleteDialog_isOpen
+    });
+  }
+
+  toggleChatDialog = () => {
+    console.log('toggleChatDialog: ', this.props);
+    this.setState({
+      chatDialog_isOpen: !this.state.chatDialog_isOpen
     });
   }
 
@@ -210,9 +219,9 @@ class ToursContainer extends Component {
   render() {
     console.log('----State Tours -----', this.state);
     console.log('----Props Tours-----', this.props);
-    const { roles, isListLoading, totalPages, currentPage,countTours } = this.props;
-    const { deleteDialog_isOpen, id_delete } = this.state;
-    
+    const { roles, isListLoading, totalPages, currentPage, countTours } = this.props;
+    const { deleteDialog_isOpen, chatDialog_isOpen, id_delete } = this.state;
+
     const deleteDialogContent = (deleteDialog_isOpen &&
       <Modal isOpen={true}>
         <form >
@@ -223,6 +232,29 @@ class ToursContainer extends Component {
           <ModalFooter>
             <Button color="primary" onClick={this.onClickRemoveImageYes} className="btn btn-primary">Да</Button>
             <Button color="danger" onClick={this.toggleDialogDelete} >Скасувати</Button>
+          </ModalFooter>
+        </form>
+      </Modal>
+    );
+
+    const chatDialogContent = (chatDialog_isOpen &&
+      <Modal isOpen={true} centered>
+        <form >
+          <ModalHeader>Chat room</ModalHeader>
+          <ModalBody>
+            <FormGroup>
+              <Label for="exampleText">Chat with manager</Label>
+              <Input type="textarea" name="text" id="exampleText" />
+            </FormGroup>
+            <InputGroup>
+              <Input placeholder=" you message ..." />
+              <InputGroupAddon addonType="append"><Button color="primary">Send</Button></InputGroupAddon>
+            </InputGroup>
+
+          </ModalBody>
+          <ModalFooter>
+
+            <Button color="danger" onClick={this.toggleChatDialog} >Скасувати</Button>
           </ModalFooter>
         </form>
       </Modal>
@@ -286,7 +318,7 @@ class ToursContainer extends Component {
             <Col sm="12" md="2" className="d-flex  justify-content-center align-items-center">
               <Row>
                 <h5>{item.price}<span className="currency">₴</span></h5>
-                <Link   to={`/views/${item.country}/${item.id}`}>
+                <Link to={`/views/${item.country}/${item.id}`}>
                   <Button className="buttonHotel">Дивитись тур</Button>
                 </Link>
               </Row>
@@ -301,9 +333,11 @@ class ToursContainer extends Component {
     return (
 
       <React.Fragment>
+        <ChatBtn toggleChatDialog={this.toggleChatDialog} />
         <div className="container">
           <div className="row">
             {deleteDialogContent}
+            {chatDialogContent}
             <div className="col-12 col-md-3">
               <FilterWidjet filters={this.props.filters} count={countTours} handleCheckChieldElement={this.handleCheckChieldElement} />
             </div>
@@ -331,7 +365,7 @@ const mapState = state => {
     filters: get(state, 'filters.list.filters'),
     filtersIdList: get(state, 'tours.list.filters'),
     totalPages: get(state, 'tours.list.totalPages'),
-    countTours:get(state, 'tours.list.countItem'),
+    countTours: get(state, 'tours.list.countItem'),
     isAuthenticated: get(state, 'auth.isAuthenticated'),
     roles: get(state, 'auth.user.roles')
   };
