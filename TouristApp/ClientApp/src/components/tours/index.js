@@ -7,9 +7,9 @@ import * as tourAction from '../../reducers/tourReducer';
 import * as filtersAction from '../../reducers/filterReducer';
 
 import {
-  Modal, ModalHeader, ModalFooter, ModalBody, FormGroup,
-  Card, Label, Input,
-  Button, InputGroup, InputGroupAddon,
+  Modal, ModalHeader, ModalFooter, ModalBody,
+  Card, 
+  Button,
   CardTitle,
   CardText,
   CardImg,
@@ -25,6 +25,7 @@ const SortToolbar = React.lazy(() => import('../SortToolbar'));
 const PaginationBar = React.lazy(() => import('../Pagination'));
 const FilterWidjet = React.lazy(() => import('../filters'));
 const ChatBtn = React.lazy(() => import('../chatButton'));
+const ChatRoom = React.lazy(() => import('../chatRoom'));
 class ToursContainer extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +42,8 @@ class ToursContainer extends Component {
       searchText: '',
       deleteDialog_isOpen: false,
       id_delete: 0,
-      chatDialog_isOpen: false
+      chatDialog_isOpen: false,
+      name:''
 
     };
   }
@@ -237,28 +239,7 @@ class ToursContainer extends Component {
       </Modal>
     );
 
-    const chatDialogContent = (chatDialog_isOpen &&
-      <Modal isOpen={true} centered>
-        <form >
-          <ModalHeader>Chat room</ModalHeader>
-          <ModalBody>
-            <FormGroup>
-              <Label for="exampleText">Chat with manager</Label>
-              <Input type="textarea" name="text" id="exampleText" />
-            </FormGroup>
-            <InputGroup>
-              <Input placeholder=" you message ..." />
-              <InputGroupAddon addonType="append"><Button color="primary">Send</Button></InputGroupAddon>
-            </InputGroup>
 
-          </ModalBody>
-          <ModalFooter>
-
-            <Button color="danger" onClick={this.toggleChatDialog} >Скасувати</Button>
-          </ModalFooter>
-        </form>
-      </Modal>
-    );
 
     const toursList = (
       this.props.list.map(item => (
@@ -337,7 +318,7 @@ class ToursContainer extends Component {
         <div className="container">
           <div className="row">
             {deleteDialogContent}
-            {chatDialogContent}
+            {chatDialog_isOpen && <ChatRoom  name={this.props.name}/>}
             <div className="col-12 col-md-3">
               <FilterWidjet filters={this.props.filters} count={countTours} handleCheckChieldElement={this.handleCheckChieldElement} />
             </div>
@@ -367,7 +348,8 @@ const mapState = state => {
     totalPages: get(state, 'tours.list.totalPages'),
     countTours: get(state, 'tours.list.countItem'),
     isAuthenticated: get(state, 'auth.isAuthenticated'),
-    roles: get(state, 'auth.user.roles')
+    roles: get(state, 'auth.user.roles'),
+    name:get(state, 'auth.user.name')
   };
 };
 
