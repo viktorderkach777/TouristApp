@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 import './tours.css';
 import * as tourAction from '../../reducers/tourReducer';
 import * as filtersAction from '../../reducers/filterReducer';
+
 import {
   Modal, ModalHeader, ModalFooter, ModalBody,
-  Card,
+  Card, 
   Button,
   CardTitle,
   CardText,
@@ -23,7 +24,8 @@ const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
 const SortToolbar = React.lazy(() => import('../SortToolbar'));
 const PaginationBar = React.lazy(() => import('../Pagination'));
 const FilterWidjet = React.lazy(() => import('../filters'));
-
+const ChatBtn = React.lazy(() => import('../chatButton'));
+const ChatRoom = React.lazy(() => import('../chatRoom'));
 class ToursContainer extends Component {
   constructor(props) {
     super(props);
@@ -32,14 +34,16 @@ class ToursContainer extends Component {
     //initializing state 
     this.state = {
       tours: [],
-      filtersIdList:[],
+      filtersIdList: [],
       currentPage: 1,
       totalPages: null,
       sortOrder: 'name',
       filters: null,
       searchText: '',
       deleteDialog_isOpen: false,
-      id_delete: 0
+      id_delete: 0,
+      chatDialog_isOpen: false,
+      name:''
 
     };
   }
@@ -75,7 +79,7 @@ class ToursContainer extends Component {
       sortOrder: props.sortOrder,
       searchText: props.searchText,
       filtersIdList: props.filtersIdList,
-      countTours:props.countTours
+      countTours: props.countTours
     };
   }
 
@@ -95,7 +99,7 @@ class ToursContainer extends Component {
       }
 
       this.postListTours(model);
-      
+
     }
 
   }
@@ -111,6 +115,13 @@ class ToursContainer extends Component {
   toggleDialogDelete = () => {
     this.setState({
       deleteDialog_isOpen: !this.state.deleteDialog_isOpen
+    });
+  }
+
+  toggleChatDialog = () => {
+    console.log('toggleChatDialog: ', this.props);
+    this.setState({
+      chatDialog_isOpen: !this.state.chatDialog_isOpen
     });
   }
 
@@ -210,9 +221,9 @@ class ToursContainer extends Component {
   render() {
     console.log('----State Tours -----', this.state);
     console.log('----Props Tours-----', this.props);
-    const { roles, isListLoading, totalPages, currentPage,countTours } = this.props;
-    const { deleteDialog_isOpen, id_delete } = this.state;
-    
+    const { roles, isListLoading, totalPages, currentPage, countTours } = this.props;
+    const { deleteDialog_isOpen, chatDialog_isOpen, id_delete } = this.state;
+
     const deleteDialogContent = (deleteDialog_isOpen &&
       <Modal isOpen={true}>
         <form >
@@ -228,13 +239,15 @@ class ToursContainer extends Component {
       </Modal>
     );
 
+
+
     const toursList = (
       this.props.list.map(item => (
         <Card key={item.id} className="CardTours" >
           <Row>
             <Col sm="12" md="4">
               <Link to={`/views/${item.country}/${item.id}`}>
-                <CardImg left="true" height="100%" className="CardImg p-2" src={!!item.imagePath ? serverUrl + item.imagePath : 'https://www.ittour.com.ua/images/itt_hotel_image/4/4/5/5/2/0/file_name/5.jpg'} alt="Card image cap" />
+                <CardImg left="true" height="100%" className="CardImg p-2" src={!!item.imagePath ? serverUrl + item.imagePath : ''} alt="Card image cap" />
                 <div className="discount">
                   <span className="discount-title">
                     знижка 15%
@@ -286,7 +299,7 @@ class ToursContainer extends Component {
             <Col sm="12" md="2" className="d-flex  justify-content-center align-items-center">
               <Row>
                 <h5>{item.price}<span className="currency">₴</span></h5>
-                <Link   to={`/views/${item.country}/${item.id}`}>
+                <Link to={`/views/${item.country}/${item.id}`}>
                   <Button className="buttonHotel">Дивитись тур</Button>
                 </Link>
               </Row>
@@ -301,9 +314,11 @@ class ToursContainer extends Component {
     return (
 
       <React.Fragment>
+        <ChatBtn toggleChatDialog={this.toggleChatDialog} />
         <div className="container">
           <div className="row">
             {deleteDialogContent}
+            {chatDialog_isOpen && <ChatRoom  name={this.props.name}/>}
             <div className="col-12 col-md-3">
               <FilterWidjet filters={this.props.filters} count={countTours} handleCheckChieldElement={this.handleCheckChieldElement} />
             </div>
@@ -331,9 +346,10 @@ const mapState = state => {
     filters: get(state, 'filters.list.filters'),
     filtersIdList: get(state, 'tours.list.filters'),
     totalPages: get(state, 'tours.list.totalPages'),
-    countTours:get(state, 'tours.list.countItem'),
+    countTours: get(state, 'tours.list.countItem'),
     isAuthenticated: get(state, 'auth.isAuthenticated'),
-    roles: get(state, 'auth.user.roles')
+    roles: get(state, 'auth.user.roles'),
+    name:get(state, 'auth.user.name')
   };
 };
 

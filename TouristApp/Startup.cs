@@ -39,6 +39,8 @@ namespace TouristApp
                 opt.UseSqlServer(Configuration
                     .GetConnectionString("DefaultConnection")));
 
+            services.AddSignalR();
+
             //services.AddDbContext<EFContext>(options =>
             //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -95,6 +97,11 @@ namespace TouristApp
             });
             //app.UseCors(
             //  builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseSignalR(
+                routes =>
+                {
+                    routes.MapHub<ChatHub>("/chat");
+                });
 
             app.UseAuthentication();
             if (env.IsDevelopment())

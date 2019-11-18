@@ -76,3 +76,181 @@
 .btn-crop{
   margin-left: 5px;
 }
+
+
+// chat-Button style
+
+.round-button {
+
+  z-index: 999;
+  position: fixed !important;
+  z-index: 200001 !important;
+  width: 97px;
+  height: 97px;
+  cursor: pointer;
+  background: none;
+  bottom: 7%;
+  right: 2%;
+}
+.round-button-circle {
+  width: 100%;
+  height:0;
+  padding-bottom: 100%;
+  border-radius: 50%;
+  border:5px solid #fcaa40;
+  overflow:hidden;
+  background: #ff9000; 
+  box-shadow: 0 0 2px rgb(255, 250, 250);
+}
+.round-button-circle:hover {
+  background:#fcaa40;
+}
+.round-button a {
+  display:inline-block;
+  // float:right;
+  //width:auto;
+  padding-top:2%;
+  //padding-bottom:10%;
+  //line-height:1em;
+  //margin-top:-0.5em;
+  text-align:center;
+  color:#e2eaf3;
+  font-family:Verdana;
+  font-size:1.2em;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+
+/*кнопка обратной связи*/
+
+.email-bt {
+        background:#ff9000;
+        border:2px solid #ff9000;
+        border-radius:50%;
+        box-shadow:0 8px 10px rgba(249,92,24,0.3);
+        cursor:pointer;
+        height:68px;
+        text-align:center;
+        width:68px;
+        position: fixed !important;
+        right: 2%;
+        bottom: 7%;
+        z-index:999;
+        transition:.3s;
+        -webkit-animation:email-an linear 1s infinite;
+        animation:email-an linear 1s infinite;
+}
+
+.email-bt .text-call{
+        height:68px;
+        width:68px;        
+        border-radius:50%;
+        position:relative;
+        overflow:hidden;
+}
+
+.email-bt .text-call span {
+    text-align: center;
+    color:#ff9000;
+    opacity: 0;
+    font-size: 0;
+        position:absolute;
+        right: 12px;
+        top: 22px;
+    line-height: 14px;
+        font-weight: 600;
+    text-transform: uppercase;
+    transition: opacity .3s linear;
+    font-family: 'montserrat', Arial, Helvetica, sans-serif;
+}
+
+.email-bt .text-call:hover span {
+    opacity: 1;
+        font-size: 11px;
+}
+.email-bt:hover i {
+    display:none;
+}
+
+.email-bt:hover {
+        z-index:1;
+        background:#fff;
+        transition:.3s;
+}
+.email-bt:hover i {
+        color:#38a3fd;
+        font-size:40px;
+        transition:.3s;
+}
+.email-bt i {
+        color:#fff;
+        font-size:29px;
+        transition:.3s;
+        line-height: 66px;
+}
+
+.email-bt i  {
+        -webkit-animation: opsimple 3s infinite;
+        animation: opsimple 3s infinite;
+}
+
+@-webkit-keyframes email-an {
+        0% {
+        box-shadow:0 8px 10px rgba(249,92,24,0.3),0 0 0 0 rgba(249,92,24,0.2),0 0 0 0 rgba(249,92,24,0.2)
+}
+40% {
+        box-shadow:0 8px 10px rgba(249,92,24,0.3),0 0 0 15px rgba(249,92,24,0.2),0 0 0 0 rgba(249,92,24,0.2)
+}
+80% {
+        box-shadow:0 8px 10px rgba(249,92,24,0.3),0 0 0 30px rgba(249,92,24,0),0 0 0 26.7px rgba(249,92,24,0.067)
+}
+100% {
+        box-shadow:0 8px 10px rgba(249,92,24,0.3),0 0 0 30px rgba(249,92,24,0),0 0 0 40px rgba(249,92,24,0.0)
+}
+}@keyframes email-an {
+        0% {
+        box-shadow:0 8px 10px rgba(249,92,24,0.3),0 0 0 0 rgba(249,92,24,0.2),0 0 0 0 rgba(249,92,24,0.2)
+}
+40% {
+        box-shadow:0 8px 10px rgba(249,92,24,0.3),0 0 0 15px rgba(249,92,24,0.2),0 0 0 0 rgba(249,92,24,0.2)
+}
+80% {
+        box-shadow:0 8px 10px rgba(249,92,24,0.3),0 0 0 30px rgba(249,92,24,0),0 0 0 26.7px rgba(249,92,24,0.067)
+}
+100% {
+        box-shadow:0 8px 10px rgba(249,92,24,0.3),0 0 0 30px rgba(249,92,24,0),0 0 0 40px rgba(249,92,24,0.0)
+}
+}
+
+@keyframes opsimple {
+0% {
+    opacity: 0;
+}
+40% {
+    opacity: 1;
+}
+
+80% {
+    opacity: 1;
+}
+100% {
+    opacity: 0;
+}
+}
+
+@-webkit-keyframes opsimple {
+0% {
+    opacity: 0;
+}
+40% {
+    opacity: 1;
+}
+80% {
+    opacity: 1;
+}
+100% {
+    opacity: 0;
+}
+}
+/* конец кнопки звязи */
