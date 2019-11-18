@@ -12,8 +12,8 @@ namespace TouristApp.DAL.Entities
             HotelSubParameters = new HashSet<HotelSubParameters>();
         }
 
-        public string Id { get; set; }
-        public string HotelId { get; set; }
+        public long Id { get; set; }
+        public long HotelId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 

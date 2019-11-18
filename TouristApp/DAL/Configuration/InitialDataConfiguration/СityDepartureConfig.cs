@@ -39,17 +39,17 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
             {
                 new CityDepartures
                 {
-                    Id=(++cityId).ToString(),
+                    Id=(++cityId),
                     Name="Київ",
                 },
                 new CityDepartures
                 {
-                    Id=(++cityId).ToString(),
-                    Name="Львов"
+                    Id=(++cityId),
+                    Name="Львiв"
                 },
                 new CityDepartures
                 {
-                    Id=(++cityId).ToString(), //3
+                    Id=(++cityId), //3
                     Name="Одеса"
                 }
             };

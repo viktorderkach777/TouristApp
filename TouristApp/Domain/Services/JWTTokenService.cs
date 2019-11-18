@@ -39,7 +39,7 @@ namespace TouristApp.Domain.Services
             var claims = new List<Claim>()
             {
                 //new Claim(JwtRegisteredClaimNames.Sub, user.Id)
-                new Claim("id", user.Id),
+                new Claim("id", user.Id.ToString()),
                 new Claim("name", user.UserName),
                 new Claim("image", userImage),
             };

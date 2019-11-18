@@ -7,9 +7,9 @@ namespace TouristApp.DAL.Entities
 {
     public class Orders
     {
-        public string Id { get; set; }
-        public string TourId { get; set; }
-        public string UserId { get; set; }
+        public long Id { get; set; }
+        public long TourId { get; set; }
+        public long UserId { get; set; }
 
         public virtual Tours Tour { get; set; }
         public virtual DbUser User { get; set; }

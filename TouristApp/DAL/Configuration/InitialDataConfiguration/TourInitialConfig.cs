@@ -21,24 +21,24 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
             {
                  new Tours
                  {
-                     Id=(++tourId).ToString(),
-                     HotelId="1",
+                     Id=(++tourId),
+                     HotelId=1,
                      DaysCount=6,
                      Price=3300,
                      FromData=new DateTime(1979, 07, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar) //DateTime.Now
                  },
                  new Tours
                  {
-                     Id=(++tourId).ToString(),
-                     HotelId="2",
+                     Id=(++tourId),
+                     HotelId=2,
                      DaysCount=8,
                      Price=4400,
                      FromData=new DateTime(1979, 07, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                  },
                  new Tours
                  {
-                     Id=(++tourId).ToString(),
-                     HotelId="2",
+                     Id=(++tourId),
+                     HotelId=2,
                      DaysCount=10,
                      Price=5500,
                      FromData=new DateTime(1979, 07, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)

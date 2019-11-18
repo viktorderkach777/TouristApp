@@ -4,15 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-
 namespace TouristApp.DAL.Entities
 {
-    //public class СityDeparture
-    //{
-    //    public string Id { get; set; }
-    //    public string Name { get; set; }
-    //}
-
     public class CityDepartures
     {
         public CityDepartures()
@@ -20,7 +13,7 @@ namespace TouristApp.DAL.Entities
             Tours = new HashSet<Tours>();
         }
 
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
 
         public virtual ICollection<Tours> Tours { get; set; }

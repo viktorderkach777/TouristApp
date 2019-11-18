@@ -60,7 +60,7 @@ namespace TouristApp.Controllers
 
         // GET: api/hotel/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<HotelSelectListViewModel>>> Get([FromRoute] string id)
+        public async Task<ActionResult<IEnumerable<HotelSelectListViewModel>>> Get([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace TouristApp.Controllers
 
             var hotels = await _context
                .Hotels
-               .Where(f => f.RegionId == id.ToString())
+               .Where(f => f.RegionId == id)
                .OrderBy(c => c.Name)
                .Select(u => new HotelSelectListViewModel
                {

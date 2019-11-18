@@ -11,7 +11,7 @@ namespace TouristApp.DAL.Entities
     public class RefreshToken
     {
         [Key, ForeignKey("User")]
-        public string Id { get; set; }
+        public long Id { get; set; }
         [Required, StringLength(128)]
         public string Token { get; set; }
         public virtual DbUser User { get; set; }

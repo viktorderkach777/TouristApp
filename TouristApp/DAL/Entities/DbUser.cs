@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TouristApp.DAL.Entities
 {
-    public class DbUser : IdentityUser
+    public class DbUser : IdentityUser<long>
     {
         public DbUser()
         {

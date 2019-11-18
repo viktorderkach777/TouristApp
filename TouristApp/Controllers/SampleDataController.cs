@@ -45,7 +45,7 @@ namespace TouristApp.Controllers
 
     public class ImageItemViewModelNext2
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string original { get; set; }
         public string thumbnail { get; set; }
     }

@@ -14,20 +14,20 @@ namespace TouristApp.ViewModels
 
     public class SelectViewModel
     {
-        public string Value { get; set; }
+        public long Value { get; set; }
         public string Label { get; set; }
     }
 
     public class FilterItemCheckViewModel
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Value { get; set; } 
         public bool isChecked { get; set; }
     }
 
     public class FilterItemViewModel
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public List<FilterItemCheckViewModel> Data { get; set; }
     }
@@ -38,7 +38,7 @@ namespace TouristApp.ViewModels
     public class HotelListViewModel
     {
 
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         public int Class { get; set; }
 
@@ -67,7 +67,7 @@ namespace TouristApp.ViewModels
 
     public class HotelSelectListViewModel
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public decimal? Price { get; set; }
     }
@@ -75,7 +75,7 @@ namespace TouristApp.ViewModels
     public class TourAddViewModel
     {
         
-        public string HotelId { get; set; }
+        public long HotelId { get; set; }
 
         public decimal? Price { get; set; }
 
@@ -83,13 +83,13 @@ namespace TouristApp.ViewModels
 
         public DateTime? FromData { get; set; }
 
-        public string CityDepartureId { get; set; }
+        public long CityDepartureId { get; set; }
     }
 
     public class TourListViewModel
     {
 
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         public int Class { get; set; }
 
@@ -121,7 +121,7 @@ namespace TouristApp.ViewModels
         public class HotelPhotoViewModel
         {
             
-            public string Id { get; set; }
+            public long Id { get; set; }
             public string original { get; set; }
             public string thumbnail { get; set; }
 
@@ -136,7 +136,7 @@ namespace TouristApp.ViewModels
 
         public string Description { get; set; }
 
-        public string RegionId { get; set; }
+        public long RegionId { get; set; }
 
         public double? Rate { get; set; }
 
@@ -155,7 +155,7 @@ namespace TouristApp.ViewModels
     {
 
 
-        public string HotelId { get; set; }
+        public long HotelId { get; set; }
 
         public string imageBase64 { get; set; }
 
@@ -163,7 +163,7 @@ namespace TouristApp.ViewModels
 
     public class ImageItemViewModelNext2
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string original { get; set; }
         public string thumbnail { get; set; }
     }
@@ -185,13 +185,13 @@ namespace TouristApp.ViewModels
     {
         public int CurrentPage { get; set; }
         public string sortOrder { get; set; }
-        public string[] filters { get; set; }
+        public long[] filters { get; set; }
         public string searchString { get; set; }
 
     }
     public class SingleTourViewModel
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         public int Class { get; set; }
 
@@ -229,7 +229,7 @@ namespace TouristApp.ViewModels
     public class CountriesViewModel
     {
 
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
 
     }
@@ -250,7 +250,7 @@ namespace TouristApp.ViewModels
     public class RegionViewModel
     {
 
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
 
     }

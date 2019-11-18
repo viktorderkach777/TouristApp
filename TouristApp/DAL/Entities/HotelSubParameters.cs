@@ -7,8 +7,8 @@ namespace TouristApp.DAL.Entities
 {
     public class HotelSubParameters
     {
-        public string Id { get; set; }
-        public string HotelParameterId { get; set; }
+        public long Id { get; set; }
+        public long HotelParameterId { get; set; }
         public string Name { get; set; }
         public bool? IsFree { get; set; }
 

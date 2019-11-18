@@ -131,7 +131,7 @@ namespace TouristApp.Controllers
 
         // PUT: api/Tour/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTours([FromRoute] string id, [FromBody] Tours tours)
+        public async Task<IActionResult> PutTours([FromRoute] long id, [FromBody] Tours tours)
         {
             if (!ModelState.IsValid)
             {
@@ -212,7 +212,7 @@ namespace TouristApp.Controllers
                         {
                             FNameId = u.Id,
                             FName = u.Name,
-                            FValueId = aEmp != null ? aEmp.FilterValueId : "0",
+                            FValueId = aEmp != null ? aEmp.FilterValueId : 0,
                             FValue = aEmp != null ? aEmp.FilterValueOf.Name : null,
                         };
 
@@ -246,9 +246,9 @@ namespace TouristApp.Controllers
             return result.ToList();
         }
 
-        private List<ToursViewModel> GetToursByFilter(string[] values, List<FNameViewModel> filtersList)
+        private List<ToursViewModel> GetToursByFilter(long[] values, List<FNameViewModel> filtersList)
         {
-            string[] filterValueSearchList = values;
+            long[] filterValueSearchList = values;
             var query = _context
                 .Tours
                 .Include(f => f.Filtres)
@@ -290,7 +290,7 @@ namespace TouristApp.Controllers
         public async Task<ActionResult<IEnumerable<ToursViewModel>>> Post([FromBody] ToursListViewModel parameters)
         {
             var filtersList = GetListFilters(_context); // list існуючих фільтрів
-            string[] filterValueSearchList = parameters.filters; //масив ID вибраних фільтрів
+            long[] filterValueSearchList = parameters.filters; //масив ID вибраних фільтрів
 
             int page = parameters.CurrentPage;
             int pageSize = 2;
@@ -393,7 +393,7 @@ namespace TouristApp.Controllers
         public async Task<ActionResult<ToursViewModel>> Post2([FromBody] ToursListViewModel parameters)
         {
             var filtersList = GetListFilters(_context); // list існуючих фільтрів
-            string[] filterValueSearchList = parameters.filters; //масив ID вибраних фільтрів
+            long[] filterValueSearchList = parameters.filters; //масив ID вибраних фільтрів
             var url = _configuration.GetValue<string>("ImagesHotelUrl");
 
             int page = parameters.CurrentPage;
@@ -502,7 +502,7 @@ namespace TouristApp.Controllers
 
 
         [HttpGet("images/{id}")]
-        public IEnumerable<ImageItemViewModelNext2> Images(string id)
+        public IEnumerable<ImageItemViewModelNext2> Images(long id)
         {
            var HotelId = _context.Tours.FirstOrDefault(f => f.Id == id).HotelId;
 
@@ -518,7 +518,7 @@ namespace TouristApp.Controllers
         }
 
         [HttpGet("single/{id}")]
-        public async Task<ActionResult<SingleTourViewModel>> Get([FromRoute] string id)
+        public async Task<ActionResult<SingleTourViewModel>> Get([FromRoute] long id)
         {            
             var tour = await _context
                 .Tours
@@ -574,7 +574,7 @@ namespace TouristApp.Controllers
             return Ok(tours.Id);
         }
 
-        private bool ToursExists(string id)
+        private bool ToursExists(long id)
         {
             return _context.Tours.Any(e => e.Id == id);
         }

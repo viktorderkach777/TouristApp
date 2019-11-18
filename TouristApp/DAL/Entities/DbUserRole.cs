@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TouristApp.DAL.Entities
 {
-    public class DbUserRole:IdentityUserRole<string> //Guid
+    public class DbUserRole:IdentityUserRole<long> //Guid
     {
         public  virtual DbUser User { get; set; }
         public virtual DbRole Role { get; set; }

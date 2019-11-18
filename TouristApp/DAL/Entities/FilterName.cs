@@ -11,7 +11,7 @@ namespace TouristApp.DAL.Entities
     public class FilterName
     {
         [Key]
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         [Required, StringLength(maximumLength: 250)]
         public string Name { get; set; }

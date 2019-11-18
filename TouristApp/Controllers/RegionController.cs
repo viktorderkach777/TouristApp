@@ -30,7 +30,7 @@ namespace TouristApp.Controllers
 
         // GET: api/Region/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<RegionViewModel>>> Get([FromRoute] string id)
+        public async Task<ActionResult<IEnumerable<RegionViewModel>>> Get([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +39,7 @@ namespace TouristApp.Controllers
 
             var regions = await _context
                .Regions
-               .Where(f => f.CountryId == id.ToString())
+               .Where(f => f.CountryId == id)
                .OrderBy(c => c.Name)
                .Select(u => new RegionViewModel
                {
@@ -76,7 +76,7 @@ namespace TouristApp.Controllers
 
         // PUT: api/Region/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegions([FromRoute] string id, [FromBody] Regions regions)
+        public async Task<IActionResult> PutRegions([FromRoute] long id, [FromBody] Regions regions)
         {
             if (!ModelState.IsValid)
             {
@@ -152,7 +152,7 @@ namespace TouristApp.Controllers
             return Ok(regions);
         }
 
-        private bool RegionsExists(string id)
+        private bool RegionsExists(long id)
         {
             return _context.Regions.Any(e => e.Id == id);
         }

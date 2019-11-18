@@ -142,7 +142,7 @@ namespace TouristApp.Controllers
         [Authorize]
         public async Task<IActionResult> Get([FromBody]UserProfileGetModel model)
         {
-            var user = await _userManager.FindByIdAsync(model.Id);
+            var user = await _userManager.FindByIdAsync(model.Id.ToString());
             if (user == null)
             {
                 return BadRequest(new { invalid = "User with this email was not found" });

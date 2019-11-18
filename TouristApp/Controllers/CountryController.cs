@@ -69,7 +69,7 @@ namespace TouristApp.Controllers
 
         // PUT: api/Countries/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountries([FromRoute] string id, [FromBody] CountriesEditViewModel model)
+        public async Task<IActionResult> PutCountries([FromRoute] long id, [FromBody] CountriesEditViewModel model)
         {
 
 
@@ -137,7 +137,7 @@ namespace TouristApp.Controllers
 
         // DELETE: api/Country/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCountries([FromRoute] string id)
+        public async Task<IActionResult> DeleteCountries([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
@@ -160,7 +160,7 @@ namespace TouristApp.Controllers
             return Ok(country);
         }
 
-        private bool CountriesExists(string id)
+        private bool CountriesExists(long id)
         {
             return _context.Countries.Any(e => e.Id == id);
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TouristApp.DAL.Entities
 {
-    public class DbRole:IdentityRole
+    public class DbRole:IdentityRole<long>
     {
         public ICollection<DbUserRole> UserRoles { get; set;}
 

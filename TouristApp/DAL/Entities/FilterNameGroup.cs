@@ -12,11 +12,11 @@ namespace TouristApp.DAL.Entities
     {
 
         [ForeignKey("FilterNameOf"), Key, Column(Order = 0)]
-        public string FilterNameId { get; set; }
+        public long FilterNameId { get; set; }
         public virtual FilterName FilterNameOf { get; set; }
 
         [ForeignKey("FilterValueOf"), Key, Column(Order = 1)]
-        public string FilterValueId { get; set; }
+        public long FilterValueId { get; set; }
         public virtual FilterValue FilterValueOf { get; set; }
 
     }

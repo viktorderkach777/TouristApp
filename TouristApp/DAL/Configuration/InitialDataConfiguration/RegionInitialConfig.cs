@@ -17,20 +17,20 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
             {
                  new Regions
                  {
-                     Id=(++cityId).ToString(),
-                     CountryId="16",
+                     Id=(++cityId),
+                     CountryId=16,
                      Name="Шарм Эль Шейх"
                  },
                  new Regions
                  {
-                     Id=(++cityId).ToString(),
-                     CountryId="1",
+                     Id=(++cityId),
+                     CountryId=1,
                      Name="Krakow"
                  },
                  new Regions
                  {
-                     Id=(++cityId).ToString(),
-                     CountryId="1",
+                     Id=(++cityId),
+                     CountryId=1,
                      Name="Wroclaw"
                  }
             };

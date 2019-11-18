@@ -1,10 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace TouristApp.Migrations
 {
-    public partial class ViktorUpdatedatabase : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,8 @@ namespace TouristApp.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
@@ -26,7 +27,8 @@ namespace TouristApp.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
@@ -57,7 +59,8 @@ namespace TouristApp.Migrations
                 name: "CityDepartures",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -69,7 +72,8 @@ namespace TouristApp.Migrations
                 name: "Countries",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -78,12 +82,38 @@ namespace TouristApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tblFilterNames",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 250, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblFilterNames", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblFilterValues",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(maxLength: 250, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblFilterValues", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    RoleId = table.Column<string>(nullable: false),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RoleId = table.Column<long>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -103,8 +133,8 @@ namespace TouristApp.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    UserId = table.Column<string>(nullable: false),
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<long>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
                 },
@@ -126,7 +156,7 @@ namespace TouristApp.Migrations
                     LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
                     ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false)
+                    UserId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,8 +173,8 @@ namespace TouristApp.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
-                    RoleId = table.Column<string>(nullable: false)
+                    UserId = table.Column<long>(nullable: false),
+                    RoleId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -167,7 +197,7 @@ namespace TouristApp.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(nullable: false),
+                    UserId = table.Column<long>(nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
                     Value = table.Column<string>(nullable: true)
@@ -187,7 +217,7 @@ namespace TouristApp.Migrations
                 name: "tblRefreshTokens",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<long>(nullable: false),
                     Token = table.Column<string>(maxLength: 128, nullable: false)
                 },
                 constraints: table =>
@@ -205,8 +235,9 @@ namespace TouristApp.Migrations
                 name: "Regions",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    CountryId = table.Column<string>(nullable: true),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CountryId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -217,17 +248,43 @@ namespace TouristApp.Migrations
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tblFilterNameGroups",
+                columns: table => new
+                {
+                    FilterNameId = table.Column<long>(nullable: false),
+                    FilterValueId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblFilterNameGroups", x => new { x.FilterValueId, x.FilterNameId });
+                    table.UniqueConstraint("AK_tblFilterNameGroups_FilterNameId_FilterValueId", x => new { x.FilterNameId, x.FilterValueId });
+                    table.ForeignKey(
+                        name: "FK_tblFilterNameGroups_tblFilterNames_FilterNameId",
+                        column: x => x.FilterNameId,
+                        principalTable: "tblFilterNames",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_tblFilterNameGroups_tblFilterValues_FilterValueId",
+                        column: x => x.FilterValueId,
+                        principalTable: "tblFilterValues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Hotels",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    RegionId = table.Column<string>(nullable: true),
+                    RegionId = table.Column<long>(nullable: false),
                     Rate = table.Column<double>(nullable: true),
                     Price = table.Column<decimal>(nullable: true),
                     RoomsCount = table.Column<int>(nullable: true),
@@ -243,19 +300,20 @@ namespace TouristApp.Migrations
                         column: x => x.RegionId,
                         principalTable: "Regions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    HotelId = table.Column<string>(nullable: true),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<long>(nullable: false),
+                    HotelId = table.Column<long>(nullable: false),
                     CreatingDate = table.Column<DateTime>(nullable: false),
                     Message = table.Column<string>(nullable: true),
-                    HotelsId = table.Column<string>(nullable: true)
+                    HotelsId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -271,15 +329,16 @@ namespace TouristApp.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "HotelImages",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    HotelId = table.Column<string>(nullable: true),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    HotelId = table.Column<long>(nullable: false),
                     HotelImageUrl = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -290,15 +349,16 @@ namespace TouristApp.Migrations
                         column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "HotelParameters",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    HotelId = table.Column<string>(nullable: true),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    HotelId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true)
                 },
@@ -310,19 +370,20 @@ namespace TouristApp.Migrations
                         column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Tours",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    HotelId = table.Column<string>(nullable: true),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    HotelId = table.Column<long>(nullable: false),
                     Price = table.Column<decimal>(nullable: true),
                     DaysCount = table.Column<int>(nullable: true),
                     FromData = table.Column<DateTime>(nullable: true),
-                    CityDepartureId = table.Column<string>(nullable: true)
+                    CityDepartureId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -332,21 +393,22 @@ namespace TouristApp.Migrations
                         column: x => x.CityDepartureId,
                         principalTable: "CityDepartures",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Tours_Hotels_HotelId",
                         column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "HotelSubParameters",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    HotelParameterId = table.Column<string>(nullable: true),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    HotelParameterId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     IsFree = table.Column<bool>(nullable: true)
                 },
@@ -358,16 +420,17 @@ namespace TouristApp.Migrations
                         column: x => x.HotelParameterId,
                         principalTable: "HotelParameters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    TourId = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: true)
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    TourId = table.Column<long>(nullable: false),
+                    UserId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -377,98 +440,46 @@ namespace TouristApp.Migrations
                         column: x => x.TourId,
                         principalTable: "Tours",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "tblFilters",
+                columns: table => new
                 {
-                    { "1", "Poland" },
-                    { "30", "Slovakia" },
-                    { "29", "Netherlands" },
-                    { "28", "Moldova" },
-                    { "27", "Latvia" },
-                    { "26", "Kazakhstan" },
-                    { "25", "Japan" },
-                    { "24", "Italy" },
-                    { "23", "Israel" },
-                    { "22", "Ireland" },
-                    { "21", "Iceland" },
-                    { "20", "Greece" },
-                    { "19", "France" },
-                    { "18", "Finland" },
-                    { "17", "Estonia" },
-                    { "16", "Egypt" },
-                    { "15", "Denmark" },
-                    { "14", "Czech Republic" },
-                    { "13", "Croatia" },
-                    { "12", "China" },
-                    { "11", "Chile" },
-                    { "10", "Canada" },
-                    { "9", "Bosnia and Herzegovina" },
-                    { "8", "Belgium" },
-                    { "7", "Australia" },
-                    { "6", "UK" },
-                    { "5", "USA" },
-                    { "4", "Ukraine" },
-                    { "3", "Germany" },
-                    { "2", "Russia" },
-                    { "31", "Slovenia" },
-                    { "32", "Spain" }
+                    FilterNameId = table.Column<long>(nullable: false),
+                    FilterValueId = table.Column<long>(nullable: false),
+                    TourId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblFilters", x => new { x.TourId, x.FilterValueId, x.FilterNameId });
+                    table.UniqueConstraint("AK_tblFilters_FilterNameId_FilterValueId_TourId", x => new { x.FilterNameId, x.FilterValueId, x.TourId });
+                    table.ForeignKey(
+                        name: "FK_tblFilters_tblFilterNames_FilterNameId",
+                        column: x => x.FilterNameId,
+                        principalTable: "tblFilterNames",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_tblFilters_tblFilterValues_FilterValueId",
+                        column: x => x.FilterValueId,
+                        principalTable: "tblFilterValues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_tblFilters_Tours_TourId",
+                        column: x => x.TourId,
+                        principalTable: "Tours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.InsertData(
-                table: "Regions",
-                columns: new[] { "Id", "CountryId", "Name" },
-                values: new object[] { "2", "1", "Krakow" });
-
-            migrationBuilder.InsertData(
-                table: "Regions",
-                columns: new[] { "Id", "CountryId", "Name" },
-                values: new object[] { "3", "1", "Wroclaw" });
-
-            migrationBuilder.InsertData(
-                table: "Regions",
-                columns: new[] { "Id", "CountryId", "Name" },
-                values: new object[] { "1", "16", "Шарм Эль Шейх" });
-
-            migrationBuilder.InsertData(
-                table: "Hotels",
-                columns: new[] { "Id", "Class", "Description", "Latitude", "Longtitude", "Name", "Price", "Rate", "RegionId", "RoomsCount" },
-                values: new object[] { "1", 4, "Отель расположен в районе Хадаба курорта Шарм-Эль-Шейх на берегу Красного моря. Был открыт в 1996 году. Реновации в отеле не было, только косметический поточный ремонт. Состоит из основного 2-этажного здания (без номеров) и комплекса 2-этажных корпусов. Коралловый пляж отеля граничит с уникальными коралловыми рифами. Рядом возле отеля находится развлекательный центр Alf Leila Wa Leila, а торговые ряды Il Merkato и Old Market порадуют любителей шопинга и местного колорита. Отель расположен в 22 км от международного аэропорта Шарм-эль-Шейх в районе Hadaba | Ras Um El Sid. Расстояние до Naama Bay: 7 км; Расстояние до Old Market (Старый Город): 4 км; Расстояние до Soho Square: 20 км.", null, null, "Royal Paradise Resort", 550m, 5.0, "1", 286 });
-
-            migrationBuilder.InsertData(
-                table: "Hotels",
-                columns: new[] { "Id", "Class", "Description", "Latitude", "Longtitude", "Name", "Price", "Rate", "RegionId", "RoomsCount" },
-                values: new object[] { "2", 3, "Отель находится в районе Рас Умм Элсид в Шарм-эль-Шейхе. В 8 км расположена набережная Наама-Бэй со множеством ресторанов и магазинов. Гостиница впервые распахнула свои двери гостям в 1999 году, последняя реновация проводилась в 2014 году. Отель подойдет для молодежного, романтического или индивидуального отдыха. В 18 км от аэропорта г. Шарм-эль-Шейх.", null, null, "Amar Sina", 572m, 3.61, "1", 98 });
-
-            migrationBuilder.InsertData(
-                table: "Hotels",
-                columns: new[] { "Id", "Class", "Description", "Latitude", "Longtitude", "Name", "Price", "Rate", "RegionId", "RoomsCount" },
-                values: new object[] { "3", 5, "Отель расположен в Хадабет Ом Эль Сид, в самом центре променада Эль Меркато, на курорте Шарм-эль-Шейх, рядом с побережьем Красного моря. Отель был открыт в 2010 году, последняя реновация проводилась в 2018 году (обновление мебели на территории отеля, обновление бассейнов и номеров категории Deluxe). Отель подойдет для семейного, романтического или молодежного отдыха. Отель расположен в 17 км от аэропорта города Шарм Эль Шейх.", null, null, "Il Mercato Hotel (ex.Iberotel Il Mercato)", 675m, 4.52, "1", 318 });
-
-            migrationBuilder.InsertData(
-                table: "Tours",
-                columns: new[] { "Id", "CityDepartureId", "DaysCount", "FromData", "HotelId", "Price" },
-                values: new object[] { "1", null, 6, new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), "1", 3300m });
-
-            migrationBuilder.InsertData(
-                table: "Tours",
-                columns: new[] { "Id", "CityDepartureId", "DaysCount", "FromData", "HotelId", "Price" },
-                values: new object[] { "2", null, 8, new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), "2", 4400m });
-
-            migrationBuilder.InsertData(
-                table: "Tours",
-                columns: new[] { "Id", "CityDepartureId", "DaysCount", "FromData", "HotelId", "Price" },
-                values: new object[] { "3", null, 10, new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), "2", 5500m });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -479,7 +490,8 @@ namespace TouristApp.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -505,7 +517,8 @@ namespace TouristApp.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_HotelsId",
@@ -553,6 +566,11 @@ namespace TouristApp.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_tblFilters_FilterValueId",
+                table: "tblFilters",
+                column: "FilterValueId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tours_CityDepartureId",
                 table: "Tours",
                 column: "CityDepartureId");
@@ -593,6 +611,12 @@ namespace TouristApp.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
+                name: "tblFilterNameGroups");
+
+            migrationBuilder.DropTable(
+                name: "tblFilters");
+
+            migrationBuilder.DropTable(
                 name: "tblRefreshTokens");
 
             migrationBuilder.DropTable(
@@ -600,6 +624,12 @@ namespace TouristApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "HotelParameters");
+
+            migrationBuilder.DropTable(
+                name: "tblFilterNames");
+
+            migrationBuilder.DropTable(
+                name: "tblFilterValues");
 
             migrationBuilder.DropTable(
                 name: "Tours");

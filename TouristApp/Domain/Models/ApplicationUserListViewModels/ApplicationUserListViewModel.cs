@@ -4,7 +4,7 @@ namespace TouristApp.Domain.Models.ApplicationUserListViewModels
 {
     public class ApplicationUserListViewModel
     {
-        public string Id { get; set; }
+        public long Id { get; set; }
 
         public string Email { get; set; }
 

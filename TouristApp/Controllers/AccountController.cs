@@ -168,7 +168,7 @@ namespace TouristApp.Controllers
                 return BadRequest(errrors);
             }
 
-            var user = await _userManager.FindByIdAsync(model.Id);
+            var user = await _userManager.FindByIdAsync(model.Id.ToString());
 
             if (user == null)
                 return BadRequest(new { invalid = "User is not found" });
@@ -226,7 +226,7 @@ namespace TouristApp.Controllers
                 return BadRequest(errrors);
             }
 
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await _userManager.FindByIdAsync(model.UserId.ToString());
 
             if (user == null)
             {

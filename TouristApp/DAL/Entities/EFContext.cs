@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace TouristApp.DAL.Entities
 {
-    public class EFContext : IdentityDbContext<DbUser, DbRole, string, IdentityUserClaim<string>,
-DbUserRole, IdentityUserLogin<string>,
-IdentityRoleClaim<string>, IdentityUserToken<string>>
+    public class EFContext : IdentityDbContext<DbUser, DbRole, long, IdentityUserClaim<long>,
+    DbUserRole, IdentityUserLogin<long>,
+    IdentityRoleClaim<long>, IdentityUserToken<long>>
     {
         public EFContext(DbContextOptions<EFContext> options)
             : base(options)
@@ -50,11 +50,11 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            builder.ApplyConfiguration(new CountryInitialConfig());
-            builder.ApplyConfiguration(new RegionInitialConfig());
-            builder.ApplyConfiguration(new HotelInitialConfig());
-            builder.ApplyConfiguration(new TourInitialConfig());
-            builder.ApplyConfiguration(new СityDepartureConfig());
+            //builder.ApplyConfiguration(new CountryInitialConfig());
+            //builder.ApplyConfiguration(new RegionInitialConfig());
+            //builder.ApplyConfiguration(new HotelInitialConfig());
+            //builder.ApplyConfiguration(new TourInitialConfig());
+            //builder.ApplyConfiguration(new СityDepartureConfig());
 
 
 

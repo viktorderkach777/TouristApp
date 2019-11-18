@@ -5,6 +5,6 @@ namespace TouristApp.Domain.Models.UserProfileGetModels
     public class UserProfileGetModel
     {
         [Required]
-        public string Id { get; set; }
+        public long Id { get; set; }
     }
 }

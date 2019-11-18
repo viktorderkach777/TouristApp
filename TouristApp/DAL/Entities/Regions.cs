@@ -12,8 +12,8 @@ namespace TouristApp.DAL.Entities
             Hotels = new HashSet<Hotels>();
         }
 
-        public string Id { get; set; }
-        public string CountryId { get; set; }
+        public long Id { get; set; }
+        public long CountryId { get; set; }
         public string Name { get; set; }
 
         public virtual Countries Country { get; set; }

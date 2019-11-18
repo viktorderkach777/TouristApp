@@ -41,7 +41,7 @@ namespace TouristApp.Domain.Services
            // _context.SaveChanges();
         //}
 
-        public UserProfileModel GetUserProfile(string id)
+        public UserProfileModel GetUserProfile(long id)
         {
            //var profile = _context.UserProfiles.Where(x => x.Id == id).Select(p => new UserProfileModel
               var profile = _context.Users.Where(x => x.Id == id).Select(p => new UserProfileModel
@@ -56,7 +56,7 @@ namespace TouristApp.Domain.Services
             profile.UserImage = GetImageUser(id);
             return profile;
         }
-        public string GetImageUser(string id)
+        public string GetImageUser(long id)
         {
             // var image = _context.UserImages.SingleOrDefault(p => p.Id == id);
             var image = _context.Users.SingleOrDefault(p => p.Id == id);

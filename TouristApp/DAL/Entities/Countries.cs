@@ -12,7 +12,7 @@ namespace TouristApp.DAL.Entities
             Regions = new HashSet<Regions>();
         }
 
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
 
         public virtual ICollection<Regions> Regions { get; set; }

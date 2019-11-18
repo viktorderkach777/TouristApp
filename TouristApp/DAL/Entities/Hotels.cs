@@ -15,10 +15,10 @@ namespace TouristApp.DAL.Entities
             Tours = new HashSet<Tours>();
         }
 
-        public string Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string RegionId { get; set; }
+        public long RegionId { get; set; }
         public double? Rate { get; set; }
         public decimal? Price { get; set; }
         public int? RoomsCount { get; set; }
