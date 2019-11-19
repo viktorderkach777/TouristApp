@@ -32,7 +32,7 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Regions> Regions { get; set; }
         public virtual DbSet<Tours> Tours { get; set; }
-
+        public DbSet<Parameter> Parameters { get; set; }
         public virtual DbSet<CityDepartures> CityDepartures { get; set; }
         //public virtual DbSet<СityDeparture> СityDeparture { get; set; }
 
@@ -55,6 +55,12 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
             builder.ApplyConfiguration(new HotelInitialConfig());
             builder.ApplyConfiguration(new TourInitialConfig());
             builder.ApplyConfiguration(new СityDepartureConfig());
+
+            // builder.Entity<Parameter>()
+            //.HasOptional(x => x.ParentParameter)
+            //.WithMany(x => x.ChildParameters)
+            //.HasForeignKey(x => x.HotelParameterId);
+
 
 
 
@@ -111,6 +117,11 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
             });
 
 
+            builder.Entity<Parameter>()
+            .HasOne(ur => ur.Parent)
+            .WithMany(r => r.Children)
+            .HasForeignKey(ur => ur.ParentId);
+            
         }
     }
 }

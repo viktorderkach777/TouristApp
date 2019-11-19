@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TouristApp.DAL.Entities;
@@ -9,9 +10,10 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    partial class EFContextModelSnapshot : ModelSnapshot
+    [Migration("20191119122507_set null parametersID")]
+    partial class setnullparametersID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -662,7 +664,7 @@ namespace TouristApp.Migrations
             modelBuilder.Entity("TouristApp.DAL.Entities.Parameter", b =>
                 {
                     b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
-                        .WithMany("Parameters")
+                        .WithMany()
                         .HasForeignKey("HotelId");
 
                     b.HasOne("TouristApp.DAL.Entities.Parameter", "Parent")

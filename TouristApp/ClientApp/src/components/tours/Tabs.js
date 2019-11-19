@@ -11,6 +11,9 @@ class Tabs extends Component {
         this.toggle = this.toggle.bind(this);
         this.state = {
             activeTab: new Array(4).fill('1'),
+            tour:{}
+
+
         };
     }
 
@@ -25,17 +28,29 @@ class Tabs extends Component {
             activeTab: newArray,
         });
     }
+    componentDidMount() {
+
+        this.setState({ tour: this.props.tour});
+
+    }
 
     tabPane() {
         const { tour } = this.props;
-        console.log('---Tabs props----', tour );
+        
+        console.log('---Tabs props----', this.props );
+        console.log('---Tabs state----', this.state );
+         
         return (
             <>
                 {/* опис готелю */}
                 <TabPane tabId="1">
-                <h3>{tour.name} {tour.class}*</h3>
+                <h3>{tour.name} *</h3>
                 {tour.description}
                 
+                 {/* {hotelParametries.map(item =>
+                     <span> <b>{item.name}</b> {item.description}}</span> )} */}
+
+
                 </TabPane>
                 {/* відгуки */}
                 <TabPane tabId="2">

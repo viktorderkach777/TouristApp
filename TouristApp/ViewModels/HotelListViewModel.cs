@@ -113,9 +113,7 @@ namespace TouristApp.ViewModels
         public string Date { get; set; }
 
         public int? DaysCount { get; set; }
-
-       // public List<HotelPhotoViewModel> Images {get; set; }
-
+                
         public string ImagePath { get; set; }
     }
         public class HotelPhotoViewModel
@@ -218,6 +216,7 @@ namespace TouristApp.ViewModels
 
         public List<HotelPhotoViewModel> Images {get; set; }
 
+        public List<ParametersViewModel> HotelParametries { get; set; }
     }
     public class SearchModel
     {

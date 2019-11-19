@@ -47,7 +47,7 @@ export default class Hotel extends Component {
         console.log('-----Single Tour state------ ', this.state);
         console.log('-----Single Tour props------ ', this.props);
         const { tour } = this.state;
-
+      
         return (
             <React.Fragment>
                 <div className="app flex-row align-items-top">
@@ -99,7 +99,7 @@ export default class Hotel extends Component {
                                                 <span className="skin-color hidden-xs"> Перельот назад:</span>
                                                 <b>19.09</b>
                                             </li>
-
+                                               
 
                                         </CardText>
 
@@ -116,11 +116,9 @@ export default class Hotel extends Component {
                         <Row>
                             <Col sm="8">
                                 <Card className="CardTours text-center">
-                                    
-                                    
-                                        <TabWidjet tour={tour} />
-
-                                    
+                                 
+                                        <TabWidjet tour={tour}/>
+          
                                 </Card>
                             </Col>
                             <Col sm="4">

@@ -109,10 +109,59 @@ namespace TouristApp.DAL.Entities
             #endregion
         }
 
+        private static void SeedHotelParameters(EFContext context)
+        {
+            string[] Names = new string[] {
+                "Расположение",
+                "Пляж",
+                "Номера",
+                "Сервисы",
+                "Спорт и развлечения",
+                "Питание",
+                "Для детей",
+                "Спорт",
+                "Развлечения",
+                "Услуги в отеле",
+                "Пляж",
+                "Отель" };
+            string[] Descriptions = new string[]  { "В 110 км от аэропорта г. Анталья. Замок города Аланья находится в 2,5 км от отеля Kleopatra Alis. До бухты Аланьи от отеля можно доехать всего за 5 минут.",
+                    "Пляж в 50 м.",
+                    "Всего 73 номера (160 мест) в четырёх- и пятиэтажном здания",
+                    "Завтрак, обед и ужин подаются в виде «шведского стола». Все местные алкогольные и безалкогольные напитки бесплатно с 10:00 до 22:00.",
+                    "1 открытый бассейн с пресной водой, без подогрева, площадь 40 кв.м, часы работы с 08:00-18:00 (не работает в зимний сезон).",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+            };
+
+            int parameterId = 0;
+             for (int i = 0; i < Names.Length; i++)
+            {
+                    context.Parameters.Add(
+                            new Entities.Parameter
+                            {
+                                 Id = (++parameterId).ToString(),
+                                 Name = Names[i],
+                                 Description=Descriptions[i],
+                                 Priority= parameterId,
+                                 HotelId="1",
+                                  
+                                 
+                            });
+                context.SaveChanges();
+            }
 
 
 
-        public static void SeedUsers(UserManager<DbUser> userManager,
+        }
+
+
+
+            public static void SeedUsers(UserManager<DbUser> userManager,
            RoleManager<DbRole> roleManager)
         {
             var email = "admin@gmail.com";
@@ -154,6 +203,7 @@ namespace TouristApp.DAL.Entities
                 var context = scope.ServiceProvider.GetRequiredService<EFContext>();
                 SeederDB.SeedUsers(manager, managerRole);
                 SeederDB.SeedFilters(context);
+                //SeederDB.SeedHotelParameters(context);
             }
         }
     }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TouristApp.DAL.Entities;
@@ -9,9 +10,10 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    partial class EFContextModelSnapshot : ModelSnapshot
+    [Migration("20191119111051_add table parameters")]
+    partial class addtableparameters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -448,8 +450,6 @@ namespace TouristApp.Migrations
                         .IsRequired()
                         .HasMaxLength(2000);
 
-                    b.Property<string>("HotelId");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -460,8 +460,6 @@ namespace TouristApp.Migrations
                     b.Property<int>("Priority");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
 
                     b.HasIndex("ParentId");
 
@@ -661,10 +659,6 @@ namespace TouristApp.Migrations
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Parameter", b =>
                 {
-                    b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
-                        .WithMany("Parameters")
-                        .HasForeignKey("HotelId");
-
                     b.HasOne("TouristApp.DAL.Entities.Parameter", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")

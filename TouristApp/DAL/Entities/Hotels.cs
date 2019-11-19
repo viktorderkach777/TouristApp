@@ -30,6 +30,7 @@ namespace TouristApp.DAL.Entities
         public virtual ICollection<Comments> Comments { get; set; }
         public virtual ICollection<HotelImages> HotelImages { get; set; }
         public virtual ICollection<HotelParameters> HotelParameters { get; set; }
+        public virtual ICollection<Parameter> Parameters { get; set; }
         public virtual ICollection<Tours> Tours { get; set; }
     }
 }

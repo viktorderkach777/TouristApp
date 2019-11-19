@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TouristApp.DAL.Entities;
@@ -9,9 +10,10 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    partial class EFContextModelSnapshot : ModelSnapshot
+    [Migration("20191119131320_set new index long")]
+    partial class setnewindexlong
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -441,7 +443,7 @@ namespace TouristApp.Migrations
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Parameter", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description")
@@ -454,7 +456,7 @@ namespace TouristApp.Migrations
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<string>("ParentId")
+                    b.Property<long?>("ParentId")
                         .IsRequired();
 
                     b.Property<int>("Priority");
@@ -662,7 +664,7 @@ namespace TouristApp.Migrations
             modelBuilder.Entity("TouristApp.DAL.Entities.Parameter", b =>
                 {
                     b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
-                        .WithMany("Parameters")
+                        .WithMany()
                         .HasForeignKey("HotelId");
 
                     b.HasOne("TouristApp.DAL.Entities.Parameter", "Parent")

@@ -292,6 +292,8 @@ namespace TouristApp.Controllers
             var filtersList = GetListFilters(_context); // list існуючих фільтрів
             string[] filterValueSearchList = parameters.filters; //масив ID вибраних фільтрів
 
+
+
             int page = parameters.CurrentPage;
             int pageSize = 2;
             int pageNo = page - 1;
@@ -471,6 +473,7 @@ namespace TouristApp.Controllers
 
             var result = await query.Select(u => new TourListViewModel
             {
+                 
                 Id = u.Id,
                 СityDeparture = u.CityDeparture.Name,
                 Name = u.Hotel.Name,
@@ -483,10 +486,8 @@ namespace TouristApp.Controllers
                 FromData = u.FromData,
                 Date = u.FromData.ToString().Substring(0, 10),
                 DaysCount = u.DaysCount,
-                //ImagePath = url + "/1200_" + u.Hotel.HotelImages.FirstOrDefault(
-                //         f => f.HotelId == u.HotelId).HotelImageUrl ?? url + "/no-photo.jpg"
                 ImagePath = Path.Combine(_url, "1200_" + u.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.HotelId).HotelImageUrl ?? "no-photo.jpg")
-            })
+                    })
                 .Skip(pageNo * pageSize)
                 .Take(pageSize).ToListAsync();
 
@@ -524,6 +525,7 @@ namespace TouristApp.Controllers
                 .Tours
                 .Where(a => a.Id == id)
                 .Include(s => s.Hotel)
+                .Include(s => s.Hotel.Parameters)
                 .Include(s => s.Hotel.HotelImages)
                 .Include(d => d.Hotel.Region)
                 .Include(f => f.Hotel.Region.Country)
@@ -548,6 +550,21 @@ namespace TouristApp.Controllers
                             Id = x.Id,
                             original = Path.Combine(_url, "1200_" + x.HotelImageUrl),
                             thumbnail = Path.Combine(_url, "268_" + x.HotelImageUrl),
+                        }).ToList(),
+                    HotelParametries = u.Hotel.Parameters
+                        .Where(x => x.ParentId == null && x.HotelId == u.HotelId)
+                        .OrderBy(z => z.Priority)
+                        .Select(pr => new ParametersViewModel
+                        {
+                            Name = pr.Name,
+                            Description = pr.Description,
+                            Priority = pr.Priority,
+                            Children = pr.Children.Select(f => new ParametersViewModel
+                            {
+                                Name = f.Name,
+                                Description = f.Description,
+                                Priority = f.Priority
+                            }).ToList()
                         }).ToList()
                 }).SingleAsync();
             return tour;
