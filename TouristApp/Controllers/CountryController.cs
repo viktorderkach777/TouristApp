@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TouristApp.DAL.Entities;
 using TouristApp.ViewModels;
+
 
 namespace TouristApp.Controllers
 {
@@ -65,8 +64,6 @@ namespace TouristApp.Controllers
             return Ok(countries);
         }
 
-
-
         // PUT: api/Countries/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCountries([FromRoute] long id, [FromBody] CountriesEditViewModel model)
@@ -83,9 +80,7 @@ namespace TouristApp.Controllers
                 Id = id,
                 Name = model.Name
 
-            };
-
-            
+            };            
 
             _context.Entry(country).State = EntityState.Modified;
 

@@ -11,7 +11,6 @@ namespace TouristApp.DAL.Entities
         public long HotelParameterId { get; set; }
         public string Name { get; set; }
         public bool? IsFree { get; set; }
-
         public virtual HotelParameters HotelParameter { get; set; }
     }
 }

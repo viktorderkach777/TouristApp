@@ -5,6 +5,7 @@ import { Button, CardText, CardSubtitle, CardTitle, Card, CardBody, Col, Contain
 //import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 import { serverUrl } from '../../config';
 import ImageGallery from 'react-image-gallery';
+import Moment from 'moment';
 //import classnames from 'classnames';
 import './tours.css'
 const TabWidjet = React.lazy(() => import('../tours/Tabs'));
@@ -22,13 +23,13 @@ export default class Hotel extends Component {
             });
         }
     }
+
     componentDidMount() {
         const url2 = `${serverUrl}api/tour/single/` + this.props.match.params.id;
         axios.get(url2)
             .then(
                 result => {
-                    console.log('--result--', result.data);
-
+                    //console.log('--result--', result.data);
                     this.setState({ tour: result.data });
                 },
                 err => {
@@ -44,22 +45,9 @@ export default class Hotel extends Component {
     }
 
     render() {
-        console.log('-----Single Tour state------ ', this.state);
-        console.log('-----Single Tour props------ ', this.props);
-
-
+        // console.log('-----Single Tour state------ ', this.state);
+        // console.log('-----Single Tour props------ ', this.props);
         const { tour } = this.state;
-
-        const func = () =>{
-            if(tour.date){
-                console.log('-----tour.date------ ', tour)
-                console.log('-----Date.parse(tour.date)------ ', Date.parse(tour.date))
-                console.log('-----Date(((Date.parse(tour.date))))------ ', Date(((Date.parse(tour.date)))))
-                let t = Date.parse(tour.date);
-            }        
-        };
-
-        //console.log('-----Single Tour props------ ', Date(((Date.parse(tour.date)))).toJSON().slice(0, 10));
 
         return (
             <React.Fragment>
@@ -67,60 +55,56 @@ export default class Hotel extends Component {
                     <Container>
                         <Card className="CardTours text-center" style={{ height: 'auto', padding: '20px' }}>
                             <CardText tag="h4">
-                                Зареєструйся до <b>1 жовтня</b> отримай бонус 250 гривень на оплату туру від нашого агентства!
+                                Зареєструйся до <b>{Moment().add(30, 'days').format('DD/MM/YY')}</b> і отримай бонус 250 гривень на оплату туру від нашого агентства!
                             </CardText>
                         </Card>
                         <Card className="CardTours">
                             <CardBody>
                                 <CardTitle tag="h3">{tour.name} {tour.class}*</CardTitle>
-                                <CardSubtitle><i className="fa fa-map-marker" aria-hidden="true" /> {tour.country},{tour.region}</CardSubtitle>
+                                <CardSubtitle><i className="fa fa-map-marker" aria-hidden="true" /> {tour.country}, {tour.region}</CardSubtitle>
                                 <Row>
                                     <Col sm="5">
                                         <ImageGallery items={this.state.tour.images} showBullets={true} />
                                     </Col>
                                     <Col sm="4">
                                         <CardText>
+                                            {/* <li>
+                                                <span className="skin-color hidden-xs"> Виліт: </span>
+                                                <b>{Moment(tour.date).format('DD/MM/YYYY')}</b>
+                                            </li> */}
+                                            {/* <li className="d-flex">                                                
+                                                    <div className="mr-auto skin-color hidden-xs">Тур:</div>
+                                                    <div className="font-weight-bold">{tour.daysCount} ночей</div>                                               
+                                            </li> */}
                                             <li>
-                                                <span className="skin-color hidden-xs"> Виліт:</span>
-                                                <span className="date-capitalize"><b> {tour.date}</b></span>
-                                            </li>
-                                            <li>
-                                                <span className="skin-color hidden-xs"> Тур:</span>
-                                                <b> {tour.daysCount} ночей</b>
-                                            </li>
-                                            <li>
-                                                <span className="skin-color hidden-xs"> Харчування:</span>
+                                                <span className="skin-color hidden-xs"> Харчування: </span>
                                                 <b>  без харчування</b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Ціна за:</span>
+                                                <span className="skin-color hidden-xs"> Ціна за: </span>
                                                 <b>   2-ох дорослих</b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Розміщення:</span>
+                                                <span className="skin-color hidden-xs"> Розміщення: </span>
                                                 <b>  2AD</b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Номер:</span>
+                                                <span className="skin-color hidden-xs"> Номер: </span>
                                                 <b>Standard Room</b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Перельот туди:</span>
-                                                <b>{tour.date}</b>
-                                                <b>{func()}</b>
+                                                <span className="skin-color hidden-xs"> Переліт туди: </span>
+                                                <b>{Moment(tour.date).format('DD/MM/YYYY')}</b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Перельот назад:</span>
-                                                <b>19.09</b>
+                                                <span className="skin-color hidden-xs"> Переліт назад: </span>
+                                                <b>{Moment(tour.date).add(tour.daysCount, 'days').format('DD/MM/YYYY')}</b>
                                             </li>
-
-
                                         </CardText>
-
                                     </Col>
                                     <Col sm="3">
                                         <CardText className="skin-color hidden-xs" tag="h3" >Найкраща ціна: </CardText>
-                                        <CardText className="GreenColor" tag="h2" >{tour.price} ₴</CardText>
+                                        <CardText className="GreenColor" tag="h2" >{tour.price} $</CardText>
                                         <Button size="lg" className="buttonHotel">Потрібна консультація</Button>
                                         <Button size="lg" className="buttonHotel">Замовлення</Button>
                                     </Col>
@@ -130,11 +114,7 @@ export default class Hotel extends Component {
                         <Row>
                             <Col sm="8">
                                 <Card className="CardTours text-center">
-                                    
-                                    
-                                        <TabWidjet tour={tour} />
-
-                                    
+                                    <TabWidjet tour={tour} />
                                 </Card>
                             </Col>
                             <Col sm="4">
@@ -178,7 +158,6 @@ export default class Hotel extends Component {
                                     <CardText tag="h5">Ми працюємо на Вас. І це нам подобається.</CardText>
 
                                 </Card>
-
                             </Col>
                         </Row>
 

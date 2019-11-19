@@ -11,8 +11,8 @@ using TouristApp.Helpers;
 using TouristApp.ViewModels.AccountViewModels;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
 using System.Collections.Generic;
+
 
 namespace TouristApp.Controllers
 {
@@ -46,6 +46,7 @@ namespace TouristApp.Controllers
             _context = context;
         }
 
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]Domain.Models.AccountModels.Credentials credentials)
         {
@@ -73,6 +74,7 @@ namespace TouristApp.Controllers
                 refToken = _jWTTokenService.CreateRefreshToken(user)
             });            
         }
+
 
         [HttpPost("refresh/{refreshToken}")]
         public IActionResult RefreshToken([FromRoute]string refreshToken)
@@ -149,14 +151,9 @@ namespace TouristApp.Controllers
             
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(
-            //new
-            //{
-            //    token = _jWTTokenService.CreateToken(user),
-            //    refToken = _jWTTokenService.CreateRefreshToken(user)
-            //}
-            );
+            return Ok();
         }
+
 
         [HttpPost("ChangePassword")]
         [Authorize]
@@ -184,6 +181,7 @@ namespace TouristApp.Controllers
 
             return Ok();
         }
+
 
         [HttpPost("ForgotPassword")]
         [AllowAnonymous]
@@ -215,6 +213,7 @@ namespace TouristApp.Controllers
 
             return Ok(new { answer = "Check your email" });
         }
+
 
         [HttpPost("ResetPassword")]
         [AllowAnonymous]

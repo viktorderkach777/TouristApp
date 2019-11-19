@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import './tours.css';
 import * as tourAction from '../../reducers/tourReducer';
 import * as filtersAction from '../../reducers/filterReducer';
+import Moment from 'moment';
 
 import {
   Modal, ModalHeader, ModalFooter, ModalBody,
@@ -267,7 +268,7 @@ class ToursContainer extends Component {
                   {item.name} {item.class}*
       </CardTitle>
                 <CardSubtitle className="CardSubTitle">
-                  <small> <i className="fa fa-map-marker" aria-hidden="true"></i>{item.country}, {item.region}</small>
+                  <small> <i className="fa fa-map-marker" aria-hidden="true"></i> {item.country}, {item.region}</small>
                 </CardSubtitle>
 
                 <CardText>
@@ -275,10 +276,10 @@ class ToursContainer extends Component {
                   <li>
                     <i className="fa fa-plane iconColor" aria-hidden="true"></i>
                     <span className="skin-color hidden-xs"> Виліт: </span>
-                    {item.сityDeparture}, <span className="date-capitalize">{item.date}</span>
+                    {item.сityDeparture}, <span className="date-capitalize">{Moment(item.date).format('DD/MM/YYYY')}</span>
                   </li>
                   <li>
-                    <i className="fa fa-clock iconColor" aria-hidden="true"></i>
+                    <i className="fa fa-calendar iconColor" aria-hidden="true"></i>
                     <span className="skin-color hidden-xs"> Тривалість: </span>
                     <b>{item.daysCount}</b> ночей
                                     </li>
@@ -298,7 +299,8 @@ class ToursContainer extends Component {
             </Col>
             <Col sm="12" md="2" className="d-flex  justify-content-center align-items-center">
               <Row>
-                <h5>{item.price}<span className="currency">₴</span></h5>
+                <h5>{item.price}<span className="currency"> $</span></h5>
+                {/* ₴ */}
                 <Link to={`/views/${item.country}/${item.id}`}>
                   <Button className="buttonHotel">Дивитись тур</Button>
                 </Link>

@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TouristApp.DAL.Configuration.InitialDataConfiguration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace TouristApp.DAL.Entities
 {
@@ -19,7 +15,6 @@ namespace TouristApp.DAL.Entities
 
         }
 
-
         // <summary>
         /// Main job classes
         /// </summary>
@@ -32,10 +27,7 @@ namespace TouristApp.DAL.Entities
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Regions> Regions { get; set; }
         public virtual DbSet<Tours> Tours { get; set; }
-
         public virtual DbSet<CityDepartures> CityDepartures { get; set; }
-        //public virtual DbSet<СityDeparture> СityDeparture { get; set; }
-
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         // <summary>
@@ -49,14 +41,11 @@ namespace TouristApp.DAL.Entities
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
             //builder.ApplyConfiguration(new CountryInitialConfig());
             //builder.ApplyConfiguration(new RegionInitialConfig());
             //builder.ApplyConfiguration(new HotelInitialConfig());
             //builder.ApplyConfiguration(new TourInitialConfig());
             //builder.ApplyConfiguration(new СityDepartureConfig());
-
-
 
             base.OnModelCreating(builder);
 
@@ -109,8 +98,6 @@ namespace TouristApp.DAL.Entities
                     .HasForeignKey(ur => ur.FilterValueId)
                     .IsRequired();
             });
-
-
         }
     }
 }

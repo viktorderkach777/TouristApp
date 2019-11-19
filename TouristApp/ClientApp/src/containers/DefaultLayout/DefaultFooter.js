@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
+//import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 const propTypes = {
   children: PropTypes.node,
@@ -38,23 +38,25 @@ class DefaultFooter extends Component {
                 <br />
                 <a className="contact-email" target="blank" href="mailto:touristapp@gmail.com">TouristApp@gmail.com</a>
                 <p>
-                <Button style={{ marginRight: '5px' }} className="btn-facebook btn-brand icon"><i className="fa fa-facebook"></i></Button>
+                  {/* <Button className="btn-facebook btn-brand icon"><i className="fa fa-facebook"></i></Button>
                 <Button style={{ marginRight: '5px' }} className="btn-twitter btn-brand icon"><i className="fa fa-twitter"></i></Button>
-                <Button className="btn-instagram btn-brand icon"><i className="fa fa-instagram"></i></Button>
+                <Button className="btn-instagram btn-brand icon"><i className="fa fa-instagram"></i></Button> */}
+                  <button className="btn-facebook btn-brand m-2 btn btn-secondary btn-sm" ><i className="fa fa-facebook"></i><span>Facebook</span></button>
+                  <button className="btn-google btn-brand m-2 btn btn-secondary btn-sm" style={{backgroundColor: "red", color: "white"}}><i className="fa fa-google"></i><span>Google</span></button>
                 </p>
               </div>
             </address>
             <div className="col-md-12">
-                <p className="text-center">Ціни, зазначені на сайті, можуть змінитися і не є публічною офертою.</p>
+              <p className="text-center">Ціни, зазначені на сайті, можуть змінитися і не є публічною офертою.</p>
             </div>
             <div>
-            <span><a href="https://coreui.io">CoreUI</a> &copy; 2019 RIVNE STEP.</span>
+              <span><a href="https://coreui.io">CoreUI</a> &copy; 2019 RIVNE STEP.</span>
 
-            <span className="text-center"> Powered by group of Step Academy students </span>
+              <span className="text-center"> Powered by group of Step Academy students </span>
             </div>
           </div>
         </div>
-        
+
       </React.Fragment>
     );
   }

@@ -21,7 +21,7 @@ namespace TouristApp.ViewModels
     {
         public long Id { get; set; }
         public string Value { get; set; }
-        public bool isChecked { get; set; }
+        public bool IsChecked { get; set; }
     }
 
     public class FilterItemViewModel
@@ -86,8 +86,8 @@ namespace TouristApp.ViewModels
     public class HotelPhotoViewModel
     {
         public long Id { get; set; }
-        public string original { get; set; }
-        public string thumbnail { get; set; }
+        public string Original { get; set; }
+        public string Thumbnail { get; set; }
     }
 
     public class HotelAddViewModel
@@ -106,14 +106,14 @@ namespace TouristApp.ViewModels
     public class HotelAddPhotoViewModel
     {
         public long HotelId { get; set; }
-        public string imageBase64 { get; set; }
+        public string ImageBase64 { get; set; }
     }
 
-    public class ImageItemViewModelNext2
+    public class ImageItemViewModelNext
     {
         public long Id { get; set; }
-        public string original { get; set; }
-        public string thumbnail { get; set; }
+        public string Original { get; set; }
+        public string Thumbnail { get; set; }
     }
 
     public class ToursViewModel
@@ -121,17 +121,15 @@ namespace TouristApp.ViewModels
         public List<TourListViewModel> Tours { get; set; }
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; }
-        public int CountItem { get; set; }
-        //public string sortOrder { get; set; }
-        //public SearchCountryViewModel Search { get; set; }
+        public int CountItem { get; set; }       
     }
 
     public class ToursListViewModel
     {
         public int CurrentPage { get; set; }
-        public string sortOrder { get; set; }
-        public long[] filters { get; set; }
-        public string searchString { get; set; }
+        public string SortOrder { get; set; }
+        public long[] Filters { get; set; }
+        public string SearchString { get; set; }
     }
 
     public class SingleTourViewModel
@@ -152,10 +150,11 @@ namespace TouristApp.ViewModels
         public int? DaysCount { get; set; }
         public List<HotelPhotoViewModel> Images { get; set; }
     }
+
     public class SearchModel
     {
-        public string typeOfSort { get; set; }
-        public string sortByAscending { get; set; }
+        public string TypeOfSort { get; set; }
+        public string SortByAscending { get; set; }
     }
 
     public class CountriesViewModel

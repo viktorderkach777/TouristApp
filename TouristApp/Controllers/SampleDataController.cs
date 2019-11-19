@@ -1,54 +1,51 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using TouristApp.ViewModels;
+
 
 namespace TouristApp.Controllers
 {
-    public class ImageItemViewModel
-    {
-        public int Id { get; set; }
-        public string BigImage { get; set; }
-        public string SmallImage { get; set; }
-    }
+    //public class ImageItemViewModel
+    //{
+    //    public int Id { get; set; }
+    //    public string BigImage { get; set; }
+    //    public string SmallImage { get; set; }
+    //}
 
-    public class KursModel
-    {
-        public string ccy { get; set; }
-        public string base_ccy { get; set; }
-        public string buy { get; set; }
-        public string sale { get; set; }
-    }
+    //public class KursModel
+    //{
+    //    public string Ccy { get; set; }
+    //    public string Base_Ccy { get; set; }
+    //    public string Buy { get; set; }
+    //    public string Sale { get; set; }
+    //}
 
-    public class KursListModel
-    {
-        public double RUR { get; set; }
-        public double USD { get; set; }
-        public double EUR { get; set; }
-        
-    }
+    //public class KursListModel
+    //{
+    //    public double RUR { get; set; }
+    //    public double USD { get; set; }
+    //    public double EUR { get; set; }        
+    //}
 
+    //public class ImageItemViewModelNext
+    //{
+    //    public int Id { get; set; }
+    //    public string Original { get; set; }
+    //    public string Thumbnail { get; set; }
+    //}
 
-    public class ImageItemViewModelNext
-    {
-        public int Id { get; set; }
-        public string original { get; set; }
-        public string thumbnail { get; set; }
-    }
-
-    public class ImageItemViewModelNext2
-    {
-        public long Id { get; set; }
-        public string original { get; set; }
-        public string thumbnail { get; set; }
-    }
+    //public class ImageItemViewModelNext
+    //{
+    //    public long Id { get; set; }
+    //    public string Original { get; set; }
+    //    public string Thumbnail { get; set; }
+    //}
 
 
     [Route("api/[controller]")]
@@ -59,47 +56,48 @@ namespace TouristApp.Controllers
         {
             _configuration = configuration;
         }
+
         //private static string[] Summaries = new[]
         //{
         //    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         //};
 
-        [HttpGet("images")]
-        public IEnumerable<ImageItemViewModel> Images()
-        {
-            var url = _configuration.GetValue<string>("ImagesUrl");
-            List<string> imageNames = new List<string>
-            {
-                "1", "2", "3", "4"
-            };
-            var model = imageNames
-                .Select(x => new ImageItemViewModel
-                {
-                    Id = int.Parse(x),
-                    BigImage = $"{url}/1200_{x}.jpg",
-                    SmallImage = $"{url}/268_{x}.jpg"
-                }).ToList();
-            return model;
-        }
+        //[HttpGet("images")]
+        //public IEnumerable<ImageItemViewModel> Images()
+        //{
+        //    var url = _configuration.GetValue<string>("ImagesUrl");
+        //    List<string> imageNames = new List<string>
+        //    {
+        //        "1", "2", "3", "4"
+        //    };
+        //    var model = imageNames
+        //        .Select(x => new ImageItemViewModel
+        //        {
+        //            Id = int.Parse(x),
+        //            BigImage = $"{url}/1200_{x}.jpg",
+        //            SmallImage = $"{url}/268_{x}.jpg"
+        //        }).ToList();
+        //    return model;
+        //}
 
-        [HttpGet("images2")]
-        public IEnumerable<ImageItemViewModelNext> Images2()
-        {
-            var serverUrl = "http://localhost:44318/";
-            var url = _configuration.GetValue<string>("ImagesUrl");
-            List<string> imageNames = new List<string>
-            {
-                "1", "2", "3", "4"
-            };
-            var model = imageNames
-                .Select(x => new ImageItemViewModelNext
-                {
-                    Id = int.Parse(x),
-                    original = $"{serverUrl}{url}/1200_{x}.jpg",
-                    thumbnail = $"{serverUrl}{url}/268_{x}.jpg"
-                }).ToList();
-            return model;
-        }
+        //[HttpGet("images2")]
+        //public IEnumerable<ImageItemViewModelNext> Images2()
+        //{
+        //    var serverUrl = "http://localhost:44318/";
+        //    var url = _configuration.GetValue<string>("ImagesUrl");
+        //    List<string> imageNames = new List<string>
+        //    {
+        //        "1", "2", "3", "4"
+        //    };
+        //    var model = imageNames
+        //        .Select(x => new ImageItemViewModelNext
+        //        {
+        //            Id = int.Parse(x),
+        //            Original = $"{serverUrl}{url}/1200_{x}.jpg",
+        //            Thumbnail = $"{serverUrl}{url}/268_{x}.jpg"
+        //        }).ToList();
+        //    return model;
+        //}
 
 
         [HttpGet("weather/{region}")]
@@ -180,10 +178,9 @@ namespace TouristApp.Controllers
 
             var answer = new KursListModel
             {
-                USD = Convert.ToDouble(kurses[0].buy),
-                RUR = Convert.ToDouble(kurses[2].buy),
-                EUR = Convert.ToDouble(kurses[1].buy),
-               
+                USD = Convert.ToDouble(kurses[0].Buy),
+                RUR = Convert.ToDouble(kurses[2].Buy),
+                EUR = Convert.ToDouble(kurses[1].Buy),               
             };
 
             return Ok(new { answer });
