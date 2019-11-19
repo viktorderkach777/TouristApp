@@ -46,7 +46,20 @@ export default class Hotel extends Component {
     render() {
         console.log('-----Single Tour state------ ', this.state);
         console.log('-----Single Tour props------ ', this.props);
+
+
         const { tour } = this.state;
+
+        const func = () =>{
+            if(tour.date){
+                console.log('-----tour.date------ ', tour)
+                console.log('-----Date.parse(tour.date)------ ', Date.parse(tour.date))
+                console.log('-----Date(((Date.parse(tour.date))))------ ', Date(((Date.parse(tour.date)))))
+                let t = Date.parse(tour.date);
+            }        
+        };
+
+        //console.log('-----Single Tour props------ ', Date(((Date.parse(tour.date)))).toJSON().slice(0, 10));
 
         return (
             <React.Fragment>
@@ -94,6 +107,7 @@ export default class Hotel extends Component {
                                             <li>
                                                 <span className="skin-color hidden-xs"> Перельот туди:</span>
                                                 <b>{tour.date}</b>
+                                                <b>{func()}</b>
                                             </li>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Перельот назад:</span>

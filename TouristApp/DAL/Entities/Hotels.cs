@@ -17,6 +17,7 @@ namespace TouristApp.DAL.Entities
 
         public long Id { get; set; }
         public string Name { get; set; }
+        public string NormalizedName { get; set; }
         public string Description { get; set; }
         public long RegionId { get; set; }
         public double? Rate { get; set; }
