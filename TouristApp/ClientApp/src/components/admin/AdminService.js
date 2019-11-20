@@ -68,12 +68,4 @@ export default class AdminService {
     static getKurs(date) {
         return axios.get(`${serverUrl}api/SampleData/kurs/` + date);
     }
-
-
-    //   static getKurs (date) {
-    //     return axios.get('https://api.privatbank.ua/p24api/exchange_rates?json&date='+ date);
-    //}
-
 }
-
-

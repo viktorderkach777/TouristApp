@@ -71,7 +71,7 @@ class ToursContainer extends Component {
 
   static getDerivedStateFromProps = (props, state) => {
 
-    console.log('---getDerivedStateFromProps---');
+    //console.log('---getDerivedStateFromProps---');
 
     return {
       tours: props.list,
@@ -109,7 +109,7 @@ class ToursContainer extends Component {
 
     this.toggleDialogDelete();
     this.setState({ id_delete: id });
-    console.log('delete tour with:', id);
+    //console.log('delete tour with:', id);
 
   }
 
@@ -120,7 +120,7 @@ class ToursContainer extends Component {
   }
 
   toggleChatDialog = () => {
-    console.log('toggleChatDialog: ', this.props);
+    //console.log('toggleChatDialog: ', this.props);
     this.setState({
       chatDialog_isOpen: !this.state.chatDialog_isOpen
     });
@@ -142,13 +142,13 @@ class ToursContainer extends Component {
       searchString: searchText
     }
 
-    console.log('---componentDidUpdate---- ', model);
+    //console.log('---componentDidUpdate---- ', model);
     this.props.postListTours(model);
   }
 
 
   onSortChanged = (data) => {
-    console.log('---sort Type ---- ', data);
+    //console.log('---sort Type ---- ', data);
     this.props.setTypeSort(data);
     // const { searchText, filters } = this.props;
     // const model = {
@@ -164,7 +164,7 @@ class ToursContainer extends Component {
 
   handleCheckChieldElement = (filterId) => {
 
-    console.log('---filterId enter---', filterId)
+    //console.log('---filterId enter---', filterId)
     this.props.setFilterId(filterId);
     // let filters = this.state.filters;
     // filters.forEach(filter => {
@@ -189,7 +189,7 @@ class ToursContainer extends Component {
   }
 
   onSearchChanged = (searchText) => {
-    console.log('---Search text ---- ', searchText);
+    //console.log('---Search text ---- ', searchText);
     // const { sortOrder, filters } = this.props;
     this.props.setSearchText(searchText);
     // const model = {
@@ -203,7 +203,7 @@ class ToursContainer extends Component {
 
   onPageChanged = (data) => {
     this.props.setCurrentPage(data);
-    console.log('---data from pagination', data);
+    //console.log('---data from pagination', data);
     // const { sortOrder, searchText, filters } = this.props;
     // const model = {
     //   currentPage: data,
@@ -220,8 +220,8 @@ class ToursContainer extends Component {
 
 
   render() {
-    console.log('----State Tours -----', this.state);
-    console.log('----Props Tours-----', this.props);
+    //console.log('----State Tours -----', this.state);
+    //console.log('----Props Tours-----', this.props);
     const { roles, isListLoading, totalPages, currentPage, countTours } = this.props;
     const { deleteDialog_isOpen, chatDialog_isOpen, id_delete } = this.state;
 

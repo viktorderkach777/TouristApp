@@ -29,7 +29,7 @@ export default class Notifications extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(this.props);
+        //console.log(this.props);
         this.state = {
             top: -200,
             message: '',

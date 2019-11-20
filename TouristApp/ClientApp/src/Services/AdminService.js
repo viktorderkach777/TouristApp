@@ -65,16 +65,7 @@ export default class AdminService {
     }
 
     //-----------------OPERATION  PrivatBank---------------------------
-    static getKurs() {
-        console.log('----axios kurs---');
+    static getKurs() {        
         return axios.get(`${serverUrl}api/SampleData/kurs`);
     }
-
-
-    //   static getKurs (date) {
-    //     return axios.get('https://api.privatbank.ua/p24api/exchange_rates?json&date='+ date);
-    //}
-
 }
-
-

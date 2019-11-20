@@ -14,6 +14,7 @@ import {weatherReducer} from '../components/weather/reducers'
 import {mapReducer} from '../components/map/reducers'
 import { loginReducer } from "../views/Pages/Login/reducer";
 import { registerReducer } from "../views/Pages/Register/reducer";
+import {kursReducer} from "../components/admin/converterPrivatBank/reducer"
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 //import { createBrowserHistory } from 'history';
 //import createHistory from 'history/createHashHistory';
@@ -27,8 +28,7 @@ export const history = createHistory.createHashHistory({ basename: baseUrl });
 export default function configureStore (history, initialState) {
     const reducers = {
       captcha: captchaReducer,
-      login: loginReducer,
-      //auth:userReducer.reducer,
+      login: loginReducer,      
       userlist: user,
       tours:tours.reducer,
       filters:filters.reducer,
@@ -36,7 +36,8 @@ export default function configureStore (history, initialState) {
       refreshToken: RefreshToken.refreshReducer,
       weather:weatherReducer,
       map:mapReducer,
-      register:registerReducer
+      register:registerReducer,
+      kurs:kursReducer
     };
 
     const middleware = [

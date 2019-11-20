@@ -28,7 +28,7 @@ class Filters extends Component {
 
     render() {
         const { filters, count } = this.props;
-        console.log('---MAIN:filters---', filters)
+        //console.log('---MAIN:filters---', filters)
         return (
             <Form>
                 <Card className="CardTours">

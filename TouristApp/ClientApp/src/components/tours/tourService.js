@@ -8,7 +8,7 @@ export default class TourService {
   }
 
   static postListTours(model) {
-    console.log('---post list tour----', model);
+    //console.log('---post list tour----', model);
     return axios.post(`${serverUrl}api/tour/list2`, model);
   }
 

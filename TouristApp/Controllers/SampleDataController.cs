@@ -1,53 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using TouristApp.ViewModels;
 
 
 namespace TouristApp.Controllers
 {
-    //public class ImageItemViewModel
-    //{
-    //    public int Id { get; set; }
-    //    public string BigImage { get; set; }
-    //    public string SmallImage { get; set; }
-    //}
-
-    //public class KursModel
-    //{
-    //    public string Ccy { get; set; }
-    //    public string Base_Ccy { get; set; }
-    //    public string Buy { get; set; }
-    //    public string Sale { get; set; }
-    //}
-
-    //public class KursListModel
-    //{
-    //    public double RUR { get; set; }
-    //    public double USD { get; set; }
-    //    public double EUR { get; set; }        
-    //}
-
-    //public class ImageItemViewModelNext
-    //{
-    //    public int Id { get; set; }
-    //    public string Original { get; set; }
-    //    public string Thumbnail { get; set; }
-    //}
-
-    //public class ImageItemViewModelNext
-    //{
-    //    public long Id { get; set; }
-    //    public string Original { get; set; }
-    //    public string Thumbnail { get; set; }
-    //}
-
-
     [Route("api/[controller]")]
     public class SampleDataController : Controller
     {
@@ -55,51 +15,9 @@ namespace TouristApp.Controllers
         public SampleDataController(IConfiguration configuration)
         {
             _configuration = configuration;
-        }
+        }      
 
-        //private static string[] Summaries = new[]
-        //{
-        //    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        //};
-
-        //[HttpGet("images")]
-        //public IEnumerable<ImageItemViewModel> Images()
-        //{
-        //    var url = _configuration.GetValue<string>("ImagesUrl");
-        //    List<string> imageNames = new List<string>
-        //    {
-        //        "1", "2", "3", "4"
-        //    };
-        //    var model = imageNames
-        //        .Select(x => new ImageItemViewModel
-        //        {
-        //            Id = int.Parse(x),
-        //            BigImage = $"{url}/1200_{x}.jpg",
-        //            SmallImage = $"{url}/268_{x}.jpg"
-        //        }).ToList();
-        //    return model;
-        //}
-
-        //[HttpGet("images2")]
-        //public IEnumerable<ImageItemViewModelNext> Images2()
-        //{
-        //    var serverUrl = "http://localhost:44318/";
-        //    var url = _configuration.GetValue<string>("ImagesUrl");
-        //    List<string> imageNames = new List<string>
-        //    {
-        //        "1", "2", "3", "4"
-        //    };
-        //    var model = imageNames
-        //        .Select(x => new ImageItemViewModelNext
-        //        {
-        //            Id = int.Parse(x),
-        //            Original = $"{serverUrl}{url}/1200_{x}.jpg",
-        //            Thumbnail = $"{serverUrl}{url}/268_{x}.jpg"
-        //        }).ToList();
-        //    return model;
-        //}
-
-
+       
         [HttpGet("weather/{region}")]
         public async Task<IActionResult> Weather(string region)
         {
@@ -158,8 +76,8 @@ namespace TouristApp.Controllers
         {
             WebRequest request;
             WebResponse response;
-            var json = "";
-            string _apiBase = " https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
+            var answer = "";
+            string _apiBase = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
             string getData = _apiBase;
 
             request = WebRequest.Create(getData);
@@ -169,53 +87,12 @@ namespace TouristApp.Controllers
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    json = reader.ReadToEnd();
+                    answer = reader.ReadToEnd();
                 }
             }
             response.Close();
-
-            List<KursModel> kurses = JsonConvert.DeserializeObject<List<KursModel>>(json);
-
-            var answer = new KursListModel
-            {
-                USD = Convert.ToDouble(kurses[0].Buy),
-                RUR = Convert.ToDouble(kurses[2].Buy),
-                EUR = Convert.ToDouble(kurses[1].Buy),               
-            };
-
-            return Ok(new { answer });
-        }
-
-
-        //[HttpGet("[action]")]
-
-        //public IEnumerable<WeatherForecast> WeatherForecasts(int startDateIndex)
-        //{
-        //    var rng = new Random();
-
-        //    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        //    {
-        //        DateFormatted = DateTime.Now.AddDays(index + startDateIndex).ToString("d"),
-        //        TemperatureC = rng.Next(-20, 55),
-        //        Summary = Summaries[rng.Next(Summaries.Length)]
-        //    });
-        //}
-
-        //public class WeatherForecast
-        //{
-        //    public string DateFormatted { get; set; }
-
-        //    public int TemperatureC { get; set; }
-
-        //    public string Summary { get; set; }
-
-        //    public int TemperatureF
-        //    {
-        //        get
-        //        {
-        //            return 32 + (int)(TemperatureC / 0.5556);
-        //        }
-        //    }
-        //}
+           
+            return Ok(new { answer });            
+        }      
     }
 }
