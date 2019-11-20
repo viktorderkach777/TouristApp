@@ -151,6 +151,8 @@ namespace TouristApp.ViewModels
         public List<HotelPhotoViewModel> Images { get; set; }
     }
 
+        public List<ParametersViewModel> HotelParametries { get; set; }
+    }
     public class SearchModel
     {
         public string TypeOfSort { get; set; }

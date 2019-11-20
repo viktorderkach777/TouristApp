@@ -48,7 +48,7 @@ export default class Hotel extends Component {
         // console.log('-----Single Tour state------ ', this.state);
         // console.log('-----Single Tour props------ ', this.props);
         const { tour } = this.state;
-
+      
         return (
             <React.Fragment>
                 <div className="app flex-row align-items-top">
