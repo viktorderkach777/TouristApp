@@ -283,6 +283,7 @@ namespace TouristApp.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
+                    NormalizedName = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     RegionId = table.Column<long>(nullable: false),
                     Rate = table.Column<double>(nullable: true),

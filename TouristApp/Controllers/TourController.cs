@@ -417,14 +417,14 @@ namespace TouristApp.Controllers
                 .Tours
                 .Where(a => a.Id == id)
                 .Include(s => s.Hotel)
-                .Include(s => s.Hotel.Parameters)
+                //.Include(s => s.Hotel.Parameters)
                 .Include(s => s.Hotel.HotelImages)
                 .Include(d => d.Hotel.Region)
                 .Include(f => f.Hotel.Region.Country)
                 .Include(z => z.CityDeparture)
                 .Select(u => new SingleTourViewModel
                 {
-                    Id = u.Id,                    
+                    Id = u.Id,
                     СityDeparture = u.CityDeparture.Name,
                     Name = u.Hotel.Name,
                     NormalizedName = u.Hotel.NormalizedName,
@@ -443,22 +443,8 @@ namespace TouristApp.Controllers
                             Id = x.Id,
                             Original = Path.Combine(_url, u.Hotel.NormalizedName, "1200_" + x.HotelImageUrl),
                             Thumbnail = Path.Combine(_url, u.Hotel.NormalizedName, "268_" + x.HotelImageUrl),
-                        }).ToList(),
-                    HotelParametries = u.Hotel.Parameters
-                        .Where(x => x.ParentId == null && x.HotelId == u.HotelId)
-                        .OrderBy(z => z.Priority)
-                        .Select(pr => new ParametersViewModel
-                        {
-                            Name = pr.Name,
-                            Description = pr.Description,
-                            Priority = pr.Priority,
-                            Children = pr.Children.Select(f => new ParametersViewModel
-                            {
-                                Name = f.Name,
-                                Description = f.Description,
-                                Priority = f.Priority
-                            }).ToList()
-                        }).SingleAsync();
+                        }).ToList()
+                }).SingleAsync();
 
             if (tour.Images.Count == 0)
             {
@@ -471,6 +457,68 @@ namespace TouristApp.Controllers
             }
             return tour;
         }
+
+        //[HttpGet("single/{id}")]
+        //public async Task<ActionResult<SingleTourViewModel>> Get([FromRoute] long id)
+        //{
+        //    var tour = await _context
+        //        .Tours
+        //        .Where(a => a.Id == id)
+        //        .Include(s => s.Hotel)
+        //        .Include(s => s.Hotel.Parameters)
+        //        .Include(s => s.Hotel.HotelImages)
+        //        .Include(d => d.Hotel.Region)
+        //        .Include(f => f.Hotel.Region.Country)
+        //        .Include(z => z.CityDeparture)
+        //        .Select(u => new SingleTourViewModel
+        //        {
+        //            Id = u.Id,                    
+        //            СityDeparture = u.CityDeparture.Name,
+        //            Name = u.Hotel.Name,
+        //            NormalizedName = u.Hotel.NormalizedName,
+        //            Region = u.Hotel.Region.Name,
+        //            Country = u.Hotel.Region.Country.Name,
+        //            Description = u.Hotel.Description,
+        //            Price = u.Hotel.Price * u.DaysCount,
+        //            Rate = u.Hotel.Rate,
+        //            Class = u.Hotel.Class,
+        //            FromData = u.FromData,
+        //            Date = u.FromData.ToString(),
+        //            DaysCount = u.DaysCount,
+        //            Images = u.Hotel.HotelImages.Where(
+        //                f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
+        //                {
+        //                    Id = x.Id,
+        //                    Original = Path.Combine(_url, u.Hotel.NormalizedName, "1200_" + x.HotelImageUrl),
+        //                    Thumbnail = Path.Combine(_url, u.Hotel.NormalizedName, "268_" + x.HotelImageUrl),
+        //                }).ToList(),
+        //            HotelParametries = u.Hotel.Parameters
+        //                .Where(x => x.ParentId == null && x.HotelId == u.HotelId)
+        //                .OrderBy(z => z.Priority)
+        //                .Select(pr => new ParametersViewModel
+        //                {
+        //                    Name = pr.Name,
+        //                    Description = pr.Description,
+        //                    Priority = pr.Priority,
+        //                    Children = pr.Children.Select(f => new ParametersViewModel
+        //                    {
+        //                        Name = f.Name,
+        //                        Description = f.Description,
+        //                        Priority = f.Priority
+        //                    }).ToList()
+        //                }).SingleAsync();
+
+        //    if (tour.Images.Count == 0)
+        //    {
+        //        tour.Images.Add(new HotelPhotoViewModel
+        //        {
+        //            Id = 0,
+        //            Original = Path.Combine(_url, "no-photo.jpg"),
+        //            Thumbnail = Path.Combine(_url, "no-photo.jpg"),
+        //        });
+        //    }
+        //    return tour;
+        //}
 
         //[HttpGet("single/{id}")]
         //public async Task<ActionResult<SingleTourViewModel>> Get([FromRoute] string id)

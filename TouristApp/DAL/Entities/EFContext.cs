@@ -27,7 +27,7 @@ namespace TouristApp.DAL.Entities
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Regions> Regions { get; set; }
         public virtual DbSet<Tours> Tours { get; set; }
-        public DbSet<Parameter> Parameters { get; set; }
+        //public DbSet<Parameter> Parameters { get; set; }
         public virtual DbSet<CityDepartures> CityDepartures { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
@@ -102,11 +102,10 @@ namespace TouristApp.DAL.Entities
             });
 
 
-            builder.Entity<Parameter>()
-            .HasOne(ur => ur.Parent)
-            .WithMany(r => r.Children)
-            .HasForeignKey(ur => ur.ParentId);
-            
+            //builder.Entity<Parameter>()
+            //.HasOne(ur => ur.Parent)
+            //.WithMany(r => r.Children)
+            //.HasForeignKey(ur => ur.ParentId);            
         }
     }
 }
