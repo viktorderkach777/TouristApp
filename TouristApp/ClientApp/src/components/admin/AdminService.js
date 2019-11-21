@@ -1,11 +1,8 @@
 import axios from 'axios';
 import { serverUrl } from '../../config';
 
-
 export default class AdminService {
-
-    //-----------------OPERATION  HOTELS---------------------------
-
+    // -----------------OPERATION  HOTELS---------------------------
     static addHotel(model) {
         return axios.post(`${serverUrl}api/hotel/create`, model)
     }
@@ -17,14 +14,12 @@ export default class AdminService {
         return axios.get(`${serverUrl}api/hotel/` + id);
     }
 
-    //-----------------OPERATION  TOURS---------------------------
-
+    // -----------------OPERATION  TOURS---------------------------
     static addTour(model) {
         return axios.post(`${serverUrl}api/tour/create`, model)
     }
 
-    //-----------------OPERATION    COUTRIES---------------------------
-
+    // -----------------OPERATION    COUTRIES---------------------------
     static getCountries() {
         return axios.get(`${serverUrl}api/country/countries`);
     }
@@ -42,8 +37,7 @@ export default class AdminService {
     }
 
 
-    //-----------------OPERATION  REGION---------------------------
-
+    // -----------------OPERATION  REGION---------------------------
     static addRegion(model) {
         return axios.post(`${serverUrl}api/region/create`, model)
     }
@@ -64,7 +58,7 @@ export default class AdminService {
         return axios.post(`${serverUrl}api/Hotel/regions/create`, model);
     }
 
-    //-----------------OPERATION  PrivatBank---------------------------
+    // -----------------OPERATION  PrivatBank---------------------------
     static getKurs(date) {
         return axios.get(`${serverUrl}api/SampleData/kurs/` + date);
     }

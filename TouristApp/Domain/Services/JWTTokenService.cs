@@ -54,7 +54,7 @@ namespace TouristApp.Domain.Services
             var jwt = new JwtSecurityToken(
                 signingCredentials: signingCredentials,
                 claims: claims,
-                expires: DateTime.Now.AddSeconds(10));
+                expires: DateTime.Now.AddDays(1));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }

@@ -6,12 +6,15 @@ import { Button, CardText, CardSubtitle, CardTitle, Card, CardBody, Col, Contain
 import { serverUrl } from '../../config';
 import ImageGallery from 'react-image-gallery';
 import Moment from 'moment';
+import * as kursAction from '../../components/admin/converterPrivatBank/reducer'
+import { connect } from 'react-redux'
 //import classnames from 'classnames';
 import './tours.css'
+import CentralPageSpinner from '../CentrPageSpinner';
 const TabWidjet = React.lazy(() => import('../tours/Tabs'));
 
 
-export default class Hotel extends Component {
+class Hotel extends Component {
     state = {
         tour: {}
     };
@@ -36,7 +39,6 @@ export default class Hotel extends Component {
                     //console.log('--problem--', err);
                 }
             );
-
     }
 
     onClickImage = (e, img_index) => {
@@ -44,11 +46,43 @@ export default class Hotel extends Component {
         this.setState({ photoIndex: img_index, isOpen: true });
     }
 
+    setPrice = (price, currency, kurs, isListLoading, errors) => {
+        let newPrice = price;
+
+        if (errors && errors.length > 0) {
+            return <><span className="mr-4">"Помилка!"</span></>;
+        }
+
+        if (!isListLoading && kurs && kurs.length === 4) {
+            const usdSale = parseFloat(kurs[0].sale);
+            const eurSale = parseFloat(kurs[1].sale);
+            const rurSale = parseFloat(kurs[2].sale);
+
+            switch (currency) {
+                case 'UAH':
+                    newPrice = (price * usdSale).toFixed(0)
+                    break;
+                case 'RUB':
+                    newPrice = (price * usdSale / rurSale).toFixed(0)
+                    break;
+                case 'EUR':
+                    newPrice = (price * eurSale / usdSale).toFixed(1)
+                    break;
+                default:
+                    break;
+            }
+        };
+        return <><span className="mr-4">{newPrice} {currency}</span></>;
+    }
+
     render() {
         // console.log('-----Single Tour state------ ', this.state);
         // console.log('-----Single Tour props------ ', this.props);
         const { tour } = this.state;
-      
+        const { currency, kurs, isKursLoading, errors } = this.props;
+        if (isKursLoading) {
+            return <CentralPageSpinner loading={isKursLoading} />
+        }
         return (
             <React.Fragment>
                 <div className="app flex-row align-items-top">
@@ -68,14 +102,6 @@ export default class Hotel extends Component {
                                     </Col>
                                     <Col sm="4">
                                         <CardText>
-                                            {/* <li>
-                                                <span className="skin-color hidden-xs"> Виліт: </span>
-                                                <b>{Moment(tour.date).format('DD/MM/YYYY')}</b>
-                                            </li> */}
-                                            {/* <li className="d-flex">                                                
-                                                    <div className="mr-auto skin-color hidden-xs">Тур:</div>
-                                                    <div className="font-weight-bold">{tour.daysCount} ночей</div>                                               
-                                            </li> */}
                                             <li>
                                                 <span className="skin-color hidden-xs"> Харчування: </span>
                                                 <b>  без харчування</b>
@@ -104,9 +130,10 @@ export default class Hotel extends Component {
                                     </Col>
                                     <Col sm="3">
                                         <CardText className="skin-color hidden-xs" tag="h3" >Найкраща ціна: </CardText>
-                                        <CardText className="GreenColor" tag="h2" >{tour.price} $</CardText>
+                                        <CardText className="GreenColor" tag="h2" >{this.setPrice(tour.price, currency, kurs, isKursLoading, errors)}</CardText>
                                         <Button size="lg" className="buttonHotel">Потрібна консультація</Button>
                                         <Button size="lg" className="buttonHotel">Замовлення</Button>
+                                        {/* <CardText className="skin-color hidden-xs" tag="h3" >{errors}</CardText> */}
                                     </Col>
                                 </Row>
                             </CardBody>
@@ -160,13 +187,30 @@ export default class Hotel extends Component {
                                 </Card>
                             </Col>
                         </Row>
-
-
                     </Container>
                 </div>
             </React.Fragment>
-
         );
     }
 }
 
+const mapState = state => {
+    return {
+        isKursLoading: state.kurs.loading,
+        currency: state.kurs.currency,
+        kurs: state.kurs.kurs,
+        errors: state.kurs.errors
+    };
+};
+
+const mapDispatch = (dispatch) => {
+    return {
+        setCurrency: (name) => {
+            dispatch(kursAction.setCurrency(name))
+        },
+        kursGet: () =>
+            dispatch(kursAction.kursGet()),
+    };
+};
+
+export default connect(mapState, mapDispatch)(Hotel)

@@ -3,14 +3,16 @@ import AdminService from '../../../../Services/AdminService'
 export const FETCH_KURS_REQUEST = "kurs/FETCH_KURS_REQUEST";
 export const FETCH_KURS_SUCCESS = "kurs/FETCH_KURS_SUCCESS";
 export const FETCH_KURS_FAILURE = "kurs/FETCH_KURS_FAILURE";
+export const SET_KURS_CURRENCY = "kurs/SET_KURS_CURRENCY";
 
 const initialState = {
     kurs: [],
     loading: false,
-    errors: {}
+    errors: {},
+    currency: 'USD'
 };
 
-export const kursReducer = (state = initialState, action) => {
+export const kursReducer = (state = initialState, action) => {    
     switch (action.type) {
         case FETCH_KURS_REQUEST:
             return {
@@ -33,10 +35,24 @@ export const kursReducer = (state = initialState, action) => {
                 loading: false,
                 errors: action.payload
             };
+        case SET_KURS_CURRENCY:
+            return {
+                ...state,
+                currency: action.payload
+            };
         default:
             return state;
     }
 };
+
+export const setCurrency = (currency) => {    
+    return (dispatch) => {        
+        dispatch({
+            type: SET_KURS_CURRENCY,
+            payload: currency.label
+        });
+    }
+}
 
 export const kursGet = () => {
     return (dispatch) => {
@@ -64,14 +80,12 @@ export const kursGet = () => {
                 //     // );
                 // }
             )
-            .catch(err => {                
-                console.log('Global Server problen in controler message', err);
+            .catch(err => {
+                console.log('Global Server problem in controler message', err);
                 dispatch({
                     type: FETCH_KURS_FAILURE,
-                    errors: err//err.response.data
+                    errors: err
                 });
             });
     }
 }
-
-//export default reducer;

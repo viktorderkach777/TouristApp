@@ -6,10 +6,10 @@ import './tours.css';
 import * as tourAction from '../../reducers/tourReducer';
 import * as filtersAction from '../../reducers/filterReducer';
 import Moment from 'moment';
-
+import * as kursAction from '../../components/admin/converterPrivatBank/reducer'
 import {
   Modal, ModalHeader, ModalFooter, ModalBody,
-  Card, 
+  Card,
   Button,
   CardTitle,
   CardText,
@@ -21,16 +21,16 @@ import {
   Col,
 } from 'reactstrap';
 import { serverUrl } from '../../config';
-const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner/index'));
+const SpinnerWidget = React.lazy(() => import('../CentrPageSpinner'));
 const SortToolbar = React.lazy(() => import('../SortToolbar'));
 const PaginationBar = React.lazy(() => import('../Pagination'));
 const FilterWidjet = React.lazy(() => import('../filters'));
 const ChatBtn = React.lazy(() => import('../chatButton'));
 const ChatRoom = React.lazy(() => import('../chatRoom'));
+
 class ToursContainer extends Component {
   constructor(props) {
     super(props);
-
 
     //initializing state 
     this.state = {
@@ -44,13 +44,12 @@ class ToursContainer extends Component {
       deleteDialog_isOpen: false,
       id_delete: 0,
       chatDialog_isOpen: false,
-      name:''
-
+      name: ''
     };
   }
 
   componentDidMount() {
-    const { currentPage, filtersIdList, totalPages, sortOrder, searchText } = this.props;
+    const { currentPage, filtersIdList, totalPages, sortOrder, searchText, kursGet } = this.props;
     const model = {
       currentPage: 1,
       sortOrder: sortOrder,
@@ -65,14 +64,11 @@ class ToursContainer extends Component {
       sortOrder: sortOrder,
       filtersIdList: filtersIdList
     });
-
-
+    kursGet();
   }
 
   static getDerivedStateFromProps = (props, state) => {
-
     //console.log('---getDerivedStateFromProps---');
-
     return {
       tours: props.list,
       currentPage: props.currentPage,
@@ -80,7 +76,12 @@ class ToursContainer extends Component {
       sortOrder: props.sortOrder,
       searchText: props.searchText,
       filtersIdList: props.filtersIdList,
-      countTours: props.countTours
+      countTours: props.countTours,
+      errors: props.errors,
+      currency: props.currency,
+      kurs: props.kurs,
+      setCurrency: props.setCurrency,
+      isListLoading: props.isListLoading
     };
   }
 
@@ -100,9 +101,7 @@ class ToursContainer extends Component {
       }
 
       this.postListTours(model);
-
     }
-
   }
 
   deleteTour = (e, id) => {
@@ -217,13 +216,45 @@ class ToursContainer extends Component {
 
   }
 
+  //currency, kurs,
+  setPrice = (price, currency, kurs, isListLoading, errors) => {
+    let newPrice = price;
+    if (errors && errors.length > 0) {
+      return <><p className="mr-4">"Помилка!"</p></>;
+    }
+
+    if (!isListLoading && kurs && kurs.length === 4) {
+      const usdSale = parseFloat(kurs[0].sale);
+      const eurSale = parseFloat(kurs[1].sale);
+      const rurSale = parseFloat(kurs[2].sale);
+
+      switch (currency) {
+        case 'UAH':
+          newPrice = (price * usdSale).toFixed(0)
+          break;
+        case 'RUB':
+          newPrice = (price * usdSale / rurSale).toFixed(0)
+          break;
+        case 'EUR':
+          newPrice = (price * eurSale / usdSale).toFixed(1)
+          break;
+        default:
+          break;
+      }
+    };
+    return <><h5 className="mr-4">{newPrice} {currency}</h5></>;
+  }
 
 
   render() {
-    //console.log('----State Tours -----', this.state);
-    //console.log('----Props Tours-----', this.props);
-    const { roles, isListLoading, totalPages, currentPage, countTours } = this.props;
-    const { deleteDialog_isOpen, chatDialog_isOpen, id_delete } = this.state;
+    // console.log('----State Tours -----', this.state);
+    // console.log('----Props Tours-----', this.props);
+    const { roles, totalPages, currentPage, countTours } = this.props;
+    const { deleteDialog_isOpen, chatDialog_isOpen, id_delete, currency, kurs, isListLoading, errors } = this.state;
+
+    //   if (isListLoading) {
+    //     return <SpinnerWidget loading={isListLoading} />
+    // }
 
     const deleteDialogContent = (deleteDialog_isOpen &&
       <Modal isOpen={true}>
@@ -240,9 +271,8 @@ class ToursContainer extends Component {
       </Modal>
     );
 
-
-
     const toursList = (
+
       this.props.list.map(item => (
         <Card key={item.id} className="CardTours" >
           <Row>
@@ -299,7 +329,7 @@ class ToursContainer extends Component {
             </Col>
             <Col sm="12" md="2" className="d-flex  justify-content-center align-items-center">
               <Row>
-                <h5>{item.price}<span className="currency"> $</span></h5>
+                {this.setPrice(item.price, currency, kurs, isListLoading, errors)}
                 {/* ₴ */}
                 <Link to={`/views/${item.country}/${item.id}`}>
                   <Button className="buttonHotel">Дивитись тур</Button>
@@ -309,20 +339,17 @@ class ToursContainer extends Component {
             </Col>
           </Row>
         </Card>
-
       )));
 
-
     return (
-
       <React.Fragment>
         <ChatBtn toggleChatDialog={this.toggleChatDialog} />
         <div className="container">
           <div className="row">
             {deleteDialogContent}
-            {chatDialog_isOpen && <ChatRoom  name={this.props.name}/>}
+            {chatDialog_isOpen && <ChatRoom name={this.props.name} />}
             <div className="col-12 col-md-3">
-              <FilterWidjet filters={this.props.filters} count={countTours} handleCheckChieldElement={this.handleCheckChieldElement} />
+              <FilterWidjet setCurrency={this.props.setCurrency} filters={this.props.filters} count={countTours} handleCheckChieldElement={this.handleCheckChieldElement} />
             </div>
             <div className="col-12 col-md-9">
               <SortToolbar onSortChanged={this.onSortChanged} onSearchChanged={this.onSearchChanged} />
@@ -340,7 +367,7 @@ class ToursContainer extends Component {
 const mapState = state => {
   return {
     list: get(state, 'tours.list.data'),
-    isListLoading: get(state, 'tours.list.loading'),
+    isListLoading: get(state, 'tours.list.loading') || get(state, 'kurs.loading'),
     isListError: get(state, 'tours.list.error'),
     currentPage: get(state, 'tours.list.currentPage'),
     sortOrder: get(state, 'tours.list.sortOrder'),
@@ -349,9 +376,12 @@ const mapState = state => {
     filtersIdList: get(state, 'tours.list.filters'),
     totalPages: get(state, 'tours.list.totalPages'),
     countTours: get(state, 'tours.list.countItem'),
-    isAuthenticated: get(state, 'auth.isAuthenticated'),
-    roles: get(state, 'auth.user.roles'),
-    name:get(state, 'auth.user.name')
+    isAuthenticated: get(state, 'login.isAuthenticated'),
+    roles: get(state, 'login.user.roles'),
+    name: get(state, 'login.user.name'),
+    errors: get(state, 'kurs.errors'),
+    currency: get(state, 'kurs.currency'),
+    kurs: get(state, 'kurs.kurs')
   };
 };
 
@@ -378,10 +408,12 @@ const mapDispatch = (dispatch) => {
     setFilterId: (filterId) => {
       dispatch(tourAction.setFilterId(filterId))
     },
+    setCurrency: (name) => {
+      dispatch(kursAction.setCurrency(name))
+    },
+    kursGet: () =>
+      dispatch(kursAction.kursGet()),
   };
 };
 
-const TourWidget =
-  connect(mapState, mapDispatch)(ToursContainer);
-
-export default TourWidget;
+export default connect(mapState, mapDispatch)(ToursContainer);

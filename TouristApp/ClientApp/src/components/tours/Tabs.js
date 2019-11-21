@@ -4,7 +4,6 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap
 import classnames from 'classnames';
 
 class Tabs extends Component {
-
     constructor(props) {
         super(props);
 
@@ -12,8 +11,6 @@ class Tabs extends Component {
         this.state = {
             activeTab: new Array(4).fill('1'),
             tour:{}
-
-
         };
     }
 
@@ -29,16 +26,13 @@ class Tabs extends Component {
         });
     }
     componentDidMount() {
-
         this.setState({ tour: this.props.tour});
-
     }
 
     tabPane() {
-        const { tour } = this.props;
-        
-        console.log('---Tabs props----', this.props );
-        console.log('---Tabs state----', this.state );
+        const { tour } = this.props;        
+        // console.log('---Tabs props----', this.props );
+        // console.log('---Tabs state----', this.state );
          
         return (
             <>
@@ -49,7 +43,6 @@ class Tabs extends Component {
                 
                  {/* {hotelParametries.map(item =>
                      <span> <b>{item.name}</b> {item.description}}</span> )} */}
-
 
                 </TabPane>
                 {/* відгуки */}
