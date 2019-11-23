@@ -8,7 +8,7 @@ using TouristApp.DAL.Entities;
 
 namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
-    public class СityDepartureConfig : IEntityTypeConfiguration<CityDepartures>
+    public class СityDepartureConfig : IEntityTypeConfiguration<CityDeparture>
     {
         //public void Configure(EntityTypeBuilder<СityDepartures> builder)
         //{
@@ -32,22 +32,22 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
         //        }
         //    };
         //}
-        public void Configure(EntityTypeBuilder<CityDepartures> builder)
+        public void Configure(EntityTypeBuilder<CityDeparture> builder)
         {
             int cityId = 0;
-            CityDepartures[] cities = new CityDepartures[]
+            CityDeparture[] cities = new CityDeparture[]
             {
-                new CityDepartures
+                new CityDeparture
                 {
                     Id=(++cityId),
                     Name="Київ",
                 },
-                new CityDepartures
+                new CityDeparture
                 {
                     Id=(++cityId),
                     Name="Львiв"
                 },
-                new CityDepartures
+                new CityDeparture
                 {
                     Id=(++cityId), //3
                     Name="Одеса"

@@ -3,17 +3,17 @@
 
 namespace TouristApp.DAL.Entities
 {
-    public class Regions
+    public class Region
     {
-        public Regions()
+        public Region()
         {
-            Hotels = new HashSet<Hotels>();
+            Hotels = new HashSet<Hotel>();
         }
 
         public long Id { get; set; }
         public long CountryId { get; set; }
         public string Name { get; set; }
-        public virtual Countries Country { get; set; }
-        public virtual ICollection<Hotels> Hotels { get; set; }
+        public virtual Country Country { get; set; }
+        public virtual ICollection<Hotel> Hotels { get; set; }
     }
 }

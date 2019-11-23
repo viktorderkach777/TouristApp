@@ -71,7 +71,7 @@ namespace TouristApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _context.Hotels.Add(new Hotels
+            _context.Hotels.Add(new Hotel
             {
                 Name = model.Name,
                 Description = model.Description,
@@ -143,7 +143,7 @@ namespace TouristApp.Controllers
                                    
             //string path = _fileService.UploadImage(model.imageBase64);
 
-            _context.HotelImages.Add(new HotelImages
+            _context.HotelImages.Add(new HotelImage
             {
                 HotelId = model.HotelId,
                 HotelImageUrl = imageName

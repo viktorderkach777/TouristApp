@@ -8,26 +8,26 @@ using TouristApp.DAL.Entities;
 
 namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
-    class RegionInitialConfig : IEntityTypeConfiguration<Regions>
+    class RegionInitialConfig : IEntityTypeConfiguration<Region>
     {
-        public void Configure(EntityTypeBuilder<Regions> builder)
+        public void Configure(EntityTypeBuilder<Region> builder)
         {
             int cityId = 0;
-            Regions[] regiones = new Regions[]
+            Region[] regiones = new Region[]
             {
-                 new Regions
+                 new Region
                  {
                      Id=(++cityId),
                      CountryId=16,
                      Name="Шарм Эль Шейх"
                  },
-                 new Regions
+                 new Region
                  {
                      Id=(++cityId),
                      CountryId=1,
                      Name="Krakow"
                  },
-                 new Regions
+                 new Region
                  {
                      Id=(++cityId),
                      CountryId=1,

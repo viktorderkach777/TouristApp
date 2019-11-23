@@ -116,31 +116,31 @@ namespace TouristApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var tours = await _context.Tours.FindAsync(id);
+            var tour = await _context.Tours.FindAsync(id);
 
-            if (tours == null)
+            if (tour == null)
             {
                 return NotFound();
             }
 
-            return Ok(tours);
+            return Ok(tour);
         }
 
         // PUT: api/Tour/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTours([FromRoute] long id, [FromBody] Tours tours)
+        public async Task<IActionResult> PutTours([FromRoute] long id, [FromBody] Tour tour)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != tours.Id)
+            if (id != tour.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(tours).State = EntityState.Modified;
+            _context.Entry(tour).State = EntityState.Modified;
 
             try
             {
@@ -148,7 +148,7 @@ namespace TouristApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ToursExists(id))
+                if (!TourExists(id))
                 {
                     return NotFound();
                 }
@@ -170,7 +170,7 @@ namespace TouristApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _context.Tours.Add(new Tours
+            _context.Tours.Add(new Tour
             {
                 HotelId = model.HotelId,
                 //CityDepartureId=model.CityDepartureId,
@@ -250,7 +250,7 @@ namespace TouristApp.Controllers
             foreach (var fName in filtersList)
             {
                 int count = 0; //Кількість співпадінь у даній групі фільтрів
-                var predicate = PredicateBuilder.False<Tours>();
+                var predicate = PredicateBuilder.False<Tour>();
                 foreach (var fValue in fName.Children)
                 {
                     for (int i = 0; i < filterValueSearchList.Length; i++)
@@ -312,7 +312,7 @@ namespace TouristApp.Controllers
                 foreach (var fName in filtersList)
                 {
                     int countFilter = 0; //Кількість співпадінь у даній групі фільтрів
-                    var predicate = PredicateBuilder.False<Tours>();
+                    var predicate = PredicateBuilder.False<Tour>();
                     foreach (var fValue in fName.Children)
                     {
                         for (int i = 0; i < filterValueSearchList.Length; i++)
@@ -581,19 +581,19 @@ namespace TouristApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var tours = await _context.Tours.FindAsync(id);
-            if (tours == null)
+            var tour = await _context.Tours.FindAsync(id);
+            if (tour == null)
             {
                 return NotFound();
             }
 
-            _context.Tours.Remove(tours);
+            _context.Tours.Remove(tour);
             await _context.SaveChangesAsync();
 
-            return Ok(tours.Id);
+            return Ok(tour.Id);
         }
 
-        private bool ToursExists(long id)
+        private bool TourExists(long id)
         {
             return _context.Tours.Any(e => e.Id == id);
         }

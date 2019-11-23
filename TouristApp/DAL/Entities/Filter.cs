@@ -17,6 +17,6 @@ namespace TouristApp.DAL.Entities
 
         [ForeignKey("TourOf"), Key, Column(Order = 2)]
         public long TourId { get; set; }
-        public virtual Tours TourOf { get; set; }
+        public virtual Tour TourOf { get; set; }
     }
 }

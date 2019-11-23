@@ -18,17 +18,17 @@ namespace TouristApp.DAL.Entities
         // <summary>
         /// Main job classes
         /// </summary>
-        public virtual DbSet<Comments> Comments { get; set; }
-        public virtual DbSet<Countries> Countries { get; set; }
-        public virtual DbSet<HotelImages> HotelImages { get; set; }
-        public virtual DbSet<HotelParameters> HotelParameters { get; set; }
-        public virtual DbSet<HotelSubParameters> HotelSubParameters { get; set; }
-        public virtual DbSet<Hotels> Hotels { get; set; }
-        public virtual DbSet<Orders> Orders { get; set; }
-        public virtual DbSet<Regions> Regions { get; set; }
-        public virtual DbSet<Tours> Tours { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<HotelImage> HotelImages { get; set; }
+        public virtual DbSet<HotelParameter> HotelParameters { get; set; }
+        public virtual DbSet<HotelSubParameter> HotelSubParameters { get; set; }
+        public virtual DbSet<Hotel> Hotels { get; set; }
+        public virtual DbSet< Order> Orders { get; set; }
+        public virtual DbSet<Region> Regions { get; set; }
+        public virtual DbSet<Tour> Tours { get; set; }
         //public DbSet<Parameter> Parameters { get; set; }
-        public virtual DbSet<CityDepartures> CityDepartures { get; set; }
+        public virtual DbSet<CityDeparture> CityDepartures { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         // <summary>

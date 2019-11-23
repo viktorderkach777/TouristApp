@@ -8,14 +8,14 @@ using TouristApp.DAL.Entities;
 
 namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
-    class HotelInitialConfig : IEntityTypeConfiguration<Hotels>
+    class HotelInitialConfig : IEntityTypeConfiguration<Hotel>
     {
-        public void Configure(EntityTypeBuilder<Hotels> builder)
+        public void Configure(EntityTypeBuilder<Hotel> builder)
         {
             int hotelId = 0;
-            Hotels[] hotels = new Hotels[]
+            Hotel[] hotels = new Hotel[]
             {
-                 new Hotels
+                 new Hotel
                  {
                      Id=(++hotelId),
                      Class=4,
@@ -32,7 +32,7 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
                      Rate=5.0,
                      Price=550
                  },
-                 new Hotels
+                 new Hotel
                  {
                      Id=(++hotelId),
                      Class=3,
@@ -46,7 +46,7 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
                      Rate=3.61,
                      Price=572
                  },
-                 new Hotels
+                 new Hotel
                  {
                      Id=(++hotelId),
                      Class=5,

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace TouristApp.DAL.Entities
 {
-    public class Tours
+    public class Tour
     {
-        public Tours()
+        public Tour()
         {
-            Orders = new HashSet<Orders>();
+            Orders = new HashSet<Order>();
         }
 
         public long Id { get; set; }
@@ -17,9 +17,9 @@ namespace TouristApp.DAL.Entities
         public int? DaysCount { get; set; }
         public DateTime? FromData { get; set; }
         public long CityDepartureId { get; set; }
-        public virtual CityDepartures CityDeparture { get; set; }
-        public virtual Hotels Hotel { get; set; }
-        public virtual ICollection<Orders> Orders { get; set; }
+        public virtual CityDeparture CityDeparture { get; set; }
+        public virtual Hotel Hotel { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<Filter> Filtres { get; set; }
     }
 }

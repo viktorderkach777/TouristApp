@@ -3,7 +3,7 @@
 
 namespace TouristApp.DAL.Entities
 {
-    public class Comments
+    public class Comment
     {
         public long Id { get; set; }
         public long UserId { get; set; }

@@ -313,18 +313,17 @@ namespace TouristApp.Migrations
                     UserId = table.Column<long>(nullable: false),
                     HotelId = table.Column<long>(nullable: false),
                     CreatingDate = table.Column<DateTime>(nullable: false),
-                    Message = table.Column<string>(nullable: true),
-                    HotelsId = table.Column<long>(nullable: true)
+                    Message = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Hotels_HotelsId",
-                        column: x => x.HotelsId,
+                        name: "FK_Comments_Hotels_HotelId",
+                        column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Comments_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -522,9 +521,9 @@ namespace TouristApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_HotelsId",
+                name: "IX_Comments_HotelId",
                 table: "Comments",
-                column: "HotelsId");
+                column: "HotelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",

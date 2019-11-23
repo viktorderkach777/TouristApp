@@ -27,6 +27,6 @@ namespace TouristApp.DAL.Entities
     //    public virtual ICollection<Parameter> Children { get; set; }
        
     //    public long HotelId { get; set; }
-    //    public virtual Hotels Hotel { get; set; }
+    //    public virtual Hotel Hotel { get; set; }
     //}
 }

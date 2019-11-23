@@ -157,18 +157,18 @@ namespace TouristApp.ViewModels
         public string SortByAscending { get; set; }
     }
 
-    public class CountriesViewModel
+    public class CountryViewModel
     {
         public long Id { get; set; }
         public string Name { get; set; }
     }
 
-    public class CountriesAddViewModel
+    public class CountryAddViewModel
     {
         public string Name { get; set; }
     }
 
-    public class CountriesEditViewModel
+    public class CountryEditViewModel
     {
         public string Name { get; set; }
     }

@@ -87,14 +87,14 @@ namespace TouristApp.DAL.Entities
             List<Filter> fils = new List<Filter>();
             foreach (var tour in context.Tours)
             {
-                CityDepartures city = context.CityDepartures.FirstOrDefault(c => c.Id == tour.CityDepartureId);
+                CityDeparture city = context.CityDepartures.FirstOrDefault(c => c.Id == tour.CityDepartureId);
                 var filvalCity = context.FilterValues.FirstOrDefault(f => f.Name == city.Name);
 
-                Hotels hotel = context.Hotels.FirstOrDefault(h => h.Id == tour.HotelId);
+                Hotel hotel = context.Hotels.FirstOrDefault(h => h.Id == tour.HotelId);
                 var filvalHotelClass = context.FilterValues.FirstOrDefault(f => f.Name == hotel.Class.ToString() + "*");
 
-                Regions regions = context.Regions.FirstOrDefault(r => r.Id == hotel.RegionId);
-                Countries country = context.Countries.FirstOrDefault(c => c.Id == regions.CountryId);
+                Region region = context.Regions.FirstOrDefault(r => r.Id == hotel.RegionId);
+                Country country = context.Countries.FirstOrDefault(c => c.Id == region.CountryId);
                 var filvalHotelCountry = context.FilterValues.FirstOrDefault(f => f.Name == country.Name);
 
                 Filter[] filts =
@@ -274,7 +274,7 @@ namespace TouristApp.DAL.Entities
             {
                 if (context.Countries.FirstOrDefault(f => f.Name == name) == null)
                 {
-                    context.Countries.Add(new Countries { Name = name });
+                    context.Countries.Add(new Country { Name = name });
                     context.SaveChanges();
                 }
             }
@@ -282,7 +282,7 @@ namespace TouristApp.DAL.Entities
 
         public static void SeedRegionsHelper(EFContext context, string countryName, string[] regions_names)
         {
-            Countries country = context.Countries.FirstOrDefault(f => f.Name == countryName);
+            Country country = context.Countries.FirstOrDefault(f => f.Name == countryName);
 
             if (country != null)
             {
@@ -290,7 +290,7 @@ namespace TouristApp.DAL.Entities
                 {
                     if (context.Regions.FirstOrDefault(f => f.Name == name && f.Country.Name == countryName) == null)
                     {
-                        context.Regions.Add(new Regions { Name = name, CountryId = country.Id });
+                        context.Regions.Add(new Region { Name = name, CountryId = country.Id });
                         context.SaveChanges();
                     }
                 }
@@ -434,13 +434,13 @@ namespace TouristApp.DAL.Entities
             {
                 if (context.CityDepartures.FirstOrDefault(f => f.Name == name) == null)
                 {
-                    context.CityDepartures.Add(new CityDepartures { Name = name });
+                    context.CityDepartures.Add(new CityDeparture { Name = name });
                     context.SaveChanges();
                 }
             }
         }
 
-        public static void SeedHotelsHelper(EFContext context, Regions region, Hotels[] hotels)
+        public static void SeedHotelsHelper(EFContext context, Region region, Hotel[] hotels)
         {
             if (region != null)
             {
@@ -459,13 +459,13 @@ namespace TouristApp.DAL.Entities
         {
             //string countryName = "Єгипет";
             string regionName = "Марса Алам";
-            Regions region = context.Regions.FirstOrDefault(f => f.Name == regionName);
+            Region region = context.Regions.FirstOrDefault(f => f.Name == regionName);
 
             if (region != null)
             {
-                SeederDB.SeedHotelsHelper(context, region, new Hotels[]
+                SeederDB.SeedHotelsHelper(context, region, new Hotel[]
                 {
-                    new Hotels
+                    new Hotel
                     {
                          Class=5,
                          RegionId=region.Id,
@@ -478,7 +478,7 @@ namespace TouristApp.DAL.Entities
                          Rate=4.29,
                          Price=55.4m
                     },
-                    new Hotels
+                    new Hotel
                     {
                          Class=4,
                          RegionId=region.Id,
@@ -490,7 +490,7 @@ namespace TouristApp.DAL.Entities
                          Rate=4.09,
                          Price=57.2m
                     },
-                    new Hotels
+                    new Hotel
                     {
                          Class=4,
                          RegionId=region.Id,
@@ -504,7 +504,7 @@ namespace TouristApp.DAL.Entities
                          Rate=4.17,
                          Price=47.5m
                     },
-                    new Hotels
+                    new Hotel
                     {
                          Class=3,
                          RegionId=region.Id,
@@ -517,7 +517,7 @@ namespace TouristApp.DAL.Entities
                          Rate=4.18,
                          Price=48.0m
                     },
-                     new Hotels
+                     new Hotel
                     {
                          Class=5,
                          RegionId=region.Id,
@@ -539,9 +539,9 @@ namespace TouristApp.DAL.Entities
 
             if (region != null)
             {
-                SeederDB.SeedHotelsHelper(context, region, new Hotels[]
+                SeederDB.SeedHotelsHelper(context, region, new Hotel[]
                 {
-                    new Hotels
+                    new Hotel
                     {
                         Class=5,
                         RegionId=region.Id,
@@ -558,7 +558,7 @@ namespace TouristApp.DAL.Entities
                         Rate=3.88,
                         Price=52.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=4,
                         RegionId=region.Id,
@@ -572,7 +572,7 @@ namespace TouristApp.DAL.Entities
                         Rate=4.02,
                         Price=47.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=4,
                         RegionId=region.Id,
@@ -586,7 +586,7 @@ namespace TouristApp.DAL.Entities
                         Rate=4.43,
                         Price=47.5m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=4,
                         RegionId=region.Id,
@@ -601,7 +601,7 @@ namespace TouristApp.DAL.Entities
                         Rate=4.54,
                         Price=50.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=3,
                         RegionId=region.Id,
@@ -623,9 +623,9 @@ namespace TouristApp.DAL.Entities
 
             if (region != null)
             {
-                SeederDB.SeedHotelsHelper(context, region, new Hotels[]
+                SeederDB.SeedHotelsHelper(context, region, new Hotel[]
                 {
-                    new Hotels
+                    new Hotel
                     {
                         Class=4,
                         RegionId=region.Id,
@@ -637,7 +637,7 @@ namespace TouristApp.DAL.Entities
                         Rate=4.45,
                         Price=42.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=3,
                         RegionId=region.Id,
@@ -649,7 +649,7 @@ namespace TouristApp.DAL.Entities
                         Rate=3.59,
                         Price=37.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=5,
                         RegionId=region.Id,
@@ -662,7 +662,7 @@ namespace TouristApp.DAL.Entities
                         Rate=3.92,
                         Price=40.5m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=4,
                         RegionId=region.Id,
@@ -676,7 +676,7 @@ namespace TouristApp.DAL.Entities
                         Rate=3.43,
                         Price=40.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=5,
                         RegionId=region.Id,
@@ -698,9 +698,9 @@ namespace TouristApp.DAL.Entities
 
             if (region != null)
             {
-                SeederDB.SeedHotelsHelper(context, region, new Hotels[]
+                SeederDB.SeedHotelsHelper(context, region, new Hotel[]
                 {
-                    new Hotels
+                    new Hotel
                     {
                         Class=4,
                         RegionId=region.Id,
@@ -712,7 +712,7 @@ namespace TouristApp.DAL.Entities
                         Rate=4.45,
                         Price=43.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=4,
                         RegionId=region.Id,
@@ -734,9 +734,9 @@ namespace TouristApp.DAL.Entities
 
             if (region != null)
             {
-                SeederDB.SeedHotelsHelper(context, region, new Hotels[]
+                SeederDB.SeedHotelsHelper(context, region, new Hotel[]
                 {
-                    new Hotels
+                    new Hotel
                     {
                         Class=5,
                         RegionId=region.Id,
@@ -751,7 +751,7 @@ namespace TouristApp.DAL.Entities
                         Rate=4.67,
                         Price=47.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=4,
                         RegionId=region.Id,
@@ -765,7 +765,7 @@ namespace TouristApp.DAL.Entities
                         Rate=3.99,
                         Price=39.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=5,
                         RegionId=region.Id,
@@ -778,7 +778,7 @@ namespace TouristApp.DAL.Entities
                         Rate=4.5,
                         Price=50.5m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=5,
                         RegionId=region.Id,
@@ -796,7 +796,7 @@ namespace TouristApp.DAL.Entities
                         Rate=4.41,
                         Price=55.0m
                     },
-                    new Hotels
+                    new Hotel
                     {
                         Class=5,
                         RegionId=region.Id,
@@ -814,7 +814,7 @@ namespace TouristApp.DAL.Entities
             }
         }
 
-        public static void SeedToursHelper(EFContext context, Tours[] tours)
+        public static void SeedToursHelper(EFContext context, Tour[] tours)
         {
             foreach (var t in tours)
             {
@@ -829,15 +829,15 @@ namespace TouristApp.DAL.Entities
         public static void SeedTours(EFContext context)
         {
             string regionName = "Марса Алам";
-            Regions region = context.Regions.FirstOrDefault(f => f.Name == regionName);
+            Region region = context.Regions.FirstOrDefault(f => f.Name == regionName);
             string hotelName = "Akassia Club Calimera Swiss Resort";
-            Hotels hotel = context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id);
+            Hotel hotel = context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id);
 
             if (hotel != null)
             {
-                SeederDB.SeedToursHelper(context, new Tours[]
+                SeederDB.SeedToursHelper(context, new Tour[]
                 {
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=1,
                          HotelId=hotel.Id,
@@ -845,7 +845,7 @@ namespace TouristApp.DAL.Entities
                          Price=hotel.Price*6,
                          FromData=new DateTime(2020, 05, 25, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                      },
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=2,
                          HotelId=hotel.Id,
@@ -853,7 +853,7 @@ namespace TouristApp.DAL.Entities
                          Price=hotel.Price*8,
                          FromData=new DateTime(2020, 05, 24, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                      },
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=3,
                          HotelId=hotel.Id,
@@ -869,9 +869,9 @@ namespace TouristApp.DAL.Entities
 
             if (hotel != null)
             {
-                SeederDB.SeedToursHelper(context, new Tours[]
+                SeederDB.SeedToursHelper(context, new Tour[]
                 {
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=1,
                          HotelId=hotel.Id,
@@ -879,7 +879,7 @@ namespace TouristApp.DAL.Entities
                          Price=hotel.Price*6,
                          FromData=new DateTime(2020, 05, 26, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                      },
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=2,
                          HotelId=hotel.Id,
@@ -887,7 +887,7 @@ namespace TouristApp.DAL.Entities
                          Price=hotel.Price*8,
                          FromData=new DateTime(2020, 05, 27, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                      },
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=3,
                          HotelId=hotel.Id,
@@ -903,9 +903,9 @@ namespace TouristApp.DAL.Entities
 
             if (hotel != null)
             {
-                SeederDB.SeedToursHelper(context, new Tours[]
+                SeederDB.SeedToursHelper(context, new Tour[]
                 {
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=1,
                          HotelId=hotel.Id,
@@ -913,7 +913,7 @@ namespace TouristApp.DAL.Entities
                          Price=hotel.Price*6,
                          FromData=new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                      },
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=2,
                          HotelId=hotel.Id,
@@ -921,7 +921,7 @@ namespace TouristApp.DAL.Entities
                          Price=hotel.Price*8,
                          FromData=new DateTime(2020, 05, 29, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                      },
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=3,
                          HotelId=hotel.Id,
@@ -937,9 +937,9 @@ namespace TouristApp.DAL.Entities
 
             if (hotel != null)
             {
-                SeederDB.SeedToursHelper(context, new Tours[]
+                SeederDB.SeedToursHelper(context, new Tour[]
                 {
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=1,
                          HotelId=hotel.Id,
@@ -947,7 +947,7 @@ namespace TouristApp.DAL.Entities
                          Price=hotel.Price*6,
                          FromData=new DateTime(2020, 05, 20, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                      },
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=2,
                          HotelId=hotel.Id,
@@ -955,7 +955,7 @@ namespace TouristApp.DAL.Entities
                          Price=hotel.Price*8,
                          FromData=new DateTime(2020, 05, 21, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                      },
-                     new Tours
+                     new Tour
                      {
                          CityDepartureId=3,
                          HotelId=hotel.Id,
@@ -998,7 +998,7 @@ namespace TouristApp.DAL.Entities
 
                     if (context.HotelImages.FirstOrDefault(f => f.HotelId == hotel.Id && f.HotelImageUrl == filename) == null)
                     {
-                        var hotelImage = new HotelImages()
+                        var hotelImage = new HotelImage()
                         {
                             HotelId = hotel.Id,
                             HotelImageUrl = filename

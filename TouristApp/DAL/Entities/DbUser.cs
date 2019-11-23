@@ -9,8 +9,8 @@ namespace TouristApp.DAL.Entities
     {
         public DbUser()
         {
-            Comments = new HashSet<Comments>();
-            Orders = new HashSet<Orders>();
+            Comments = new HashSet<Comment>();
+            Orders = new HashSet<Order>();
         }
 
         public ICollection<DbUserRole> UserRoles { get; set;}       
@@ -20,8 +20,8 @@ namespace TouristApp.DAL.Entities
         public DateTime DateOfBirth { get; set; }
         public DateTime SignUpTime { get; set; } 
         public string AvatarUrl { get; set; }
-        public virtual ICollection<Comments> Comments { get; set; }
-        public virtual ICollection<Orders> Orders { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection< Order> Orders { get; set; }
         public virtual RefreshToken RefreshToken { get; set; }
     }
 }

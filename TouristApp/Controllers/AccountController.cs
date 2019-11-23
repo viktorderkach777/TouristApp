@@ -48,7 +48,7 @@ namespace TouristApp.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody]Domain.Models.AccountModels.Credentials credentials)
+        public async Task<IActionResult> Login([FromBody] Credentials credentials)
         {
             if (!ModelState.IsValid)
             {                
