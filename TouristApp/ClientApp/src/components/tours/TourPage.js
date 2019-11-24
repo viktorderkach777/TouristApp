@@ -28,11 +28,11 @@ export default class Hotel extends Component {
             .then(
                 result => {
                     console.log('--result--', result.data);
-
-                    this.setState({ tour: result.data });
+                    let z = { ...result.data }
+                    this.setState({ tour: z });
                 },
                 err => {
-                    //console.log('--problem--', err);
+                    console.log('--problem--', err);
                 }
             );
 
@@ -43,11 +43,16 @@ export default class Hotel extends Component {
         this.setState({ photoIndex: img_index, isOpen: true });
     }
 
+
+
     render() {
         console.log('-----Single Tour state------ ', this.state);
         console.log('-----Single Tour props------ ', this.props);
         const { tour } = this.state;
-      
+        let param = tour.hotelParametries;
+        console.log('-----tour------ ', param);
+       
+
         return (
             <React.Fragment>
                 <div className="app flex-row align-items-top">
@@ -99,7 +104,7 @@ export default class Hotel extends Component {
                                                 <span className="skin-color hidden-xs"> Перельот назад:</span>
                                                 <b>19.09</b>
                                             </li>
-                                               
+
 
                                         </CardText>
 
@@ -109,6 +114,7 @@ export default class Hotel extends Component {
                                         <CardText className="GreenColor" tag="h2" >{tour.price} ₴</CardText>
                                         <Button size="lg" className="buttonHotel">Потрібна консультація</Button>
                                         <Button size="lg" className="buttonHotel">Замовлення</Button>
+
                                     </Col>
                                 </Row>
                             </CardBody>
@@ -116,10 +122,14 @@ export default class Hotel extends Component {
                         <Row>
                             <Col sm="8">
                                 <Card className="CardTours text-center">
-                                 
-                                        <TabWidjet tour={tour}/>
-          
+
+                                    {/* {this.state.tour.rate} */}
+                                    <TabWidjet tour={this.state.tour} param={param}/>
+                                    {/* {this.state.tour.images.map(item =>
+                                            <span> <b>{item.id}</b> </span> )} */}
+
                                 </Card>
+
                             </Col>
                             <Col sm="4">
 
