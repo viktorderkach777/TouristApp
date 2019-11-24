@@ -363,22 +363,22 @@ namespace TouristApp.Controllers
 
             var result = await query.Select(u => new TourListViewModel
             {
-                 
+
                 Id = u.Id,
                 СityDeparture = u.CityDeparture.Name,
                 Name = u.Hotel.Name,
                 NormalizedName = u.Hotel.NormalizedName,
                 Region = u.Hotel.Region.Name,
                 Country = u.Hotel.Region.Country.Name,
-                Description = u.Hotel.Description,               
+                Description = u.Hotel.Description,
                 Price = u.Hotel.Price * u.DaysCount,
                 Rate = u.Hotel.Rate,
                 Class = u.Hotel.Class,
                 FromData = u.FromData,
                 Date = u.FromData.ToString(),
-                DaysCount = u.DaysCount,                
-                ImagePath = u.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.HotelId)==null 
-                            ? Path.Combine(_url, "no-photo.jpg") 
+                DaysCount = u.DaysCount,
+                ImagePath = u.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.HotelId) == null
+                            ? Path.Combine(_url, "no-photo.jpg")
                             : Path.Combine(_url, u.Hotel.NormalizedName, "1200_" + u.Hotel.HotelImages.FirstOrDefault(
                             f => f.HotelId == u.HotelId).HotelImageUrl)
             })
@@ -394,20 +394,36 @@ namespace TouristApp.Controllers
 
 
         [HttpGet("images/{id}")]
-        public IEnumerable<ImageItemViewModelNext> Images(long id)
-        {           
-            var tour = _context.Tours.FirstOrDefault(f => f.Id == id);
-            var hotel = _context.Hotels.FirstOrDefault(h => h.Id == tour.HotelId);
+        public async Task<IEnumerable<ImageItemViewModelNext>> Images(long id)
+        {
+            var hotel = await _context
+                        .Hotels
+                        .Include(s => s.Tours)
+                        .Where(s => s.Tours.FirstOrDefault(t => t.Id == id).HotelId == s.Id)
+                        .SingleOrDefaultAsync();
 
-            var images = _context.HotelImages.Where(
-                f => f.HotelId == tour.HotelId).Select(x => new ImageItemViewModelNext
+            if (hotel != null)
+            {
+                var images = await _context.HotelImages.Where(
+               f => f.HotelId == hotel.Id).Select(x => new ImageItemViewModelNext
+               {
+                   Id = x.Id,
+                   Original = Path.Combine(_url, hotel.NormalizedName, "1200_" + x.HotelImageUrl),
+                   Thumbnail = Path.Combine(_url, hotel.NormalizedName, "268_" + x.HotelImageUrl)
+               }).ToListAsync();
+
+                return images;
+            }           
+
+            return new List<ImageItemViewModelNext>
+            {
+                new ImageItemViewModelNext
                 {
-                    Id = x.Id,
-                    Original = Path.Combine(_url, hotel.NormalizedName, "1200_" + x.HotelImageUrl),
-                    Thumbnail = Path.Combine(_url, hotel.NormalizedName, "268_" + x.HotelImageUrl)
-                }).ToList();
-
-            return images;
+                    Id = 0,
+                    Original = Path.Combine(_url, "no-photo.jpg"),
+                    Thumbnail = Path.Combine(_url, "no-photo.jpg"),
+                }
+            }; 
         }
 
         [HttpGet("single/{id}")]

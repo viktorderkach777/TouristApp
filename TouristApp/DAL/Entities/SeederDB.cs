@@ -8,6 +8,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace TouristApp.DAL.Entities
 {
@@ -828,10 +831,14 @@ namespace TouristApp.DAL.Entities
 
         public static void SeedTours(EFContext context)
         {
-            string regionName = "Марса Алам";
-            Region region = context.Regions.FirstOrDefault(f => f.Name == regionName);
-            string hotelName = "Akassia Club Calimera Swiss Resort";
-            Hotel hotel = context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id);
+            string regionName = "Марса Алам";           
+            string hotelName = "Akassia Club Calimera Swiss Resort";           
+            var hotel = context
+                .Hotels
+                .Where(p => p.Name == hotelName)
+                .Include(s => s.Region)
+                .Where(p => p.Region.Name == regionName)
+                .SingleOrDefault();
 
             if (hotel != null)
             {
@@ -865,7 +872,12 @@ namespace TouristApp.DAL.Entities
             }
 
             hotelName = "Aurora Bay Resort";
-            hotel = context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id);
+            hotel = context
+                    .Hotels
+                    .Where(p => p.Name == hotelName)
+                    .Include(s => s.Region)
+                    .Where(p => p.Region.Name == regionName)
+                    .SingleOrDefault();
 
             if (hotel != null)
             {
@@ -899,7 +911,12 @@ namespace TouristApp.DAL.Entities
             }
 
             hotelName = "Aurora Nada Resort";
-            hotel = context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id);
+            hotel = context
+                    .Hotels
+                    .Where(p => p.Name == hotelName)
+                    .Include(s => s.Region)
+                    .Where(p => p.Region.Name == regionName)
+                    .SingleOrDefault();
 
             if (hotel != null)
             {
@@ -933,7 +950,12 @@ namespace TouristApp.DAL.Entities
             }
 
             hotelName = "Bliss Abo Nawas";
-            hotel = context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id);
+            hotel = context
+                    .Hotels
+                    .Where(p => p.Name == hotelName)
+                    .Include(s => s.Region)
+                    .Where(p => p.Region.Name == regionName)
+                    .SingleOrDefault();
 
             if (hotel != null)
             {
