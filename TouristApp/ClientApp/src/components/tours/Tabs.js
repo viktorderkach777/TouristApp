@@ -8,25 +8,24 @@ const SoapIcon = ['', 'soap-icon-locations', 'soap-icon-beach', 'soap-icon-hotel
 
 const ParamItemList = (props) => {
     console.log('ParamItemList', props)
-     let child = props.children ;
-     console.log('child', child) 
+    let child = props.children;
+    console.log('child', child)
     return (
         props != null ?
-        <Row>
-            <Col xs="12" >
-                <div className='icon-box style6'><i className={props.priority < 7 ? SoapIcon[props.priority] : SoapIcon[6]}></i>
-                    <div className="description text-left">
-                        <h4 className="box-title">{props.name}</h4>
-                        <p>{props.description}</p>
+            <Row>
+                <Col xs="12" >
+                    <div className='icon-box style6'><i className={props.priority < 7 ? SoapIcon[props.priority] : SoapIcon[6]}></i>
+                        <div className="description text-left">
+                            <h4 className="box-title">{props.name}</h4>
+                            <p>{props.description}</p>
+                        </div>
                     </div>
-                </div>
-                <ul className="check facilities">
-                    {(props.children == 'undefined' ) ? (<li>undefined</li>) : 
-                        props.children.map((itemChild,index) => <li key={index}> {itemChild.name}</li>)}
-                </ul>
-            </Col>
-        </Row>:
-        ''
+                    <ul className="check facilities text-left">
+                        {(props.children == 'undefined' || props.children.length == 0) ? ('') :
+                            props.children.map((itemChild, index) => <li key={index}> {itemChild.name}</li>)}
+                    </ul>
+                </Col>
+            </Row> : ''
     )
 }
 
@@ -76,20 +75,15 @@ class Tabs extends Component {
                     <h3>{tour.name} *</h3>
                     {tour.description}
 
-
-
-                   
                     {param.length == 0 ? ('') :
                         (param.map(item =>
                             <ParamItemList {...item} key={item.priority} />
                         ))}
 
-
-
                 </TabPane>
                 {/* відгуки */}
                 <TabPane tabId="2">
-                     {param.length == 0 ? ('') :
+                    {/* {param.length == 0 ? ('') :
                         (param.map(item =>
                             <li key={item.priority}>
                                 <b className='YColor'>{item.name}</b>
@@ -97,7 +91,7 @@ class Tabs extends Component {
                                 {item.description}
                                 {item.children.length == 0 ? ('') :
                                     item.children.map((itemChild, index) => <span key={index} className='ml-2'>{itemChild.name}{'   '}</span>)}
-                            </li>))}
+                            </li>))} */}
                 </TabPane>
                 {/* карта */}
                 <TabPane tabId="3">
