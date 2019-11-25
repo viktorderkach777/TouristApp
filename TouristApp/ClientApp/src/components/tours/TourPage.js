@@ -32,11 +32,12 @@ class Hotel extends Component {
         axios.get(url2)
             .then(
                 result => {
-                    //console.log('--result--', result.data);
-                    this.setState({ tour: result.data });
+                    console.log('--result--', result.data);
+                    let z = { ...result.data }
+                    this.setState({ tour: z });
                 },
                 err => {
-                    //console.log('--problem--', err);
+                    console.log('--problem--', err);
                 }
             );
     }
@@ -83,6 +84,10 @@ class Hotel extends Component {
         if (isKursLoading) {
             return <CentralPageSpinner loading={isKursLoading} />
         }
+        let param = tour.hotelParametries;
+        console.log('-----tour------ ', param);
+       
+
         return (
             <React.Fragment>
                 <div className="app flex-row align-items-top">
@@ -141,8 +146,14 @@ class Hotel extends Component {
                         <Row>
                             <Col sm="8">
                                 <Card className="CardTours text-center">
-                                    <TabWidjet tour={tour} />
+
+                                    {/* {this.state.tour.rate} */}
+                                    <TabWidjet tour={this.state.tour} param={param}/>
+                                    {/* {this.state.tour.images.map(item =>
+                                            <span> <b>{item.id}</b> </span> )} */}
+
                                 </Card>
+
                             </Col>
                             <Col sm="4">
 
