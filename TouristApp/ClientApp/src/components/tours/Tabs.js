@@ -76,10 +76,12 @@ class Tabs extends Component {
                     <h3>{tour.name} *</h3>
                     {tour.description}
 
-                    {param.length == 0 ? ('') :
+                {/*
+               {param.length == 0 ? ('') :
                         (param.map(item =>
                             <ParamItemList {...item} key={item.priority} />
                         ))}
+                */}
 
                 </TabPane>
                 {/* відгуки */}
