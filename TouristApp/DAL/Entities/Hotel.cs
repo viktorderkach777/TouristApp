@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace TouristApp.DAL.Entities
 {
@@ -21,6 +20,8 @@ namespace TouristApp.DAL.Entities
         public string Description { get; set; }
         public long RegionId { get; set; }
         public double? Rate { get; set; }
+
+        [Column(TypeName = "decimal(5,2)")]
         public decimal? Price { get; set; }
         public int? RoomsCount { get; set; }
         public int Class { get; set; }

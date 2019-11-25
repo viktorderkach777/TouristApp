@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -19,7 +17,11 @@ namespace TouristApp.DAL.Entities
         private static void SeedFilters(EFContext context)
         {
             #region tblFilterNames - Назви фільтрів
-            string[] filterNames = { "Країни", "Місто вильоту", "Клас готелю" };
+            const string FILTER_NAME_HOTEL_COUNTRY = "Країни";
+            const string FILTER_NAME_CITY = "Місто вильоту";
+            const string FILTER_NAME_HOTEL_CLASS = "Клас готелю";
+            
+            string[] filterNames = { FILTER_NAME_HOTEL_COUNTRY, FILTER_NAME_CITY, FILTER_NAME_HOTEL_CLASS };
             foreach (var type in filterNames)
             {
                 if (context.FilterNames.SingleOrDefault(f => f.Name == type) == null)
@@ -60,7 +62,6 @@ namespace TouristApp.DAL.Entities
             #endregion
 
             #region tblFilterNameGroups - Групування по групах фільтрів
-
             for (int i = 0; i < filterNames.Length; i++)
             {
                 foreach (var value in filterValues[i])
@@ -83,67 +84,46 @@ namespace TouristApp.DAL.Entities
                     }
                 }
             }
-
-
             #endregion
 
-            List<Filter> fils = new List<Filter>();
-            foreach (var tour in context.Tours)
-            {
-                CityDeparture city = context.CityDepartures.FirstOrDefault(c => c.Id == tour.CityDepartureId);
-                var filvalCity = context.FilterValues.FirstOrDefault(f => f.Name == city.Name);
-
-                Hotel hotel = context.Hotels.FirstOrDefault(h => h.Id == tour.HotelId);
-                var filvalHotelClass = context.FilterValues.FirstOrDefault(f => f.Name == hotel.Class.ToString() + "*");
-
-                Region region = context.Regions.FirstOrDefault(r => r.Id == hotel.RegionId);
-                Country country = context.Countries.FirstOrDefault(c => c.Id == region.CountryId);
-                var filvalHotelCountry = context.FilterValues.FirstOrDefault(f => f.Name == country.Name);
-
-                Filter[] filts =
-                {
-                    new Filter { FilterNameId = 3, FilterValueId = filvalHotelClass.Id, TourId = tour.Id },  //клас готелю
-                    new Filter { FilterNameId = 1, FilterValueId = filvalHotelCountry.Id, TourId = tour.Id },  // країна
-                    new Filter { FilterNameId = 2, FilterValueId = filvalCity.Id, TourId = tour.Id } // місто вильоту
-                };
-
-                fils.AddRange(filts);
-            }
-
-
-            //    Filter[] filters =
-            //{
-            //        new Filter { FilterNameId = 3, FilterValueId=16, TourId=1 },  //клас готелю
-            //        new Filter { FilterNameId = 1, FilterValueId=2, TourId=1 },  // країна
-            //        new Filter { FilterNameId = 2, FilterValueId=11, TourId=1 },  // місто вильоту
-
-            //        new Filter { FilterNameId = 3, FilterValueId=16, TourId=2 },
-            //        new Filter { FilterNameId = 1, FilterValueId=2, TourId=2 },
-            //        new Filter { FilterNameId = 2, FilterValueId=12, TourId=2 },
-
-            //        new Filter { FilterNameId = 3, FilterValueId=16, TourId=3 },
-            //        new Filter { FilterNameId = 1, FilterValueId=2, TourId=3 },
-            //        new Filter { FilterNameId = 2, FilterValueId=13, TourId=3 },
-            //};
-
-
-
             #region tblFilters - Фільтри
-            //Filter[] filters =
-            //{
-            //        new Filter { FilterNameId = "1c57a39c-165f-459d-852e-8275b290520e", FilterValueId="daf3b4a5-b084-426f-9cc5-a219a861ad8d", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },  //клас готелю
-            //        new Filter { FilterNameId = "b4b2c278-cbbd-4242-9e05-85db3ef47055", FilterValueId="3919924e-0493-4b02-9cf8-7c6b420f3ed2", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },  // країна
-            //        new Filter { FilterNameId = "bd265235-e90e-4a6a-945f-2d379a5455f2", FilterValueId="1e62f01f-5461-45e2-934f-c545166b330b", TourId="42ba7a0a-3060-4cf2-b956-c6507961a423" },  // місто вильоту
+            List<Filter> fils = new List<Filter>();
+            CityDeparture city = null;
+            Hotel hotel = null;            
+            Country country = null;
+            var filterNameHotelClass = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_CLASS);
+            var filterNameHotelCountry = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_COUNTRY);
+            var filterNameCity = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_CITY);
 
-            //        new Filter { FilterNameId = "1c57a39c-165f-459d-852e-8275b290520e", FilterValueId="daf3b4a5-b084-426f-9cc5-a219a861ad8d", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
-            //        new Filter { FilterNameId = "b4b2c278-cbbd-4242-9e05-85db3ef47055", FilterValueId="2a5a2de1-80c0-4303-a2b3-4c7d5a373cd8", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
-            //        new Filter { FilterNameId = "bd265235-e90e-4a6a-945f-2d379a5455f2", FilterValueId="1e62f01f-5461-45e2-934f-c545166b330b", TourId="a5a0c5ed-d53a-4534-a25a-ba60349af439" },
+            if (filterNameHotelClass != null && filterNameHotelCountry != null && filterNameCity != null)
+            {
+                foreach (var tour in context.Tours)
+                {
+                    city = context.CityDepartures.FirstOrDefault(c => c.Id == tour.CityDepartureId);
+                    hotel = context.Hotels.FirstOrDefault(h => h.Id == tour.HotelId);
+                    country = context.Countries.FirstOrDefault(c => c.Id == tour.Hotel.Region.CountryId);
 
-            //        new Filter { FilterNameId = "1c57a39c-165f-459d-852e-8275b290520e", FilterValueId="daf3b4a5-b084-426f-9cc5-a219a861ad8d", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
-            //        new Filter { FilterNameId = "b4b2c278-cbbd-4242-9e05-85db3ef47055", FilterValueId="3919924e-0493-4b02-9cf8-7c6b420f3ed2", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
-            //        new Filter { FilterNameId = "bd265235-e90e-4a6a-945f-2d379a5455f2", FilterValueId="1e62f01f-5461-45e2-934f-c545166b330b", TourId="f51b2ba2-4293-44a6-af37-63086811aa29" },
+                    if (city != null && hotel != null && country != null)
+                    {
+                        var filvalCity = context.FilterValues.FirstOrDefault(f => f.Name == city.Name);
+                        var filvalHotelClass = context.FilterValues.FirstOrDefault(f => f.Name == hotel.Class.ToString() + "*");
+                        var filvalHotelCountry = context.FilterValues.FirstOrDefault(f => f.Name == country.Name);
 
-            //    };
+                        if (filvalHotelClass != null && filvalHotelCountry != null && filvalCity != null)
+                        {
+                            Filter[] filts =
+                            {
+                                new Filter { FilterNameId = filterNameHotelClass.Id, FilterValueId = filvalHotelClass.Id, TourId = tour.Id },  //клас готелю
+                                new Filter { FilterNameId = filterNameHotelCountry.Id, FilterValueId = filvalHotelCountry.Id, TourId = tour.Id },  // країна
+                                new Filter { FilterNameId = filterNameCity.Id, FilterValueId = filvalCity.Id, TourId = tour.Id } // місто вильоту
+                            };
+
+                            fils.AddRange(filts);
+                        }
+                    }
+                };
+            }
+           
             foreach (var item in fils)
             {
                 if (context.Filters.FirstOrDefault(f => f.FilterNameId == item.FilterNameId && f.FilterValueId == item.FilterValueId && f.TourId == item.TourId) == null)

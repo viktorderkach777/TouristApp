@@ -287,7 +287,7 @@ namespace TouristApp.Migrations
                     Description = table.Column<string>(nullable: true),
                     RegionId = table.Column<long>(nullable: false),
                     Rate = table.Column<double>(nullable: true),
-                    Price = table.Column<decimal>(nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
                     RoomsCount = table.Column<int>(nullable: true),
                     Class = table.Column<int>(nullable: false),
                     Longtitude = table.Column<double>(nullable: true),
@@ -380,7 +380,7 @@ namespace TouristApp.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     HotelId = table.Column<long>(nullable: false),
-                    Price = table.Column<decimal>(nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
                     DaysCount = table.Column<int>(nullable: true),
                     FromData = table.Column<DateTime>(nullable: true),
                     CityDepartureId = table.Column<long>(nullable: false)

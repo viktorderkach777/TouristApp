@@ -10,14 +10,14 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20191123203237_Init")]
+    [Migration("20191125165433_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -324,7 +324,8 @@ namespace TouristApp.Migrations
 
                     b.Property<string>("NormalizedName");
 
-                    b.Property<decimal?>("Price");
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<double?>("Rate");
 
@@ -457,7 +458,8 @@ namespace TouristApp.Migrations
 
                     b.Property<long>("HotelId");
 
-                    b.Property<decimal?>("Price");
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(5,2)");
 
                     b.HasKey("Id");
 
