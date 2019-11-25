@@ -12,39 +12,39 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
 
 
-    class TourInitialConfig : IEntityTypeConfiguration<Tours>
+    class TourInitialConfig : IEntityTypeConfiguration<Tour>
     {
-        public void Configure(EntityTypeBuilder<Tours> builder)
+        public void Configure(EntityTypeBuilder<Tour> builder)
         {
             int tourId = 0;
-            Tours[] hotels = new Tours[]
+            Tour[] tours = new Tour[]
             {
-                 new Tours
+                 new Tour
                  {
-                     Id=(++tourId).ToString(),
-                     HotelId="1",
+                     Id=(++tourId),
+                     HotelId=1,
                      DaysCount=6,
                      Price=3300,
                      FromData=new DateTime(1979, 07, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar) //DateTime.Now
                  },
-                 new Tours
+                 new Tour
                  {
-                     Id=(++tourId).ToString(),
-                     HotelId="2",
+                     Id=(++tourId),
+                     HotelId=2,
                      DaysCount=8,
                      Price=4400,
                      FromData=new DateTime(1979, 07, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                  },
-                 new Tours
+                 new Tour
                  {
-                     Id=(++tourId).ToString(),
-                     HotelId="2",
+                     Id=(++tourId),
+                     HotelId=2,
                      DaysCount=10,
                      Price=5500,
                      FromData=new DateTime(1979, 07, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                  }
                 };
-            builder.HasData(hotels);
+            builder.HasData(tours);
         }
     }
 }

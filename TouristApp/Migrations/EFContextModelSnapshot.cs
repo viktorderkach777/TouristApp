@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TouristApp.DAL.Entities;
 
 namespace TouristApp.Migrations
@@ -15,21 +15,21 @@ namespace TouristApp.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired();
+                    b.Property<long>("RoleId");
 
                     b.HasKey("Id");
 
@@ -38,17 +38,17 @@ namespace TouristApp.Migrations
                     b.ToTable("AspNetRoleClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType");
 
                     b.Property<string>("ClaimValue");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<long>("UserId");
 
                     b.HasKey("Id");
 
@@ -57,7 +57,7 @@ namespace TouristApp.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128);
@@ -67,8 +67,7 @@ namespace TouristApp.Migrations
 
                     b.Property<string>("ProviderDisplayName");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<long>("UserId");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -77,9 +76,9 @@ namespace TouristApp.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<long>("UserId");
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128);
@@ -94,10 +93,11 @@ namespace TouristApp.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.CityDepartures", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.CityDeparture", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
@@ -106,81 +106,47 @@ namespace TouristApp.Migrations
                     b.ToTable("CityDepartures");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Comments", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Comment", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatingDate");
 
-                    b.Property<string>("HotelId");
-
-                    b.Property<string>("HotelsId");
+                    b.Property<long>("HotelId");
 
                     b.Property<string>("Message");
 
-                    b.Property<string>("UserId");
+                    b.Property<long>("UserId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HotelsId");
+                    b.HasIndex("HotelId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Countries", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Country", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
-
-                    b.HasData(
-                        new { Id = "1", Name = "Poland" },
-                        new { Id = "2", Name = "Russia" },
-                        new { Id = "3", Name = "Germany" },
-                        new { Id = "4", Name = "Ukraine" },
-                        new { Id = "5", Name = "USA" },
-                        new { Id = "6", Name = "UK" },
-                        new { Id = "7", Name = "Australia" },
-                        new { Id = "8", Name = "Belgium" },
-                        new { Id = "9", Name = "Bosnia and Herzegovina" },
-                        new { Id = "10", Name = "Canada" },
-                        new { Id = "11", Name = "Chile" },
-                        new { Id = "12", Name = "China" },
-                        new { Id = "13", Name = "Croatia" },
-                        new { Id = "14", Name = "Czech Republic" },
-                        new { Id = "15", Name = "Denmark" },
-                        new { Id = "16", Name = "Egypt" },
-                        new { Id = "17", Name = "Estonia" },
-                        new { Id = "18", Name = "Finland" },
-                        new { Id = "19", Name = "France" },
-                        new { Id = "20", Name = "Greece" },
-                        new { Id = "21", Name = "Iceland" },
-                        new { Id = "22", Name = "Ireland" },
-                        new { Id = "23", Name = "Israel" },
-                        new { Id = "24", Name = "Italy" },
-                        new { Id = "25", Name = "Japan" },
-                        new { Id = "26", Name = "Kazakhstan" },
-                        new { Id = "27", Name = "Latvia" },
-                        new { Id = "28", Name = "Moldova" },
-                        new { Id = "29", Name = "Netherlands" },
-                        new { Id = "30", Name = "Slovakia" },
-                        new { Id = "31", Name = "Slovenia" },
-                        new { Id = "32", Name = "Spain" }
-                    );
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.DbRole", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -195,15 +161,17 @@ namespace TouristApp.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.DbUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount");
 
@@ -257,16 +225,17 @@ namespace TouristApp.Migrations
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.DbUserRole", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<long>("UserId");
 
-                    b.Property<string>("RoleId");
+                    b.Property<long>("RoleId");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -277,11 +246,11 @@ namespace TouristApp.Migrations
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Filter", b =>
                 {
-                    b.Property<string>("TourId");
+                    b.Property<long>("TourId");
 
-                    b.Property<string>("FilterValueId");
+                    b.Property<long>("FilterValueId");
 
-                    b.Property<string>("FilterNameId");
+                    b.Property<long>("FilterNameId");
 
                     b.HasKey("TourId", "FilterValueId", "FilterNameId");
 
@@ -294,8 +263,9 @@ namespace TouristApp.Migrations
 
             modelBuilder.Entity("TouristApp.DAL.Entities.FilterName", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -308,9 +278,9 @@ namespace TouristApp.Migrations
 
             modelBuilder.Entity("TouristApp.DAL.Entities.FilterNameGroup", b =>
                 {
-                    b.Property<string>("FilterValueId");
+                    b.Property<long>("FilterValueId");
 
-                    b.Property<string>("FilterNameId");
+                    b.Property<long>("FilterNameId");
 
                     b.HasKey("FilterValueId", "FilterNameId");
 
@@ -321,8 +291,9 @@ namespace TouristApp.Migrations
 
             modelBuilder.Entity("TouristApp.DAL.Entities.FilterValue", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -333,44 +304,11 @@ namespace TouristApp.Migrations
                     b.ToTable("tblFilterValues");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelImages", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Hotel", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("HotelId");
-
-                    b.Property<string>("HotelImageUrl");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("HotelImages");
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelParameters", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("HotelId");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("HotelParameters");
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.Hotels", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Class");
 
@@ -382,11 +320,14 @@ namespace TouristApp.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<decimal?>("Price");
+                    b.Property<string>("NormalizedName");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<double?>("Rate");
 
-                    b.Property<string>("RegionId");
+                    b.Property<long>("RegionId");
 
                     b.Property<int?>("RoomsCount");
 
@@ -395,20 +336,51 @@ namespace TouristApp.Migrations
                     b.HasIndex("RegionId");
 
                     b.ToTable("Hotels");
-
-                    b.HasData(
-                        new { Id = "1", Class = 4, Description = "Отель расположен в районе Хадаба курорта Шарм-Эль-Шейх на берегу Красного моря. Был открыт в 1996 году. Реновации в отеле не было, только косметический поточный ремонт. Состоит из основного 2-этажного здания (без номеров) и комплекса 2-этажных корпусов. Коралловый пляж отеля граничит с уникальными коралловыми рифами. Рядом возле отеля находится развлекательный центр Alf Leila Wa Leila, а торговые ряды Il Merkato и Old Market порадуют любителей шопинга и местного колорита. Отель расположен в 22 км от международного аэропорта Шарм-эль-Шейх в районе Hadaba | Ras Um El Sid. Расстояние до Naama Bay: 7 км; Расстояние до Old Market (Старый Город): 4 км; Расстояние до Soho Square: 20 км.", Name = "Royal Paradise Resort", Price = 550m, Rate = 5.0, RegionId = "1", RoomsCount = 286 },
-                        new { Id = "2", Class = 3, Description = "Отель находится в районе Рас Умм Элсид в Шарм-эль-Шейхе. В 8 км расположена набережная Наама-Бэй со множеством ресторанов и магазинов. Гостиница впервые распахнула свои двери гостям в 1999 году, последняя реновация проводилась в 2014 году. Отель подойдет для молодежного, романтического или индивидуального отдыха. В 18 км от аэропорта г. Шарм-эль-Шейх.", Name = "Amar Sina", Price = 572m, Rate = 3.61, RegionId = "1", RoomsCount = 98 },
-                        new { Id = "3", Class = 5, Description = "Отель расположен в Хадабет Ом Эль Сид, в самом центре променада Эль Меркато, на курорте Шарм-эль-Шейх, рядом с побережьем Красного моря. Отель был открыт в 2010 году, последняя реновация проводилась в 2018 году (обновление мебели на территории отеля, обновление бассейнов и номеров категории Deluxe). Отель подойдет для семейного, романтического или молодежного отдыха. Отель расположен в 17 км от аэропорта города Шарм Эль Шейх.", Name = "Il Mercato Hotel (ex.Iberotel Il Mercato)", Price = 675m, Rate = 4.52, RegionId = "1", RoomsCount = 318 }
-                    );
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameters", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelImage", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("HotelParameterId");
+                    b.Property<long>("HotelId");
+
+                    b.Property<string>("HotelImageUrl");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelId");
+
+                    b.ToTable("HotelImages");
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelParameter", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<long>("HotelId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelId");
+
+                    b.ToTable("HotelParameters");
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameter", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("HotelParameterId");
 
                     b.Property<bool?>("IsFree");
 
@@ -421,14 +393,15 @@ namespace TouristApp.Migrations
                     b.ToTable("HotelSubParameters");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Orders", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("TourId");
+                    b.Property<long>("TourId");
 
-                    b.Property<string>("UserId");
+                    b.Property<long>("UserId");
 
                     b.HasKey("Id");
 
@@ -439,38 +412,9 @@ namespace TouristApp.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Parameter", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(2000);
-
-                    b.Property<string>("HotelId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.Property<string>("ParentId")
-                        .IsRequired();
-
-                    b.Property<int>("Priority");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("tblParameters");
-                });
-
             modelBuilder.Entity("TouristApp.DAL.Entities.RefreshToken", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<long>("Id");
 
                     b.Property<string>("Token")
                         .IsRequired()
@@ -481,12 +425,13 @@ namespace TouristApp.Migrations
                     b.ToTable("tblRefreshTokens");
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Regions", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Region", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CountryId");
+                    b.Property<long>("CountryId");
 
                     b.Property<string>("Name");
 
@@ -495,28 +440,24 @@ namespace TouristApp.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Regions");
-
-                    b.HasData(
-                        new { Id = "1", CountryId = "16", Name = "Шарм Эль Шейх" },
-                        new { Id = "2", CountryId = "1", Name = "Krakow" },
-                        new { Id = "3", CountryId = "1", Name = "Wroclaw" }
-                    );
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Tours", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Tour", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CityDepartureId");
+                    b.Property<long>("CityDepartureId");
 
                     b.Property<int?>("DaysCount");
 
                     b.Property<DateTime?>("FromData");
 
-                    b.Property<string>("HotelId");
+                    b.Property<long>("HotelId");
 
-                    b.Property<decimal?>("Price");
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(5,2)");
 
                     b.HasKey("Id");
 
@@ -525,15 +466,9 @@ namespace TouristApp.Migrations
                     b.HasIndex("HotelId");
 
                     b.ToTable("Tours");
-
-                    b.HasData(
-                        new { Id = "1", DaysCount = 6, FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), HotelId = "1", Price = 3300m },
-                        new { Id = "2", DaysCount = 8, FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), HotelId = "2", Price = 4400m },
-                        new { Id = "3", DaysCount = 10, FromData = new DateTime(1979, 7, 28, 22, 35, 5, 0, DateTimeKind.Unspecified), HotelId = "2", Price = 5500m }
-                    );
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.HasOne("TouristApp.DAL.Entities.DbRole")
                         .WithMany()
@@ -541,7 +476,7 @@ namespace TouristApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<long>", b =>
                 {
                     b.HasOne("TouristApp.DAL.Entities.DbUser")
                         .WithMany()
@@ -549,7 +484,7 @@ namespace TouristApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
                     b.HasOne("TouristApp.DAL.Entities.DbUser")
                         .WithMany()
@@ -557,7 +492,7 @@ namespace TouristApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
                 {
                     b.HasOne("TouristApp.DAL.Entities.DbUser")
                         .WithMany()
@@ -565,15 +500,17 @@ namespace TouristApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Comments", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Comment", b =>
                 {
-                    b.HasOne("TouristApp.DAL.Entities.Hotels")
+                    b.HasOne("TouristApp.DAL.Entities.Hotel")
                         .WithMany("Comments")
-                        .HasForeignKey("HotelsId");
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TouristApp.DAL.Entities.DbUser", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.DbUserRole", b =>
@@ -601,7 +538,7 @@ namespace TouristApp.Migrations
                         .HasForeignKey("FilterValueId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TouristApp.DAL.Entities.Tours", "TourOf")
+                    b.HasOne("TouristApp.DAL.Entities.Tour", "TourOf")
                         .WithMany("Filtres")
                         .HasForeignKey("TourId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -620,54 +557,48 @@ namespace TouristApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelImages", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Hotel", b =>
                 {
-                    b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
-                        .WithMany("HotelImages")
-                        .HasForeignKey("HotelId");
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelParameters", b =>
-                {
-                    b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
-                        .WithMany("HotelParameters")
-                        .HasForeignKey("HotelId");
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.Hotels", b =>
-                {
-                    b.HasOne("TouristApp.DAL.Entities.Regions", "Region")
+                    b.HasOne("TouristApp.DAL.Entities.Region", "Region")
                         .WithMany("Hotels")
-                        .HasForeignKey("RegionId");
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameters", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelImage", b =>
                 {
-                    b.HasOne("TouristApp.DAL.Entities.HotelParameters", "HotelParameter")
+                    b.HasOne("TouristApp.DAL.Entities.Hotel", "Hotel")
+                        .WithMany("HotelImages")
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelParameter", b =>
+                {
+                    b.HasOne("TouristApp.DAL.Entities.Hotel", "Hotel")
+                        .WithMany("HotelParameters")
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameter", b =>
+                {
+                    b.HasOne("TouristApp.DAL.Entities.HotelParameter", "HotelParameter")
                         .WithMany("HotelSubParameters")
-                        .HasForeignKey("HotelParameterId");
+                        .HasForeignKey("HotelParameterId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Orders", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Order", b =>
                 {
-                    b.HasOne("TouristApp.DAL.Entities.Tours", "Tour")
+                    b.HasOne("TouristApp.DAL.Entities.Tour", "Tour")
                         .WithMany("Orders")
-                        .HasForeignKey("TourId");
+                        .HasForeignKey("TourId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TouristApp.DAL.Entities.DbUser", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.Parameter", b =>
-                {
-                    b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
-                        .WithMany("Parameters")
-                        .HasForeignKey("HotelId");
-
-                    b.HasOne("TouristApp.DAL.Entities.Parameter", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -679,22 +610,25 @@ namespace TouristApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Regions", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Region", b =>
                 {
-                    b.HasOne("TouristApp.DAL.Entities.Countries", "Country")
+                    b.HasOne("TouristApp.DAL.Entities.Country", "Country")
                         .WithMany("Regions")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TouristApp.DAL.Entities.Tours", b =>
+            modelBuilder.Entity("TouristApp.DAL.Entities.Tour", b =>
                 {
-                    b.HasOne("TouristApp.DAL.Entities.CityDepartures", "CityDeparture")
+                    b.HasOne("TouristApp.DAL.Entities.CityDeparture", "CityDeparture")
                         .WithMany("Tours")
-                        .HasForeignKey("CityDepartureId");
+                        .HasForeignKey("CityDepartureId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TouristApp.DAL.Entities.Hotels", "Hotel")
+                    b.HasOne("TouristApp.DAL.Entities.Hotel", "Hotel")
                         .WithMany("Tours")
-                        .HasForeignKey("HotelId");
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

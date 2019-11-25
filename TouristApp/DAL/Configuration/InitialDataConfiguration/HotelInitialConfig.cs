@@ -8,18 +8,18 @@ using TouristApp.DAL.Entities;
 
 namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
-    class HotelInitialConfig : IEntityTypeConfiguration<Hotels>
+    class HotelInitialConfig : IEntityTypeConfiguration<Hotel>
     {
-        public void Configure(EntityTypeBuilder<Hotels> builder)
+        public void Configure(EntityTypeBuilder<Hotel> builder)
         {
             int hotelId = 0;
-            Hotels[] hotels = new Hotels[]
+            Hotel[] hotels = new Hotel[]
             {
-                 new Hotels
+                 new Hotel
                  {
-                     Id=(++hotelId).ToString(),
+                     Id=(++hotelId),
                      Class=4,
-                     RegionId="1",
+                     RegionId=1,
                      Name="Royal Paradise Resort",
                      Description="Отель расположен в районе Хадаба курорта Шарм-Эль-Шейх на берегу Красного моря." +
                      " Был открыт в 1996 году. Реновации в отеле не было, только косметический поточный ремонт. " +
@@ -32,11 +32,11 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
                      Rate=5.0,
                      Price=550
                  },
-                 new Hotels
+                 new Hotel
                  {
-                     Id=(++hotelId).ToString(),
+                     Id=(++hotelId),
                      Class=3,
-                     RegionId="1",
+                     RegionId=1,
                      Name="Amar Sina",
                      Description="Отель находится в районе Рас Умм Элсид в Шарм-эль-Шейхе. В 8 км расположена набережная Наама-Бэй" +
                      " со множеством ресторанов и магазинов. Гостиница впервые распахнула свои двери гостям в 1999 году, последняя" +
@@ -46,11 +46,11 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
                      Rate=3.61,
                      Price=572
                  },
-                 new Hotels
+                 new Hotel
                  {
-                     Id=(++hotelId).ToString(),
+                     Id=(++hotelId),
                      Class=5,
-                     RegionId="1",
+                     RegionId=1,
                      Name="Il Mercato Hotel (ex.Iberotel Il Mercato)",
                      Description="Отель расположен в Хадабет Ом Эль Сид, в самом центре променада Эль Меркато, на курорте Шарм-эль-Шейх," +
                      " рядом с побережьем Красного моря. Отель был открыт в 2010 году, последняя реновация проводилась в 2018 году " +

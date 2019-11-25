@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TouristApp.DAL.Entities;
@@ -23,14 +21,14 @@ namespace TouristApp.Controllers
 
         // GET: api/Region
         [HttpGet]
-        public IEnumerable<Regions> GetRegions()
+        public IEnumerable<Region> GetRegions()
         {
             return _context.Regions;
         }
 
         // GET: api/Region/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<RegionViewModel>>> Get([FromRoute] string id)
+        public async Task<ActionResult<IEnumerable<RegionViewModel>>> Get([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +37,7 @@ namespace TouristApp.Controllers
 
             var regions = await _context
                .Regions
-               .Where(f => f.CountryId == id.ToString())
+               .Where(f => f.CountryId == id)
                .OrderBy(c => c.Name)
                .Select(u => new RegionViewModel
                {
@@ -76,19 +74,19 @@ namespace TouristApp.Controllers
 
         // PUT: api/Region/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegions([FromRoute] string id, [FromBody] Regions regions)
+        public async Task<IActionResult> PutRegions([FromRoute] long id, [FromBody] Region region)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != regions.Id)
+            if (id != region.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(regions).State = EntityState.Modified;
+            _context.Entry(region).State = EntityState.Modified;
 
             try
             {
@@ -96,7 +94,7 @@ namespace TouristApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RegionsExists(id))
+                if (!RegionExists(id))
                 {
                     return NotFound();
                 }
@@ -120,7 +118,7 @@ namespace TouristApp.Controllers
             }
 
 
-            _context.Regions.Add(new Regions
+            _context.Regions.Add(new Region
             {
                 Name = model.Name,
                 CountryId = model.Id
@@ -140,19 +138,19 @@ namespace TouristApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var regions = await _context.Regions.FindAsync(id);
-            if (regions == null)
+            var region = await _context.Regions.FindAsync(id);
+            if (region == null)
             {
                 return NotFound();
             }
 
-            _context.Regions.Remove(regions);
+            _context.Regions.Remove(region);
             await _context.SaveChangesAsync();
 
-            return Ok(regions);
+            return Ok(region);
         }
 
-        private bool RegionsExists(string id)
+        private bool RegionExists(long id)
         {
             return _context.Regions.Any(e => e.Id == id);
         }

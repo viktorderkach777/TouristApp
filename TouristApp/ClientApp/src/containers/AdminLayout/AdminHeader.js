@@ -6,18 +6,22 @@ import PropTypes from 'prop-types';
 import { AppAsideToggler, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/brand/logo.png'
 import sygnet from '../../assets/img/brand/logo.png'
+const CentralPageSpinner = React.lazy(() => import('../../components/CentrPageSpinner'));
 
 const propTypes = {
   children: PropTypes.node,
+  loading: PropTypes.bool.isRequired
 };
 
-const defaultProps = {};
+const defaultProps = {
+  loading:false
+};
 
 class AdminHeader extends Component {
   render() {
 
     // eslint-disable-next-line
-    const { children, ...attributes } = this.props;
+    const { loading, children, ...attributes } = this.props;
 
     return (
       <React.Fragment>
@@ -78,6 +82,7 @@ class AdminHeader extends Component {
         </Nav>
         <AppAsideToggler className="d-md-down-none" />
         <AppAsideToggler className="d-lg-none" mobile />
+        <CentralPageSpinner loading={loading} />
       </React.Fragment>
     );
   }

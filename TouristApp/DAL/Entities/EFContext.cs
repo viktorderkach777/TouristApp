@@ -1,17 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using TouristApp.DAL.Configuration.InitialDataConfiguration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace TouristApp.DAL.Entities
 {
-    public class EFContext : IdentityDbContext<DbUser, DbRole, string, IdentityUserClaim<string>,
-DbUserRole, IdentityUserLogin<string>,
-IdentityRoleClaim<string>, IdentityUserToken<string>>
+    public class EFContext : IdentityDbContext<DbUser, DbRole, long, IdentityUserClaim<long>,
+    DbUserRole, IdentityUserLogin<long>,
+    IdentityRoleClaim<long>, IdentityUserToken<long>>
     {
         public EFContext(DbContextOptions<EFContext> options)
             : base(options)
@@ -19,23 +15,20 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
 
         }
 
-
         // <summary>
         /// Main job classes
         /// </summary>
-        public virtual DbSet<Comments> Comments { get; set; }
-        public virtual DbSet<Countries> Countries { get; set; }
-        public virtual DbSet<HotelImages> HotelImages { get; set; }
-        public virtual DbSet<HotelParameters> HotelParameters { get; set; }
-        public virtual DbSet<HotelSubParameters> HotelSubParameters { get; set; }
-        public virtual DbSet<Hotels> Hotels { get; set; }
-        public virtual DbSet<Orders> Orders { get; set; }
-        public virtual DbSet<Regions> Regions { get; set; }
-        public virtual DbSet<Tours> Tours { get; set; }
-        public DbSet<Parameter> Parameters { get; set; }
-        public virtual DbSet<CityDepartures> CityDepartures { get; set; }
-        //public virtual DbSet<СityDeparture> СityDeparture { get; set; }
-
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<HotelImage> HotelImages { get; set; }
+        public virtual DbSet<HotelParameter> HotelParameters { get; set; }
+        public virtual DbSet<HotelSubParameter> HotelSubParameters { get; set; }
+        public virtual DbSet<Hotel> Hotels { get; set; }
+        public virtual DbSet< Order> Orders { get; set; }
+        public virtual DbSet<Region> Regions { get; set; }
+        public virtual DbSet<Tour> Tours { get; set; }
+        //public DbSet<Parameter> Parameters { get; set; }
+        public virtual DbSet<CityDeparture> CityDepartures { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
         // <summary>
@@ -49,19 +42,11 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
-            builder.ApplyConfiguration(new CountryInitialConfig());
-            builder.ApplyConfiguration(new RegionInitialConfig());
-            builder.ApplyConfiguration(new HotelInitialConfig());
-            builder.ApplyConfiguration(new TourInitialConfig());
-            builder.ApplyConfiguration(new СityDepartureConfig());
-
-            // builder.Entity<Parameter>()
-            //.HasOptional(x => x.ParentParameter)
-            //.WithMany(x => x.ChildParameters)
-            //.HasForeignKey(x => x.HotelParameterId);
-
-
+            //builder.ApplyConfiguration(new CountryInitialConfig());
+            //builder.ApplyConfiguration(new RegionInitialConfig());
+            //builder.ApplyConfiguration(new HotelInitialConfig());
+            //builder.ApplyConfiguration(new TourInitialConfig());
+            //builder.ApplyConfiguration(new СityDepartureConfig());
 
 
             base.OnModelCreating(builder);
@@ -117,11 +102,10 @@ IdentityRoleClaim<string>, IdentityUserToken<string>>
             });
 
 
-            builder.Entity<Parameter>()
-            .HasOne(ur => ur.Parent)
-            .WithMany(r => r.Children)
-            .HasForeignKey(ur => ur.ParentId);
-            
+            //builder.Entity<Parameter>()
+            //.HasOne(ur => ur.Parent)
+            //.WithMany(r => r.Children)
+            //.HasForeignKey(ur => ur.ParentId);            
         }
     }
 }

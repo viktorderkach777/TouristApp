@@ -8,175 +8,175 @@ using TouristApp.DAL.Entities;
 
 namespace TouristApp.DAL.Configuration.InitialDataConfiguration
 {
-    public class CountryInitialConfig : IEntityTypeConfiguration<Countries>
+    public class CountryInitialConfig : IEntityTypeConfiguration<Country>
     {
-        public void Configure(EntityTypeBuilder<Countries> builder)
+        public void Configure(EntityTypeBuilder<Country> builder)
         {
             int countryId = 0;
-            Countries[] countries = new Countries[]
+            Country[] Country = new Country[]
             {
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Poland",
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Russia"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(), //3
+                    Id=(++countryId), //3
                     Name="Germany"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Ukraine"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="USA"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//6
+                    Id=(++countryId),//6
                     Name="UK"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Australia"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Belgium"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Bosnia and Herzegovina"//9
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Canada"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Chile"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//12
+                    Id=(++countryId),//12
                     Name="China"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Croatia"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Czech Republic"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//15
+                    Id=(++countryId),//15
                     Name="Denmark"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//16
+                    Id=(++countryId),//16
                     Name="Egypt"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Estonia"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//18
+                    Id=(++countryId),//18
                     Name="Finland"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="France"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Greece"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//21
+                    Id=(++countryId),//21
                     Name="Iceland"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Ireland"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Israel"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//24
+                    Id=(++countryId),//24
                     Name="Italy"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Japan"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Kazakhstan"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//27
+                    Id=(++countryId),//27
                     Name="Latvia"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Moldova"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Netherlands"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),//30
+                    Id=(++countryId),//30
                     Name="Slovakia"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Slovenia"
                 },
-                new Countries
+                new Country
                 {
-                    Id=(++countryId).ToString(),
+                    Id=(++countryId),
                     Name="Spain"
                 }
             };
-            builder.HasData(countries);
+            builder.HasData(Country);
         }
     }
 }

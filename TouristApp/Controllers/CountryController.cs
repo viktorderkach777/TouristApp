@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TouristApp.DAL.Entities;
 using TouristApp.ViewModels;
+
 
 namespace TouristApp.Controllers
 {
@@ -23,13 +22,13 @@ namespace TouristApp.Controllers
 
         // GET: api/Countries
         [HttpGet]
-        public IEnumerable<Countries> GetCountries()
+        public IEnumerable<Country> GetCountries()
         {
             return _context.Countries;
         }
 
         [HttpGet("countries")]
-        public async Task<ActionResult<IEnumerable<CountriesViewModel>>> Get()
+        public async Task<ActionResult<IEnumerable<CountryViewModel>>> Get()
         {
 
             var model = await _context
@@ -55,21 +54,19 @@ namespace TouristApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var countries = await _context.Countries.FindAsync(id);
+            var country = await _context.Countries.FindAsync(id);
 
-            if (countries == null)
+            if (country == null)
             {
                 return NotFound();
             }
 
-            return Ok(countries);
+            return Ok(country);
         }
-
-
 
         // PUT: api/Countries/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountries([FromRoute] string id, [FromBody] CountriesEditViewModel model)
+        public async Task<IActionResult> PutCountries([FromRoute] long id, [FromBody] CountryEditViewModel model)
         {
 
 
@@ -78,14 +75,12 @@ namespace TouristApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            Countries country = new Countries
+            Country country = new Country
             {
                 Id = id,
                 Name = model.Name
 
-            };
-
-            
+            };            
 
             _context.Entry(country).State = EntityState.Modified;
 
@@ -95,7 +90,7 @@ namespace TouristApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CountriesExists(id))
+                if (!CountryExists(id))
                 {
                     return NotFound();
                 }
@@ -115,14 +110,14 @@ namespace TouristApp.Controllers
 
         // POST: api/Countries
         [HttpPost("create")]
-        public async Task<IActionResult> Post([FromBody] CountriesAddViewModel model)
+        public async Task<IActionResult> Post([FromBody] CountryAddViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var country = new Countries  
+            var country = new Country  
             {
                 Name = model.Name
             };
@@ -137,7 +132,7 @@ namespace TouristApp.Controllers
 
         // DELETE: api/Country/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCountries([FromRoute] string id)
+        public async Task<IActionResult> DeleteCountries([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
@@ -151,8 +146,8 @@ namespace TouristApp.Controllers
             }
 
             
-            var regionsToDelete = _context.Regions.Where(c => c.CountryId == id);
-            _context.Regions.RemoveRange(regionsToDelete); 
+            var regionToDelete = _context.Regions.Where(c => c.CountryId == id);
+            _context.Regions.RemoveRange(regionToDelete); 
 
             _context.Countries.Remove(country);
             await _context.SaveChangesAsync();
@@ -160,7 +155,7 @@ namespace TouristApp.Controllers
             return Ok(country);
         }
 
-        private bool CountriesExists(string id)
+        private bool CountryExists(long id)
         {
             return _context.Countries.Any(e => e.Id == id);
         }

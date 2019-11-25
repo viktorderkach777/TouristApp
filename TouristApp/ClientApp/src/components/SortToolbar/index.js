@@ -48,8 +48,6 @@ class SortToolbar extends Component {
         const { findOrder } = this.state;
         //  console.log('--findOrder ', findOrder);
         this.setState({ findOrder: '' }, () => onSearchChanged(findOrder));
-
-
     }
 
     callBackCloseDialog = () => {
@@ -63,7 +61,6 @@ class SortToolbar extends Component {
     toggle_colapse = () => {
         this.setState({ collapse: !this.state.collapse });
     }
-
 
     render() {
         //  console.log('--Sorting state----', this.state);
@@ -110,4 +107,3 @@ class SortToolbar extends Component {
 }
 
 export default SortToolbar;
-

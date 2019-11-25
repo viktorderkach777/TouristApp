@@ -56,7 +56,7 @@ export const filters = createSlice({
         getFiltersSuccess: (state, action) => {
             let newState = state;
             const data = action.payload.data;
-            console.log("get list filter from server", data);
+            //console.log("get list filter from server", data);
             newState = update.set(state, 'list.loading', false);
             newState = update.set(newState, 'list.success', true);
             newState = update.set(newState, 'list.filters', data);
@@ -78,11 +78,11 @@ export const getListFilters = () => {
 
         TourService.getListFilters()
             .then((response) => {
-                console.log('--success list filter--', response.data);
+                //console.log('--success list filter--', response.data);
                 dispatch(filters.actions.getFiltersSuccess(response));
             })
             .catch(() => {
-                console.log('--failed--');
+                //console.log('--failed--');
                 dispatch(filters.actions.getFiltersFailed());
             });
     }

@@ -5,8 +5,8 @@ namespace TouristApp.Domain.Interfaces
     public interface IUserService
     {
         //void AddUserProfile(string id, CustomRegisterModel model);
-        UserProfileModel GetUserProfile(string id);
-        string GetImageUser(string id);
+        UserProfileModel GetUserProfile(long id);
+        string GetImageUser(long id);
         string GetPathImage(string imageName);
     }
 }

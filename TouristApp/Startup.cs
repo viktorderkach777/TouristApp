@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -36,14 +35,14 @@ namespace TouristApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<EFContext>(opt =>
-            //    opt.UseSqlServer(Configuration
-            //        .GetConnectionString("DefaultConnection")));
+            services.AddDbContext<EFContext>(opt =>
+                opt.UseSqlServer(Configuration
+                    .GetConnectionString("DefaultConnection")));
 
             services.AddSignalR();
 
-            services.AddDbContext<EFContext>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<EFContext>(options =>
+            //options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFileService, FileService>();
@@ -76,7 +75,6 @@ namespace TouristApp
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ClockSkew = TimeSpan.Zero //вирубаємо похибку
-
                 };
             });
 
@@ -155,7 +153,6 @@ namespace TouristApp
             {
                 Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), @"Uploaded"));
             }
-
 
             app.UseStaticFiles(new StaticFileOptions
             {

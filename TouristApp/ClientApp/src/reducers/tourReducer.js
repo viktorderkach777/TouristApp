@@ -85,7 +85,7 @@ export const tours = createSlice({
     setTypeSort: (state, action) => {
       let newState = state;
       const typeSort = action.payload;
-      console.log('--typeSort--', typeSort);
+      //console.log('--typeSort--', typeSort);
       newState = update.set(state, 'list.sortOrder', typeSort);
       newState = update.set(newState, 'list.currentPage', 1);
       return newState;
@@ -94,7 +94,7 @@ export const tours = createSlice({
     setSearchText: (state, action) => {
       let newState = state;
       const SearchText = action.payload;
-      console.log('--SearchText--', SearchText);
+      //console.log('--SearchText--', SearchText);
       newState = update.set(state, 'list.searchText', SearchText);
       newState = update.set(newState, 'list.currentPage', 1);
       return newState;
@@ -103,7 +103,7 @@ export const tours = createSlice({
     setCurrentPage: (state, action) => {
       let newState = state;
       const CurrentPage = action.payload;
-      console.log('--CurrentPage--', CurrentPage);
+      //console.log('--CurrentPage--', CurrentPage);
       newState = update.set(state, 'list.currentPage', CurrentPage);
       return newState;
     },
@@ -131,7 +131,7 @@ export const postListTours = (model) => {
         dispatch(tours.actions.postToursSuccess(response));
       })
       .catch(() => {
-        console.log('--failed--');
+        //console.log('--failed--');
         dispatch(tours.actions.postToursFailed());
       });
   }
@@ -143,12 +143,12 @@ export const deleteTour = (tourId) => {
 
     TourService.deleteTour(tourId)
       .then((response) => {
-        console.log('--success delete--', response.data);
+        //console.log('--success delete--', response.data);
         var tourId = response.data;
         dispatch(tours.actions.deleteTourSuccess(tourId));
       })
       .catch(() => {
-        console.log('--failed--');
+        //console.log('--failed--');
         dispatch(tours.actions.deleteTourFailed());
       });
   }

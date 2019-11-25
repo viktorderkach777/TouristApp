@@ -20,10 +20,10 @@ const initialState = {
     },
     isAuthenticated: false,
     user: {
-      id: '',
-      name: '',
-      //image:'',
-      roles: []
+        id: '',
+        name: '',
+        //image:'',
+        roles: []
     }
 }
 
@@ -32,7 +32,7 @@ export const loginReducer = (state = initialState, action) => {
 
     switch (action.type) {
 
-        case LOGIN_POST_STARTED: { 
+        case LOGIN_POST_STARTED: {
             newState = update.set(state, 'post.loading', true);
             newState = update.set(newState, 'post.success', false);
             newState = update.set(newState, 'post.errors', {});
@@ -68,17 +68,28 @@ export const loginReducer = (state = initialState, action) => {
     return newState;
 }
 
+const loginPush = (token, dispatch) => {
+    var user = jwt.decode(token);
+    //console.log('login token', token); 
+    if (user.roles.includes('Admin')) {
+        dispatch(push('/admin/tours'));
+    }
+    else if (user.roles.includes('User')) {
+        dispatch(push('/tours'));
+    }
+}
+
 export const loginPost = (model) => {
     return (dispatch) => {
         dispatch(loginActions.started());
         LoginService.login(model)
-            .then((response) => {    
+            .then((response) => {
                 dispatch(loginActions.success());
-                loginByJWT(response.data, dispatch);   
-                //console.log('register');             
-                
-            }, err=> { throw err; })
-            .catch(err=> {
+                loginByJWT(response.data, dispatch);                
+                loginPush(response.data.token, dispatch);
+
+            }, err => { throw err; })
+            .catch(err => {
                 dispatch(loginActions.failed(err.response));
             });
     }
@@ -88,13 +99,14 @@ export const googleLoginPost = (model) => {
     return (dispatch) => {
         dispatch(loginActions.started());
         LoginService.google_enter(model)
-            .then((response) => {    
+            .then((response) => {
                 dispatch(loginActions.success());
-                loginByJWT(response.data, dispatch);   
-                console.log('googleLoginPost');             
-                
-            }, err=> { throw err; })
-            .catch(err=> {
+                loginByJWT(response.data, dispatch);
+                loginPush(response.data.token, dispatch);
+                console.log('googleLoginPost');
+
+            }, err => { throw err; })
+            .catch(err => {
                 dispatch(loginActions.failed(err.response));
             });
     }
@@ -104,13 +116,14 @@ export const facebookLoginPost = (model) => {
     return (dispatch) => {
         dispatch(loginActions.started());
         LoginService.facebook_enter(model)
-            .then((response) => {    
+            .then((response) => {
                 dispatch(loginActions.success());
-                loginByJWT(response.data, dispatch);   
-                console.log('facebookLoginPost');             
-                
-            }, err=> { throw err; })
-            .catch(err=> {
+                loginByJWT(response.data, dispatch);
+                loginPush(response.data.token, dispatch);
+                console.log('facebookLoginPost');
+
+            }, err => { throw err; })
+            .catch(err => {
                 dispatch(loginActions.failed(err.response));
             });
     }
@@ -151,23 +164,23 @@ export function logout() {
 }
 
 export const loginByJWT = (tokens, dispatch) => {
-    const {token, refToken}=tokens;
+    const { token, refToken } = tokens;
     var user = jwt.decode(token);
     if (!Array.isArray(user.roles)) {
         user.roles = Array.of(user.roles);
-    }    
-    
+    }
+
     localStorage.setItem('jwtToken', token);
     localStorage.setItem('refreshToken', refToken);
     setAuthorizationToken(token);
     dispatch(loginActions.setCurrentUser(user));
-   
-    if(user.roles.includes('Admin')){
-        dispatch(push('/admin/tours'));
-    }
-    else if(user.roles.includes('User')){
-        dispatch(push('/tours'));
-    }
+
+    // if(user.roles.includes('Admin')){
+    //     dispatch(push('/admin/tours'));
+    // }
+    // else if(user.roles.includes('User')){
+    //     dispatch(push('/tours'));
+    // }
 }
 
 export const logoutByJWT = (dispatch) => {

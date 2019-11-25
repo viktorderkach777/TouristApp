@@ -103,7 +103,7 @@ class PaginationBar extends Component {
     const { currentPage } = this.props;
    // console.log('---Pagination props---', this.props);
     const pages = this.getPager();
-    console.log('pages', pages);
+    //console.log('pages', pages);
 
     const pageList = (
       (pages.length>0)?

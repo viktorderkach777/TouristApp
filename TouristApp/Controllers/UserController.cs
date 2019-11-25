@@ -15,10 +15,10 @@ namespace TouristApp.Controllers
     [Produces("application/json")]
     [Route("api/User")]
     [ApiController]
-    
+
     public class UserController : ControllerBase
     {
-        readonly UserManager<DbUser> _userManager;        
+        readonly UserManager<DbUser> _userManager;
         readonly IUserService _userService;
         readonly IFileService _fileService;
         readonly EFContext _context;
@@ -35,8 +35,8 @@ namespace TouristApp.Controllers
         }
 
         //GET: api/User
-       [HttpGet("list")]
-        public  IEnumerable<ApplicationUserListViewModel> Get()
+        [HttpGet("list")]
+        public IEnumerable<ApplicationUserListViewModel> Get()
         {
             var model = _context
                 .Users
@@ -50,7 +50,7 @@ namespace TouristApp.Controllers
                         Id = r.Role.Id,
                         Name = r.Role.Name
                     }),
-                    FullName = u.FirstName + ' '  + u.LastName,
+                    FullName = u.FirstName + ' ' + u.LastName,
                     UserImage = _userService.GetPathImage(u.AvatarUrl)
                 })
                 .ToList();
@@ -58,7 +58,7 @@ namespace TouristApp.Controllers
             return model;
         }
 
-      
+
         // GET: api/User/5
         [HttpGet("{id}", Name = "Get")]
         public string Get(int id)
@@ -79,7 +79,7 @@ namespace TouristApp.Controllers
         }
 
         // DELETE: api/ApiWithActions/5
-       // [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute]string id)
         {
@@ -127,14 +127,14 @@ namespace TouristApp.Controllers
                         {
                             transaction.Commit();
                             _fileService.DeleteImage(path);
-                        }                       
+                        }
                     }
                 }
 
-                return Ok(user.Id); 
+                return Ok(user.Id);
             }
 
-        return Ok();            
+            return Ok();
         }
 
 
@@ -142,7 +142,7 @@ namespace TouristApp.Controllers
         [Authorize]
         public async Task<IActionResult> Get([FromBody]UserProfileGetModel model)
         {
-            var user = await _userManager.FindByIdAsync(model.Id);
+            var user = await _userManager.FindByIdAsync(model.Id.ToString());
             if (user == null)
             {
                 return BadRequest(new { invalid = "User with this email was not found" });

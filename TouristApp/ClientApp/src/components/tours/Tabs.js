@@ -32,7 +32,6 @@ const ParamItemList = (props) => {
 
 
 class Tabs extends Component {
-
     constructor(props) {
         super(props);
 
@@ -66,8 +65,10 @@ class Tabs extends Component {
     }
 
     tabPane() {
-        const { tour, param } = this.props;
-
+        const { tour } = this.props;        
+        // console.log('---Tabs props----', this.props );
+        // console.log('---Tabs state----', this.state );
+         
         return (
             <>
                 {/* опис готелю */}
@@ -75,10 +76,12 @@ class Tabs extends Component {
                     <h3>{tour.name} *</h3>
                     {tour.description}
 
-                    {param.length == 0 ? ('') :
+                {/*
+               {param.length == 0 ? ('') :
                         (param.map(item =>
                             <ParamItemList {...item} key={item.priority} />
                         ))}
+                */}
 
                 </TabPane>
                 {/* відгуки */}
@@ -145,7 +148,5 @@ class Tabs extends Component {
         );
     }
 }
-
-
 
 export default Tabs;

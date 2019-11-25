@@ -11,8 +11,8 @@ using TouristApp.Helpers;
 using TouristApp.ViewModels.AccountViewModels;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
 using System.Collections.Generic;
+
 
 namespace TouristApp.Controllers
 {
@@ -23,35 +23,36 @@ namespace TouristApp.Controllers
     {
         readonly UserManager<DbUser> _userManager;
         readonly RoleManager<DbRole> _roleManager;
-        readonly SignInManager<DbUser> _signInManager;       
+        readonly SignInManager<DbUser> _signInManager;
         readonly IEmailSender _emailSender;
         readonly IFileService _fileService;
-        readonly IJWTTokenService _jWTTokenService;       
+        readonly IJWTTokenService _jWTTokenService;
         private readonly EFContext _context;
 
         public AccountController(UserManager<DbUser> userManager,
             RoleManager<DbRole> roleManager,
             SignInManager<DbUser> signInManager,
-            IFileService fileService,           
+            IFileService fileService,
             IEmailSender emailSender,
-            IJWTTokenService jWTTokenService,           
+            IJWTTokenService jWTTokenService,
             EFContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _fileService = fileService;         
+            _fileService = fileService;
             _emailSender = emailSender;
             _roleManager = roleManager;
-            _jWTTokenService = jWTTokenService;            
+            _jWTTokenService = jWTTokenService;
             _context = context;
         }
 
+
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody]Domain.Models.AccountModels.Credentials credentials)
+        public async Task<IActionResult> Login([FromBody] Credentials credentials)
         {
             if (!ModelState.IsValid)
-            {                
-                return BadRequest(new { invalid="Problem validation" });
+            {
+                return BadRequest(new { invalid = "Problem validation" });
             }
 
             var result = await _signInManager
@@ -65,34 +66,36 @@ namespace TouristApp.Controllers
 
             var user = await _userManager.FindByEmailAsync(credentials.Email);
             await _signInManager.SignInAsync(user, isPersistent: false);
-            
+
             return Ok(
             new
             {
                 token = _jWTTokenService.CreateToken(user),
                 refToken = _jWTTokenService.CreateRefreshToken(user)
-            });            
+            });
         }
+
 
         [HttpPost("refresh/{refreshToken}")]
         public IActionResult RefreshToken([FromRoute]string refreshToken)
         {
             var _refreshToken = _context.RefreshTokens
-                .Include(u=>u.User)
+                .Include(u => u.User)
                 .SingleOrDefault(m => m.Token == refreshToken);
 
             if (_refreshToken == null)
             {
                 return NotFound("Refresh token not found");
-            }           
+            }
 
             _refreshToken.Token = Guid.NewGuid().ToString();
             _context.RefreshTokens.Update(_refreshToken);
             _context.SaveChanges();
             //Thread.Sleep(2000);
             return Ok(
-            new {
-                token = _jWTTokenService.CreateToken( _refreshToken.User),
+            new
+            {
+                token = _jWTTokenService.CreateToken(_refreshToken.User),
                 refToken = _refreshToken.Token
             });
         }
@@ -146,16 +149,12 @@ namespace TouristApp.Controllers
             }).Result;
 
             result = _userManager.AddToRoleAsync(user, roleName).Result;
-            
+
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok(
-            new
-            {
-                token = _jWTTokenService.CreateToken(user),
-                refToken = _jWTTokenService.CreateRefreshToken(user)
-            });
+            return Ok();
         }
+
 
         [HttpPost("ChangePassword")]
         [Authorize]
@@ -167,7 +166,7 @@ namespace TouristApp.Controllers
                 return BadRequest(errrors);
             }
 
-            var user = await _userManager.FindByIdAsync(model.Id);
+            var user = await _userManager.FindByIdAsync(model.Id.ToString());
 
             if (user == null)
                 return BadRequest(new { invalid = "User is not found" });
@@ -183,6 +182,7 @@ namespace TouristApp.Controllers
 
             return Ok();
         }
+
 
         [HttpPost("ForgotPassword")]
         [AllowAnonymous]
@@ -215,6 +215,7 @@ namespace TouristApp.Controllers
             return Ok(new { answer = "Check your email" });
         }
 
+
         [HttpPost("ResetPassword")]
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel model)
@@ -225,7 +226,7 @@ namespace TouristApp.Controllers
                 return BadRequest(errrors);
             }
 
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await _userManager.FindByIdAsync(model.UserId.ToString());
 
             if (user == null)
             {

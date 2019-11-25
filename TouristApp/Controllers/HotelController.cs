@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using TouristApp.DAL.Entities;
-using TouristApp.Domain.Interfaces;
 using TouristApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,8 +10,8 @@ using Microsoft.Extensions.Configuration;
 using TouristApp.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
-using System.Drawing;
 using System.Drawing.Imaging;
+
 
 namespace TouristApp.Controllers
 {
@@ -23,44 +19,24 @@ namespace TouristApp.Controllers
     [Route("api/Hotel")]
     //[RequireHttps]
     public class HotelController : ControllerBase
-    {
-        readonly UserManager<DbUser> _userManager;
-        readonly RoleManager<DbRole> _roleManager;
-        readonly SignInManager<DbUser> _signInManager;
-        readonly IUserService _userService;
-        readonly IEmailSender _emailSender;
-        readonly IFileService _fileService;
+    {       
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _env;
         readonly EFContext _context;
 
-        public HotelController(UserManager<DbUser> userManager,
-            RoleManager<DbRole> roleManager,
-            SignInManager<DbUser> signInManager,
-            IFileService fileService,
-            IUserService userService,
-            IEmailSender emailSender,
+        public HotelController(
             IHostingEnvironment env,
             IConfiguration configuration,
-
             EFContext context)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _fileService = fileService;
-            _context = context;
-            _userService = userService;
-            _emailSender = emailSender;
-            _roleManager = roleManager;
+        {           
+            _context = context;           
             _configuration = configuration;
             _env = env;
-        }
-
-        
+        }        
 
         // GET: api/hotel/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<HotelSelectListViewModel>>> Get([FromRoute] string id)
+        public async Task<ActionResult<IEnumerable<HotelSelectListViewModel>>> Get([FromRoute] long id)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +45,7 @@ namespace TouristApp.Controllers
 
             var hotels = await _context
                .Hotels
-               .Where(f => f.RegionId == id.ToString())
+               .Where(f => f.RegionId == id)
                .OrderBy(c => c.Name)
                .Select(u => new HotelSelectListViewModel
                {
@@ -87,8 +63,6 @@ namespace TouristApp.Controllers
         }
 
 
-
-
         // POST: api/hotel/create
         [HttpPost("create")]
         public async Task<IActionResult> Post([FromBody] HotelAddViewModel model)
@@ -97,7 +71,7 @@ namespace TouristApp.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _context.Hotels.Add(new Hotels
+            _context.Hotels.Add(new Hotel
             {
                 Name = model.Name,
                 Description = model.Description,
@@ -106,7 +80,6 @@ namespace TouristApp.Controllers
                 RoomsCount = model.RoomsCount,
                 RegionId = model.RegionId
             });
-
 
             await _context.SaveChangesAsync();
 
@@ -131,9 +104,7 @@ namespace TouristApp.Controllers
                 }).ToList();
 
             return model;
-        }
-
-        
+        }        
 
 
         // POST: api/hotel/photo
@@ -148,7 +119,7 @@ namespace TouristApp.Controllers
             var sizes = _configuration.GetValue<string>("ImagesSizes").Split(' ');
 
             string imageName = Guid.NewGuid().ToString() + ".jpg";
-            string base64 = model.imageBase64;
+            string base64 = model.ImageBase64;
             if (base64.Contains(","))
             {
                 base64 = base64.Split(',')[1];
@@ -172,7 +143,7 @@ namespace TouristApp.Controllers
                                    
             //string path = _fileService.UploadImage(model.imageBase64);
 
-            _context.HotelImages.Add(new HotelImages
+            _context.HotelImages.Add(new HotelImage
             {
                 HotelId = model.HotelId,
                 HotelImageUrl = imageName
@@ -182,10 +153,5 @@ namespace TouristApp.Controllers
 
             return Ok(model);
         }
-
-
-
-
     }
-
 }
