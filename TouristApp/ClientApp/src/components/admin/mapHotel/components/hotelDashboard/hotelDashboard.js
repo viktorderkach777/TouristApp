@@ -128,7 +128,7 @@ class HotelDashboard extends Component {
         mapService.getMarkersLayer()
             .then((hotels) => {
                 dispatch(markersLayerLoading(hotels))
-                console.log("hotels", hotels);
+                //console.log("hotels", hotels);
                 //this.locations(hotels);
                 this.setState({
                     features: hotels.features,
@@ -282,8 +282,8 @@ class HotelDashboard extends Component {
                 rate
             })
         }
-        console.log(`element:`, element);
-        console.log(`Option selected:`, selectedOption);
+        //console.log(`element:`, element);
+        //console.log(`Option selected:`, selectedOption);
     };
 
     setStars(stars) {

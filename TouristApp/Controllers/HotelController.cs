@@ -19,7 +19,7 @@ namespace TouristApp.Controllers
     [Route("api/Hotel")]
     //[RequireHttps]
     public class HotelController : ControllerBase
-    {       
+    {
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _env;
         readonly EFContext _context;
@@ -28,11 +28,11 @@ namespace TouristApp.Controllers
             IHostingEnvironment env,
             IConfiguration configuration,
             EFContext context)
-        {           
-            _context = context;           
+        {
+            _context = context;
             _configuration = configuration;
             _env = env;
-        }        
+        }
 
         // GET: api/hotel/5
         [HttpGet("{id}")]
@@ -75,7 +75,7 @@ namespace TouristApp.Controllers
             {
                 Name = model.Name,
                 Description = model.Description,
-                Class =model.Class,
+                Class = model.Class,
                 Price = model.Price,
                 RoomsCount = model.RoomsCount,
                 RegionId = model.RegionId
@@ -104,7 +104,7 @@ namespace TouristApp.Controllers
                 }).ToList();
 
             return model;
-        }        
+        }
 
 
         // POST: api/hotel/photo
@@ -118,16 +118,22 @@ namespace TouristApp.Controllers
 
             var sizes = _configuration.GetValue<string>("ImagesSizes").Split(' ');
 
-            string imageName = Guid.NewGuid().ToString() + ".jpg";
+            string imageName = Guid.NewGuid().ToString().Substring(0, 8) + ".jpg";
             string base64 = model.ImageBase64;
             if (base64.Contains(","))
             {
                 base64 = base64.Split(',')[1];
             }
 
-            var bmp = base64.FromBase64StringToBitMap();
-            string fileDestDir = _env.ContentRootPath;
-            fileDestDir = Path.Combine(fileDestDir, _configuration.GetValue<string>("ImagesPath"));
+            var bmp = base64.FromBase64StringToBitMap();           
+            var hotel = _context.Hotels.FirstOrDefault(f => f.Id == model.HotelId);
+
+            if (hotel == null)
+            {
+                return BadRequest(new { invalid = "Hotel does not exist" });
+            }
+
+            string fileDestDir = Path.Combine(_env.ContentRootPath, _configuration.GetValue<string>("ImagesPath"), hotel.NormalizedName);
 
             foreach (var element in sizes)
             {
@@ -138,9 +144,8 @@ namespace TouristApp.Controllers
                     var image = ImageHelper.CompressImage(bmp, size, size);
                     image.Save(fileSave, ImageFormat.Jpeg);
                 }
-
             }
-                                   
+
             //string path = _fileService.UploadImage(model.imageBase64);
 
             _context.HotelImages.Add(new HotelImage

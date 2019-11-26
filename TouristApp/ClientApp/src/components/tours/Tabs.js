@@ -4,30 +4,30 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap
 import classnames from 'classnames';
 
 
-const SoapIcon = ['', 'soap-icon-locations', 'soap-icon-beach', 'soap-icon-hotel', 'soap-icon-check', 'soap-icon-party', 'soap-icon-wifi']
+//const SoapIcon = ['', 'soap-icon-locations', 'soap-icon-beach', 'soap-icon-hotel', 'soap-icon-check', 'soap-icon-party', 'soap-icon-wifi']
 
-const ParamItemList = (props) => {
-    console.log('ParamItemList', props)
-    let child = props.children;
-    console.log('child', child)
-    return (
-        props != null ?
-            <Row>
-                <Col xs="12" >
-                    <div className='icon-box style6'><i className={props.priority < 7 ? SoapIcon[props.priority] : SoapIcon[6]}></i>
-                        <div className="description text-left">
-                            <h4 className="box-title">{props.name}</h4>
-                            <p>{props.description}</p>
-                        </div>
-                    </div>
-                    <ul className="check facilities text-left">
-                        {(props.children == 'undefined' || props.children.length == 0) ? ('') :
-                            props.children.map((itemChild, index) => <li key={index}> {itemChild.name}</li>)}
-                    </ul>
-                </Col>
-            </Row> : ''
-    )
-}
+// const ParamItemList = (props) => {
+//     console.log('ParamItemList', props)
+//     let child = props.children;
+//     console.log('child', child)
+//     return (
+//         props != null ?
+//             <Row>
+//                 <Col xs="12" >
+//                     <div className='icon-box style6'><i className={props.priority < 7 ? SoapIcon[props.priority] : SoapIcon[6]}></i>
+//                         <div className="description text-left">
+//                             <h4 className="box-title">{props.name}</h4>
+//                             <p>{props.description}</p>
+//                         </div>
+//                     </div>
+//                     <ul className="check facilities text-left">
+//                         {(props.children == 'undefined' || props.children.length == 0) ? ('') :
+//                             props.children.map((itemChild, index) => <li key={index}> {itemChild.name}</li>)}
+//                     </ul>
+//                 </Col>
+//             </Row> : ''
+//     )
+// }
 
 
 
