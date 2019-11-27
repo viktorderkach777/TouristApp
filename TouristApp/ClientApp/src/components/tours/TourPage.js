@@ -77,8 +77,8 @@ class Hotel extends Component {
     }
 
     render() {
-        // console.log('-----Single Tour state------ ', this.state);
-        // console.log('-----Single Tour props------ ', this.props);
+         console.log('-----Single Tour state------ ', this.state);
+         console.log('-----Single Tour props------ ', this.props);
         const { tour } = this.state;
         const { currency, kurs, isKursLoading, errors } = this.props;
         if (isKursLoading) {

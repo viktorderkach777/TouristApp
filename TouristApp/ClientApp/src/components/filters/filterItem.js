@@ -54,7 +54,7 @@ class FilterItem extends Component {
     }
 
     render() {
-          console.log('filterItem.pros:', this.props);
+         // console.log('filterItem.pros:', this.props);
         const { collapse } = this.state;
         const { filterData } = this.props;
         let filter = filterData.children;

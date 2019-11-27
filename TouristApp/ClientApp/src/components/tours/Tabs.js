@@ -4,7 +4,7 @@ import { Col, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap
 import classnames from 'classnames';
 
 
-const SoapIcon = ['', 'soap-icon-locations', 'soap-icon-beach', 'soap-icon-hotel', 'soap-icon-check', 'soap-icon-party', 'soap-icon-wifi']
+const SoapIcon = ['', 'soap-icon-locations', 'soap-icon-beach', 'soap-icon-hotel', 'soap-icon-check', 'soap-icon-party', 'soap-icon-notice']
 
 const ParamItemList = (props) => {
     console.log('ParamItemList', props)
@@ -20,10 +20,14 @@ const ParamItemList = (props) => {
                             <p>{props.description}</p>
                         </div>
                     </div>
-                    <ul className="check facilities text-left">
+                  
                         {(props.children == 'undefined' || props.children.length == 0) ? ('') :
-                            props.children.map((itemChild, index) => <li key={index}> {itemChild.name}</li>)}
-                    </ul>
+                        (
+                            <ul className="check facilities text-left">
+                                {props.children.map((itemChild, index) => <li key={index}> {itemChild.name}</li>)}
+                            </ul>
+                        )}
+                   
                 </Col>
             </Row> : ''
     )
@@ -65,9 +69,9 @@ class Tabs extends Component {
     }
 
     tabPane() {
-        const { tour } = this.props;        
-        // console.log('---Tabs props----', this.props );
-        // console.log('---Tabs state----', this.state );
+        const { tour, param } = this.props;        
+         console.log('---Tabs props----', this.props );
+         console.log('---Tabs state----', this.state );
          
         return (
             <>
@@ -76,26 +80,18 @@ class Tabs extends Component {
                     <h3>{tour.name} *</h3>
                     {tour.description}
 
-                {/*
+                
                {param.length == 0 ? ('') :
                         (param.map(item =>
                             <ParamItemList {...item} key={item.priority} />
                         ))}
-                */}
+               
 
                 </TabPane>
                 {/* відгуки */}
                 <TabPane tabId="2">
-                    {/* {param.length == 0 ? ('') :
-                        (param.map(item =>
-                            <li key={item.priority}>
-                                <b className='YColor'>{item.name}</b>
-                                {'  '}
-                                {item.description}
-                                {item.children.length == 0 ? ('') :
-                                    item.children.map((itemChild, index) => <span key={index} className='ml-2'>{itemChild.name}{'   '}</span>)}
-                            </li>))} */}
                 </TabPane>
+                
                 {/* карта */}
                 <TabPane tabId="3">
                     {`3. ${this.lorem()}`}

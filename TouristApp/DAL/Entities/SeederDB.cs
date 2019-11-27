@@ -971,11 +971,11 @@ namespace TouristApp.DAL.Entities
 
         public static void SeedParametersHotel(EFContext context)
         {
-            string[] Names = new string[] {"",
+            string[] Names = new string[] {
                "Розташування", "Пляж", "Номери", "Сервіси",
                "Спорт і розваги","Для дітей", "Харчування",
-               "Спорт", "Розваги", "Послуги в готелі",
-               "Пляж", "Готель" };
+               "Спорт","Для дітей (послуги)", "Розваги", "Послуги в готелі",
+               "Пляж (послуги)", "Готель" };
 
             Dictionary<string, string> descriptions = new Dictionary<string, string>();
             descriptions.Add("Розташування", "Розташований в 36 км від аеропорту м Марса Алам і в 165 км від аеропорту Хургади.");
@@ -985,12 +985,19 @@ namespace TouristApp.DAL.Entities
             descriptions.Add("Спорт і розваги", "Освітлення тенісного корту (платно), катання на верблюдах (за додаткову плату), водне поло (безкоштовно), дартс (безкоштовно), бочче (безкоштовно), міні-футбол (безкоштовно), пірнання з аквалангом, 2 тенісних корти (з твердим покриттям , 1 - в LTI Akassia Beach Resort), стрільба з лука.");
             descriptions.Add("Для дітей", "6 водних гірок, 3 відкритий басейни (1 в LTI Akassia Beach Resort), 3 дитячі секції в басейні (1 в LTI Akassia Beach Resort), дитячий клуб (з 4 до 12 років), дитяча коляска.");
 
-            Dictionary<int, List<string>> childrens = new Dictionary<int, List<string>>();
-            childrens.Add(7, new List<string> { "Кафе", "Ресторан" });
-            childrens.Add(8, new List<string> { "SPA", "Сауна/Лазня $", "Джакузі",
+            Dictionary<string, List<string>> childrens = new Dictionary<string, List<string>>();
+            childrens.Add("Харчування", new List<string> { "Кафе", "Ресторан" });
+            childrens.Add("Розваги", new List<string> { "SPA", "Сауна/Лазня $", "Джакузі",
             "Дискотека","Водні горки","Музика","Массаж $","Відкритий басейн","Аніматори"});
-            childrens.Add(6, new List<string> { "Дитячий басейн", "Послуги няні $",
+            childrens.Add("Для дітей (послуги)", new List<string> { "Дитячий басейн", "Послуги няні $",
             "Дитяча площадка","Дитячі стульчики в ресторані","Дитяча кімната","Дитяча кроватка"});
+            childrens.Add("Спорт", new List<string> { "Більярд $", "Фітнес", "Аеробіка", "Настольний тенніс",
+            "Волейбол","Аквапарк","Теннісний корт","Верхова їзда $","Дайвінг $"});
+            childrens.Add("Пляж (послуги)", new List<string> { "Власний пляж", "Понтон", "Пляжні полотенця",
+            "Піщано - галечний пляж","Шезлонги","Пляжні зонтики"});
+            childrens.Add("Готель", new List<string> { "Вид на басейн", "Вид на море", "Вид на территорію"});
+            childrens.Add("Послуги в готелі", new List<string> { "Конференц зал", "Банкомат", "Холодильник", "Сервіс для бізнеса $",
+            "Врач $","Фен","Парковка","Ванна чи душ","Сейф","Wi-Fi","TV","Інтернет","Обмін валют","Телефон"});
 
 
             string hotelName = "Akassia Club Calimera Swiss Resort";
@@ -1001,26 +1008,49 @@ namespace TouristApp.DAL.Entities
 
             if (hotel != null)
             {
-                int parameterId = 0;
+                int priority = 1;
                 for (int i = 0; i < Names.Length; i++)
                 {
-                    context.Parameters.Add(
+                    if (context.Parameters.FirstOrDefault(f => f.HotelId == hotel.Id && f.ParentId == null && f.Name == Names[i]) == null)
+                    {
+                        context.Parameters.Add(
                             new Parameter
                             {
-                                Id = (++parameterId),
                                 Name = Names[i],
                                 Description = descriptions.ContainsKey(Names[i]) ? descriptions[Names[i]] : "",
-                                Priority = parameterId,
+                                Priority = priority++,
                                 HotelId = hotel.Id,
-                                
+                                ParentId = null
+
                             });
-                    context.SaveChanges();
+                        context.SaveChanges();
+                    }
                 }
 
+                long parentId;
+                foreach (KeyValuePair<string, List<string>> keyValue in childrens)
+                {
+                    priority = 1;
+                    parentId = context.Parameters.FirstOrDefault(f => f.HotelId == hotel.Id && f.ParentId == null && f.Name == keyValue.Key).Id;
+                    foreach (var item in keyValue.Value)
+                    {
+                        if (context.Parameters.FirstOrDefault(f => f.HotelId == hotel.Id && f.ParentId != null && f.Name == item) == null)
+                        {
+                            context.Parameters.Add(
+                            new Parameter
+                            {
+                                Name = item,
+                                Description = item,
+                                Priority = priority++,
+                                HotelId = hotel.Id,
+                                ParentId = parentId
 
+                            });
+                            context.SaveChanges();
+                        }
+                    }
+                }
             }
-
-
         }
 
 
@@ -1144,7 +1174,7 @@ namespace TouristApp.DAL.Entities
                 SeederDB.SeedTours(context);
                 SeederDB.SeedFilters(context);
                 SeederDB.SeedHotelImages(context, env, config);
-                //SeederDB.SeedHotelParameters(context);
+                SeederDB.SeedParametersHotel(context);
             }
         }
     }
