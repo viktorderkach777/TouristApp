@@ -20,7 +20,7 @@ namespace TouristApp.DAL.Entities
             const string FILTER_NAME_HOTEL_COUNTRY = "Країни";
             const string FILTER_NAME_CITY = "Місто вильоту";
             const string FILTER_NAME_HOTEL_CLASS = "Клас готелю";
-            
+
             string[] filterNames = { FILTER_NAME_HOTEL_COUNTRY, FILTER_NAME_CITY, FILTER_NAME_HOTEL_CLASS };
             foreach (var type in filterNames)
             {
@@ -89,7 +89,7 @@ namespace TouristApp.DAL.Entities
             #region tblFilters - Фільтри
             List<Filter> fils = new List<Filter>();
             CityDeparture city = null;
-            Hotel hotel = null;            
+            Hotel hotel = null;
             Country country = null;
             var filterNameHotelClass = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_CLASS);
             var filterNameHotelCountry = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_COUNTRY);
@@ -123,7 +123,7 @@ namespace TouristApp.DAL.Entities
                     }
                 };
             }
-           
+
             foreach (var item in fils)
             {
                 if (context.Filters.FirstOrDefault(f => f.FilterNameId == item.FilterNameId && f.FilterValueId == item.FilterValueId && f.TourId == item.TourId) == null)
@@ -811,8 +811,8 @@ namespace TouristApp.DAL.Entities
 
         public static void SeedTours(EFContext context)
         {
-            string regionName = "Марса Алам";           
-            string hotelName = "Akassia Club Calimera Swiss Resort";           
+            string regionName = "Марса Алам";
+            string hotelName = "Akassia Club Calimera Swiss Resort";
             var hotel = context
                 .Hotels
                 .Where(p => p.Name == hotelName)
@@ -969,6 +969,61 @@ namespace TouristApp.DAL.Entities
             }
         }
 
+        public static void SeedParametersHotel(EFContext context)
+        {
+            string[] Names = new string[] {"",
+               "Розташування", "Пляж", "Номери", "Сервіси",
+               "Спорт і розваги","Для дітей", "Харчування",
+               "Спорт", "Розваги", "Послуги в готелі",
+               "Пляж", "Готель" };
+
+            Dictionary<string, string> descriptions = new Dictionary<string, string>();
+            descriptions.Add("Розташування", "Розташований в 36 км від аеропорту м Марса Алам і в 165 км від аеропорту Хургади.");
+            descriptions.Add("Пляж", "Піщано-кораловий пляж. Протяжність пляжу - 500 м. Рекомендується спеціальне взуття.");
+            descriptions.Add("Номери", "У готелі 444 номери.");
+            descriptions.Add("Сервіси", "Ресторани: Green House Restaurant (сніданок, обід і вечерю, шведський стіл) La Vista Restaurant (міжнародна кухня) Panorama Restaurant (місцева кухня) Beach BBQ Restaurant Бари: Lobby Bar Pool Bar Waves Beach Bar Scarabeo Beach Disco До послуг гостей: 6 басейнів ( 1 зі штучною хвилею, 2 з підігрівом в зимовий період, 1 олімпійський басейн");
+            descriptions.Add("Спорт і розваги", "Освітлення тенісного корту (платно), катання на верблюдах (за додаткову плату), водне поло (безкоштовно), дартс (безкоштовно), бочче (безкоштовно), міні-футбол (безкоштовно), пірнання з аквалангом, 2 тенісних корти (з твердим покриттям , 1 - в LTI Akassia Beach Resort), стрільба з лука.");
+            descriptions.Add("Для дітей", "6 водних гірок, 3 відкритий басейни (1 в LTI Akassia Beach Resort), 3 дитячі секції в басейні (1 в LTI Akassia Beach Resort), дитячий клуб (з 4 до 12 років), дитяча коляска.");
+
+            Dictionary<int, List<string>> childrens = new Dictionary<int, List<string>>();
+            childrens.Add(7, new List<string> { "Кафе", "Ресторан" });
+            childrens.Add(8, new List<string> { "SPA", "Сауна/Лазня $", "Джакузі",
+            "Дискотека","Водні горки","Музика","Массаж $","Відкритий басейн","Аніматори"});
+            childrens.Add(6, new List<string> { "Дитячий басейн", "Послуги няні $",
+            "Дитяча площадка","Дитячі стульчики в ресторані","Дитяча кімната","Дитяча кроватка"});
+
+
+            string hotelName = "Akassia Club Calimera Swiss Resort";
+            var hotel = context
+                .Hotels
+                .Where(p => p.Name == hotelName)
+                .SingleOrDefault();
+
+            if (hotel != null)
+            {
+                int parameterId = 0;
+                for (int i = 0; i < Names.Length; i++)
+                {
+                    context.Parameters.Add(
+                            new Parameter
+                            {
+                                Id = (++parameterId),
+                                Name = Names[i],
+                                Description = descriptions.ContainsKey(Names[i]) ? descriptions[Names[i]] : "",
+                                Priority = parameterId,
+                                HotelId = hotel.Id,
+                                
+                            });
+                    context.SaveChanges();
+                }
+
+
+            }
+
+
+        }
+
+
         public static void SeedHotelImages(EFContext context, IHostingEnvironment env,
             IConfiguration config)
         {
@@ -1012,50 +1067,7 @@ namespace TouristApp.DAL.Entities
             }
         }
 
-        //private static void SeedHotelParameters(EFContext context)
-        //{
-        //    string[] Names = new string[] {
-        //        "Расположение",
-        //        "Пляж",
-        //        "Номера",
-        //        "Сервисы",
-        //        "Спорт и развлечения",
-        //        "Питание",
-        //        "Для детей",
-        //        "Спорт",
-        //        "Развлечения",
-        //        "Услуги в отеле",
-        //        "Пляж",
-        //        "Отель" };
-        //    string[] Descriptions = new string[]  { "В 110 км от аэропорта г. Анталья. Замок города Аланья находится в 2,5 км от отеля Kleopatra Alis. До бухты Аланьи от отеля можно доехать всего за 5 минут.",
-        //            "Пляж в 50 м.",
-        //            "Всего 73 номера (160 мест) в четырёх- и пятиэтажном здания",
-        //            "Завтрак, обед и ужин подаются в виде «шведского стола». Все местные алкогольные и безалкогольные напитки бесплатно с 10:00 до 22:00.",
-        //            "1 открытый бассейн с пресной водой, без подогрева, площадь 40 кв.м, часы работы с 08:00-18:00 (не работает в зимний сезон).",
-        //            "",
-        //            "",
-        //            "",
-        //            "",
-        //            "",
-        //            "",
-        //            ""
-        //    };
 
-        //    int parameterId = 0;
-        //    for (int i = 0; i < Names.Length; i++)
-        //    {
-        //        context.Parameters.Add(
-        //                new Parameter
-        //                {
-        //                    Id = (++parameterId),
-        //                    Name = Names[i],
-        //                    Description = Descriptions[i],
-        //                    Priority = parameterId,
-        //                    HotelId = 1,
-        //                });
-        //        context.SaveChanges();
-        //    }
-        //}
 
         public static void SeedUsers(UserManager<DbUser> userManager,
            RoleManager<DbRole> roleManager)

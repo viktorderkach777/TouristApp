@@ -6,7 +6,7 @@ import './tours.css';
 import * as tourAction from '../../reducers/tourReducer';
 import * as filtersAction from '../../reducers/filterReducer';
 import Moment from 'moment';
-import * as kursAction from '../../components/admin/converterPrivatBank/reducer'
+import * as kursAction from '../../components/admin/ConverterPrivatBank/reducer'
 import {
   Modal, ModalHeader, ModalFooter, ModalBody,
   Card,
