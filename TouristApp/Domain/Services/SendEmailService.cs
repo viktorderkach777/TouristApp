@@ -37,7 +37,7 @@ namespace TouristApp.Domain.Services
                     //body = reader.ReadToEnd();
                 }
                 body = body.Replace("{UserName}", name);
-                body = body.Replace("{Title}", "Cайт максефект");
+                body = body.Replace("{Title}", "Cайт TouristApp");
                 body = body.Replace("{Url}", "https://touristapp.dp.ua/");
                 body = body.Replace("{Description}", text);
 

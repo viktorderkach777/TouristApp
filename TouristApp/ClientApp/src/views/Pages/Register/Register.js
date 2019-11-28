@@ -1,5 +1,20 @@
 import React, { Component } from 'react';
-import { Alert, Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row, FormFeedback, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import {
+  Alert,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Col,
+  Container,
+  Form,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Row,
+  FormFeedback
+} from 'reactstrap';
 import { connect } from "react-redux";
 import get from 'lodash.get';
 import PropTypes from 'prop-types';
@@ -9,6 +24,7 @@ import { registerPost } from './reducer';
 import * as captchaActions from '../../../components/captcha/reducer';
 import CaptchaWidget from '../../../components/captcha';
 import CentralPageSpinner from '../../../components/CentrPageSpinner';
+import MyModal from '../../../components/admin/myModal'
 import defaultPath from './default-user.png'
 import refreshPng from './refresh.png'
 import 'cropperjs/dist/cropper.css';
@@ -34,11 +50,9 @@ class Register extends Component {
     email: '',
     password: '',
     confirmPassword: '',
-    errors: {
-    },
+    errors: {},
     done: false,
-    loading: false,
-    //loading: this.props.loading,
+    loading: false,    
     isLoadingPhoto: false,
     src: '',
     imageBase64: defaultPath,
@@ -48,10 +62,9 @@ class Register extends Component {
     dateOfBirth: '',
     captchaText: "",
     imageError: true,
-    danger: false,
-    modalText: ''
-    // errorsServer: {
-    // },
+    isModalOpen: false,
+    modalText: '',
+    modalType: 'danger'   
   };
 
   componentDidMount() {
@@ -76,10 +89,19 @@ class Register extends Component {
     });
   }
 
-  toggleDanger = () => {
-    this.setState({
-      danger: !this.state.danger,
-    });
+  toggleModal = (modalType, modalText) => {
+    if (!this.state.isModalOpen) {
+      this.setState({
+        modalText,
+        modalType,
+        isModalOpen: !this.state.isModalOpen,
+      });
+    }
+    else {
+      this.setState({
+        isModalOpen: !this.state.isModalOpen,
+      });
+    }
   }
 
   // static getDerivedStateFromProps(nextProps, prevState) {
@@ -102,22 +124,13 @@ class Register extends Component {
       const currentFile = files[0];
       const currentFileSize = currentFile.size;
       if (!currentFile.type.match(/^image\//)) {
-        this.toggleDanger();
-        this.setState({
-          modalText: "Error file type!",
-        });
+        this.toggleModal("danger", "Невірний тип файлу!");
       }
       else if (currentFileSize > IMAGE_MAX_SIZE) {
-        this.toggleDanger();
-        this.setState({
-          modalText: "The image size must be less than 10Mb!",
-        });
+        this.toggleModal("danger", "Розмір файлу повинен бути меншим 10Mb!");
       }
       else if (currentFileSize < IMAGE_MIN_SIZE) {
-        this.toggleDanger();
-        this.setState({
-          modalText: "The image size must be more than 3Kb!",
-        });
+        this.toggleModal("danger", "Розмір файлу повинен бути більшим 3Kb!");
       } else {
         const reader = new FileReader();
         reader.onload = () => {
@@ -127,10 +140,7 @@ class Register extends Component {
         reader.readAsDataURL(currentFile);
       }
     } else {
-      this.toggleDanger();
-      this.setState({
-        modalText: "Select an image, please!",
-      });
+      this.toggleModal("danger", "Select an image, please!");
     }
   };
 
@@ -153,6 +163,7 @@ class Register extends Component {
       src: '',
       imageError: false
     });
+    //this.toggleModal("success", "Фото додано!")
   }
 
   setStateByErrors = (name, value) => {
@@ -261,7 +272,9 @@ class Register extends Component {
       captcha,
       imageError,
       isLoadingPhoto,
-      modalText
+      modalText,
+      modalType,
+      isModalOpen
     } = this.state;
 
     const form = (
@@ -270,16 +283,7 @@ class Register extends Component {
         <div className="app flex-row ">
           <Container>
             <Row>
-              <Modal isOpen={this.state.danger} toggle={this.toggleDanger}
-                className={'modal-danger ' + this.props.className}>
-                <ModalHeader toggle={this.toggleDanger}>Warning!</ModalHeader>
-                <ModalBody>
-                  {modalText}
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="secondary" onClick={this.toggleDanger}>Cancel</Button>
-                </ModalFooter>
-              </Modal>
+              <MyModal isModalOpen={isModalOpen} toggle={this.toggleModal} modalText={modalText} modalType={modalType} />
             </Row>
             <Row className="justify-content-center">
               <Col md="9" lg="7" xl="6">

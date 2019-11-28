@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Threading.Tasks;
 
 
 namespace TouristApp.Helpers
@@ -88,7 +85,7 @@ namespace TouristApp.Helpers
                         //oGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                         oGraphics.DrawImage(originalPic, 0, 0, width, height);
                         //Водяний знак
-                        Font font = new Font("Arial", 18);
+                        Font font = new Font("Arial", 16);
                         Brush brash = new SolidBrush(Color.Blue);
                         oGraphics.DrawString("TouristApp", font, brash, new Point(25, 25));
 

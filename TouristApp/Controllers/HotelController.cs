@@ -144,9 +144,7 @@ namespace TouristApp.Controllers
                     var image = ImageHelper.CompressImage(bmp, size, size);
                     image.Save(fileSave, ImageFormat.Jpeg);
                 }
-            }
-
-            //string path = _fileService.UploadImage(model.imageBase64);
+            }           
 
             _context.HotelImages.Add(new HotelImage
             {

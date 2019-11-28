@@ -40,7 +40,7 @@ class ThemeView extends Component {
   }
 }
 
-class ThemeColor extends Component {
+export class ThemeColor extends Component {
   // constructor(props) {
   //   super(props);
   // }
