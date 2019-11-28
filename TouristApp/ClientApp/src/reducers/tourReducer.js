@@ -9,7 +9,7 @@ export const initialState = {
     success: false,
     loading: false,
     totalPages: null,
-    currentPage: '1',
+    currentPage: 1,
     sortOrder: 'name',
     countItem:0,
     searchText: '',
@@ -50,7 +50,7 @@ export const tours = createSlice({
       newState = update.set(newState, 'list.totalPages', data.totalPages);
       newState = update.set(newState, 'list.countItem', data.countItem);
       newState = update.set(newState, 'list.currentPage', data.currentPage);
-      newState = update.set(newState, 'list.sortOrder', data.sortOrder);
+      //newState = update.set(newState, 'list.sortOrder', data.sortOrder);
       //newState = update.set(newState, 'list.searchText', '');
       return newState;
     },

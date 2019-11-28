@@ -47,9 +47,9 @@ const MapNavigation = React.lazy(()=>import("../components/mapNavigation"))
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  {path: '/singlepage',exact:true ,name: 'Готель' , component: SinglePage },
-  {path: '/tours',exact:true ,name: 'Тури' , component: TourWidget  },
-  {path: "/ss", exact:true, name: "ss", component: Salo},
+  { path: '/singlepage',exact:true ,name: 'Готель' , component: SinglePage },
+  { path: '/tours',exact:true ,name: 'Тури' , component: TourWidget  },
+  { path: "/ss", exact:true, name: "ss", component: Salo},
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },
@@ -90,8 +90,8 @@ const routes = [
   //{ path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
-  { path: '/views/:country/:id', exact: true, name: 'User Details', component: SimplyTour },
-  { path: '/images', exact: true, name: 'User Details', component: SimplyTour },
+  { path: '/tours/:country/:normalizedName/:id', exact: true, name: 'Деталі тура', component: SimplyTour },
+  // { path: '/images', exact: true, name: 'User Details', component: SimplyTour },
   { path: '/weather', exact: true, name: 'Weather', component: WeatherWidget },
   { path: '/map', exact: true, name: 'MapLayout', component: MapLayoutWidget },
   { path: '/mapNavigation', exact: true, name: 'map-navigation', component: MapNavigation }

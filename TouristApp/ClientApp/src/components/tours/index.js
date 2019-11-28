@@ -247,8 +247,8 @@ class ToursContainer extends Component {
 
 
     render() {
-        // console.log('----State Tours -----', this.state);
-        // console.log('----Props Tours-----', this.props);
+         console.log('----State Tours -----', this.state);
+         console.log('----Props Tours-----', this.props);
         const { roles, totalPages, currentPage, countTours } = this.props;
         const { deleteDialog_isOpen, chatDialog_isOpen, id_delete, currency, kurs, isListLoading, errors } = this.state;
 
@@ -277,7 +277,7 @@ class ToursContainer extends Component {
                 <Card key={item.id} className="CardTours" >
                     <Row>
                         <Col sm="12" md="4">
-                            <Link to={`/views/${item.country}/${item.id}`}>
+                            <Link to={`/tours/${item.country}/${item.normalizedName}/${item.id}`}>
                                 <CardImg left="true" height="100%" className="CardImg p-2" src={!!item.imagePath ? serverUrl + item.imagePath : ''} alt="Card image cap" />
                                 <div className="discount">
                                     <span className="discount-title">
