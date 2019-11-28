@@ -6,7 +6,7 @@ import { Button, CardText, CardSubtitle, CardTitle, Card, CardBody, Col, Contain
 import { serverUrl } from '../../config';
 import ImageGallery from 'react-image-gallery';
 import Moment from 'moment';
-import * as kursAction from '../../components/admin/converterPrivatBank/reducer'
+import * as kursAction from '../../components/admin/ConverterPrivatBank/reducer'
 import { connect } from 'react-redux'
 //import classnames from 'classnames';
 import './tours.css'
@@ -77,8 +77,8 @@ class Hotel extends Component {
     }
 
     render() {
-        // console.log('-----Single Tour state------ ', this.state);
-        // console.log('-----Single Tour props------ ', this.props);
+         console.log('-----Single Tour state------ ', this.state);
+         console.log('-----Single Tour props------ ', this.props);
         const { tour } = this.state;
         const { currency, kurs, isKursLoading, errors } = this.props;
         if (isKursLoading) {

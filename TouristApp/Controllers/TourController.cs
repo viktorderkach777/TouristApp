@@ -12,9 +12,7 @@ using TouristApp.ViewModels;
 
 namespace TouristApp.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
-    //[Route("api/tour")]
+    
     [Produces("application/json")]
     [Route("api/tour")]
     [ApiController]
@@ -31,80 +29,6 @@ namespace TouristApp.Controllers
             _configuration = configuration;
             _url = _configuration.GetValue<string>(IMAGES_PATH);
         }
-
-        // GET: api/Tour/list/id
-        //[HttpGet("list/{currentPage}")]
-        //public async Task<ActionResult<IEnumerable<ToursViewModel>>> Get([FromRoute] int currentPage, string sortOrder)
-        //{
-        //    int page = currentPage;
-        //    int pageSize = 2;
-        //    int pageNo = page - 1;
-        //    ToursViewModel model = new ToursViewModel();
-
-        //    var query = await _context
-        //        .Tours.AsQueryable()
-        //        .Include(s => s.Hotel)
-        //        .Include(s => s.Hotel.HotelImages)
-        //        .Include(d => d.Hotel.Region)
-        //        .Include(f => f.Hotel.Region.Country)
-        //        .Include(z => z.CityDeparture)
-        //        .Select(u => new TourListViewModel
-        //        {
-        //            Id = u.Id,
-        //            СityDeparture = "Київ",
-        //            Name = u.Hotel.Name,
-        //            Region = u.Hotel.Region.Name,
-        //            Country = u.Hotel.Region.Country.Name,
-        //            Description = u.Hotel.Description,
-        //            Price = u.Price * u.DaysCount,
-        //            Rate = u.Hotel.Rate,
-        //            Class = u.Hotel.Class,
-        //            FromData = u.FromData,
-        //            Date = u.FromData.ToString().Substring(0, 10),
-        //            DaysCount = u.DaysCount,
-        //            ImagePath = Path.Combine(_url, "1200_" + u.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.HotelId).HotelImageUrl)
-
-        //            //Images = u.Hotel.HotelImages.Where(
-        //            //    f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
-        //            //{
-        //            //    Name= $"{url}/1200_{x.HotelImageUrl}"  
-        //            //}).ToList()
-
-        //        }).ToListAsync();
-
-
-        //    switch (sortOrder)
-        //    {
-        //        case "name":
-        //            query = query.OrderBy(c => c.Name).ToList();
-        //            break;
-        //        case "name_desc":
-        //            query = query.OrderByDescending(c => c.Name).ToList();
-        //            break;
-
-        //        case "rate":
-        //            query = query.OrderBy(c => c.Rate).ToList();
-        //            break;
-        //        case "rate_desc":
-        //            query = query.OrderByDescending(c => c.Rate).ToList();
-        //            break;
-
-        //        default:
-        //            query = query.OrderBy(c => c.Name).ToList();
-        //            break;
-        //    }
-
-        //    query = query
-        //        .Skip(pageNo * pageSize)
-        //        .Take(pageSize).ToList();
-
-        //    model.Tours = query;
-
-        //    int count = _context.Tours.Count();
-        //    model.TotalPages = (int)Math.Ceiling((double)count / pageSize);
-        //    model.CurrentPage = page;
-        //    return Ok(model);
-        //}
 
 
         // GET: api/Tour/5
@@ -239,46 +163,6 @@ namespace TouristApp.Controllers
 
             return result.ToList();
         }
-
-        private List<ToursViewModel> GetToursByFilter(long[] values, List<FNameViewModel> filtersList)
-        {
-            long[] filterValueSearchList = values;
-            var query = _context
-                .Tours
-                .Include(f => f.Filtres)
-                .AsQueryable();
-            foreach (var fName in filtersList)
-            {
-                int count = 0; //Кількість співпадінь у даній групі фільтрів
-                var predicate = PredicateBuilder.False<Tour>();
-                foreach (var fValue in fName.Children)
-                {
-                    for (int i = 0; i < filterValueSearchList.Length; i++)
-                    {
-                        var idV = fValue.Id;
-                        if (filterValueSearchList[i] == idV)
-                        {
-                            predicate = predicate
-                                .Or(p => p.Filtres
-                                    .Any(f => f.FilterValueId == idV));
-                            count++;
-                        }
-                    }
-                }
-                if (count != 0)
-                    query = query.Where(predicate);
-            }
-            var listProductSearch = query.Select(p => new ToursViewModel
-            {
-                //Id = p.Id,
-                //Price = p.Price
-                CurrentPage = 10
-            }).ToList();
-            return listProductSearch;
-
-            //return null;
-        }
-
 
         // version 2
         [HttpPost("list2")]
@@ -426,14 +310,14 @@ namespace TouristApp.Controllers
             }; 
         }
 
-        [HttpGet("single/{id}")]
+    [HttpGet("single/{id}")]
         public async Task<ActionResult<SingleTourViewModel>> Get([FromRoute] long id)
         {
             var tour = await _context
                 .Tours
                 .Where(a => a.Id == id)
                 .Include(s => s.Hotel)
-                //.Include(s => s.Hotel.Parameters)
+                .Include(s => s.Hotel.Parameters)
                 .Include(s => s.Hotel.HotelImages)
                 .Include(d => d.Hotel.Region)
                 .Include(f => f.Hotel.Region.Country)
@@ -443,15 +327,14 @@ namespace TouristApp.Controllers
                     Id = u.Id,
                     СityDeparture = u.CityDeparture.Name,
                     Name = u.Hotel.Name,
-                    NormalizedName = u.Hotel.NormalizedName,
                     Region = u.Hotel.Region.Name,
                     Country = u.Hotel.Region.Country.Name,
                     Description = u.Hotel.Description,
-                    Price = u.Hotel.Price * u.DaysCount,
+                    Price = u.Price * u.DaysCount,
                     Rate = u.Hotel.Rate,
                     Class = u.Hotel.Class,
                     FromData = u.FromData,
-                    Date = u.FromData.ToString(),
+                    Date = u.FromData.ToString().Substring(0, 10),
                     DaysCount = u.DaysCount,
                     Images = u.Hotel.HotelImages.Where(
                         f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
@@ -459,6 +342,21 @@ namespace TouristApp.Controllers
                             Id = x.Id,
                             Original = Path.Combine(_url, u.Hotel.NormalizedName, "1200_" + x.HotelImageUrl),
                             Thumbnail = Path.Combine(_url, u.Hotel.NormalizedName, "268_" + x.HotelImageUrl),
+                        }).ToList(),
+                    HotelParametries = u.Hotel.Parameters
+                        .Where(x => x.ParentId == null && x.HotelId == u.HotelId)
+                        .OrderBy(z => z.Priority)
+                        .Select(pr => new ParametersViewModel
+                        {
+                            Name = pr.Name,
+                            Description = pr.Description,
+                            Priority = pr.Priority,
+                            Children = pr.Children.Select(f => new ParametersViewModel
+                            {
+                                Name = f.Name,
+                                Description = f.Description,
+                                Priority = f.Priority
+                            }).ToList()
                         }).ToList()
                 }).SingleAsync();
 
@@ -471,122 +369,10 @@ namespace TouristApp.Controllers
                     Thumbnail = Path.Combine(_url, "no-photo.jpg"),
                 });
             }
+
+
             return tour;
         }
-
-        //[HttpGet("single/{id}")]
-        //public async Task<ActionResult<SingleTourViewModel>> Get([FromRoute] long id)
-        //{
-        //    var tour = await _context
-        //        .Tours
-        //        .Where(a => a.Id == id)
-        //        .Include(s => s.Hotel)
-        //        .Include(s => s.Hotel.Parameters)
-        //        .Include(s => s.Hotel.HotelImages)
-        //        .Include(d => d.Hotel.Region)
-        //        .Include(f => f.Hotel.Region.Country)
-        //        .Include(z => z.CityDeparture)
-        //        .Select(u => new SingleTourViewModel
-        //        {
-        //            Id = u.Id,                    
-        //            СityDeparture = u.CityDeparture.Name,
-        //            Name = u.Hotel.Name,
-        //            NormalizedName = u.Hotel.NormalizedName,
-        //            Region = u.Hotel.Region.Name,
-        //            Country = u.Hotel.Region.Country.Name,
-        //            Description = u.Hotel.Description,
-        //            Price = u.Hotel.Price * u.DaysCount,
-        //            Rate = u.Hotel.Rate,
-        //            Class = u.Hotel.Class,
-        //            FromData = u.FromData,
-        //            Date = u.FromData.ToString(),
-        //            DaysCount = u.DaysCount,
-        //            Images = u.Hotel.HotelImages.Where(
-        //                f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
-        //                {
-        //                    Id = x.Id,
-        //                    Original = Path.Combine(_url, u.Hotel.NormalizedName, "1200_" + x.HotelImageUrl),
-        //                    Thumbnail = Path.Combine(_url, u.Hotel.NormalizedName, "268_" + x.HotelImageUrl),
-        //                }).ToList(),
-        //            HotelParametries = u.Hotel.Parameters
-        //                .Where(x => x.ParentId == null && x.HotelId == u.HotelId)
-        //                .OrderBy(z => z.Priority)
-        //                .Select(pr => new ParametersViewModel
-        //                {
-        //                    Name = pr.Name,
-        //                    Description = pr.Description,
-        //                    Priority = pr.Priority,
-        //                    Children = pr.Children.Select(f => new ParametersViewModel
-        //                    {
-        //                        Name = f.Name,
-        //                        Description = f.Description,
-        //                        Priority = f.Priority
-        //                    }).ToList()
-        //                }).SingleAsync();
-
-        //    if (tour.Images.Count == 0)
-        //    {
-        //        tour.Images.Add(new HotelPhotoViewModel
-        //        {
-        //            Id = 0,
-        //            Original = Path.Combine(_url, "no-photo.jpg"),
-        //            Thumbnail = Path.Combine(_url, "no-photo.jpg"),
-        //        });
-        //    }
-        //    return tour;
-        //}
-
-        //[HttpGet("single/{id}")]
-        //public async Task<ActionResult<SingleTourViewModel>> Get([FromRoute] string id)
-        //{
-        //    var tour = await _context
-        //        .Tours
-        //        .Where(a => a.Id == id)
-        //        .Include(s => s.Hotel)
-        //        .Include(s => s.Hotel.Parameters)
-        //        .Include(s => s.Hotel.HotelImages)
-        //        .Include(d => d.Hotel.Region)
-        //        .Include(f => f.Hotel.Region.Country)
-        //        .Include(z => z.CityDeparture)
-        //        .Select(u => new SingleTourViewModel
-        //        {
-        //            Id = u.Id,
-        //            СityDeparture = "Київ",
-        //            Name = u.Hotel.Name,
-        //            Region = u.Hotel.Region.Name,
-        //            Country = u.Hotel.Region.Country.Name,
-        //            Description = u.Hotel.Description,
-        //            Price = u.Price * u.DaysCount,
-        //            Rate = u.Hotel.Rate,
-        //            Class = u.Hotel.Class,
-        //            FromData = u.FromData,
-        //            Date = u.FromData.ToString().Substring(0, 10),
-        //            DaysCount = u.DaysCount,
-        //            Images = u.Hotel.HotelImages.Where(
-        //                f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
-        //                {
-        //                    Id = x.Id,
-        //                    original = Path.Combine(_url, "1200_" + x.HotelImageUrl),
-        //                    thumbnail = Path.Combine(_url, "268_" + x.HotelImageUrl),
-        //                }).ToList(),
-        //            HotelParametries = u.Hotel.Parameters
-        //                .Where(x => x.ParentId == null && x.HotelId == u.HotelId)
-        //                .OrderBy(z => z.Priority)
-        //                .Select(pr => new ParametersViewModel
-        //                {
-        //                    Name = pr.Name,
-        //                    Description = pr.Description,
-        //                    Priority = pr.Priority,
-        //                    Children = pr.Children.Select(f => new ParametersViewModel
-        //                    {
-        //                        Name = f.Name,
-        //                        Description = f.Description,
-        //                        Priority = f.Priority
-        //                    }).ToList()
-        //                }).ToList()
-        //        }).SingleAsync();
-        //    return tour;
-        //}
 
         // DELETE: api/Tour/5
         [HttpDelete("{id}")]
