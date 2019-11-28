@@ -49,7 +49,7 @@ const CountryDelWidget = React.lazy(() => import("../components/admin/delCountry
 const CountryEditWidget = React.lazy(() => import("../components/admin/editCountry"))
 const TourAddWidget = React.lazy(() => import("../components/admin/addTour"))
 const PhotoHotelAddWidget = React.lazy(() => import("../components/admin/addPhotoHotel"))
-const KursWidget = React.lazy(() => import("../components/admin/ConverterPrivatBank/"))
+const KursWidget = React.lazy(() => import("../components/admin/converterPrivatBank/"))
 const CountryWidget = React.lazy(() => import("../components/admin/country"))
 const MapHotelWidget = React.lazy(() => import("../components/admin/mapHotel"))
 
