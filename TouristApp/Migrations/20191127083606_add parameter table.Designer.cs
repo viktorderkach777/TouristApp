@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TouristApp.DAL.Entities;
 
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    partial class EFContextModelSnapshot : ModelSnapshot
+    [Migration("20191127083606_add parameter table")]
+    partial class addparametertable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -634,7 +636,7 @@ namespace TouristApp.Migrations
             modelBuilder.Entity("TouristApp.DAL.Entities.Parameter", b =>
                 {
                     b.HasOne("TouristApp.DAL.Entities.Hotel", "Hotel")
-                        .WithMany("Parameters")
+                        .WithMany()
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade);
 
