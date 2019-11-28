@@ -14,7 +14,7 @@ import {weatherReducer} from '../components/weather/reducers'
 import {mapReducer} from '../components/map/reducers'
 import { loginReducer } from "../views/Pages/Login/reducer";
 import { registerReducer } from "../views/Pages/Register/reducer";
-import {kursReducer} from "../components/admin/ConverterPrivatBank/reducer"
+import {kursReducer} from "../components/admin/converterPrivatBank/reducer"
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 //import { createBrowserHistory } from 'history';
 //import createHistory from 'history/createHashHistory';
