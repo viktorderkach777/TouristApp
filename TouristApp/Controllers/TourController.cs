@@ -330,11 +330,11 @@ namespace TouristApp.Controllers
                     Region = u.Hotel.Region.Name,
                     Country = u.Hotel.Region.Country.Name,
                     Description = u.Hotel.Description,
-                    Price = u.Price * u.DaysCount,
+                    Price = u.Hotel.Price * u.DaysCount,
                     Rate = u.Hotel.Rate,
                     Class = u.Hotel.Class,
                     FromData = u.FromData,
-                    Date = u.FromData.ToString().Substring(0, 10),
+                    Date = u.FromData.ToString(),//.Substring(0, 10),
                     DaysCount = u.DaysCount,
                     Images = u.Hotel.HotelImages.Where(
                         f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
