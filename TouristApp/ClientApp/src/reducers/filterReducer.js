@@ -7,36 +7,7 @@ export const initialState = {
         error: false,
         success: false,
         loading: false,
-        filters: [
-            // {
-            //     name: 'Країни',
-            //     id: '1',
-            //     children: [
-            //         { value: 'Іспанія', id: '1', isChecked: false },
-            //         { value: 'Франція', id: '2', isChecked: false },
-            //         { value: 'Єгипет', id: '3', isChecked: false },
-            //         { value: 'Кіпр', id: '4', isChecked: false }
-            //     ]
-            // },
-            // {
-            //     name: 'Місто відправлення',
-            //     id: '2',
-            //     children: [
-            //         { value: 'Київ', id: '5', isChecked: false },
-            //         { value: 'Львів', id: '6', isChecked: false },
-            //         { value: 'Одесса', id: '7', isChecked: false }
-            //     ]
-            // },
-            // {
-            //     name: 'Гроші',
-            //     id: '3',
-            //     children: [
-            //         { value: 'UA', id: '8', isChecked: false },
-            //         { value: 'RUS', id: '9', isChecked: false },
-            //         { value: 'EUR', id: '10', isChecked: false }
-            //     ]
-            // }
-        ]
+        filters: []
     }
 
 };
@@ -46,7 +17,6 @@ export const filters = createSlice({
     slice: 'filters',
     initialState: initialState,
     reducers: {
-
         getFiltersStarted: state => {
             let newState = state;
             newState = update.set(state, 'list.loading', true);
@@ -68,7 +38,28 @@ export const filters = createSlice({
             newState = update.set(state, 'list.loading', false);
             newState = update.set(newState, 'list.error', true);
             return newState;
+        },
+        setChekedFilters: (state, action) => {
+            let newState = state;
+            const filterId = action.payload;
+            console.log("FilterReducer-setChekedFilters-filterId:", filterId);
+            console.log("FilterReducer-setChekedFilters-newstate:", newState );
+            newState.list.filters.forEach((filter) => {
+                console.log("filter name", filter.name);
+                filter.children.forEach((element, index) => {
+                    console.log("children name", element.value ,'id:', element.id );
+                    if (element.id == filterId) {
+                        console.log("chekedID", element.id );
+                        element.isChecked = !element.isChecked;
+                    }
+                });
+            });
+            // newState = update.set(state, 'list.loading', false);
+            // newState = update.set(newState, 'list.error', true);
+            return newState;
         }
+
+
     }
 });
 
@@ -88,4 +79,8 @@ export const getListFilters = () => {
     }
 };
 
-
+export const setChekedFilters = (filterId) => {
+    return (dispatch) => {
+        dispatch(filters.actions.setChekedFilters(filterId));
+    }
+}

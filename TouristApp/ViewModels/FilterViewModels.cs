@@ -7,6 +7,7 @@ namespace TouristApp.ViewModels
     {
         public long Id { get; set; }
         public string Value { get; set; }
+        public bool IsChecked { get; set; } = false;
     }
     public class FNameGetViewModel
     {
@@ -19,6 +20,7 @@ namespace TouristApp.ViewModels
     {
         public long Id { get; set; }
         public string Name { get; set; }
+        public bool IsCollapsed{ get; set; } = false;
         public List<FValueViewModel> Children { get; set; }
     }
 

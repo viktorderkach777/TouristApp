@@ -1,6 +1,7 @@
 import { createSlice } from 'redux-starter-kit';
 import update from '../helpers/update'
 import TourService from "../components/tours/tourService";
+import * as FilterReducer from "../reducers/filterReducer";
 
 export const initialState = {
   list: {
@@ -174,6 +175,14 @@ export const setCurrentPage = (currentPage) => {
 
 export const setFilterId = (filterId) => {
   return (dispatch) => {
-    dispatch(tours.actions.setFilterId(filterId));
+      dispatch(FilterReducer.setChekedFilters(filterId));
+    return dispatch(tours.actions.setFilterId(filterId));
   }
 }
+
+// export function notifyAndSetInventory(notify, inventoryItem) {
+//   return dispatch => {
+//       dispatch(displayNotification(notify));
+//       return dispatch(setInventory(inventoryItem));
+//   };
+// }

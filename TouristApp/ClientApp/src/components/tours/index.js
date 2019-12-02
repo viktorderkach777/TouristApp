@@ -49,6 +49,7 @@ class ToursContainer extends Component {
     }
 
     componentDidMount() {
+        console.log('--tours-componentDidMount---');
         const { currentPage, filtersIdList, totalPages, sortOrder, searchText, kursGet } = this.props;
         const model = {
             currentPage: 1,
@@ -56,7 +57,10 @@ class ToursContainer extends Component {
             filters: filtersIdList,
             searchString: searchText
         }
-        this.props.getListFilters();
+        if (filtersIdList.length===0) {
+            this.props.getListFilters();
+        }
+      
         this.props.postListTours(model);
         this.setState({
             currentPage: currentPage,
@@ -68,7 +72,7 @@ class ToursContainer extends Component {
     }
 
     static getDerivedStateFromProps = (props, state) => {
-        //console.log('---getDerivedStateFromProps---');
+        console.log('--tours-getDerivedStateFromProps---');
         return {
             tours: props.list,
             currentPage: props.currentPage,
@@ -149,71 +153,21 @@ class ToursContainer extends Component {
     onSortChanged = (data) => {
         //console.log('---sort Type ---- ', data);
         this.props.setTypeSort(data);
-        // const { searchText, filters } = this.props;
-        // const model = {
-        //   currentPage: 1,
-        //   sortOrder: data,
-        //   filters: filters,
-        //   searchString: searchText
-        // }
-
-        //this.props.postListTours(model);
-
-    }
+     }
 
     handleCheckChieldElement = (filterId) => {
-
         //console.log('---filterId enter---', filterId)
         this.props.setFilterId(filterId);
-        // let filters = this.state.filters;
-        // filters.forEach(filter => {
-        //   filter.children.forEach(item => {
-        //     if (item.id === filterId) {
-        //        console.log('---isChecked---', data.isChecked)
-        //       item.isChecked = !item.isChecked
-        //     }
-        //   })
-        // })
-        // this.setState({ filters: filters });
-        //this.props.setFilters(filters);
-        // const { sortOrder, searchText } = this.props;
-        // const model = {
-        //   currentPage: 1,
-        //   sortOrder: sortOrder,
-        //   filters: filters,
-        //   searchString: searchText
-        // }
-        //this.props.postListTours(model);
-
     }
 
     onSearchChanged = (searchText) => {
         //console.log('---Search text ---- ', searchText);
-        // const { sortOrder, filters } = this.props;
         this.props.setSearchText(searchText);
-        // const model = {
-        //   currentPage: 1,
-        //   sortOrder: sortOrder,
-        //   filters: filters,
-        //   searchString: searchText
-        // }
-        //this.props.postListTours(model);
     }
 
     onPageChanged = (data) => {
-        this.props.setCurrentPage(data);
         //console.log('---data from pagination', data);
-        // const { sortOrder, searchText, filters } = this.props;
-        // const model = {
-        //   currentPage: data,
-        //   sortOrder: sortOrder,
-        //   filters: filters,
-        //   searchString: searchText
-        // }
-        //console.log('---postListTours onPageChanged----', model);
-        //this.props.postListTours(model);
-        //this.setState({ currentPage: data });
-
+        this.props.setCurrentPage(data);
     }
 
     //currency, kurs,
@@ -331,7 +285,7 @@ class ToursContainer extends Component {
                             <Row>
                                 {this.setPrice(item.price, currency, kurs, isListLoading, errors)}
                                 {/* ₴ */}
-                                <Link to={`/views/${item.country}/${item.id}`}>
+                                <Link to={`/tours/${item.country}/${item.normalizedName}/${item.id}`}>
                                     <Button className="buttonHotel">Дивитись тур</Button>
                                 </Link>
                             </Row>

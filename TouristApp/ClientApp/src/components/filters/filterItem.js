@@ -16,7 +16,14 @@ const FilterCheckBox = (props) => {
     return (
         <FormGroup check className='align-text-bottom' >
             <Label check>
-                <Input key={props.id}  type="checkbox" onClick={props.handleCheckChieldElement} id={props.id} value={props.value} />{' '}<h5> {props.value} </h5>
+                <Input key={props.id}
+                       checked = {props.isChecked}
+                       type="checkbox"
+                       onChange={props.handleCheckChieldElement}
+                       id={props.id}
+                       value={props.value} />
+                       {' '}
+                       <h5> {props.value} </h5>
             </Label>
         </FormGroup>)
 }
@@ -24,7 +31,7 @@ const FilterHeader = (props) => {
     return (
         <Button
             color="info"
-            onClick={props.onClick}
+            onClick={props.toggle}
             className="mt-2 col">
             {props.name}{' ('}
             {props.children.length}{')'}
@@ -44,7 +51,7 @@ class FilterItem extends Component {
     }
 
     componentDidMount() {
-        this.setState({ filter: this.props.filterData });
+        this.setState({ filter: this.props.filterData,collapse:this.props.filterData.isCollapsed});
     }
 
     handleCheckChieldElement = (event) => {
@@ -53,14 +60,22 @@ class FilterItem extends Component {
         handleCheckChieldElement(filterId);
     }
 
+    static getDerivedStateFromProps = (props, state) => {
+        console.log('---getDerivedStateFromProps filter---');
+        return {
+            filter: props.filterData
+        };
+    }
+
     render() {
-         // console.log('filterItem.pros:', this.props);
-        const { collapse } = this.state;
+        console.log('filterItem.state:', this.state);
+        console.log('filterItem.props:', this.props);
+        const { collapse} = this.state;
         const { filterData } = this.props;
         let filter = filterData.children;
         return (
             <div>
-                <FilterHeader {...filterData} collapse={collapse} onClick={this.toggle} />
+                <FilterHeader {...filterData} collapse={collapse} toggle={this.toggle} />
                 <Collapse isOpen={collapse}>
                     <Card>
                         <CardBody>
