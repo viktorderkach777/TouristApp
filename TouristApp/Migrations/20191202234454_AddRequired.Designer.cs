@@ -10,8 +10,8 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20191201141245_Init")]
-    partial class Init
+    [Migration("20191202234454_AddRequired")]
+    partial class AddRequired
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -101,7 +101,9 @@ namespace TouristApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
 
                     b.HasKey("Id");
 
@@ -137,7 +139,9 @@ namespace TouristApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -177,7 +181,9 @@ namespace TouristApp.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("AvatarUrl");
+                    b.Property<string>("AvatarUrl")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -189,15 +195,20 @@ namespace TouristApp.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<string>("MiddleName");
+                    b.Property<string>("MiddleName")
+                        .HasMaxLength(250);
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -314,15 +325,23 @@ namespace TouristApp.Migrations
 
                     b.Property<int>("Class");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000);
+
+                    b.Property<long>("HotelFoodId");
 
                     b.Property<double?>("Latitude");
 
                     b.Property<double?>("Longtitude");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
-                    b.Property<string>("NormalizedName");
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(5,2)");
@@ -335,9 +354,26 @@ namespace TouristApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HotelFoodId");
+
                     b.HasIndex("RegionId");
 
                     b.ToTable("Hotels");
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.HotelFood", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HotelFoods");
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.HotelImage", b =>
@@ -348,51 +384,15 @@ namespace TouristApp.Migrations
 
                     b.Property<long>("HotelId");
 
-                    b.Property<string>("HotelImageUrl");
+                    b.Property<string>("HotelImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
                     b.HasIndex("HotelId");
 
                     b.ToTable("HotelImages");
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelParameter", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description");
-
-                    b.Property<long>("HotelId");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("HotelParameters");
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameter", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("HotelParameterId");
-
-                    b.Property<bool?>("IsFree");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelParameterId");
-
-                    b.ToTable("HotelSubParameters");
                 });
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Order", b =>
@@ -464,7 +464,9 @@ namespace TouristApp.Migrations
 
                     b.Property<long>("CountryId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -590,6 +592,11 @@ namespace TouristApp.Migrations
 
             modelBuilder.Entity("TouristApp.DAL.Entities.Hotel", b =>
                 {
+                    b.HasOne("TouristApp.DAL.Entities.HotelFood", "HotelFood")
+                        .WithMany("Hotels")
+                        .HasForeignKey("HotelFoodId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("TouristApp.DAL.Entities.Region", "Region")
                         .WithMany("Hotels")
                         .HasForeignKey("RegionId")
@@ -601,22 +608,6 @@ namespace TouristApp.Migrations
                     b.HasOne("TouristApp.DAL.Entities.Hotel", "Hotel")
                         .WithMany("HotelImages")
                         .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelParameter", b =>
-                {
-                    b.HasOne("TouristApp.DAL.Entities.Hotel", "Hotel")
-                        .WithMany("HotelParameters")
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TouristApp.DAL.Entities.HotelSubParameter", b =>
-                {
-                    b.HasOne("TouristApp.DAL.Entities.HotelParameter", "HotelParameter")
-                        .WithMany("HotelSubParameters")
-                        .HasForeignKey("HotelParameterId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

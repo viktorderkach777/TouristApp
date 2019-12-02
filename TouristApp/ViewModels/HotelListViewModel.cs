@@ -81,6 +81,7 @@ namespace TouristApp.ViewModels
         public string Date { get; set; }
         public int? DaysCount { get; set; }
         public string ImagePath { get; set; }
+        public string HotelFood { get; set; }
     }
 
     public class HotelPhotoViewModel
@@ -141,6 +142,7 @@ namespace TouristApp.ViewModels
         public string Description { get; set; }
         public int RoomsCount { get; set; }
         public string Region { get; set; }
+        public string HotelFood { get; set; }
         public string Country { get; set; }
         public string СityDeparture { get; set; }
         public double? Rate { get; set; }

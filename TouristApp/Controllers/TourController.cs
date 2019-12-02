@@ -258,6 +258,7 @@ namespace TouristApp.Controllers
                 Price = u.Hotel.Price * u.DaysCount,
                 Rate = u.Hotel.Rate,
                 Class = u.Hotel.Class,
+                HotelFood = u.Hotel.HotelFood.Name,
                 FromData = u.FromData,
                 Date = u.FromData.ToString(),
                 DaysCount = u.DaysCount,
@@ -320,6 +321,7 @@ namespace TouristApp.Controllers
                 .Include(s => s.Hotel.Parameters)
                 .Include(s => s.Hotel.HotelImages)
                 .Include(d => d.Hotel.Region)
+                .Include(d => d.Hotel.HotelFood)
                 .Include(f => f.Hotel.Region.Country)
                 .Include(z => z.CityDeparture)
                 .Select(u => new SingleTourViewModel
@@ -334,8 +336,9 @@ namespace TouristApp.Controllers
                     Rate = u.Hotel.Rate,
                     Class = u.Hotel.Class,
                     FromData = u.FromData,
-                    Date = u.FromData.ToString(),//.Substring(0, 10),
+                    Date = u.FromData.ToString(),
                     DaysCount = u.DaysCount,
+                    HotelFood = u.Hotel.HotelFood.Name,
                     Images = u.Hotel.HotelImages.Where(
                         f => f.HotelId == u.HotelId).Select(x => new HotelPhotoViewModel
                         {

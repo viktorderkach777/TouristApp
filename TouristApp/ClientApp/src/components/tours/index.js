@@ -247,8 +247,8 @@ class ToursContainer extends Component {
 
 
     render() {
-        //  console.log('----State Tours -----', this.state);
-        //  console.log('----Props Tours-----', this.props);
+        // console.log('----State Tours -----', this.state);
+        // console.log('----Props Tours-----', this.props);
         const { roles, totalPages, currentPage, countTours } = this.props;
         const { deleteDialog_isOpen, chatDialog_isOpen, id_delete, currency, kurs, isListLoading, errors } = this.state;
 
@@ -314,9 +314,12 @@ class ToursContainer extends Component {
                                         <b>{item.daysCount}</b> ночей
                                     </li>
                                     <li>
-                                        <i className="fa fa-bus iconColor" aria-hidden="true"></i>
-                                        <span className="skin-color hidden-xs"> Проїзд: </span>
-                                        включений
+                                        {/* <i className="fa fa-bus iconColor" aria-hidden="true"></i> */}
+                                        {/* <span className="skin-color hidden-xs"> Проїзд: </span> */}
+                                        {/* включений */}
+                                        <i className="fa fa-coffee iconColor" aria-hidden="true"></i>
+                                        <span className="skin-color hidden-xs"> Харчування: </span>
+                                        {item.hotelFood}
                                     </li>
                                     <li>
                                         <i className="fa fa-credit-card iconColor" aria-hidden="true"></i>

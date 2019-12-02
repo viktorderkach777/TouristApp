@@ -9,6 +9,7 @@ namespace TouristApp.DAL.Entities
     {
         [Key, ForeignKey("User")]
         public long Id { get; set; }
+
         [Required, StringLength(128)]
         public string Token { get; set; }
         public virtual DbUser User { get; set; }

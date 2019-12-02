@@ -112,7 +112,7 @@ class Hotel extends Component {
                                         <CardText>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Харчування: </span>
-                                                <b>  без харчування</b>
+                                                <b>  {tour.hotelFood}</b>
                                             </li>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Ціна за: </span>

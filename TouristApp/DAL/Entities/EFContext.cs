@@ -12,7 +12,6 @@ namespace TouristApp.DAL.Entities
         public EFContext(DbContextOptions<EFContext> options)
             : base(options)
         {
-
         }
 
         // <summary>
@@ -20,9 +19,7 @@ namespace TouristApp.DAL.Entities
         /// </summary>
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
-        public virtual DbSet<HotelImage> HotelImages { get; set; }
-        public virtual DbSet<HotelParameter> HotelParameters { get; set; }
-        public virtual DbSet<HotelSubParameter> HotelSubParameters { get; set; }
+        public virtual DbSet<HotelImage> HotelImages { get; set; }        
         public virtual DbSet<Hotel> Hotels { get; set; }
         public virtual DbSet< Order> Orders { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
@@ -30,6 +27,8 @@ namespace TouristApp.DAL.Entities
         public DbSet<Parameter> Parameters { get; set; }
         public virtual DbSet<CityDeparture> CityDepartures { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
+        public virtual DbSet<HotelFood> HotelFoods { get; set; }
 
         // <summary>
         /// Filter tables

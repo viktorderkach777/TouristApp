@@ -82,6 +82,19 @@ namespace TouristApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HotelFoods",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HotelFoods", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblFilterNames",
                 columns: table => new
                 {
@@ -291,11 +304,18 @@ namespace TouristApp.Migrations
                     RoomsCount = table.Column<int>(nullable: true),
                     Class = table.Column<int>(nullable: false),
                     Longtitude = table.Column<double>(nullable: true),
-                    Latitude = table.Column<double>(nullable: true)
+                    Latitude = table.Column<double>(nullable: true),
+                    HotelFoodId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Hotels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Hotels_HotelFoods_HotelFoodId",
+                        column: x => x.HotelFoodId,
+                        principalTable: "HotelFoods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Hotels_Regions_RegionId",
                         column: x => x.RegionId,
@@ -346,27 +366,6 @@ namespace TouristApp.Migrations
                     table.PrimaryKey("PK_HotelImages", x => x.Id);
                     table.ForeignKey(
                         name: "FK_HotelImages_Hotels_HotelId",
-                        column: x => x.HotelId,
-                        principalTable: "Hotels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HotelParameters",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    HotelId = table.Column<long>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HotelParameters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_HotelParameters_Hotels_HotelId",
                         column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "Id",
@@ -427,27 +426,6 @@ namespace TouristApp.Migrations
                         name: "FK_Tours_Hotels_HotelId",
                         column: x => x.HotelId,
                         principalTable: "Hotels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HotelSubParameters",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    HotelParameterId = table.Column<long>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    IsFree = table.Column<bool>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HotelSubParameters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_HotelSubParameters_HotelParameters_HotelParameterId",
-                        column: x => x.HotelParameterId,
-                        principalTable: "HotelParameters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -565,19 +543,14 @@ namespace TouristApp.Migrations
                 column: "HotelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HotelParameters_HotelId",
-                table: "HotelParameters",
-                column: "HotelId");
+                name: "IX_Hotels_HotelFoodId",
+                table: "Hotels",
+                column: "HotelFoodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Hotels_RegionId",
                 table: "Hotels",
                 column: "RegionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HotelSubParameters_HotelParameterId",
-                table: "HotelSubParameters",
-                column: "HotelParameterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_TourId",
@@ -644,9 +617,6 @@ namespace TouristApp.Migrations
                 name: "HotelImages");
 
             migrationBuilder.DropTable(
-                name: "HotelSubParameters");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
@@ -665,9 +635,6 @@ namespace TouristApp.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "HotelParameters");
-
-            migrationBuilder.DropTable(
                 name: "tblFilterNames");
 
             migrationBuilder.DropTable(
@@ -684,6 +651,9 @@ namespace TouristApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Hotels");
+
+            migrationBuilder.DropTable(
+                name: "HotelFoods");
 
             migrationBuilder.DropTable(
                 name: "Regions");
