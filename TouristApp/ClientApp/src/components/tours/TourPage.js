@@ -32,12 +32,12 @@ class Hotel extends Component {
         axios.get(url2)
             .then(
                 result => {
-                    console.log('--result--', result.data);
+                    //console.log('--result--', result.data);
                     let z = { ...result.data }
                     this.setState({ tour: z });
                 },
                 err => {
-                    console.log('--problem--', err);
+                    //console.log('--problem--', err);
                 }
             );
     }
@@ -73,20 +73,23 @@ class Hotel extends Component {
                     break;
             }
         };
+        if (isNaN(newPrice)) {
+            return <CentralPageSpinner loading={true} />
+        }
         return <><span className="mr-4">{newPrice} {currency}</span></>;
     }
 
     render() {
-         console.log('-----Single Tour state------ ', this.state);
-         console.log('-----Single Tour props------ ', this.props);
+        // console.log('-----Single Tour state------ ', this.state);
+        // console.log('-----Single Tour props------ ', this.props);
         const { tour } = this.state;
         const { currency, kurs, isKursLoading, errors } = this.props;
         if (isKursLoading) {
             return <CentralPageSpinner loading={isKursLoading} />
         }
         let param = tour.hotelParametries;
-        console.log('-----tour------ ', param);
-       
+        //console.log('-----tour------ ', param);
+
 
         return (
             <React.Fragment>
@@ -148,7 +151,7 @@ class Hotel extends Component {
                                 <Card className="CardTours text-center">
 
                                     {/* {this.state.tour.rate} */}
-                                    <TabWidjet tour={this.state.tour} param={param}/>
+                                    <TabWidjet tour={this.state.tour} param={param} />
                                     {/* {this.state.tour.images.map(item =>
                                             <span> <b>{item.id}</b> </span> )} */}
 

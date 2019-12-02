@@ -7,9 +7,9 @@ import classnames from 'classnames';
 const SoapIcon = ['', 'soap-icon-locations', 'soap-icon-beach', 'soap-icon-hotel', 'soap-icon-check', 'soap-icon-party', 'soap-icon-notice']
 
 const ParamItemList = (props) => {
-    console.log('ParamItemList', props)
-    let child = props.children;
-    console.log('child', child)
+    //console.log('ParamItemList', props)
+    //let child = props.children;
+    //console.log('child', child)
     return (
         props != null ?
             <Row>
@@ -63,15 +63,15 @@ class Tabs extends Component {
         });
     }
     componentDidMount() {
-        console.log('--- tabs)----', this.props);
+        //console.log('--- tabs)----', this.props);
         this.setState({ tour: this.props.tour });
 
     }
 
     tabPane() {
         const { tour, param } = this.props;        
-         console.log('---Tabs props----', this.props );
-         console.log('---Tabs state----', this.state );
+        //  console.log('---Tabs props----', this.props );
+        //  console.log('---Tabs state----', this.state );
          
         return (
             <>
@@ -102,9 +102,9 @@ class Tabs extends Component {
 
     render() {
         const { activeTab } = this.state;
-        console.log('---Tabs state----', this.state);
-        console.log('---Tabs props----', this.props);
-        console.log('---Data----', this.props.class);
+        // console.log('---Tabs state----', this.state);
+        // console.log('---Tabs props----', this.props);
+        // console.log('---Data----', this.props.class);
         return (
             <div className="animated fadeIn">
                 <Row className="p-2">

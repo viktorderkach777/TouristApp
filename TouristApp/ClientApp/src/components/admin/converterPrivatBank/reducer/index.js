@@ -59,7 +59,7 @@ export const kursGet = () => {
         dispatch({ type: FETCH_KURS_REQUEST });
         AdminService.getKurs()
             .then((response) => {
-                //console.log('(response)', response);
+                console.log('(response)', response);
                 if (response.statusText !== "OK") {
                     dispatch({
                         type: FETCH_KURS_FAILURE,

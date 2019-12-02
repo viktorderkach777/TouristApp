@@ -247,8 +247,8 @@ class ToursContainer extends Component {
 
 
     render() {
-         console.log('----State Tours -----', this.state);
-         console.log('----Props Tours-----', this.props);
+        //  console.log('----State Tours -----', this.state);
+        //  console.log('----Props Tours-----', this.props);
         const { roles, totalPages, currentPage, countTours } = this.props;
         const { deleteDialog_isOpen, chatDialog_isOpen, id_delete, currency, kurs, isListLoading, errors } = this.state;
 
