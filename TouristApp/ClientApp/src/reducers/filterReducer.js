@@ -42,14 +42,14 @@ export const filters = createSlice({
         setChekedFilters: (state, action) => {
             let newState = state;
             const filterId = action.payload;
-            console.log("FilterReducer-setChekedFilters-filterId:", filterId);
-            console.log("FilterReducer-setChekedFilters-newstate:", newState );
+            //console.log("FilterReducer-setChekedFilters-filterId:", filterId);
+            //console.log("FilterReducer-setChekedFilters-newstate:", newState );
             newState.list.filters.forEach((filter) => {
-                console.log("filter name", filter.name);
+                //console.log("filter name", filter.name);
                 filter.children.forEach((element, index) => {
-                    console.log("children name", element.value ,'id:', element.id );
+                    //console.log("children name", element.value ,'id:', element.id );
                     if (element.id == filterId) {
-                        console.log("chekedID", element.id );
+                        //console.log("chekedID", element.id );
                         element.isChecked = !element.isChecked;
                     }
                 });

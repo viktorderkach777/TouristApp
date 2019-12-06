@@ -8,7 +8,7 @@ import get from 'lodash.get';
 import CentralPageSpinner from '../../../components/CentrPageSpinner';
 import Google from '../../../components/google';
 import Facebook from '../../../components/facebook';
-
+import * as kursAction from '../../../components/admin/converterPrivatBank/reducer'
 
 const propTypes = {
   login: PropTypes.func.isRequired,
@@ -17,6 +17,7 @@ const propTypes = {
   success: PropTypes.bool.isRequired,
   history: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
+  setCurrency: PropTypes.func.isRequired,
 };
 
 const defaultProps = {};
@@ -55,6 +56,7 @@ class Login extends Component {
 
   onSubmitForm = (e) => {
     e.preventDefault();
+    //const {setCurrency} = this.props;
     let errors = {};
 
     if (this.state.email === '') errors.email = "Can't be empty!"
@@ -67,6 +69,7 @@ class Login extends Component {
         Email: email,
         Password: password
       };
+      this.props.setCurrency("USD");
       this.props.login(model);
     }
     else {
@@ -208,9 +211,14 @@ const mapState = (state) => {
   }
 }
 
-const mapDispatch = {
-  login: (model) => {
-    return loginActions.loginPost(model);
+const mapDispatch = (dispatch) => {
+  return {
+    login: (model) => {
+      dispatch(loginActions.loginPost(model));
+    },
+    setCurrency: (name) => {
+      dispatch(kursAction.setCurrency(name))
+    },
   }
 }
 

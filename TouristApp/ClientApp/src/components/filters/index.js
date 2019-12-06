@@ -52,7 +52,7 @@ class Filters extends Component {
                             onChange={this.handleChange}
                             options={options}
                             defaultValue={{ value: 'usd', label: 'USD' }}
-                            placeholder={"Select your currency"}
+                            placeholder={"Валюта"}
                         />
                     </CardFooter>
                 </Card>

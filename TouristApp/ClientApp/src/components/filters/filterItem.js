@@ -61,15 +61,15 @@ class FilterItem extends Component {
     }
 
     static getDerivedStateFromProps = (props, state) => {
-        console.log('---getDerivedStateFromProps filter---');
+        //console.log('---getDerivedStateFromProps filter---');
         return {
             filter: props.filterData
         };
     }
 
     render() {
-        console.log('filterItem.state:', this.state);
-        console.log('filterItem.props:', this.props);
+        //console.log('filterItem.state:', this.state);
+        //console.log('filterItem.props:', this.props);
         const { collapse} = this.state;
         const { filterData } = this.props;
         let filter = filterData.children;

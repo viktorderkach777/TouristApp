@@ -49,7 +49,7 @@ class ToursContainer extends Component {
     }
 
     componentDidMount() {
-        console.log('--tours-componentDidMount---');
+        //console.log('--tours-componentDidMount---');
         const { currentPage, filtersIdList, totalPages, sortOrder, searchText, kursGet } = this.props;
         const model = {
             currentPage: 1,
@@ -57,10 +57,10 @@ class ToursContainer extends Component {
             filters: filtersIdList,
             searchString: searchText
         }
-        if (filtersIdList.length===0) {
+        if (filtersIdList.length === 0) {
             this.props.getListFilters();
         }
-      
+
         this.props.postListTours(model);
         this.setState({
             currentPage: currentPage,
@@ -72,7 +72,7 @@ class ToursContainer extends Component {
     }
 
     static getDerivedStateFromProps = (props, state) => {
-        console.log('--tours-getDerivedStateFromProps---');
+        //console.log('--tours-getDerivedStateFromProps---');
         return {
             tours: props.list,
             currentPage: props.currentPage,
@@ -153,7 +153,7 @@ class ToursContainer extends Component {
     onSortChanged = (data) => {
         //console.log('---sort Type ---- ', data);
         this.props.setTypeSort(data);
-     }
+    }
 
     handleCheckChieldElement = (filterId) => {
         //console.log('---filterId enter---', filterId)
@@ -196,7 +196,8 @@ class ToursContainer extends Component {
                     break;
             }
         };
-        return <><h5 className="mr-4">{newPrice} {currency}</h5></>;
+        //console.log('---currency', currency);
+        return <><h5 className="mr-4">{newPrice} {currency === undefined ? "USD" : currency}</h5></>;
     }
 
 
@@ -286,7 +287,7 @@ class ToursContainer extends Component {
                         </Col>
                         <Col sm="12" md="2" className="d-flex  justify-content-center align-items-center">
                             <Row>
-                                {this.setPrice(item.price, currency, kurs, isListLoading, errors)}
+                                {isListLoading ? null : this.setPrice(item.price, currency, kurs, isListLoading, errors)}
                                 {/* ₴ */}
                                 <Link to={`/tours/${item.country}/${item.normalizedName}/${item.id}`}>
                                     <Button className="buttonHotel">Дивитись тур</Button>

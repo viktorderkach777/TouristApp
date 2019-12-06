@@ -76,7 +76,7 @@ class Hotel extends Component {
         if (isNaN(newPrice)) {
             return <CentralPageSpinner loading={true} />
         }
-        return <><span className="mr-4">{newPrice} {currency}</span></>;
+        return <><span className="mr-4">{newPrice} {currency === undefined ? "USD" : currency}</span></>;
     }
 
     render() {

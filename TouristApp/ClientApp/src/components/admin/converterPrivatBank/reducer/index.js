@@ -12,7 +12,7 @@ const initialState = {
     currency: 'USD'
 };
 
-export const kursReducer = (state = initialState, action) => {    
+export const kursReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_KURS_REQUEST:
             return {
@@ -33,7 +33,8 @@ export const kursReducer = (state = initialState, action) => {
                 ...state,
                 kurs: [],
                 loading: false,
-                errors: action.payload
+                //errors: action.payload
+                errors: { errorsServer: action.payload }
             };
         case SET_KURS_CURRENCY:
             return {
@@ -45,8 +46,8 @@ export const kursReducer = (state = initialState, action) => {
     }
 };
 
-export const setCurrency = (currency) => {    
-    return (dispatch) => {        
+export const setCurrency = (currency) => {
+    return (dispatch) => {
         dispatch({
             type: SET_KURS_CURRENCY,
             payload: currency.label
