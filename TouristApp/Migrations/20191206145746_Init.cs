@@ -43,12 +43,12 @@ namespace TouristApp.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    MiddleName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(maxLength: 250, nullable: false),
+                    MiddleName = table.Column<string>(maxLength: 250, nullable: true),
+                    LastName = table.Column<string>(maxLength: 250, nullable: false),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     SignUpTime = table.Column<DateTime>(nullable: false),
-                    AvatarUrl = table.Column<string>(nullable: true)
+                    AvatarUrl = table.Column<string>(maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -61,7 +61,7 @@ namespace TouristApp.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 128, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,7 +74,8 @@ namespace TouristApp.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 250, nullable: false),
+                    NormalizedName = table.Column<string>(maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,7 +88,7 @@ namespace TouristApp.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -251,7 +252,7 @@ namespace TouristApp.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CountryId = table.Column<long>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -295,9 +296,9 @@ namespace TouristApp.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    NormalizedName = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 250, nullable: false),
+                    NormalizedName = table.Column<string>(maxLength: 250, nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: false),
                     RegionId = table.Column<long>(nullable: false),
                     Rate = table.Column<double>(nullable: true),
                     Price = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
@@ -359,7 +360,7 @@ namespace TouristApp.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     HotelId = table.Column<long>(nullable: false),
-                    HotelImageUrl = table.Column<string>(nullable: true)
+                    HotelImageUrl = table.Column<string>(maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {

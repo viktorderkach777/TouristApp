@@ -15,6 +15,9 @@ namespace TouristApp.DAL.Entities
 
         [Required, StringLength(maximumLength: 250)]
         public string Name { get; set; }
+
+        [Required, StringLength(maximumLength: 250)]
+        public string NormalizedName { get; set; }
         public virtual ICollection<Region> Regions { get; set; }
     }
 }

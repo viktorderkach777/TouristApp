@@ -150,134 +150,467 @@ namespace TouristApp.DAL.Entities
             #endregion
         }
 
+        #region SeedCountries
         public static void SeedCountries(EFContext context)
         {
-            string[] country_names = new string[]
+            Country[] countries = new Country[]
             {
-                "Австралія",
-                "Австрія",
-                "Азербайджан",
-                "Албанія",
-                "Андора",
-                "Аргентина",
-                "Арменія",
-                "Аруба",
-                "Багамскі Острови",
-                "Бангладеш",
-                "Барбадос",
-                "Білорусь",
-                "Бірма",
-                "Бельгія",
-                "Болгарія",
-                "Болівія",
-                "Боснія и Герцеговина",
-                "Бразилія",
-                "Бутан",
-                "Великобританія",
-                "Венгрія",
-                "В'єтнам",
-                "Гватемала",
-                "Гондурас",
-                "Гонконг",
-                "Греція",
-                "Грузія",
-                "Данія",
-                "Домінікана",
-                "Іспанія",
-                "Еквадор",
-                "Естонія",
-                "Єгипет",
-                "Зімбабве",
-                "Ізраїль",
-                "Індонезія",
-                "Індія",
-                "Іорданія",
-                "Іспанія",
-                "Іран",
-                "Ірландія",
-                "Ісландія",
-                "Італія",
-                "Камбоджа",
-                "Канада",
-                "Катар",
-                "Кенія",
-                "Кіпр",
-                "Китай",
-                "Коста-Ріка",
-                "Куба",
-                "Кюрасао",
-                "Лаос",
-                "Латвія",
-                "Литва",
-                "Ліхтенштейн",
-                "Люксембург",
-                "Маврикій",
-                "Мадагаскар",
-                "Македонія",
-                "Малайзія",
-                "Мальдіви",
-                "Мальта",
-                "Марокко",
-                "Мексика",
-                "Молдова",
-                "Монако",
-                "Мьянма",
-                "Непал",
-                "Нідерланди",
-                "Нікарагуа",
-                "Німеччина",
-                "Новая Зеландія",
-                "Норвегія",
-                "ОАЕ",
-                "Оман",
-                "ПАР",
-                "Парагвай",
-                "Південна Корея",
-                "Перу",
-                "Польша",
-                "Португалія",
-                "Росія",
-                "Румунія",
-                "Сан-Марино",
-                "Сейшельскі о.",
-                "Сен-Бартелемі",
-                "Сен-Мартен",
-                "Сербія",
-                "Сінгапур",
-                "Словакія",
-                "Словенія",
-                "США",
-                "Таїланд",
-                "Танзанія",
-                "Турція",
-                "Туніс",
-                "Україна",
-                "Филипіни",
-                "Фінляндія",
-                "Франція",
-                "Французська Полінезія",
-                "Хорватія",
-                "Чехія",
-                "Чорногогрія",
-                "Чилі",
-                "Швейцарія",
-                "Швеція",
-                "Шотландія",
-                "Шрі Ланка",
-                "Ямайка",
-                "Японія"
+                new Country{
+                    Name = "Австралія",
+                    NormalizedName = "australia"
+                },
+                new Country{
+                    Name = "Австрія",
+                    NormalizedName = "austria"
+                },
+                new Country{
+                    Name = "Азербайджан",
+                    NormalizedName = "azerbaijan"
+                },
+                new Country{
+                    Name = "Албанія",
+                    NormalizedName = "albania"
+                },
+                new Country{
+                    Name = "Андорра",
+                    NormalizedName = "andorra"
+                },
+                new Country{
+                    Name = "Аргентина",
+                    NormalizedName = "argentina"
+                },
+                new Country{
+                    Name = "Арменія",
+                    NormalizedName = "armenia"
+                },
+                new Country{
+                    Name = "Аруба",
+                    NormalizedName = "aruba"
+                },
+                new Country{
+                    Name = "Багамські Острови",
+                    NormalizedName = "bahamas"
+                },
+                new Country{
+                    Name = "Бангладеш",
+                    NormalizedName = "bangladesh"
+                },
+                new Country{
+                    Name = "Барбадос",
+                    NormalizedName = "barbados"
+                },
+                new Country{
+                    Name = "Білорусь",
+                    NormalizedName = "belarus"
+                },
+                new Country{
+                    Name = "Бірма",
+                    NormalizedName = "burma"
+                },
+                new Country{
+                    Name = "Бельгія",
+                    NormalizedName = "belgium"
+                },
+                new Country{
+                    Name = "Болгарія",
+                    NormalizedName = "bulgaria"
+                },
+                new Country{
+                    Name = "Болівія",
+                    NormalizedName = "bolivia"
+                },
+                new Country{
+                    Name = "Боснія и Герцеговина",
+                    NormalizedName = "bosnia-and-herzegovina"
+                },
+                new Country{
+                    Name = "Бразилія",
+                    NormalizedName = "brazil"
+                },
+                new Country{
+                    Name = "Бутан",
+                    NormalizedName = "butane"
+                },
+                new Country{
+                    Name = "Великобританія",
+                    NormalizedName = "united-kingdom"
+                },
+                new Country{
+                    Name = "Венгрія",
+                    NormalizedName = "hungary"
+                },
+                new Country{
+                    Name = "В'єтнам",
+                    NormalizedName = "vietnam"
+                },
+                new Country{
+                    Name = "Гватемала",
+                    NormalizedName = "guatemala"
+                },
+                new Country{
+                    Name = "Гондурас",
+                    NormalizedName = "honduras"
+                },
+                new Country{
+                    Name = "Гонконг",
+                    NormalizedName = "hong-kong"
+                },
+                new Country{
+                    Name = "Греція",
+                    NormalizedName = "greece"
+                },
+                new Country{
+                    Name = "Грузія",
+                    NormalizedName = "georgia"
+                },
+                new Country{
+                    Name = "Данія",
+                    NormalizedName = "denmark"
+                },
+                new Country{
+                    Name = "Домінікана",
+                    NormalizedName = "dominican-republic"
+                },
+                new Country{
+                    Name = "Іспанія",
+                    NormalizedName = "spain"
+                },
+                new Country{
+                    Name = "Еквадор",
+                    NormalizedName = "ecuador"
+                },
+                new Country{
+                    Name = "Естонія",
+                    NormalizedName = "estonia"
+                },
+                new Country{
+                    Name = "Єгипет",
+                    NormalizedName = "egypt"
+                },
+                new Country{
+                    Name = "Зімбабве",
+                    NormalizedName = "zimbabwe"
+                },
+                new Country{
+                    Name = "Ізраїль",
+                    NormalizedName = "israel"
+                },
+                new Country{
+                    Name = "Індонезія",
+                    NormalizedName = "indonesia"
+                },
+                new Country{
+                    Name = "Індія",
+                    NormalizedName = "india"
+                },
+                new Country{
+                    Name = "Іран",
+                    NormalizedName = "iran"
+                },
+                new Country{
+                    Name = "Ірландія",
+                    NormalizedName = "ireland"
+                },
+                new Country{
+                    Name = "Ісландія",
+                    NormalizedName = "iceland"
+                },
+                new Country{
+                    Name = "Італія",
+                    NormalizedName = "italy"
+                },
+                new Country{
+                    Name = "Йорданія",
+                    NormalizedName = "jordan"
+                },
+                new Country{
+                    Name = "Камбоджа",
+                    NormalizedName = "cambodia"
+                },
+                new Country{
+                    Name = "Канада",
+                    NormalizedName = "canada"
+                },
+                new Country{
+                    Name = "Катар",
+                    NormalizedName = "qatar"
+                },
+                new Country{
+                    Name = "Кенія",
+                    NormalizedName = "kenya"
+                },
+                new Country{
+                    Name = "Кіпр",
+                    NormalizedName = "cyprus"
+                },
+                new Country{
+                    Name = "Китай",
+                    NormalizedName = "china"
+                },
+                new Country{
+                    Name = "Коста-Ріка",
+                    NormalizedName = "costa-rica"
+                },
+                new Country{
+                    Name = "Куба",
+                    NormalizedName = "cuba"
+                },
+                new Country{
+                    Name = "Кюрасао",
+                    NormalizedName = "curacao"
+                },
+                new Country{
+                    Name = "Лаос",
+                    NormalizedName = "laos"
+                },
+                new Country{
+                    Name = "Латвія",
+                    NormalizedName = "latvia"
+                },
+                new Country{
+                    Name = "Литва",
+                    NormalizedName = "lithuania"
+                },
+                new Country{
+                    Name = "Ліхтенштейн",
+                    NormalizedName = "liechtenstein"
+                },
+                new Country{
+                    Name = "Люксембург",
+                    NormalizedName = "luxembourg"
+                },
+                new Country{
+                    Name = "Маврикій",
+                    NormalizedName = "mauritius"
+                },
+                new Country{
+                    Name = "Мадагаскар",
+                    NormalizedName = "madagascar"
+                },
+                new Country{
+                    Name = "Македонія",
+                    NormalizedName = "macedonia"
+                },
+                new Country{
+                    Name = "Малайзія",
+                    NormalizedName = "malaysia"
+                },
+                new Country{
+                    Name = "Мальдіви",
+                    NormalizedName = "maldives"
+                },
+                new Country{
+                    Name = "Мальта",
+                    NormalizedName = "malta"
+                },
+                new Country{
+                    Name = "Марокко",
+                    NormalizedName = "morocco"
+                },
+                new Country{
+                    Name = "Мексика",
+                    NormalizedName = "mexico"
+                },
+                new Country{
+                    Name = "Молдова",
+                    NormalizedName = "moldova"
+                },
+                new Country{
+                    Name = "Монако",
+                    NormalizedName = "monaco"
+                },
+                new Country{
+                    Name = "М'янма",
+                    NormalizedName = "myanmar"
+                },
+                new Country{
+                    Name = "Непал",
+                    NormalizedName = "nepal"
+                },
+                new Country{
+                    Name = "Нідерланди",
+                    NormalizedName = "netherlands"
+                },
+                new Country{
+                    Name = "Нікарагуа",
+                    NormalizedName = "nicaragua"
+                },
+                new Country{
+                    Name = "Німеччина",
+                    NormalizedName = "germany"
+                },
+                new Country{
+                    Name = "Новая Зеландія",
+                    NormalizedName = "new-zealand"
+                },
+                new Country{
+                    Name = "Норвегія",
+                    NormalizedName = "norway"
+                },
+                new Country{
+                    Name = "ОАЕ",
+                    NormalizedName = "uae"
+                },
+                new Country{
+                    Name = "Оман",
+                    NormalizedName = "oman"
+                },
+                new Country{
+                    Name = "ПАР",
+                    NormalizedName = "sar"
+                },
+                new Country{
+                    Name = "Парагвай",
+                    NormalizedName = "paraguay"
+                },
+                new Country{
+                    Name = "Південна Корея",
+                    NormalizedName = "south-korea"
+                },
+                 new Country{
+                    Name = "Перу",
+                    NormalizedName = "peru"
+                },
+                new Country{
+                    Name = "Польща",
+                    NormalizedName = "poland"
+                },
+                new Country{
+                    Name = "Португалія",
+                    NormalizedName = "portugal"
+                },
+                new Country{
+                    Name = "Росія",
+                    NormalizedName = "russia"
+                },
+                new Country{
+                    Name = "Румунія",
+                    NormalizedName = "romania"
+                },
+                new Country{
+                    Name = "Сан-Марино",
+                    NormalizedName = "san-marino"
+                },
+                new Country{
+                    Name = "Сейшельські о.",
+                    NormalizedName = "seychelles"
+                },
+                new Country{
+                    Name = "Сен-Бартельмі",
+                    NormalizedName = "saint-barthelemy"
+                },
+                new Country{
+                    Name = "Сен-Мартен",
+                    NormalizedName = "saint-martin"
+                },
+                new Country{
+                    Name = "Сербія",
+                    NormalizedName = "serbia"
+                },
+                new Country{
+                    Name = "Сінгапур",
+                    NormalizedName = "singapore"
+                },
+                new Country{
+                    Name = "Словакія",
+                    NormalizedName = "slovakia"
+                },
+                new Country{
+                    Name = "Словенія",
+                    NormalizedName = "slovenia"
+                },
+                new Country{
+                    Name = "США",
+                    NormalizedName = "usa"
+                },
+                new Country{
+                    Name = "Таїланд",
+                    NormalizedName = "thailand"
+                },
+                new Country{
+                    Name = "Танзанія",
+                    NormalizedName = "tanzania"
+                },
+                new Country{
+                    Name = "Турція",
+                    NormalizedName = "turkey"
+                },
+                new Country{
+                    Name = "Туніс",
+                    NormalizedName = "tunisia"
+                },
+                new Country{
+                    Name = "Україна",
+                    NormalizedName = "ukraine"
+                },
+                new Country{
+                    Name = "Філіппіни",
+                    NormalizedName = "philippines"
+                },
+                new Country{
+                    Name = "Фінляндія",
+                    NormalizedName = "finland"
+                },
+                new Country{
+                    Name = "Франція",
+                    NormalizedName = "france"
+                },
+                new Country{
+                    Name = "Французька Полінезія",
+                    NormalizedName = "french-polynesia"
+                },
+                new Country{
+                    Name = "Хорватія",
+                    NormalizedName = "croatia"
+                },
+                new Country{
+                    Name = "Чехія",
+                    NormalizedName = "czech-republic"
+                },
+                new Country{
+                    Name = "Чорногорія",
+                    NormalizedName = "montenegro"
+                },
+                new Country{
+                    Name = "Чилі",
+                    NormalizedName = "chile"
+                },
+                new Country{
+                    Name = "Швейцарія",
+                    NormalizedName = "switzerland"
+                },
+                new Country{
+                    Name = "Швеція",
+                    NormalizedName = "sweden"
+                },
+                new Country{
+                    Name = "Шотландія",
+                    NormalizedName = "scotland"
+                },
+                new Country{
+                    Name = "Шрі Ланка",
+                    NormalizedName = "sri-lanka"
+                },
+                new Country{
+                    Name = "Ямайка",
+                    NormalizedName = "jamaica"
+                },
+                new Country{
+                    Name = "Японія",
+                    NormalizedName = "japan"
+                },
             };
 
-            foreach (var name in country_names)
+            foreach (var country in countries)
             {
-                if (context.Countries.FirstOrDefault(f => f.Name == name) == null)
+                if (context.Countries.FirstOrDefault(f => f.Name == country.Name) == null)
                 {
-                    context.Countries.Add(new Country { Name = name });
+                    context.Countries.Add(new Country { Name = country.Name, NormalizedName = country.NormalizedName });
                     context.SaveChanges();
                 }
             }
         }
-
+        #endregion
 
         public static void SeedHotelFoods(EFContext context)
         {
@@ -459,7 +792,7 @@ namespace TouristApp.DAL.Entities
                     context.SaveChanges();
                 }
             }
-        }       
+        }
 
         public static void SeedHotelsHelper(EFContext context, Region region, HotelFood hotelFood, Hotel hotel)
         {
@@ -471,7 +804,7 @@ namespace TouristApp.DAL.Entities
         }
 
         public static void SeedHotels(EFContext context)
-         {
+        {
             //string countryName = "Єгипет";
             string hotelFoodNameNoFood = "Без харчування";
             string hotelFoodNameBreakfast = "Сніданок";
@@ -487,7 +820,7 @@ namespace TouristApp.DAL.Entities
             HotelFood hotelFoodAllInclusive = context.HotelFoods.FirstOrDefault(f => f.Name == hotelFoodNameAllInclusive);
             HotelFood hotelFoodUltraAllInclusive = context.HotelFoods.FirstOrDefault(f => f.Name == hotelFoodNameUltraAllInclusive);
 
-            if (hotelFoodNoFood != null && hotelFoodBreakfast != null && hotelFoodBreakfastAndDinner != null 
+            if (hotelFoodNoFood != null && hotelFoodBreakfast != null && hotelFoodBreakfastAndDinner != null
                 && hotelFoodFoolBoard != null && hotelFoodAllInclusive != null && hotelFoodUltraAllInclusive != null)
             {
                 string regionName = "Марса Алам";
@@ -575,7 +908,7 @@ namespace TouristApp.DAL.Entities
                           Rate = 4.49,
                           Price = 50.0m,
                           HotelFoodId = hotelFood.Id
-                      });                    
+                      });
                 }
 
                 regionName = "Хургада";
@@ -670,7 +1003,7 @@ namespace TouristApp.DAL.Entities
                            Rate = 4.15,
                            Price = 40.0m,
                            HotelFoodId = hotelFood.Id
-                       });                   
+                       });
                 }
 
 
@@ -756,7 +1089,7 @@ namespace TouristApp.DAL.Entities
                         Rate = 4.05,
                         Price = 46.0m,
                         HotelFoodId = hotelFood.Id
-                    });                    
+                    });
                 }
 
                 regionName = "Сафага";
@@ -794,7 +1127,7 @@ namespace TouristApp.DAL.Entities
                         Rate = 4.08,
                         Price = 44.0m,
                         HotelFoodId = hotelFood.Id
-                    });                    
+                    });
                 }
 
                 regionName = "Сахл Хашиш";
@@ -889,7 +1222,7 @@ namespace TouristApp.DAL.Entities
                         Rate = 4.82,
                         Price = 56.0m,
                         HotelFoodId = hotelFood.Id
-                    });                   
+                    });
                 }
             }
         }
@@ -1068,35 +1401,6 @@ namespace TouristApp.DAL.Entities
 
         public static void SeedParametersHotel(EFContext context)
         {
-            string[] Names = new string[] {
-               "Розташування", "Пляж", "Номери", "Сервіси",
-               "Спорт і розваги","Для дітей", "Харчування",
-               "Спорт","Для дітей (послуги)", "Розваги", "Послуги в готелі",
-               "Пляж (послуги)", "Готель" };
-
-            Dictionary<string, string> descriptions = new Dictionary<string, string>();
-            descriptions.Add("Розташування", "Розташований в 36 км від аеропорту м Марса Алам і в 165 км від аеропорту Хургади.");
-            descriptions.Add("Пляж", "Піщано-кораловий пляж. Протяжність пляжу - 500 м. Рекомендується спеціальне взуття.");
-            descriptions.Add("Номери", "У готелі 444 номери.");
-            descriptions.Add("Сервіси", "Ресторани: Green House Restaurant (сніданок, обід і вечерю, шведський стіл) La Vista Restaurant (міжнародна кухня) Panorama Restaurant (місцева кухня) Beach BBQ Restaurant Бари: Lobby Bar Pool Bar Waves Beach Bar Scarabeo Beach Disco До послуг гостей: 6 басейнів ( 1 зі штучною хвилею, 2 з підігрівом в зимовий період, 1 олімпійський басейн");
-            descriptions.Add("Спорт і розваги", "Освітлення тенісного корту (платно), катання на верблюдах (за додаткову плату), водне поло (безкоштовно), дартс (безкоштовно), бочче (безкоштовно), міні-футбол (безкоштовно), пірнання з аквалангом, 2 тенісних корти (з твердим покриттям , 1 - в LTI Akassia Beach Resort), стрільба з лука.");
-            descriptions.Add("Для дітей", "6 водні гірки, 3 відкриті басейни (1 в LTI Akassia Beach Resort), 3 дитячі секції в басейні (1 в LTI Akassia Beach Resort), дитячий клуб (з 4 до 12 років), дитяча коляска.");
-
-            Dictionary<string, List<string>> childrens = new Dictionary<string, List<string>>();
-            childrens.Add("Харчування", new List<string> { "Кафе", "Ресторан" });
-            childrens.Add("Розваги", new List<string> { "SPA", "Сауна/Лазня $", "Джакузі",
-            "Дискотека","Водні гірки","Музика","Масаж $","Відкритий басейн","Аніматори"});
-            childrens.Add("Для дітей (послуги)", new List<string> { "Дитячий басейн", "Послуги няні $",
-            "Дитяча площадка","Дитячі стільчики в ресторані","Дитяча кімната","Дитяче ліжко"});
-            childrens.Add("Спорт", new List<string> { "Більярд $", "Фітнес", "Аеробіка", "Настільний теніс",
-            "Волейбол","Аквапарк","Тенісний корт","Верхова їзда $","Дайвінг $"});
-            childrens.Add("Пляж (послуги)", new List<string> { "Власний пляж", "Понтон", "Пляжні рушники",
-            "Піщано - гальковий пляж","Шезлонги","Пляжні парасольки"});
-            childrens.Add("Готель", new List<string> { "Вид на басейн", "Вид на море", "Вид на територію" });
-            childrens.Add("Послуги в готелі", new List<string> { "Конференц зал", "Банкомат", "Холодильник", "Сервіс для бізнеса $",
-            "Врач $","Фен","Парковка","Ванна чи душ","Сейф","Wi-Fi","TV","Інтернет","Обмін валют","Телефон"});
-
-
             string hotelName = "Akassia Club Calimera Swiss Resort";
             var hotel = context
                 .Hotels
@@ -1105,6 +1409,34 @@ namespace TouristApp.DAL.Entities
 
             if (hotel != null)
             {
+                string[] Names = new string[] {
+               "Розташування", "Пляж", "Номери", "Сервіси",
+               "Спорт і розваги","Для дітей", "Харчування",
+               "Спорт","Для дітей (послуги)", "Розваги", "Послуги в готелі",
+               "Пляж (послуги)", "Готель" };
+
+                Dictionary<string, string> descriptions = new Dictionary<string, string>();
+                descriptions.Add("Розташування", "Розташований в 36 км від аеропорту м Марса Алам і в 165 км від аеропорту Хургади.");
+                descriptions.Add("Пляж", "Піщано-кораловий пляж. Протяжність пляжу - 500 м. Рекомендується спеціальне взуття.");
+                descriptions.Add("Номери", "У готелі " + hotel.RoomsCount.ToString()  +" номери.");
+                descriptions.Add("Сервіси", "Ресторани: Green House Restaurant (сніданок, обід і вечерю, шведський стіл) La Vista Restaurant (міжнародна кухня) Panorama Restaurant (місцева кухня) Beach BBQ Restaurant Бари: Lobby Bar Pool Bar Waves Beach Bar Scarabeo Beach Disco До послуг гостей: 6 басейнів ( 1 зі штучною хвилею, 2 з підігрівом в зимовий період, 1 олімпійський басейн");
+                descriptions.Add("Спорт і розваги", "Освітлення тенісного корту (платно), катання на верблюдах (за додаткову плату), водне поло (безкоштовно), дартс (безкоштовно), бочче (безкоштовно), міні-футбол (безкоштовно), пірнання з аквалангом, 2 тенісних корти (з твердим покриттям , 1 - в LTI Akassia Beach Resort), стрільба з лука.");
+                descriptions.Add("Для дітей", "6 водні гірки, 3 відкриті басейни (1 в LTI Akassia Beach Resort), 3 дитячі секції в басейні (1 в LTI Akassia Beach Resort), дитячий клуб (з 4 до 12 років), дитяча коляска.");
+
+                Dictionary<string, List<string>> childrens = new Dictionary<string, List<string>>();
+                childrens.Add("Харчування", new List<string> { "Кафе", "Ресторан" });
+                childrens.Add("Розваги", new List<string> { "SPA", "Сауна/Лазня $", "Джакузі",
+                "Дискотека","Водні гірки","Музика","Масаж $","Відкритий басейн","Аніматори"});
+                childrens.Add("Для дітей (послуги)", new List<string> { "Дитячий басейн", "Послуги няні $",
+                "Дитяча площадка","Дитячі стільчики в ресторані","Дитяча кімната","Дитяче ліжко"});
+                childrens.Add("Спорт", new List<string> { "Більярд $", "Фітнес", "Аеробіка", "Настільний теніс",
+                "Волейбол","Аквапарк","Тенісний корт","Верхова їзда $","Дайвінг $"});
+                childrens.Add("Пляж (послуги)", new List<string> { "Власний пляж", "Понтон", "Пляжні рушники",
+                "Піщано-гальковий пляж","Шезлонги","Пляжні парасольки"});
+                childrens.Add("Готель", new List<string> { "Вид на басейн", "Вид на море", "Вид на територію" });
+                childrens.Add("Послуги в готелі", new List<string> { "Конференц зал", "Банкомат", "Холодильник", "Сервіс для бізнеса $",
+                "Лікар $","Фен","Парковка","Ванна чи душ","Сейф","Wi-Fi","TV","Інтернет","Обмін валют","Телефон"});
+
                 int priority = 1;
                 for (int i = 0; i < Names.Length; i++)
                 {

@@ -10,8 +10,8 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20191202234454_AddRequired")]
-    partial class AddRequired
+    [Migration("20191206145746_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -140,6 +140,10 @@ namespace TouristApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250);
+
+                    b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasMaxLength(250);
 

@@ -69,11 +69,12 @@ namespace TouristApp.ViewModels
         public long Id { get; set; }
         public int Class { get; set; }
         public string Name { get; set; }
-        public string NormalizedName { get; set; }
+        public string HotelNormalizedName { get; set; }
         public string Description { get; set; }
         public int RoomsCount { get; set; }
         public string Region { get; set; }
         public string Country { get; set; }
+        public string CountryNormalizedName { get; set; }
         public string СityDeparture { get; set; }
         public double? Rate { get; set; }
         public decimal? Price { get; set; }

@@ -180,14 +180,14 @@ namespace TouristApp.Controllers
             var query = _context
                 .Tours
                 .Include(s => s.Hotel)
-                    .ThenInclude(hotel => hotel.Name)
+                    //.ThenInclude(hotel => hotel.Name)
                 .Include(d => d.Hotel.Region)
-                    .ThenInclude(region => region.Name)
+                    //.ThenInclude(region => region.Name)
                 .Include(f => f.Hotel.Region.Country)
-                    .ThenInclude(country => country.Name)
+                    //.ThenInclude(country => country.Name)
                 .Include(s => s.Hotel.HotelImages)
                 .Include(z => z.CityDeparture)
-                    .ThenInclude(city => city.Name)
+                    //.ThenInclude(city => city.Name)
                 .Include(t => t.Filtres)
                 .AsQueryable();
 
@@ -251,9 +251,10 @@ namespace TouristApp.Controllers
                 Id = u.Id,
                 СityDeparture = u.CityDeparture.Name,
                 Name = u.Hotel.Name,
-                NormalizedName = u.Hotel.NormalizedName,
+                HotelNormalizedName = u.Hotel.NormalizedName,
                 Region = u.Hotel.Region.Name,
                 Country = u.Hotel.Region.Country.Name,
+                CountryNormalizedName = u.Hotel.Region.Country.NormalizedName,
                 Description = u.Hotel.Description,
                 Price = u.Hotel.Price * u.DaysCount,
                 Rate = u.Hotel.Rate,

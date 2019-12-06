@@ -141,6 +141,10 @@ namespace TouristApp.Migrations
                         .IsRequired()
                         .HasMaxLength(250);
 
+                    b.Property<string>("NormalizedName")
+                        .IsRequired()
+                        .HasMaxLength(250);
+
                     b.HasKey("Id");
 
                     b.ToTable("Countries");

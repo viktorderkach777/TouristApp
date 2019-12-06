@@ -232,7 +232,7 @@ class ToursContainer extends Component {
                 <Card key={item.id} className="CardTours" >
                     <Row>
                         <Col sm="12" md="4">
-                            <Link to={`/tours/${item.country}/${item.normalizedName}/${item.id}`}>
+                            <Link to={`/tours/${item.countryNormalizedName}/${item.hotelNormalizedName}/${item.id}`}>
                                 <CardImg left="true" height="100%" className="CardImg p-2" src={!!item.imagePath ? serverUrl + item.imagePath : ''} alt="Card image cap" />
                                 <div className="discount">
                                     <span className="discount-title">
@@ -289,7 +289,7 @@ class ToursContainer extends Component {
                             <Row>
                                 {isListLoading ? null : this.setPrice(item.price, currency, kurs, isListLoading, errors)}
                                 {/* ₴ */}
-                                <Link to={`/tours/${item.country}/${item.normalizedName}/${item.id}`}>
+                                <Link to={`/tours/${item.countryNormalizedName}/${item.hotelNormalizedName}/${item.id}`}>
                                     <Button className="buttonHotel">Дивитись тур</Button>
                                 </Link>
                             </Row>
