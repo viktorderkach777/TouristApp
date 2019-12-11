@@ -2,7 +2,7 @@ import { createSlice } from 'redux-starter-kit';
 import update from '../helpers/update'
 import TourService from "../components/tours/tourService";
 import * as FilterReducer from "../reducers/filterReducer";
-
+import { push } from 'connected-react-router';
 export const initialState = {
   list: {
     data: [],
@@ -175,14 +175,14 @@ export const setCurrentPage = (currentPage) => {
 
 export const setFilterId = (filterId) => {
   return (dispatch) => {
+      
       dispatch(FilterReducer.setChekedFilters(filterId));
+      
+      const country = 'all?country_id%5B%5D=1&country_id%5B%5D=2&country_id%5B%5D=3&nights_from=6&nights_to=8&min_price=&max_price=&date_from=&date_to=&order=3';
+      dispatch(push(`/tours/${country}`));
+      
+
     return dispatch(tours.actions.setFilterId(filterId));
   }
 }
 
-// export function notifyAndSetInventory(notify, inventoryItem) {
-//   return dispatch => {
-//       dispatch(displayNotification(notify));
-//       return dispatch(setInventory(inventoryItem));
-//   };
-// }

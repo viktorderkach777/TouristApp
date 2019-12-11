@@ -38,7 +38,7 @@ const Typography = React.lazy(() => import('../views/Theme/Typography/Typography
 const Widgets = React.lazy(() => import('../views/Widgets/Widgets'));
 const Users = React.lazy(() => import('../views/Users/Users'));
 const User = React.lazy(() => import('../views/Users/User'));
-const SinglePage = React.lazy(() => import('../components/client/tours/singleTour/SingleTour'));
+//const SinglePage = React.lazy(() => import('../components/client/tours/singleTour/SingleTour'));
 //const Salo = React.lazy(() => import("../components/client/Salo"))
 const TourWidget = React.lazy(() => import("../components/tours/index"))
 const HotelAddWidget = React.lazy(() => import("../components/admin/addHotel"))
@@ -65,7 +65,7 @@ const routes=[
   { path: '/admin/countryedit', exact: true, name: 'Країна редагування', component: CountryEditWidget},
   { path: '/admin/kurs', exact: true, name: 'Курси валют', component: KursWidget},
   { path: '/admin/touradd', exact: true, name: 'Тур додавання', component: TourAddWidget},
-  { path: '/admin/singlepage', exact: true, name: 'Готель', component: SinglePage },
+  //{ path: '/admin/singlepage', exact: true, name: 'Готель', component: SinglePage },
   { path: '/admin/tours', exact: true, name: 'Тури', component: TourWidget },
   //{ path: "/admin/ss", exact: true, name: "ss", component: Salo },
   { path: '/admin/dashboard', name: 'Dashboard', component: Dashboard },

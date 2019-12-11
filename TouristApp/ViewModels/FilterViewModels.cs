@@ -20,7 +20,7 @@ namespace TouristApp.ViewModels
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public bool IsCollapsed{ get; set; } = false;
+        public bool IsCollapsed{ get; set; } = true;
         public List<FValueViewModel> Children { get; set; }
     }
 

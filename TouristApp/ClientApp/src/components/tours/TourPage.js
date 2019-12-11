@@ -26,9 +26,8 @@ class Hotel extends Component {
             });
         }
     }
-
-    componentDidMount() {
-        const url2 = `${serverUrl}api/tour/single/` + this.props.match.params.id;
+    searchDataFetched=(hotelId)=> {
+        const url2 = `${serverUrl}api/tour/single/` + hotelId;
         axios.get(url2)
             .then(
                 result => {
@@ -41,6 +40,22 @@ class Hotel extends Component {
                 }
             );
     }
+
+    componentDidMount() {
+        const hotelId = parseInt(this.props.match.params.id, 10) || 1;
+        this.searchDataFetched(hotelId);
+    }
+
+    componentDidUpdate() {
+        const hotelId = parseInt(this.props.match.params.id, 10) || 1;
+        if(this.props.hotelId!==hotelId)
+        {
+          this.searchDataFetched(hotelId);
+        }
+        // This method is called when the route parameters change
+      }
+
+
 
     onClickImage = (e, img_index) => {
         e.preventDefault();
