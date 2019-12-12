@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import get from 'lodash.get';
 import { Link } from 'react-router-dom';
+import * as queryString from 'query-string';
 import './tours.css';
 import * as tourAction from '../../reducers/tourReducer';
 import * as filtersAction from '../../reducers/filterReducer';
@@ -203,7 +204,10 @@ class ToursContainer extends Component {
 
     render() {
         // console.log('----State Tours -----', this.state);
-        // console.log('----Props Tours-----', this.props);
+         console.log('----Props Tours-----', this.props);
+         const {location}=this.props;
+         const parsed = queryString.parse(location.search);
+         console.log(parsed);
         const { roles, totalPages, currentPage, countTours } = this.props;
         const { deleteDialog_isOpen, chatDialog_isOpen, id_delete, currency, kurs, isListLoading, errors } = this.state;
 
