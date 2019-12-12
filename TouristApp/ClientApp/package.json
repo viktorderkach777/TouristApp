@@ -58,8 +58,7 @@
     "rimraf": "^3.0.0",
     "select": "^1.1.2",
     "simple-line-icons": "^2.4.1",
-    "styled-components": "^4.3.2",
-    "webpack": "4.41.0"
+    "styled-components": "^4.3.2"
   },
   "devDependencies": {
     "ajv": "^6.10.2",
