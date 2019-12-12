@@ -19,16 +19,16 @@ namespace TouristApp.DAL.Entities
         /// </summary>
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
-        public virtual DbSet<HotelImage> HotelImages { get; set; }        
+        public virtual DbSet<HotelImage> HotelImages { get; set; }
         public virtual DbSet<Hotel> Hotels { get; set; }
-        public virtual DbSet< Order> Orders { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Region> Regions { get; set; }
         public virtual DbSet<Tour> Tours { get; set; }
         public DbSet<Parameter> Parameters { get; set; }
         public virtual DbSet<CityDeparture> CityDepartures { get; set; }
         public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
-
         public virtual DbSet<HotelFood> HotelFoods { get; set; }
+        public virtual DbSet<RoomType> RoomTypes { get; set; }
 
         // <summary>
         /// Filter tables
@@ -104,7 +104,7 @@ namespace TouristApp.DAL.Entities
             builder.Entity<Parameter>()
             .HasOne(ur => ur.Parent)
             .WithMany(r => r.Children)
-            .HasForeignKey(ur => ur.ParentId);
+            .HasForeignKey(ur => ur.ParentId);            
         }
     }
 }

@@ -12,6 +12,7 @@ namespace TouristApp.DAL.Entities
             Comments= new HashSet<Comment>();
             HotelImages = new HashSet<HotelImage>();           
             Tours = new HashSet<Tour>();
+            RoomTypes = new HashSet<RoomType>();
         }
 
         public long Id { get; set; }
@@ -42,5 +43,6 @@ namespace TouristApp.DAL.Entities
         public virtual ICollection<HotelImage> HotelImages { get; set; }        
         public virtual ICollection<Parameter> Parameters { get; set; }
         public virtual ICollection<Tour> Tours { get; set; }
+        public virtual ICollection<RoomType> RoomTypes { get; set; }
     }
 }

@@ -115,7 +115,6 @@ namespace TouristApp.DAL.Entities
                     country = context.Countries.FirstOrDefault(c => c.Id == tour.Hotel.Region.CountryId);
                     food = context.HotelFoods.FirstOrDefault(f => f.Id == tour.Hotel.HotelFood.Id);
 
-
                     if (city != null && hotel != null && country != null && food != null)
                     {
                         var filvalCity = context.FilterValues.FirstOrDefault(f => f.Name == city.Name);
@@ -130,7 +129,7 @@ namespace TouristApp.DAL.Entities
                                 new Filter { FilterNameId = filterNameHotelClass.Id, FilterValueId = filvalHotelClass.Id, TourId = tour.Id },  //клас готелю
                                 new Filter { FilterNameId = filterNameHotelCountry.Id, FilterValueId = filvalHotelCountry.Id, TourId = tour.Id },  // країна
                                 new Filter { FilterNameId = filterNameCity.Id, FilterValueId = filvalCity.Id, TourId = tour.Id }, // місто вильоту
-                                new Filter { FilterNameId = filterNameHotelFood.Id, FilterValueId = filvalHotelFood.Id, TourId = tour.Id } // місто вильоту
+                                new Filter { FilterNameId = filterNameHotelFood.Id, FilterValueId = filvalHotelFood.Id, TourId = tour.Id } // харчування
                             };
 
                             fils.AddRange(filts);
@@ -634,6 +633,28 @@ namespace TouristApp.DAL.Entities
             }
         }
 
+        public static void SeedRoomTypes(EFContext context)
+        {
+            string[] roomTypes_names = new string[]
+            {
+                "Без харчування",
+                "Сніданок",
+                "Сніданок і вечеря",
+                "Повний пансіон",
+                "Усе включено",
+                "Ультра все включено"
+            };
+
+            foreach (var name in roomTypes_names)
+            {
+                if (context.HotelFoods.FirstOrDefault(f => f.Name == name) == null)
+                {
+                    context.HotelFoods.Add(new HotelFood { Name = name });
+                    context.SaveChanges();
+                }
+            }
+        }
+
         public static void SeedRegionsHelper(EFContext context, string countryName, string[] regions_names)
         {
             Country country = context.Countries.FirstOrDefault(f => f.Name == countryName);
@@ -803,6 +824,75 @@ namespace TouristApp.DAL.Entities
             }
         }
 
+        //public static void SeedHotelsHelper2(EFContext context, Region region, HotelFood hotelFood, string hotelName, Hotel hotel)
+        //{
+        //    if (context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id) == null)
+        //    {
+        //        context.Hotels.Add(hotel);
+        //        context.SaveChanges();
+        //    }
+        //}
+
+
+
+        //public static void SeedHotelsHelper2(EFContext context, Region region, HotelFood hotelFood, Hotel hotel, RoomType[] roomTypes)
+        //{
+        //    if (context.Hotels.FirstOrDefault(f => f.Name == hotel.Name && f.RegionId == region.Id) == null)
+        //    {
+        //        context.Hotels.Add(hotel);
+        //        context.SaveChanges();
+        //    }
+
+        //    if (context.Hotels.FirstOrDefault(f => f.Name == hotel.Name && f.RegionId == region.Id) != null)
+        //    {
+        //        foreach (var roomType in roomTypes)
+        //        {
+        //            if (context.RoomTypes.FirstOrDefault(f => f.Name == roomType.Name && f.Description == roomType.Description && f.ExtraBedType == roomType.ExtraBedType && f.Price == roomType.Price && f.HotelId == roomType.HotelId) == null)
+        //            {
+        //                context.RoomTypes.Add(roomType);
+        //                context.SaveChanges();
+        //            }
+        //        }
+        //    }
+        //}
+
+        //public static void SeedRoomTypesHelper(EFContext context, Hotel hotel, RoomType[] roomTypes)
+        //{
+        //    foreach (var roomType in roomTypes)
+        //    {
+        //        if (context.RoomTypes.FirstOrDefault(f => f.Name == roomType.Name && f.Description == roomType.Description && f.ExtraBedType == roomType.ExtraBedType && f.Price == roomType.Price && f.HotelId == hotel.Id) == null)
+        //        {
+        //            context.RoomTypes.Add(roomType);
+        //            context.SaveChanges();
+        //        }
+        //    }           
+        //}
+
+        public static void SeedHotelsHelper3(EFContext context, Region region, HotelFood hotelFood, string hotelName, Hotel hotel, RoomType[] roomTypes)
+        {
+            if (context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id) == null)
+            {
+                context.Hotels.Add(hotel);
+                context.SaveChanges();
+            }
+
+            hotel = context.Hotels.FirstOrDefault(h => h.RegionId == region.Id && h.Name == hotelName);
+
+            if (hotel != null)
+            {
+                foreach (var roomType in roomTypes)
+                {
+                    roomType.HotelId = hotel.Id;
+                    if (context.RoomTypes.FirstOrDefault(f => f.Name == roomType.Name && f.Description == roomType.Description && f.ExtraBedType == roomType.ExtraBedType && f.Price == roomType.Price && f.HotelId == hotel.Id) == null)
+                    {
+                        context.RoomTypes.Add(roomType);
+                        context.SaveChanges();
+                    }
+                }
+            }
+        }
+
+
         public static void SeedHotels(EFContext context)
         {
             //string countryName = "Єгипет";
@@ -820,409 +910,1584 @@ namespace TouristApp.DAL.Entities
             HotelFood hotelFoodAllInclusive = context.HotelFoods.FirstOrDefault(f => f.Name == hotelFoodNameAllInclusive);
             HotelFood hotelFoodUltraAllInclusive = context.HotelFoods.FirstOrDefault(f => f.Name == hotelFoodNameUltraAllInclusive);
 
+            //SeedRooms(context);
+
+
             if (hotelFoodNoFood != null && hotelFoodBreakfast != null && hotelFoodBreakfastAndDinner != null
                 && hotelFoodFoolBoard != null && hotelFoodAllInclusive != null && hotelFoodUltraAllInclusive != null)
             {
                 string regionName = "Марса Алам";
                 Region region = context.Regions.FirstOrDefault(f => f.Name == regionName);
                 HotelFood hotelFood;
+                string hotelName;
 
                 if (region != null)
                 {
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood,
+                    //
+                    hotelName = "Akassia Club Calimera Swiss Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodNoFood, hotelName,
                         new Hotel
                         {
-                            Class = 5,
+                            Class = 4,
                             RegionId = region.Id,
-                            Name = "Akassia Club Calimera Swiss Resort",
+                            Name = hotelName,
                             NormalizedName = "marsa-alam-akassia-club-calimera-swiss-resort",
                             Description = "Готель розташований в місті Ель-Кусейр. Відкритий в 2002 році, остання реставрація пройшла в 2011 році." +
                              " Гості можуть користуватися територією і послугами готелю LTI Akassia Beach Resort. Готель підійде для сімейного відпочинку," +
-                             " романтичної подорожі і для відпочинку в колі друзів. Розташований в 36 км від аеропорту м Марса Алам і в 165 км від аеропорту Хургади.",
+                             " романтичної подорожі і для відпочинку в колі друзів. Розташований в 36 км від аеропорту м Марса Алам і в 165 км від аеропорту Хургади." +
+                             " Відстань до моря: 1 лінія.",
                             RoomsCount = 444,
                             Rate = 4.29,
                             Price = 55.4m,
                             HotelFoodId = hotelFood.Id
-                        });
-
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
-                        new Hotel
+                        },
+                        new RoomType[]
                         {
-                            Class = 4,
-                            RegionId = region.Id,
-                            Name = "Aurora Bay Resort",
-                            NormalizedName = "marsa-alam-aurora-bay-resort",
-                            Description = "Готель розташований в 308 км від аеропорту Хургади, в 165 км від центру Ель-Кусейр і в 15 км від Марса Алам. Відкритий в 2010 році." +
-                             " Готель прекрасно підійде для романтичного відпочинку, поїздок з друзями або для подорожі з сім'єю. Готель знаходиться в 45 км від аеропорту Марса-Алам.",
-                            RoomsCount = 98,
-                            Rate = 4.09,
-                            Price = 57.2m,
-                            HotelFoodId = hotelFood.Id
+                            new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на сад, басейн або частковим видом на море. У номері king bed або twin beds. Одне додаткове місце - розкладачка з матрацом.",
+                                TotalArea = 50.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладачка з матрацом",
+                                Price = 55.4m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Beach Front Room",
+                                Description = "Beach Front Room - стандартний номер з видом на море, розташований поруч із пляжем. У номері king bed або twin beds. Одне додаткове місце - розкладачка з матрацом.",
+                                TotalArea = 50.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладачка з матрацом",
+                                Price = 65.5m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Family Room",
+                                Description = "Family Room - сімейний номер з видом на аквапарк, басейн або сад. Складається з двох кімнат, в номері king bed і twin beds. Номер розташований біля аквапарку, до пляжу їздить автобус.",
+                                TotalArea = 50.0,
+                                RoomsCount = 2,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладачка з матрацом",
+                                Price = 105.5m,
+                             }
                         });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfastAndDinner,
-                        new Hotel
-                        {
-                            Class = 4,
-                            RegionId = region.Id,
-                            Name = "Aurora Nada Resort",
-                            NormalizedName = "marsa-alam-aurora-nada-resort",
-                            Description = "Готель Aurora Nada Marsa Alam Resort був відкритий в 2007 році, дата останньої реновації 2012 рік." +
-                             " Готель побудований в давньо-нубійському стилі на березі Червоного моря в затишному районі Shoni зі своїм 400 метровим пляжем." +
-                             " Складається з двох триповерхових корпусів А і B. Підходить для сімейного відпочинку з дітьми або відпочинку компанії друзів." +
-                             " У 20 км від аеропорту м Марса Алам, 40 км від м Марса Алам.",
-                            RoomsCount = 264,
-                            Rate = 4.17,
-                            Price = 47.5m,
-                            HotelFoodId = hotelFood.Id
-                        });
+                    //SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
+                    //    new Hotel
+                    //    {
+                    //        Class = 4,
+                    //        RegionId = region.Id,
+                    //        Name = "Aurora Bay Resort",
+                    //        NormalizedName = "marsa-alam-aurora-bay-resort",
+                    //        Description = "Готель розташований в 308 км від аеропорту Хургади, в 165 км від центру Ель-Кусейр і в 15 км від Марса Алам. Відкритий в 2010 році." +
+                    //         " Готель прекрасно підійде для романтичного відпочинку, поїздок з друзями або для подорожі з сім'єю. Готель знаходиться в 45 км від аеропорту Марса-Алам.",
+                    //        RoomsCount = 98,
+                    //        Rate = 4.09,
+                    //        Price = 57.2m,
+                    //        HotelFoodId = hotelFood.Id
+                    //    });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                       new Hotel
-                       {
-                           Class = 3,
-                           RegionId = region.Id,
-                           Name = "Bliss Abo Nawas",
-                           NormalizedName = "marsa-alam-bliss-abo-nawas",
-                           Description = "Готель оформлений в нубійському стилі. Складається з основної будівлі і 5 корпусів різної поверховості." +
-                             " Готель розташований в 110 км від центру міста Ель-Кусейр, на самому березі моря. Підійде для спокійного сімейного відпочинку. " +
-                             "Відстань до Марса Алам 20 км, до аеропорту Марса Алам 45 км, до Хургади - 255 км.",
-                           RoomsCount = 200,
-                           Rate = 4.18,
-                           Price = 48.0m,
-                           HotelFoodId = hotelFood.Id
-                       });
-
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
-                      new Hotel
-                      {
-                          Class = 5,
-                          RegionId = region.Id,
-                          Name = "Calimera Habiba Beach Resort",
-                          NormalizedName = "marsa-alam-calimera-habiba-beach-resort",
-                          Description = "Готель розташований на березі моря, поряд з власним кораловим пляжем." +
-                             " Побудований в 2006 році і має мавританську архітектуру. Готель ідеально підійде для активного відпочинку," +
-                             " сімейного відпочинку з дітьми і вивчення підводного світу Червоного моря. 22 км від центру м Марса Алам." +
-                             " 38 км від аеропорту м Марса Алам.",
-                          RoomsCount = 334,
-                          Rate = 4.49,
-                          Price = 50.0m,
-                          HotelFoodId = hotelFood.Id
-                      });
-                }
-
-                regionName = "Хургада";
-                region = context.Regions.FirstOrDefault(f => f.Name == regionName);
-
-                if (region != null)
-                {
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood,
+                    hotelName = "Aurora Bay Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfast, hotelName,
                        new Hotel
                        {
                            Class = 5,
                            RegionId = region.Id,
-                           Name = "Al Mas Red Sea Palace",
-                           NormalizedName = "hurgada-al-mas-red-sea-palace",
-                           Description = "Готель розташований в 17 км від м Хургада." +
-                            " Входить в мережу River Rock Hotels & Resorts." +
-                            " Побудований в 2001 році, а останній ремонт проведений в 2011 р." +
-                            " Гості мають можливість користуватися всією інфраструктурою готелів Diamond Red Sea Resort і" +
-                            " Paradise Red Sea Resort - барами, басейнами, пляжем, аквапарком, дайвінг-центром, оздоровчим центром," +
-                            " тенісними кортами, центром водних видів спорту і т.д. Підійде для активного сімейного, " +
-                            "молодіжного або романтичного відпочинку. У 12 км від аеропорту, в 23 км від Хургади, на березі моря.",
-                           RoomsCount = 434,
-                           Rate = 3.88,
-                           Price = 52.0m,
+                           Name = hotelName,
+                           NormalizedName = "marsa-alam-aurora-bay-resort",
+                           Description = "Готель розташований в 308 км від аеропорту Хургади, в 165 км від центру Ель-Кусейр і в 15 км від Марса Алам. Відкритий в 2010 році." +
+                             " Готель прекрасно підійде для романтичного відпочинку, поїздок з друзями або для подорожі з сім'єю. Готель знаходиться в 45 км від аеропорту Марса-Алам." +
+                             "Відстань до моря (2 лінія): 200 м.",
+                           RoomsCount = 98,
+                           Rate = 4.09,
+                           Price = 57.2m,
                            HotelFoodId = hotelFood.Id
-                       });
+                       },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Classic Room",
+                                Description = "Classic Room - стандартний номер з видом на сад. Загальні вітальня і балкон на два номери. Одне додаткове місце - софа або розкладачка з матрацом.",
+                                TotalArea = 45.0,
+                                RoomsCount = 1,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа або розкладачка з матрацом",
+                                Price = 55.4m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Superior Room",
+                                Description = "Superior Room - покращений номер з видом на сад, басейн або частковим видом на море. Номер складається з спальної кімнати, вітальні і кухні. У номері king bed, одне додаткове місце - софа або розкладачка з матрацом",
+                                TotalArea = 60.0,
+                                RoomsCount = 3,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа або розкладачка з матрацом",
+                                Price = 55.4m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Family Room",
+                                Description = "Family Room - сімейний номер з видом на сад або море. Номер складається з двох спальних кімнат, вітальні і кухні. У номері king bed і twin beds. Додаткове місце - софа або розкладачка з матрацом.",
+                                TotalArea = 65.0,
+                                RoomsCount = 5,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа або розкладачка з матрацом",
+                                Price = 98.5m,
+                             }
+                        });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
-                       new Hotel
-                       {
-                           Class = 4,
-                           RegionId = region.Id,
-                           Name = "Aladdin Beach Resort",
-                           NormalizedName = "hurgada-aladdin-beach-resort",
-                           Description = "Готель розташований на першій лінії, має власний пляж. Тут запропоновано великий вибір розваг і способів активного відпочинку." +
-                            " Відкритий в 1995 році, регулярно проводиться часткова реновація. Складається з основного 2-поверхової будівлі (лише рецепшн)," +
-                            " двох 2-поверхових корпусів і комплексу 1-поверхових бунгало. Готель орієнтований на сімейний відпочинок з дітьми." +
-                            " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря. Відстань до торгового центру Senzo Mall: 1,5 км.",
-                           RoomsCount = 99,
-                           Rate = 4.02,
-                           Price = 47.0m,
-                           HotelFoodId = hotelFood.Id
-                       });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                       new Hotel
-                       {
-                           Class = 4,
-                           RegionId = region.Id,
-                           Name = "Albatros Aqua Park",
-                           NormalizedName = "hurgada-albatros-aqua-park",
-                           Description = "Готель розташований в самому початку туристичної зони Хургади, в 15 км від центру міста." +
-                            " Входить до складу мережі готелів Pickalbatros Hotels." +
-                            " Відкритий в 2000 році, останній ремонт проведений в 2016 р Готель прекрасно підійде для сімейного відпочинку з дітьми." +
-                            " Готель розташований в 7 км від аеропорту Хургади.",
-                           RoomsCount = 246,
-                           Rate = 4.43,
-                           Price = 47.5m,
-                           HotelFoodId = hotelFood.Id
-                       });
+                    //SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfastAndDinner,
+                    //    new Hotel
+                    //    {
+                    //        Class = 4,
+                    //        RegionId = region.Id,
+                    //        Name = "Aurora Nada Resort",
+                    //        NormalizedName = "marsa-alam-aurora-nada-resort",
+                    //        Description = "Готель Aurora Nada Marsa Alam Resort був відкритий в 2007 році, дата останньої реновації 2012 рік." +
+                    //         " Готель побудований в давньо-нубійському стилі на березі Червоного моря в затишному районі Shoni зі своїм 400 метровим пляжем." +
+                    //         " Складається з двох триповерхових корпусів А і B. Підходить для сімейного відпочинку з дітьми або відпочинку компанії друзів." +
+                    //         " У 20 км від аеропорту м Марса Алам, 40 км від м Марса Алам.",
+                    //        RoomsCount = 264,
+                    //        Rate = 4.17,
+                    //        Price = 47.5m,
+                    //        HotelFoodId = hotelFood.Id
+                    //    });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
+                    hotelName = "Aurora Nada Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfastAndDinner, hotelName,
                         new Hotel
                         {
                             Class = 4,
                             RegionId = region.Id,
-                            Name = "Albatros Aqua Vista Resort",
+                            Name = hotelName,
+                            NormalizedName = "marsa-alam-aurora-nada-resort",
+                            Description = "Готель Aurora Nada Marsa Alam Resort був відкритий в 2007 році, дата останньої реновації 2012 рік." +
+                             " Готель побудований в давньо-нубійському стилі на березі Червоного моря в затишному районі Shoni зі своїм 400 метровим пляжем." +
+                             " Складається з двох триповерхових корпусів А і B. Підходить для сімейного відпочинку з дітьми або відпочинку компанії друзів." +
+                             " У 20 км від аеропорту м Марса Алам, 40 км від м Марса Алам. Відстань до моря: 1 лінія.",
+                            RoomsCount = 264,
+                            Rate = 4.17,
+                            Price = 47.5m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                            new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на сад, басейн або море. У номері king size bed або twin beds. Одне додаткове місце - розкладне односпальне ліжко односпальне ліжко.",
+                                TotalArea = 30.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 55.4m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Family Room",
+                                Description = "Family Room - сімейний номер з однієї кімнати з видом на сад, басейн або море. У номері king bed або twin beds.. Одне додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 35.0,
+                                RoomsCount = 1,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 65.5m,
+                             },
+                              new RoomType
+                              {
+                                Name = "Suite",
+                                Description = "Suite - номер з двох кімнат, спальні і вітальні з видом на сад, басейн або море. У номері king bed.. Одне додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 55.0,
+                                RoomsCount = 2,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 75.0m,
+                              }
+                        });
+
+                    //SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
+                    //   new Hotel
+                    //   {
+                    //       Class = 3,
+                    //       RegionId = region.Id,
+                    //       Name = "Bliss Abo Nawas",
+                    //       NormalizedName = "marsa-alam-bliss-abo-nawas",
+                    //       Description = "Готель оформлений в нубійському стилі. Складається з основної будівлі і 5 корпусів різної поверховості." +
+                    //         " Готель розташований в 110 км від центру міста Ель-Кусейр, на самому березі моря. Підійде для спокійного сімейного відпочинку. " +
+                    //         "Відстань до Марса Алам 20 км, до аеропорту Марса Алам 45 км, до Хургади - 255 км.",
+                    //       RoomsCount = 200,
+                    //       Rate = 4.18,
+                    //       Price = 48.0m,
+                    //       HotelFoodId = hotelFood.Id
+                    //   });
+
+                    hotelName = "Bliss Abo Nawas";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 3,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "marsa-alam-bliss-abo-nawas",
+                            Description = "Готель оформлений в нубійському стилі. Складається з основної будівлі і 5 корпусів різної поверховості." +
+                             " Готель розташований в 110 км від центру міста Ель-Кусейр, на самому березі моря. Підійде для спокійного сімейного відпочинку. " +
+                             "Відстань до Марса Алам 20 км, до аеропорту Марса Алам 45 км, до Хургади - 255 км.",
+                            RoomsCount = 200,
+                            Rate = 4.18,
+                            Price = 48.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                            new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - номери в нубійському стилі з купольними стелями і кам'яними арками. З номера відкривається гарний вид на сад, басейн або море. У номері king size bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 25.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 48.4m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Suite",
+                                Description = "Superior Room - номер з вітальнею і спальнею. З номера відкривається гарний вид на сад, басейн або море. У номері king size bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 35.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 55.0m,
+                            }
+                        });
+
+                    //SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
+                    //  new Hotel
+                    //  {
+                    //      Class = 5,
+                    //      RegionId = region.Id,
+                    //      Name = "Calimera Habiba Beach Resort",
+                    //      NormalizedName = "marsa-alam-calimera-habiba-beach-resort",
+                    //      Description = "Готель розташований на березі моря, поряд з власним кораловим пляжем." +
+                    //         " Побудований в 2006 році і має мавританську архітектуру. Готель ідеально підійде для активного відпочинку," +
+                    //         " сімейного відпочинку з дітьми і вивчення підводного світу Червоного моря. 22 км від центру м Марса Алам." +
+                    //         " 38 км від аеропорту м Марса Алам.",
+                    //      RoomsCount = 334,
+                    //      Rate = 4.49,
+                    //      Price = 50.0m,
+                    //      HotelFoodId = hotelFood.Id
+                    //  });
+
+                    hotelName = "Calimera Habiba Beach Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = "Calimera Habiba Beach Resort",
+                            NormalizedName = "marsa-alam-calimera-habiba-beach-resort",
+                            Description = "Готель розташований на березі моря, поряд з власним кораловим пляжем." +
+                                     " Побудований в 2006 році і має мавританську архітектуру. Готель ідеально підійде для активного відпочинку," +
+                                     " сімейного відпочинку з дітьми і вивчення підводного світу Червоного моря. 22 км від центру м Марса Алам." +
+                                     " 38 км від аеропорту м Марса Алам.",
+                            RoomsCount = 334,
+                            Rate = 4.49,
+                            Price = 50.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                            new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на сад, басейн або море. У номері king bed або twin beds. Одне додаткове місце - софа.",
+                                TotalArea = 32.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 55.4m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Superior Room",
+                                Description = "Superior Room - покращений номер з видом на сад, басейн або море. У номері king bed або twin beds. Одне додаткове місце - софа.",
+                                TotalArea = 45.0,
+                                RoomsCount = 1,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 65.5m,
+                             },
+                              new RoomType
+                              {
+                                Name = "Junior Suite",
+                                Description = "Junior Suite - номер з видом на сад, басейн або море. Номер складається з вітальні і спальної кімнати. У номері king bed, додаткове місце - софа.",
+                                TotalArea = 55.0,
+                                RoomsCount = 2,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 75.0m,
+                              },
+                               new RoomType
+                              {
+                                Name = "Junior Suite",
+                                Description = "Royal Suite - номер люкс з виглядом на море. Номер складається з вітальні, спальної кімнати, невеликої кухні та тераси з джакузі, додаткове місце - софа.",
+                                TotalArea = 55.0,
+                                RoomsCount = 3,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 75.0m,
+                              }
+                        });
+
+
+                    regionName = "Хургада";
+                    hotelName = "Al Mas Red Sea Palace";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodNoFood, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "hurgada-al-mas-red-sea-palace",
+                            Description = "Готель розташований в 17 км від м Хургада." +
+                                                " Входить в мережу River Rock Hotels & Resorts." +
+                                                " Побудований в 2001 році, а останній ремонт проведений в 2011 р." +
+                                                " Гості мають можливість користуватися всією інфраструктурою готелів Diamond Red Sea Resort і" +
+                                                " Paradise Red Sea Resort - барами, басейнами, пляжем, аквапарком, дайвінг-центром, оздоровчим центром," +
+                                                " тенісними кортами, центром водних видів спорту і т.д. Підійде для активного сімейного, " +
+                                                "молодіжного або романтичного відпочинку. У 12 км від аеропорту, в 23 км від Хургади, на березі моря.",
+                            RoomsCount = 434,
+                            Rate = 3.88,
+                            Price = 52.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Classic Room",
+                                Description = "Classic Room - стандартний номер з видом на сад. Загальні вітальня і балкон на два номери. Одне додаткове місце - софа або розкладачка з матрацом.",
+                                TotalArea = 45.0,
+                                RoomsCount = 1,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа або розкладачка з матрацом",
+                                Price = 75.4m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Superior Room",
+                                Description = "Superior Room - покращений номер з видом на сад, басейн або частковим видом на море. Номер складається з спальної кімнати, вітальні і кухні. У номері king bed, одне додаткове місце - софа або розкладачка з матрацом",
+                                TotalArea = 60.0,
+                                RoomsCount = 3,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа або розкладачка з матрацом",
+                                Price = 76.5m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Family Room",
+                                Description = "Family Room - сімейний номер з видом на сад або море. Номер складається з двох спальних кімнат, вітальні і кухні. У номері king bed і twin beds. Додаткове місце - софа або розкладачка з матрацом.",
+                                TotalArea = 65.0,
+                                RoomsCount = 5,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа або розкладачка з матрацом",
+                                Price = 100.5m,
+                             }
+                        });
+                    //        region = context.Regions.FirstOrDefault(f => f.Name == regionName);
+
+                    //        if (region != null)
+                    //        {
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood,
+                    //               new Hotel
+                    //               {
+                    //                   Class = 5,
+                    //                   RegionId = region.Id,
+                    //                   Name = "Al Mas Red Sea Palace",
+                    //                   NormalizedName = "hurgada-al-mas-red-sea-palace",
+                    //                   Description = "Готель розташований в 17 км від м Хургада." +
+                    //                    " Входить в мережу River Rock Hotels & Resorts." +
+                    //                    " Побудований в 2001 році, а останній ремонт проведений в 2011 р." +
+                    //                    " Гості мають можливість користуватися всією інфраструктурою готелів Diamond Red Sea Resort і" +
+                    //                    " Paradise Red Sea Resort - барами, басейнами, пляжем, аквапарком, дайвінг-центром, оздоровчим центром," +
+                    //                    " тенісними кортами, центром водних видів спорту і т.д. Підійде для активного сімейного, " +
+                    //                    "молодіжного або романтичного відпочинку. У 12 км від аеропорту, в 23 км від Хургади, на березі моря.",
+                    //                   RoomsCount = 434,
+                    //                   Rate = 3.88,
+                    //                   Price = 52.0m,
+                    //                   HotelFoodId = hotelFood.Id
+                    //               });
+
+                    hotelName = "Aladdin Beach Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
+                        new Hotel
+                        {
+                            Class = 4,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "hurgada-aladdin-beach-resort",
+                            Description = "Готель розташований на першій лінії, має власний пляж. Тут запропоновано великий вибір розваг і способів активного відпочинку." +
+                                                " Відкритий в 1995 році, регулярно проводиться часткова реновація. Складається з основного 2-поверхової будівлі (лише рецепшн)," +
+                                                " двох 2-поверхових корпусів і комплексу 1-поверхових бунгало. Готель орієнтований на сімейний відпочинок з дітьми." +
+                                                " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря. Відстань до торгового центру Senzo Mall: 1,5 км.",
+                            RoomsCount = 99,
+                            Rate = 4.02,
+                            Price = 47.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на сад або басейн (Pool View), номер розташований в двоповерховому корпусі. У номері king bed, одне додаткове місце - софа.",
+                                TotalArea = 35.0,
+                                RoomsCount = 1,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 68.2m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Standard Bungalow",
+                                Description = "Standard Bungalow - стандартний номер з видом на сад або басейн, розташований в одноповерховій бунгало. У номері twin beds, одне додаткове місце - софа.",
+                                TotalArea = 38.0,
+                                RoomsCount = 3,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 76.5m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Family Room",
+                                Description = "Family Room - сімейний номер з видом на сад або басейн, номер розташований в двоповерховому корпусі. У номері king bed або twin beds. Одне додаткове місце - софа.",
+                                TotalArea = 65.0,
+                                RoomsCount = 5,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 100.5m,
+                             }
+                        });
+
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
+                    //               new Hotel
+                    //               {
+                    //                   Class = 4,
+                    //                   RegionId = region.Id,
+                    //                   Name = "Aladdin Beach Resort",
+                    //                   NormalizedName = "hurgada-aladdin-beach-resort",
+                    //                   Description = "Готель розташований на першій лінії, має власний пляж. Тут запропоновано великий вибір розваг і способів активного відпочинку." +
+                    //                    " Відкритий в 1995 році, регулярно проводиться часткова реновація. Складається з основного 2-поверхової будівлі (лише рецепшн)," +
+                    //                    " двох 2-поверхових корпусів і комплексу 1-поверхових бунгало. Готель орієнтований на сімейний відпочинок з дітьми." +
+                    //                    " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря. Відстань до торгового центру Senzo Mall: 1,5 км.",
+                    //                   RoomsCount = 99,
+                    //                   Rate = 4.02,
+                    //                   Price = 47.0m,
+                    //                   HotelFoodId = hotelFood.Id
+                    //               });
+
+                    hotelName = "Albatros Aqua Park";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 4,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "hurgada-albatros-aqua-park",
+                            Description = "Готель розташований в самому початку туристичної зони Хургади, в 15 км від центру міста." +
+                                                " Входить до складу мережі готелів Pickalbatros Hotels." +
+                                                " Відкритий в 2000 році, останній ремонт проведений в 2016 р Готель прекрасно підійде для сімейного відпочинку з дітьми." +
+                                                " Готель розташований в 7 км від аеропорту Хургади.",
+                            RoomsCount = 246,
+                            Rate = 4.43,
+                            Price = 47.5m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - номер з видом на сад або басейн. У номері king size bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 23.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 45.0m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Family Room",
+                                Description = "Family Room - сімейний номер, складається з двох спалень і однієї ванної кімнати. Вид на басейн або сад. У номері king size bed і twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 41.0,
+                                RoomsCount = 2,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 90.1m,
+                             }
+                        });
+
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
+                    //               new Hotel
+                    //               {
+                    //                   Class = 4,
+                    //                   RegionId = region.Id,
+                    //                   Name = "Albatros Aqua Park",
+                    //                   NormalizedName = "hurgada-albatros-aqua-park",
+                    //                   Description = "Готель розташований в самому початку туристичної зони Хургади, в 15 км від центру міста." +
+                    //                    " Входить до складу мережі готелів Pickalbatros Hotels." +
+                    //                    " Відкритий в 2000 році, останній ремонт проведений в 2016 р Готель прекрасно підійде для сімейного відпочинку з дітьми." +
+                    //                    " Готель розташований в 7 км від аеропорту Хургади.",
+                    //                   RoomsCount = 246,
+                    //                   Rate = 4.43,
+                    //                   Price = 47.5m,
+                    //                   HotelFoodId = hotelFood.Id
+                    //               });
+
+                    hotelName = "Albatros Aqua Vista Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 4,
+                            RegionId = region.Id,
+                            Name = hotelName,
                             NormalizedName = "hurgada-albatros-aqua-vista-resort",
                             Description = "Готель входить до мережі Pickalbatros, знаходиться на другій лінії за готелем Beach Albatros 4 *." +
-                            " Справа знаходяться готелі - Pickalbatros Sea World 4 * і Albatros Garden 4 *, на їх територіях є дитячий і дорослий аквапарки," +
-                            " гості готелю Albatros Aqua Vista Resort & Spa 4 * можуть абсолютно безкоштовно ними користуватися." +
-                            " Відкритий в 2008 році. Готель прекрасно підійде для сімейного відпочинку з дітьми. У 7 км від міжнародного аеропорту Хургади," +
-                            " в 15 км від центру Хургади",
+                                                " Справа знаходяться готелі - Pickalbatros Sea World 4 * і Albatros Garden 4 *, на їх територіях є дитячий і дорослий аквапарки," +
+                                                " гості готелю Albatros Aqua Vista Resort & Spa 4 * можуть абсолютно безкоштовно ними користуватися." +
+                                                " Відкритий в 2008 році. Готель прекрасно підійде для сімейного відпочинку з дітьми. У 7 км від міжнародного аеропорту Хургади," +
+                                                " в 15 км від центру Хургади",
                             RoomsCount = 273,
                             Rate = 4.54,
                             Price = 50.0m,
                             HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на басейн, сад або гори. У номері queen size bed або twin beds. Два додаткових місця - twin beds.",
+                                TotalArea = 41.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 2,
+                                ExtraBedType = "twin beds",
+                                Price = 45.0m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Family Room",
+                                Description = "Family Room - сімейний номер з двома спальнями та ванною кімнатою, з видом на сад, басейн або гори. У номері queen size bed і twin beds. Два додаткових місця - twin beds.",
+                                TotalArea = 82.0,
+                                RoomsCount = 2,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 2,
+                                ExtraBedType = "twin beds",
+                                Price = 92.2m,
+                             }
                         });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
-                       new Hotel
-                       {
-                           Class = 3,
-                           RegionId = region.Id,
-                           Name = "Ali Baba Palace",
-                           NormalizedName = "hurgada-ali-baba-palace",
-                           Description = "Готель розташований в Хургаді. Відкритий в 2000 році, остання часткова реновація пройшла в 2009 році. " +
-                            "Гості можуть користуватися послугами готелів Jasmine Village і Aladdin Beach Resort. " +
-                            "Готель підійде для сімейного, молодіжного або романтичного відпочинку." +
-                            " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря.",
-                           RoomsCount = 646,
-                           Rate = 4.15,
-                           Price = 40.0m,
-                           HotelFoodId = hotelFood.Id
-                       });
-                }
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
+                    //                new Hotel
+                    //                {
+                    //                    Class = 4,
+                    //                    RegionId = region.Id,
+                    //                    Name = "Albatros Aqua Vista Resort",
+                    //                    NormalizedName = "hurgada-albatros-aqua-vista-resort",
+                    //                    Description = "Готель входить до мережі Pickalbatros, знаходиться на другій лінії за готелем Beach Albatros 4 *." +
+                    //                    " Справа знаходяться готелі - Pickalbatros Sea World 4 * і Albatros Garden 4 *, на їх територіях є дитячий і дорослий аквапарки," +
+                    //                    " гості готелю Albatros Aqua Vista Resort & Spa 4 * можуть абсолютно безкоштовно ними користуватися." +
+                    //                    " Відкритий в 2008 році. Готель прекрасно підійде для сімейного відпочинку з дітьми. У 7 км від міжнародного аеропорту Хургади," +
+                    //                    " в 15 км від центру Хургади",
+                    //                    RoomsCount = 273,
+                    //                    Rate = 4.54,
+                    //                    Price = 50.0m,
+                    //                    HotelFoodId = hotelFood.Id
+                    //                });
+
+                    hotelName = "Ali Baba Palace";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfast, hotelName,
+                        new Hotel
+                        {
+                            Class = 4,
+                            RegionId = region.Id,
+                            Name = "Ali Baba Palace",
+                            NormalizedName = "hurgada-ali-baba-palace",
+                            Description = "Готель розташований в Хургаді. Відкритий в 2000 році, остання часткова реновація пройшла в 2009 році. " +
+                                                "Гості можуть користуватися послугами готелів Jasmine Village і Aladdin Beach Resort. " +
+                                                "Готель підійде для сімейного, молодіжного або романтичного відпочинку." +
+                                                " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря.",
+                            RoomsCount = 646,
+                            Rate = 4.15,
+                            Price = 40.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на сад, басейн (Pool View) або частковим видом на море (Sea Side View). У номері king bed або twin beds. Одне додаткове місце - софа.",
+                                TotalArea = 35.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 60.0m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Family Room",
+                                Description = "Family Deluxe - сімейний номер з видом на сад або басейн. У номері king bed або twin beds і двох'ярусна ліжко. Одне додаткове місце - софа.",
+                                TotalArea = 35.0,
+                                RoomsCount = 1,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 75.3m,
+                             },
+                             new RoomType
+                            {
+                                Name = "Family Connected",
+                                Description = "Family Connected - сімейний номер з видом на басейн. Номер складається з двох стандартних номерів, з'єднаних міжкімнатними дверима. У номері king bed і twin beds.",
+                                TotalArea = 70.0,
+                                RoomsCount = 2,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 100.0m,
+                            },
+                             new RoomType
+                             {
+                                Name = "Deluxe",
+                                Description = "Deluxe - покращений номер з видом на сад або басейн. У номері king bed або twin beds. Одне додаткове місце - софа.",
+                                TotalArea = 45.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "софа",
+                                Price = 53.3m,
+                             }
+                        });
+
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
+                    //               new Hotel
+                    //               {
+                    //                   Class = 3,
+                    //                   RegionId = region.Id,
+                    //                   Name = "Ali Baba Palace",
+                    //                   NormalizedName = "hurgada-ali-baba-palace",
+                    //                   Description = "Готель розташований в Хургаді. Відкритий в 2000 році, остання часткова реновація пройшла в 2009 році. " +
+                    //                    "Гості можуть користуватися послугами готелів Jasmine Village і Aladdin Beach Resort. " +
+                    //                    "Готель підійде для сімейного, молодіжного або романтичного відпочинку." +
+                    //                    " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря.",
+                    //                   RoomsCount = 646,
+                    //                   Rate = 4.15,
+                    //                   Price = 40.0m,
+                    //                   HotelFoodId = hotelFood.Id
+                    //               });
+                    //        }
+
+                    regionName = "Шарм Ель Шейх";
+                    hotelName = "Aloha Sharm Hotel";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfastAndDinner, hotelName,
+                        new Hotel
+                        {
+                            Class = 4,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sharm-el-sheikh-aloha-sharm-hotel",
+                            Description = "Готель розташований в 7 км від Наама Бей, в Ом Ель Сід. Відкритий в 2004 році, останній ремонт проведений в 2015 р Готель підійде для сімейного," +
+                                               " молодіжного або романтичного відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх, 7 км від Наама Бей, в Ом Ель Сід.",
+                            RoomsCount = 206,
+                            Rate = 4.45,
+                            Price = 42.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - однокімнатний номер з видом на сад, басейн, територію готелю або околиці. У номері надається king size bed або twin beds. Надається тільки одне додаткове спальне місце - мобільне односпальне ліжко.",
+                                TotalArea = 37.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "мобільне односпальне ліжко",
+                                Price = 42.0m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Sea View Room",
+                                Description = "Sea View Room - однокімнатний номер з видом на море. У номері надається king size bed або twin beds. Надається тільки одне додаткове спальне місце - мобільне односпальне ліжко.",
+                                TotalArea = 60.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "мобільне односпальне ліжко",
+                                Price = 42.5m,
+                            }
+                        });
+
+                    //        regionName = "Шарм Ель Шейх";
+                    //        region = context.Regions.FirstOrDefault(f => f.Name == regionName);
+
+                    //        if (region != null)
+                    //        {
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfastAndDinner,
+                    //             new Hotel
+                    //             {
+                    //                 Class = 4,
+                    //                 RegionId = region.Id,
+                    //                 Name = "Aloha Sharm Hotel",
+                    //                 NormalizedName = "sharm-el-sheikh-aloha-sharm-hotel",
+                    //                 Description = "Готель розташований в 7 км від Наама Бей, в Ом Ель Сід. Відкритий в 2004 році, останній ремонт проведений в 2015 р Готель підійде для сімейного," +
+                    //                   " молодіжного або романтичного відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх, 7 км від Наама Бей, в Ом Ель Сід.",
+                    //                 RoomsCount = 206,
+                    //                 Rate = 4.45,
+                    //                 Price = 42.0m,
+                    //                 HotelFoodId = hotelFood.Id
+                    //             });
+
+                    hotelName = "Amar Sina";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 3,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sharm-el-sheikh-amar-sina",
+                            Description = "Готель знаходиться в районі Рас Умм Елсід в Шарм-ель-Шейху. У 8 км розташована набережна Наама-Бей з безліччю ресторанів і магазинів." +
+                                                " Готель вперше відчинила свої двері гостям в 1999 році. Готель підійде для молодіжного, романтичного або індивідуального відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх.",
+                            RoomsCount = 98,
+                            Rate = 3.59,
+                            Price = 37.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - однокімнатний номер з видом на сад, басейн, територію готелю або околиці. У номері надається king size bed або twin beds. Надається тільки одне додаткове спальне місце - мобільне односпальне ліжко.",
+                                TotalArea = 37.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "мобільне односпальне ліжко",
+                                Price = 40.0m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Sea View Room",
+                                Description = "Sea View Room - однокімнатний номер з видом на море. У номері надається king size bed або twin beds. Надається тільки одне додаткове спальне місце - мобільне односпальне ліжко.",
+                                TotalArea = 37.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "мобільне односпальне ліжко",
+                                Price = 52.5m,
+                            }
+                        });
+
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
+                    //            new Hotel
+                    //            {
+                    //                Class = 3,
+                    //                RegionId = region.Id,
+                    //                Name = "Amar Sina",
+                    //                NormalizedName = "sharm-el-sheikh-amar-sina",
+                    //                Description = "Готель знаходиться в районі Рас Умм Елсід в Шарм-ель-Шейху. У 8 км розташована набережна Наама-Бей з безліччю ресторанів і магазинів." +
+                    //                    " Готель вперше відчинила свої двері гостям в 1999 році. Готель підійде для молодіжного, романтичного або індивідуального відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх.",
+                    //                RoomsCount = 98,
+                    //                Rate = 3.59,
+                    //                Price = 37.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
+
+                    hotelName = "Amwaj Oyoun Hotel";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sharm-el-sheikh-amwaj-oyoun-hotel",
+                            Description = "Готель розташований в районі Набк Бей. Був відкритий в 2007 році. При в'їзді в готель є казино VEGAS." +
+                                                " Готель прекрасно підійде для сімейного або індивідуального відпочинку, а також для подорожі з друзями або для бізнес-поїздок." +
+                                                " Готель розташований в 15 км від аеропорту міста Шарм ель Шейх.",
+                            RoomsCount = 465,
+                            Rate = 3.92,
+                            Price = 40.5m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                             {
+                                Name = "Standard Sport Area",
+                                Description = "Standard Sport Area - номер з видом на сад, басейн або на територію сусіднього готелю. У номерах king-size bed або twin beds. Номери розміщені в окремому триповерховому будинку (зліва між в'їздом в готель і основною будівлею. Додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 32.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 40.0m,
+                             },
+                            new RoomType
+                            {
+                                Name = "Superior Garden View",
+                                Description = "Standard Sport Area - номер з видом на сад. У номерах king-size bed або twin beds. Номери розміщені в окремому триповерховому будинку (зліва між в'їздом в готель і основною будівлею. Додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 32.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 43.0m,
+                            },
+                             new RoomType
+                            {
+                                Name = "Superior Pool View",
+                                Description = "Standard Sport Area - номер з видом на басейн. У номерах king-size bed або twin beds. Номери розміщені в окремому триповерховому будинку (зліва між в'їздом в готель і основною будівлею. Додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 32.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 43.0m,
+                            },
+                              new RoomType
+                            {
+                                Name = "Superior Sea View",
+                                Description = "Standard Sport Area - номер з видом на на море (seaside view). У номерах king-size bed або twin beds. Номери розміщені в окремому триповерховому будинку (зліва між в'їздом в готель і основною будівлею. Додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 32.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 43.0m,
+                            },
+                              new RoomType
+                            {
+                                Name = "1 Bedroom Family Room",
+                                Description = "1 Bedroom Family Room - однокімнатний номер. У номерах king-size bed або twin beds. Додаткове місце - мобільне односпальне ліжко. Надається два додаткових спальних місця. Номери розміщені в основній будівлі.",
+                                TotalArea = 48.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 2,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 48.0m,
+                            },
+                        });
+
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
+                    //            new Hotel
+                    //            {
+                    //                Class = 5,
+                    //                RegionId = region.Id,
+                    //                Name = "Amwaj Oyoun Hotel",
+                    //                NormalizedName = "sharm-el-sheikh-amwaj-oyoun-hotel",
+                    //                Description = "Готель розташований в районі Набк Бей. Був відкритий в 2007 році. При в'їзді в готель є казино VEGAS." +
+                    //                    " Готель прекрасно підійде для сімейного або індивідуального відпочинку, а також для подорожі з друзями або для бізнес-поїздок." +
+                    //                    " Готель розташований в 15 км від аеропорту міста Шарм ель Шейх.",
+                    //                RoomsCount = 465,
+                    //                Rate = 3.92,
+                    //                Price = 40.5m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
 
 
-                regionName = "Шарм Ель Шейх";
-                region = context.Regions.FirstOrDefault(f => f.Name == regionName);
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood,
+                    //            new Hotel
+                    //            {
+                    //                Class = 4,
+                    //                RegionId = region.Id,
+                    //                Name = "Aqua Hotel Resort",
+                    //                NormalizedName = "sharm-el-sheikh-aqua-hotel-resort",
+                    //                Description = "Готель розташований в туристичному районі Шарм-еш-Шейха - Nabq Bay." +
+                    //                    " Був побудований в 2005 році. Остання реновація була в 2014 році." +
+                    //                    " Готель прекрасно підійде для сімейного відпочинку, романтичної подорожі і для поїздки з друзями." +
+                    //                    " Готель розташований в 15 км від аеропорту і в 20 км від центру міста Шарм ель Шейх.",
+                    //                RoomsCount = 127,
+                    //                Rate = 3.43,
+                    //                Price = 40.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
+                    hotelName = "Aqua Hotel Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodNoFood, hotelName,
+                        new Hotel
+                        {
+                            Class = 4,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sharm-el-sheikh-aqua-hotel-resort",
+                            Description = "Готель розташований в туристичному районі Шарм-еш-Шейха - Nabq Bay." +
+                                                " Був побудований в 2005 році. Остання реновація була в 2014 році." +
+                                                " Готель прекрасно підійде для сімейного відпочинку, романтичної подорожі і для поїздки з друзями." +
+                                                " Готель розташований в 15 км від аеропорту і в 20 км від центру міста Шарм ель Шейх.",
+                            RoomsCount = 127,
+                            Rate = 3.43,
+                            Price = 40.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - номер з видом на курорт / околиці / головну дорогу. У номерах king size bed або twin beds (більшість номерів). Додаткове місце - мобільне односпальне ліжко. Є номери тільки з вікном (без балкона).",
+                                TotalArea = 35.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "мобільне односпальне ліжко",
+                                Price = 42.2m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Pool View Room",
+                                Description = "Pool View Room - номер з видом на басейн. У номерах king size bed або twin beds (більшість номерів). Додаткове місце - мобільне односпальне ліжко.",
+                                TotalArea = 40.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "мобільне односпальне ліжко",
+                                Price = 45.5m,
+                            }
+                        });
 
-                if (region != null)
-                {
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfastAndDinner,
-                     new Hotel
-                     {
-                         Class = 4,
-                         RegionId = region.Id,
-                         Name = "Aloha Sharm Hotel",
-                         NormalizedName = "sharm-el-sheikh-aloha-sharm-hotel",
-                         Description = "Готель розташований в 7 км від Наама Бей, в Ом Ель Сід. Відкритий в 2004 році, останній ремонт проведений в 2015 р Готель підійде для сімейного," +
-                           " молодіжного або романтичного відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх, 7 км від Наама Бей, в Ом Ель Сід.",
-                         RoomsCount = 206,
-                         Rate = 4.45,
-                         Price = 42.0m,
-                         HotelFoodId = hotelFood.Id
-                     });
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
+                    //            new Hotel
+                    //            {
+                    //                Class = 5,
+                    //                RegionId = region.Id,
+                    //                Name = "Aurora Oriental Resort",
+                    //                NormalizedName = "sharm-el-sheikh-aurora-oriental-resort",
+                    //                Description = "Готель розташований на пляжній території і орієнтований фасадною стороною на острів Тиран," +
+                    //                    " до якого всього 20 хвилин їзди від курортного району Наама-бей. Готель вперше відчинила свої двері гостям в 2001 році." +
+                    //                    " Готель прекрасно підійде для сімейного відпочинку. Відстань до міжнародного аеропорту Шарм-еш-Шейха - 10 км.",
+                    //                RoomsCount = 264,
+                    //                Rate = 4.05,
+                    //                Price = 46.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
+                    //        }
+                    hotelName = "Aurora Oriental Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sharm-el-sheikh-aurora-oriental-resort",
+                            Description = "Готель розташований на пляжній території і орієнтований фасадною стороною на острів Тиран," +
+                                                " до якого всього 20 хвилин їзди від курортного району Наама-бей. Готель вперше відчинила свої двері гостям в 2001 році." +
+                                                " Готель прекрасно підійде для сімейного відпочинку. Відстань до міжнародного аеропорту Шарм-еш-Шейха - 10 км.",
+                            RoomsCount = 264,
+                            Rate = 4.05,
+                            Price = 46.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Garden View Room",
+                                Description = "Garden View Room - номер з видом на сад. У номерах king size bed або twin beds. Додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 45.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 45.5m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Pool View Room",
+                                Description = "Pool View Room - номер з видом на басейн. У номерах king size bed або twin beds. Додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 45.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 45.5m,
+                            },
+                             new RoomType
+                            {
+                                Name = "See View Room",
+                                Description = "Pool View Room - номер з видом на море. У номерах king size bed або twin beds. Додаткове місце - розкладне односпальне ліжко.",
+                                TotalArea = 45.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне односпальне ліжко",
+                                Price = 45.5m,
+                            }
+                        });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    new Hotel
-                    {
-                        Class = 3,
-                        RegionId = region.Id,
-                        Name = "Amar Sina",
-                        NormalizedName = "sharm-el-sheikh-amar-sina",
-                        Description = "Готель знаходиться в районі Рас Умм Елсід в Шарм-ель-Шейху. У 8 км розташована набережна Наама-Бей з безліччю ресторанів і магазинів." +
-                            " Готель вперше відчинила свої двері гостям в 1999 році. Готель підійде для молодіжного, романтичного або індивідуального відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх.",
-                        RoomsCount = 98,
-                        Rate = 3.59,
-                        Price = 37.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
+                    //        regionName = "Сафага";
+                    //        region = context.Regions.FirstOrDefault(f => f.Name == regionName);
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
-                    new Hotel
-                    {
-                        Class = 5,
-                        RegionId = region.Id,
-                        Name = "Amwaj Oyoun Hotel",
-                        NormalizedName = "sharm-el-sheikh-amwaj-oyoun-hotel",
-                        Description = "Готель розташований в районі Набк Бей. Був відкритий в 2007 році. При в'їзді в готель є казино VEGAS." +
-                            " Готель прекрасно підійде для сімейного або індивідуального відпочинку, а також для подорожі з друзями або для бізнес-поїздок." +
-                            " Готель розташований в 15 км від аеропорту міста Шарм ель Шейх.",
-                        RoomsCount = 465,
-                        Rate = 3.92,
-                        Price = 40.5m,
-                        HotelFoodId = hotelFood.Id
-                    });
+                    //        if (region != null)
+                    //        {
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
+                    //            new Hotel
+                    //            {
+                    //                Class = 4,
+                    //                RegionId = region.Id,
+                    //                Name = "Coral Sun Beach",
+                    //                NormalizedName = "safaga-coral-sun-beach",
+                    //                Description = "Готель розташований в 22 км від м Сафага. Готель вперше розкрив свої двері гостям в 2011 році, останній ремонт був проведений в 2015 році. " +
+                    //                    "Готель підійде для сімейного відпочинку, романтичних подорожей або для поїздки з друзями. Готель розташований в 80 км від аеропорту м Хургада.",
+                    //                RoomsCount = 110,
+                    //                Rate = 4.45,
+                    //                Price = 43.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood,
-                    new Hotel
-                    {
-                        Class = 4,
-                        RegionId = region.Id,
-                        Name = "Aqua Hotel Resort",
-                        NormalizedName = "sharm-el-sheikh-aqua-hotel-resort",
-                        Description = "Готель розташований в туристичному районі Шарм-еш-Шейха - Nabq Bay." +
-                            " Був побудований в 2005 році. Остання реновація була в 2014 році." +
-                            " Готель прекрасно підійде для сімейного відпочинку, романтичної подорожі і для поїздки з друзями." +
-                            " Готель розташований в 15 км від аеропорту і в 20 км від центру міста Шарм ель Шейх.",
-                        RoomsCount = 127,
-                        Rate = 3.43,
-                        Price = 40.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
+                    regionName = "Сафага";
+                    hotelName = "Coral Sun Beach";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
+                        new Hotel
+                        {
+                            Class = 4,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "safaga-coral-sun-beach",
+                            Description = "Готель розташований в 22 км від м Сафага. Готель вперше розкрив свої двері гостям в 2011 році, останній ремонт був проведений в 2015 році. " +
+                                                "Готель підійде для сімейного відпочинку, романтичних подорожей або для поїздки з друзями. Готель розташований в 80 км від аеропорту м Хургада.",
+                            RoomsCount = 110,
+                            Rate = 4.45,
+                            Price = 43.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на басейн і частковим видом на море. У номері king bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 47.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 42.2m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Superior Room",
+                                Description = "Superior Room - номер з видом на море. У номері king bed або twin beds і софа. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 65.0,
+                                RoomsCount = 1,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 65.5m,
+                            }
+                        });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    new Hotel
-                    {
-                        Class = 5,
-                        RegionId = region.Id,
-                        Name = "Aurora Oriental Resort",
-                        NormalizedName = "sharm-el-sheikh-aurora-oriental-resort",
-                        Description = "Готель розташований на пляжній території і орієнтований фасадною стороною на острів Тиран," +
-                            " до якого всього 20 хвилин їзди від курортного району Наама-бей. Готель вперше відчинила свої двері гостям в 2001 році." +
-                            " Готель прекрасно підійде для сімейного відпочинку. Відстань до міжнародного аеропорту Шарм-еш-Шейха - 10 км.",
-                        RoomsCount = 264,
-                        Rate = 4.05,
-                        Price = 46.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
-                }
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
+                    //            new Hotel
+                    //            {
+                    //                Class = 4,
+                    //                RegionId = region.Id,
+                    //                Name = "Menaville",
+                    //                NormalizedName = "safaga-menaville",
+                    //                Description = "Готель розташований прямо на березі Червоного моря. " +
+                    //                    "Відкритий в 1991 році, остання часткова реновація пройшла в 2010 році. " +
+                    //                    "Підійде для сімейного, романтичного або молодіжного відпочинку. " +
+                    //                    "Готель розташований в 45 км від аеропорту Хургади, в 8 км від міста Сафага і в 180 км від великого міста Луксора.",
+                    //                RoomsCount = 301,
+                    //                Rate = 4.08,
+                    //                Price = 44.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
+                    //        }
 
-                regionName = "Сафага";
-                region = context.Regions.FirstOrDefault(f => f.Name == regionName);
+                    hotelName = "Menaville";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 4,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "safaga-menaville",
+                            Description = "Готель розташований прямо на березі Червоного моря. " +
+                                                "Відкритий в 1991 році, остання часткова реновація пройшла в 2010 році. " +
+                                                "Підійде для сімейного, романтичного або молодіжного відпочинку. " +
+                                                "Готель розташований в 45 км від аеропорту Хургади, в 8 км від міста Сафага і в 180 км від великого міста Луксора.",
+                            RoomsCount = 301,
+                            Rate = 4.08,
+                            Price = 44.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на околиці, гори, сад або море. Номери знаходяться в головній будівлі. У номері king bed або twin beds. Одне додаткове місце - розкладне ліжко.",
+                                TotalArea = 32.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне ліжко",
+                                Price = 44.0m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Superior Room",
+                                Description = "Superior Room - номер з видом на море. У номері king bed або twin beds. Одне додаткове місце - розкладне ліжко.",
+                                TotalArea = 65.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "розкладне ліжко",
+                                Price = 55.4m,
+                            }
+                        });
 
-                if (region != null)
-                {
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
-                    new Hotel
-                    {
-                        Class = 4,
-                        RegionId = region.Id,
-                        Name = "Coral Sun Beach",
-                        NormalizedName = "safaga-coral-sun-beach",
-                        Description = "Готель розташований в 22 км від м Сафага. Готель вперше розкрив свої двері гостям в 2011 році, останній ремонт був проведений в 2015 році. " +
-                            "Готель підійде для сімейного відпочинку, романтичних подорожей або для поїздки з друзями. Готель розташований в 80 км від аеропорту м Хургада.",
-                        RoomsCount = 110,
-                        Rate = 4.45,
-                        Price = 43.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
+                    //        regionName = "Сахл Хашиш";
+                    //        region = context.Regions.FirstOrDefault(f => f.Name == regionName);
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
-                    new Hotel
-                    {
-                        Class = 4,
-                        RegionId = region.Id,
-                        Name = "Menaville",
-                        NormalizedName = "safaga-menaville",
-                        Description = "Готель розташований прямо на березі Червоного моря. " +
-                            "Відкритий в 1991 році, остання часткова реновація пройшла в 2010 році. " +
-                            "Підійде для сімейного, романтичного або молодіжного відпочинку. " +
-                            "Готель розташований в 45 км від аеропорту Хургади, в 8 км від міста Сафага і в 180 км від великого міста Луксора.",
-                        RoomsCount = 301,
-                        Rate = 4.08,
-                        Price = 44.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
-                }
+                    //        if (region != null)
+                    //        {
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
+                    //            new Hotel
+                    //            {
+                    //                Class = 5,
+                    //                RegionId = region.Id,
+                    //                Name = "Oberoi",
+                    //                NormalizedName = "sahl-hasheesh-oberoi",
+                    //                Description = "Розташований на узбережжі Червоного моря The Oberoi, " +
+                    //                    "Sahl Hasheesh являє собою ексклюзивний люкс-курорт. Готель розташовується на території в 48 акрів. " +
+                    //                    "Торговий центр знаходяться в 25 хвилинах їзди від курортного готелю Oberoi Sahl Hasheesh. " +
+                    //                    "Готель підійде для пляжного відпочинку з сім'єю. Готель розташований в 17 км від аеропорту, в 20 км від центру Хургади, " +
+                    //                    "на самому березі моря.",
+                    //                RoomsCount = 102,
+                    //                Rate = 4.67,
+                    //                Price = 47.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
 
-                regionName = "Сахл Хашиш";
-                region = context.Regions.FirstOrDefault(f => f.Name == regionName);
+                    regionName = "Сахл Хашиш";
+                    hotelName = "Oberoi";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfast, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sahl-hasheesh-oberoi",
+                            Description = "Розташований на узбережжі Червоного моря The Oberoi, " +
+                                                "Sahl Hasheesh являє собою ексклюзивний люкс-курорт. Готель розташовується на території в 48 акрів. " +
+                                                "Торговий центр знаходяться в 25 хвилинах їзди від курортного готелю Oberoi Sahl Hasheesh. " +
+                                                "Готель підійде для пляжного відпочинку з сім'єю. Готель розташований в 17 км від аеропорту, в 20 км від центру Хургади, " +
+                                                "на самому березі моря.",
+                            RoomsCount = 102,
+                            Rate = 4.67,
+                            Price = 47.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Deluxe Suite",
+                                Description = "Deluxe Suite - номер з видом на море або сад. Номер складається з вітальні, обідньої і спальної зон, розділених аркою. У номері king bed і софа. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 85.0,
+                                RoomsCount = 3,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 78.0m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Superior Deluxe Suite",
+                                Description = "Superior Deluxe Suite - номер з прямим видом на море, розташований перед пляжем. Номер складається з вітальні, обідньої і спальної зон розділених аркою. У номері king bed і софа. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 85.0,
+                                RoomsCount = 3,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 80.4m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Grand Suite",
+                                Description = "Grand Suite - номер з видом на сад або море і власним басейном з підігрівом в зимовий період. Номер складається з вітальні, обідньої і спальної зон розділених аркою. У номері king bed і софа. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 125.0,
+                                RoomsCount = 3,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 80.4m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Royal Suite",
+                                Description = "Royal Suite - королівський номер з видом на сад або море і власним басейном з підігрівом в зимовий період. Номер складається з вітальні, двох ванних кімнат, двох обідніх зони (всередині номера і біля басейну) і спальної зони розділених аркою. У номері king bed і софа. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 225.0,
+                                RoomsCount = 6,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 278.0m,
+                            },
+                        });
 
-                if (region != null)
-                {
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
-                    new Hotel
-                    {
-                        Class = 5,
-                        RegionId = region.Id,
-                        Name = "Oberoi",
-                        NormalizedName = "sahl-hasheesh-oberoi",
-                        Description = "Розташований на узбережжі Червоного моря The Oberoi, " +
-                            "Sahl Hasheesh являє собою ексклюзивний люкс-курорт. Готель розташовується на території в 48 акрів. " +
-                            "Торговий центр знаходяться в 25 хвилинах їзди від курортного готелю Oberoi Sahl Hasheesh. " +
-                            "Готель підійде для пляжного відпочинку з сім'єю. Готель розташований в 17 км від аеропорту, в 20 км від центру Хургади, " +
-                            "на самому березі моря.",
-                        RoomsCount = 102,
-                        Rate = 4.67,
-                        Price = 47.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
+                    //            new Hotel
+                    //            {
+                    //                Class = 4,
+                    //                RegionId = region.Id,
+                    //                Name = "Ocean Breeze",
+                    //                NormalizedName = "sahl-hasheesh-ocean-breeze",
+                    //                Description = "Апартаменти Ocean Breeze з власним пляжем і відкритим басейном розташовані на морському узбережжі в районі" +
+                    //                    " Сахл-Хашіш міста Хургада в 17 км від зони для дайвінгу Малек-Дішан і в 23 км від зони для дайвінгу Абу-Хашиш. Готель був відкритий в 2018 році." +
+                    //                    " Всього в готелі 439 номерів які розташовані в головній 6-ти поверховій будівлі, віллах і бунгало. У 23 км знаходиться затока Джетт-Макаді-Бей " +
+                    //                    "і Центр дайвінгу Субаква Санрайз. Відстань до Міжнародного аеропорту Хургада становить 3 км",
+                    //                RoomsCount = 98,
+                    //                Rate = 3.99,
+                    //                Price = 39.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
+                    hotelName = "Ocean Breeze";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sahl-hasheesh-ocean-breeze",
+                            Description = "Апартаменти Ocean Breeze з власним пляжем і відкритим басейном розташовані на морському узбережжі в районі" +
+                                                " Сахл-Хашіш міста Хургада в 17 км від зони для дайвінгу Малек-Дішан і в 23 км від зони для дайвінгу Абу-Хашиш. Готель був відкритий в 2018 році." +
+                                                " Всього в готелі 439 номерів які розташовані в головній 6-ти поверховій будівлі, віллах і бунгало. У 23 км знаходиться затока Джетт-Макаді-Бей " +
+                                                "і Центр дайвінгу Субаква Санрайз. Відстань до Міжнародного аеропорту Хургада становить 3 км",
+                            RoomsCount = 98,
+                            Rate = 3.99,
+                            Price = 39.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - номер в головній будівлі або в бунгало з видом на басейн або далеке море. У номері king size bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 45.0,
+                                 RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 38.0m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Junior Suite",
+                                Description = "Junior Suite - номер в головній будівлі або бунгало з видом на басейн або далеке море. У номері вітальня і спальня з king size bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 65.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 40.4m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Family (Executive) Suite",
+                                Description = "Family (Executive) Suite - номер в головній будівлі або бунгало з видом на басейн або далеке море. У номері 2 спальні і вітальня. У спальні king size bed або twin beds.",
+                                TotalArea = 90.0,
+                                RoomsCount = 3,
+                                PlacesCount = 4,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 95.0m,
+                            }
+                        });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
-                    new Hotel
-                    {
-                        Class = 4,
-                        RegionId = region.Id,
-                        Name = "Ocean Breeze",
-                        NormalizedName = "sahl-hasheesh-ocean-breeze",
-                        Description = "Апартаменти Ocean Breeze з власним пляжем і відкритим басейном розташовані на морському узбережжі в районі" +
-                            " Сахл-Хашіш міста Хургада в 17 км від зони для дайвінгу Малек-Дішан і в 23 км від зони для дайвінгу Абу-Хашиш. Готель був відкритий в 2018 році." +
-                            " Всього в готелі 439 номерів які розташовані в головній 6-ти поверховій будівлі, віллах і бунгало. У 23 км знаходиться затока Джетт-Макаді-Бей " +
-                            "і Центр дайвінгу Субаква Санрайз. Відстань до Міжнародного аеропорту Хургада становить 3 км",
-                        RoomsCount = 98,
-                        Rate = 3.99,
-                        Price = 39.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
+                    //             new Hotel
+                    //             {
+                    //                 Class = 5,
+                    //                 RegionId = region.Id,
+                    //                 Name = "Old Palace Resort",
+                    //                 NormalizedName = "sahl-hasheesh-old-palace-resort",
+                    //                 Description = "Готель розташований в Хургаді, в районі Саль-Хашиш, за Порожніми горами на приватному піщаному пляжі. Дата відкриття - 2008 рік, " +
+                    //                    "дата останньої реставрації - 2011 р Недалеко від готелю розташований променад з магазинами та ресторанами. Готель підійде для сімейного, романтичного" +
+                    //                    " або молодіжного відпочинку. Готель розташований в 23 км від аеропорту, в 25 км від центру Хургади.",
+                    //                 RoomsCount = 292,
+                    //                 Rate = 4.5,
+                    //                 Price = 50.5m,
+                    //                 HotelFoodId = hotelFood.Id
+                    //             });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                     new Hotel
-                     {
-                         Class = 5,
-                         RegionId = region.Id,
-                         Name = "Old Palace Resort",
-                         NormalizedName = "sahl-hasheesh-old-palace-resort",
-                         Description = "Готель розташований в Хургаді, в районі Саль-Хашиш, за Порожніми горами на приватному піщаному пляжі. Дата відкриття - 2008 рік, " +
-                            "дата останньої реставрації - 2011 р Недалеко від готелю розташований променад з магазинами та ресторанами. Готель підійде для сімейного, романтичного" +
-                            " або молодіжного відпочинку. Готель розташований в 23 км від аеропорту, в 25 км від центру Хургади.",
-                         RoomsCount = 292,
-                         Rate = 4.5,
-                         Price = 50.5m,
-                         HotelFoodId = hotelFood.Id
-                     });
+                    hotelName = "Old Palace Resort";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sahl-hasheesh-old-palace-resort",
+                            Description = "Готель розташований в Хургаді, в районі Саль-Хашиш, за Порожніми горами на приватному піщаному пляжі. Дата відкриття - 2008 рік, " +
+                                                "дата останньої реставрації - 2011 р Недалеко від готелю розташований променад з магазинами та ресторанами. Готель підійде для сімейного, романтичного" +
+                                                " або молодіжного відпочинку. Готель розташований в 23 км від аеропорту, в 25 км від центру Хургади.",
+                            RoomsCount = 292,
+                            Rate = 4.5,
+                            Price = 50.5m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - номер з видом на прилеглу територію, сад або басейн. У номері king-size bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 37.0,
+                                 RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 38.2m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Superior Room",
+                                Description = "Superior Room - номер з боковим видом на море. У номері king-size bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 37.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 40.2m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Deluxe Room",
+                                Description = "Deluxe Room - номер з видом на море. У номері king-size bed або twin beds і софа. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 47.0,
+                                RoomsCount = 1,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 80.8m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Chalet / Family Room",
+                                Description = "Chalet / Family Room - сімейний номер з видом на сад, басейн або частковим видом на море. У номері king-size bed або twin beds і софа. Одне додаткове місце - односпальне ліжко. Номер розташований в додатковому корпусі.",
+                                TotalArea = 60.0,
+                                RoomsCount = 1,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 98.0m,
+                            },
+                             new RoomType
+                            {
+                                Name = "Junior Suite",
+                                Description = "Junior Suite - номер з видом на море. У номері king-size bed. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 57.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 48.8m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Suite",
+                                Description = "Suite - номер з видом на сад або басейн, складається з двох кімнат. У номері king-size bed або twin beds і софа. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 68.0,
+                                RoomsCount = 2,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 58.0m,
+                            }
+                        });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
-                    new Hotel
-                    {
-                        Class = 5,
-                        RegionId = region.Id,
-                        Name = "Pyramisa",
-                        NormalizedName = "sahl-hasheesh-pyramisa",
-                        Description = "Готель розташований на піщаному пляжі в бухті Сахл Хашіш. " +
-                            "Побудований в 2007 році, остання реставрація проведена в 2014 році. " +
-                            "Складається з основного 2-, 3- і 4-поверхової будівлі (каскадом), додаткового 2-," +
-                            " 3- і 4-поверхового корпусу (каскадом) і трьох 2-поверхових вілл. Готель з сучасними і" +
-                            " стильними номерами пропонує своїм гостям чудовий пляж, ресторани на будь-який смак, " +
-                            "а також численні розважальні заходи. Підходить для сімейного відпочинку з дітьми, " +
-                            "а також для проведення конференцій. Готель розташований в 21 км від аеропорту, " +
-                            "в 24 км від центру Хургади, в 200 км від м Луксор, на самому березі моря.",
-                        RoomsCount = 127,
-                        Rate = 4.41,
-                        Price = 55.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
+                    //            new Hotel
+                    //            {
+                    //                Class = 5,
+                    //                RegionId = region.Id,
+                    //                Name = "Pyramisa",
+                    //                NormalizedName = "sahl-hasheesh-pyramisa",
+                    //                Description = "Готель розташований на піщаному пляжі в бухті Сахл Хашіш. " +
+                    //                    "Побудований в 2007 році, остання реставрація проведена в 2014 році. " +
+                    //                    "Складається з основного 2-, 3- і 4-поверхової будівлі (каскадом), додаткового 2-," +
+                    //                    " 3- і 4-поверхового корпусу (каскадом) і трьох 2-поверхових вілл. Готель з сучасними і" +
+                    //                    " стильними номерами пропонує своїм гостям чудовий пляж, ресторани на будь-який смак, " +
+                    //                    "а також численні розважальні заходи. Підходить для сімейного відпочинку з дітьми, " +
+                    //                    "а також для проведення конференцій. Готель розташований в 21 км від аеропорту, " +
+                    //                    "в 24 км від центру Хургади, в 200 км від м Луксор, на самому березі моря.",
+                    //                RoomsCount = 127,
+                    //                Rate = 4.41,
+                    //                Price = 55.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
 
-                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    new Hotel
-                    {
-                        Class = 5,
-                        RegionId = region.Id,
-                        Name = "Sensimar Premier Le Reve Hotel",
-                        NormalizedName = "sahl-hasheesh-sensimar-premier-le-reve-hotel",
-                        Description = "Готель розташований в районі Сахл Хашіш на Єгипетському узбережжі Червоного моря. " +
-                            "Відкритий в 2009 році, останній ремонт проведений в 2015 р. Готель приймає гостей старше 16 років. " +
-                            "Підійде для романтичного відпочинку, поїздки з друзями або для індивідуального подорожі. " +
-                            "У 22 км від аеропорту м Хургада, 25 км від м Хургада, в Сал Хашиш.",
-                        RoomsCount = 339,
-                        Rate = 4.82,
-                        Price = 56.0m,
-                        HotelFoodId = hotelFood.Id
-                    });
+                    hotelName = "Pyramisa";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sahl-hasheesh-pyramisa",
+                            Description = "Готель розташований на піщаному пляжі в бухті Сахл Хашіш. " +
+                                                "Побудований в 2007 році, остання реставрація проведена в 2014 році. " +
+                                                "Складається з основного 2-, 3- і 4-поверхової будівлі (каскадом), додаткового 2-," +
+                                                " 3- і 4-поверхового корпусу (каскадом) і трьох 2-поверхових вілл. Готель з сучасними і" +
+                                                " стильними номерами пропонує своїм гостям чудовий пляж, ресторани на будь-який смак, " +
+                                                "а також численні розважальні заходи. Підходить для сімейного відпочинку з дітьми, " +
+                                                "а також для проведення конференцій. Готель розташований в 21 км від аеропорту, " +
+                                                "в 24 км від центру Хургади, в 200 км від м Луксор, на самому березі моря.",
+                            RoomsCount = 127,
+                            Rate = 4.41,
+                            Price = 55.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Standard Room",
+                                Description = "Standard Room - стандартний номер з видом на сад, басейн, море або бічним видом на море. У номері king bed або twin beds. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 40.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 36.6m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Deluxe Room",
+                                Description = "Deluxe Room - покращений номер з видом на море, складається з спальної кімнати і вітальні. У номері king-size bed або twin beds і софа. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 72.0,
+                                RoomsCount = 2,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 81.8m,
+                            },
+                             new RoomType
+                            {
+                                Name = "Junior Suite",
+                                Description = "Junior Suite - номер напівлюкс з видом на море, складається з спальної кімнати і вітальні. У номері king-size bed. Одне додаткове місце - односпальне ліжко.",
+                                TotalArea = 93.0,
+                                RoomsCount = 2,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 88.1m,
+                            }
+                        });
+
+                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
+                    //            new Hotel
+                    //            {
+                    //                Class = 5,
+                    //                RegionId = region.Id,
+                    //                Name = "Sensimar Premier Le Reve Hotel",
+                    //                NormalizedName = "sahl-hasheesh-sensimar-premier-le-reve-hotel",
+                    //                Description = "Готель розташований в районі Сахл Хашіш на Єгипетському узбережжі Червоного моря. " +
+                    //                    "Відкритий в 2009 році, останній ремонт проведений в 2015 р. Готель приймає гостей старше 16 років. " +
+                    //                    "Підійде для романтичного відпочинку, поїздки з друзями або для індивідуального подорожі. " +
+                    //                    "У 22 км від аеропорту м Хургада, 25 км від м Хургада, в Сал Хашиш.",
+                    //                RoomsCount = 339,
+                    //                Rate = 4.82,
+                    //                Price = 56.0m,
+                    //                HotelFoodId = hotelFood.Id
+                    //            });
+
+                    hotelName = "Sensimar Premier Le Reve Hotel";
+                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                        new Hotel
+                        {
+                            Class = 5,
+                            RegionId = region.Id,
+                            Name = hotelName,
+                            NormalizedName = "sahl-hasheesh-sensimar-premier-le-reve-hotel",
+                            Description = "Готель розташований в районі Сахл Хашіш на Єгипетському узбережжі Червоного моря. " +
+                                                "Відкритий в 2009 році, останній ремонт проведений в 2015 р. Готель приймає гостей старше 16 років. " +
+                                                "Підійде для романтичного відпочинку, поїздки з друзями або для індивідуального подорожі. " +
+                                                "У 22 км від аеропорту м Хургада, 25 км від м Хургада, в Сал Хашиш.",
+                            RoomsCount = 339,
+                            Rate = 4.82,
+                            Price = 56.0m,
+                            HotelFoodId = hotelFood.Id
+                        },
+                        new RoomType[]
+                        {
+                             new RoomType
+                            {
+                                Name = "Garden View Room",
+                                Description = "Garden View Room - номер з видом на сад. У номері king size bed або twin beds. Додаткове місце - односпальне ліжко.",
+                                TotalArea = 49.0,
+                                RoomsCount = 1,
+                                PlacesCount = 2,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 38.4m,
+                            },
+                            new RoomType
+                            {
+                                Name = "Pool View Room",
+                                Description = "Pool View Room - номер з видом на басейн. У номері king size bed або twin beds. Додаткове місце - односпальне ліжко.",
+                                TotalArea = 49.0,
+                                RoomsCount = 2,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 38.4m,
+                            },
+                             new RoomType
+                            {
+                                Name = "Limited Sea View Room",
+                                Description = "Limited Sea View Room - номер з частковим видом на море. У номері king size bed або twin beds. Додаткове місце - односпальне ліжко.",
+                                 TotalArea = 49.0,
+                                RoomsCount = 2,
+                                PlacesCount = 3,
+                                ExtraPlacesCount = 1,
+                                ExtraBedType = "односпальне ліжко",
+                                Price = 38.4m,
+                            }
+                        });
                 }
             }
         }
@@ -1239,6 +2504,30 @@ namespace TouristApp.DAL.Entities
             }
         }
 
+        public static void SeedToursHelper2(EFContext context, string regionName, string hotelName, string roomTypename, Tour tour)
+        {
+            var hotel = context
+                .Hotels
+                .Where(p => p.Name == hotelName)
+                .Include(s => s.Region)
+                .Where(p => p.Region.Name == regionName)
+                .SingleOrDefault();
+
+            if (hotel != null)
+            {
+                var roomType = context.RoomTypes.FirstOrDefault(r => r.HotelId == hotel.Id && r.Name == roomTypename);
+
+                if (roomType!=null)
+                {
+                    if (context.Tours.FirstOrDefault(f => f.CityDepartureId == tour.CityDepartureId && f.HotelId == tour.HotelId && f.DaysCount == tour.DaysCount && f.FromData == tour.FromData && f.Price == tour.Price) == null)
+                    {
+                        context.Tours.Add(tour);
+                        context.SaveChanges();
+                    }
+                }
+            }           
+        }
+
         public static void SeedTours(EFContext context)
         {
             string regionName = "Марса Алам";
@@ -1249,6 +2538,8 @@ namespace TouristApp.DAL.Entities
                 .Include(s => s.Region)
                 .Where(p => p.Region.Name == regionName)
                 .SingleOrDefault();
+            //string roomTypename = "Standard Room";
+            //var roomType = context.RoomTypes.FirstOrDefault(r => r.HotelId == hotel.Id && r.Name == roomTypename);
 
             if (hotel != null)
             {
@@ -1418,7 +2709,7 @@ namespace TouristApp.DAL.Entities
                 Dictionary<string, string> descriptions = new Dictionary<string, string>();
                 descriptions.Add("Розташування", "Розташований в 36 км від аеропорту м Марса Алам і в 165 км від аеропорту Хургади.");
                 descriptions.Add("Пляж", "Піщано-кораловий пляж. Протяжність пляжу - 500 м. Рекомендується спеціальне взуття.");
-                descriptions.Add("Номери", "У готелі " + hotel.RoomsCount.ToString()  +" номери.");
+                descriptions.Add("Номери", "У готелі " + hotel.RoomsCount.ToString() + " номери.");
                 descriptions.Add("Сервіси", "Ресторани: Green House Restaurant (сніданок, обід і вечерю, шведський стіл) La Vista Restaurant (міжнародна кухня) Panorama Restaurant (місцева кухня) Beach BBQ Restaurant Бари: Lobby Bar Pool Bar Waves Beach Bar Scarabeo Beach Disco До послуг гостей: 6 басейнів ( 1 зі штучною хвилею, 2 з підігрівом в зимовий період, 1 олімпійський басейн");
                 descriptions.Add("Спорт і розваги", "Освітлення тенісного корту (платно), катання на верблюдах (за додаткову плату), водне поло (безкоштовно), дартс (безкоштовно), бочче (безкоштовно), міні-футбол (безкоштовно), пірнання з аквалангом, 2 тенісних корти (з твердим покриттям , 1 - в LTI Akassia Beach Resort), стрільба з лука.");
                 descriptions.Add("Для дітей", "6 водні гірки, 3 відкриті басейни (1 в LTI Akassia Beach Resort), 3 дитячі секції в басейні (1 в LTI Akassia Beach Resort), дитячий клуб (з 4 до 12 років), дитяча коляска.");

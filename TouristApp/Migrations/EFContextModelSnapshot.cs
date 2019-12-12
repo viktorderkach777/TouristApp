@@ -477,6 +477,38 @@ namespace TouristApp.Migrations
                     b.ToTable("Regions");
                 });
 
+            modelBuilder.Entity("TouristApp.DAL.Entities.RoomType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("ExtraBedType");
+
+                    b.Property<int?>("ExtraPlacesCount");
+
+                    b.Property<long>("HotelId");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("PlacesCount");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<int?>("RoomsCount");
+
+                    b.Property<double?>("TotalArea");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelId");
+
+                    b.ToTable("RoomTypes");
+                });
+
             modelBuilder.Entity("TouristApp.DAL.Entities.Tour", b =>
                 {
                     b.Property<long>("Id")
@@ -651,6 +683,14 @@ namespace TouristApp.Migrations
                     b.HasOne("TouristApp.DAL.Entities.Country", "Country")
                         .WithMany("Regions")
                         .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TouristApp.DAL.Entities.RoomType", b =>
+                {
+                    b.HasOne("TouristApp.DAL.Entities.Hotel", "Hotel")
+                        .WithMany("RoomTypes")
+                        .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

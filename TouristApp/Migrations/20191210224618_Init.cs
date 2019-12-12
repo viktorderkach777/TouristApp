@@ -374,6 +374,33 @@ namespace TouristApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoomTypes",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    TotalArea = table.Column<double>(nullable: true),
+                    RoomsCount = table.Column<int>(nullable: true),
+                    PlacesCount = table.Column<int>(nullable: false),
+                    ExtraPlacesCount = table.Column<int>(nullable: true),
+                    ExtraBedType = table.Column<string>(nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    HotelId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoomTypes_Hotels_HotelId",
+                        column: x => x.HotelId,
+                        principalTable: "Hotels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblParameters",
                 columns: table => new
                 {
@@ -569,6 +596,11 @@ namespace TouristApp.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RoomTypes_HotelId",
+                table: "RoomTypes",
+                column: "HotelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_tblFilters_FilterValueId",
                 table: "tblFilters",
                 column: "FilterValueId");
@@ -619,6 +651,9 @@ namespace TouristApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "RoomTypes");
 
             migrationBuilder.DropTable(
                 name: "tblFilterNameGroups");
