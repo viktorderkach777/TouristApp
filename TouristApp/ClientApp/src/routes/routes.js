@@ -35,8 +35,8 @@ const Typography = React.lazy(() => import('../views/Theme/Typography/Typography
 const Widgets = React.lazy(() => import('../views/Widgets/Widgets'));
 const Users = React.lazy(() => import('../views/Users/Users'));
 const User = React.lazy(() => import('../views/Users/User'));
-const SinglePage = React.lazy(()=>import('../components/client/tours/singleTour/SingleTour'));
-const Salo = React.lazy(()=>import("../components/client/Salo"))
+//const SinglePage = React.lazy(()=>import('../components/client/tours/singleTour/SingleTour'));
+//const Salo = React.lazy(()=>import("../components/client/Salo"))
 const TourWidget = React.lazy(()=>import("../components/tours/index"))
 const SimplyTour = React.lazy(()=>import("../components/tours/TourPage"))
 const WeatherWidget = React.lazy(()=>import("../components/weather"))
@@ -47,9 +47,10 @@ const MapNavigation = React.lazy(()=>import("../components/mapNavigation"))
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/singlepage',exact:true ,name: 'Готель' , component: SinglePage },
+ // { path: '/singlepage',exact:true ,name: 'Готель' , component: SinglePage },
   { path: '/tours',exact:true ,name: 'Тури' , component: TourWidget  },
-  { path: "/ss", exact:true, name: "ss", component: Salo},
+  { path: '/tours/:country',exact:true ,name: 'Тури' , component: TourWidget  },
+  //{ path: "/ss", exact:true, name: "ss", component: Salo},
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/theme', exact: true, name: 'Theme', component: Colors },
   { path: '/theme/colors', name: 'Colors', component: Colors },
