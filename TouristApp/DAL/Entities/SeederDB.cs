@@ -101,6 +101,7 @@ namespace TouristApp.DAL.Entities
             Hotel hotel = null;
             Country country = null;
             HotelFood food = null;
+
             var filterNameHotelClass = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_CLASS);
             var filterNameHotelCountry = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_COUNTRY);
             var filterNameCity = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_CITY);
@@ -111,9 +112,9 @@ namespace TouristApp.DAL.Entities
                 foreach (var tour in context.Tours)
                 {
                     city = context.CityDepartures.FirstOrDefault(c => c.Id == tour.CityDepartureId);
-                    hotel = context.Hotels.FirstOrDefault(h => h.Id == tour.HotelId);
-                    country = context.Countries.FirstOrDefault(c => c.Id == tour.Hotel.Region.CountryId);
-                    food = context.HotelFoods.FirstOrDefault(f => f.Id == tour.Hotel.HotelFood.Id);
+                    hotel = context.Hotels.FirstOrDefault(h => h.Id == tour.RoomType.HotelId);
+                    country = context.Countries.FirstOrDefault(c => c.Id == tour.RoomType.Hotel.Region.CountryId);
+                    food = context.HotelFoods.FirstOrDefault(f => f.Id == tour.RoomType.Hotel.HotelFood.Id);
 
                     if (city != null && hotel != null && country != null && food != null)
                     {
@@ -824,51 +825,7 @@ namespace TouristApp.DAL.Entities
             }
         }
 
-        //public static void SeedHotelsHelper2(EFContext context, Region region, HotelFood hotelFood, string hotelName, Hotel hotel)
-        //{
-        //    if (context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id) == null)
-        //    {
-        //        context.Hotels.Add(hotel);
-        //        context.SaveChanges();
-        //    }
-        //}
-
-
-
-        //public static void SeedHotelsHelper2(EFContext context, Region region, HotelFood hotelFood, Hotel hotel, RoomType[] roomTypes)
-        //{
-        //    if (context.Hotels.FirstOrDefault(f => f.Name == hotel.Name && f.RegionId == region.Id) == null)
-        //    {
-        //        context.Hotels.Add(hotel);
-        //        context.SaveChanges();
-        //    }
-
-        //    if (context.Hotels.FirstOrDefault(f => f.Name == hotel.Name && f.RegionId == region.Id) != null)
-        //    {
-        //        foreach (var roomType in roomTypes)
-        //        {
-        //            if (context.RoomTypes.FirstOrDefault(f => f.Name == roomType.Name && f.Description == roomType.Description && f.ExtraBedType == roomType.ExtraBedType && f.Price == roomType.Price && f.HotelId == roomType.HotelId) == null)
-        //            {
-        //                context.RoomTypes.Add(roomType);
-        //                context.SaveChanges();
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public static void SeedRoomTypesHelper(EFContext context, Hotel hotel, RoomType[] roomTypes)
-        //{
-        //    foreach (var roomType in roomTypes)
-        //    {
-        //        if (context.RoomTypes.FirstOrDefault(f => f.Name == roomType.Name && f.Description == roomType.Description && f.ExtraBedType == roomType.ExtraBedType && f.Price == roomType.Price && f.HotelId == hotel.Id) == null)
-        //        {
-        //            context.RoomTypes.Add(roomType);
-        //            context.SaveChanges();
-        //        }
-        //    }           
-        //}
-
-        public static void SeedHotelsHelper3(EFContext context, Region region, HotelFood hotelFood, string hotelName, Hotel hotel, RoomType[] roomTypes)
+        public static void SeedHotelsHelper(EFContext context, Region region, HotelFood hotelFood, string hotelName, Hotel hotel, RoomType[] roomTypes)
         {
             if (context.Hotels.FirstOrDefault(f => f.Name == hotelName && f.RegionId == region.Id) == null)
             {
@@ -910,9 +867,6 @@ namespace TouristApp.DAL.Entities
             HotelFood hotelFoodAllInclusive = context.HotelFoods.FirstOrDefault(f => f.Name == hotelFoodNameAllInclusive);
             HotelFood hotelFoodUltraAllInclusive = context.HotelFoods.FirstOrDefault(f => f.Name == hotelFoodNameUltraAllInclusive);
 
-            //SeedRooms(context);
-
-
             if (hotelFoodNoFood != null && hotelFoodBreakfast != null && hotelFoodBreakfastAndDinner != null
                 && hotelFoodFoolBoard != null && hotelFoodAllInclusive != null && hotelFoodUltraAllInclusive != null)
             {
@@ -923,9 +877,8 @@ namespace TouristApp.DAL.Entities
 
                 if (region != null)
                 {
-                    //
                     hotelName = "Akassia Club Calimera Swiss Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodNoFood, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -938,7 +891,6 @@ namespace TouristApp.DAL.Entities
                              " Відстань до моря: 1 лінія.",
                             RoomsCount = 444,
                             Rate = 4.29,
-                            Price = 55.4m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -978,23 +930,8 @@ namespace TouristApp.DAL.Entities
                              }
                         });
 
-                    //SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
-                    //    new Hotel
-                    //    {
-                    //        Class = 4,
-                    //        RegionId = region.Id,
-                    //        Name = "Aurora Bay Resort",
-                    //        NormalizedName = "marsa-alam-aurora-bay-resort",
-                    //        Description = "Готель розташований в 308 км від аеропорту Хургади, в 165 км від центру Ель-Кусейр і в 15 км від Марса Алам. Відкритий в 2010 році." +
-                    //         " Готель прекрасно підійде для романтичного відпочинку, поїздок з друзями або для подорожі з сім'єю. Готель знаходиться в 45 км від аеропорту Марса-Алам.",
-                    //        RoomsCount = 98,
-                    //        Rate = 4.09,
-                    //        Price = 57.2m,
-                    //        HotelFoodId = hotelFood.Id
-                    //    });
-
                     hotelName = "Aurora Bay Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfast, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast, hotelName,
                        new Hotel
                        {
                            Class = 5,
@@ -1006,7 +943,6 @@ namespace TouristApp.DAL.Entities
                              "Відстань до моря (2 лінія): 200 м.",
                            RoomsCount = 98,
                            Rate = 4.09,
-                           Price = 57.2m,
                            HotelFoodId = hotelFood.Id
                        },
                         new RoomType[]
@@ -1046,26 +982,8 @@ namespace TouristApp.DAL.Entities
                              }
                         });
 
-
-                    //SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfastAndDinner,
-                    //    new Hotel
-                    //    {
-                    //        Class = 4,
-                    //        RegionId = region.Id,
-                    //        Name = "Aurora Nada Resort",
-                    //        NormalizedName = "marsa-alam-aurora-nada-resort",
-                    //        Description = "Готель Aurora Nada Marsa Alam Resort був відкритий в 2007 році, дата останньої реновації 2012 рік." +
-                    //         " Готель побудований в давньо-нубійському стилі на березі Червоного моря в затишному районі Shoni зі своїм 400 метровим пляжем." +
-                    //         " Складається з двох триповерхових корпусів А і B. Підходить для сімейного відпочинку з дітьми або відпочинку компанії друзів." +
-                    //         " У 20 км від аеропорту м Марса Алам, 40 км від м Марса Алам.",
-                    //        RoomsCount = 264,
-                    //        Rate = 4.17,
-                    //        Price = 47.5m,
-                    //        HotelFoodId = hotelFood.Id
-                    //    });
-
                     hotelName = "Aurora Nada Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfastAndDinner, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfastAndDinner, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -1078,7 +996,6 @@ namespace TouristApp.DAL.Entities
                              " У 20 км від аеропорту м Марса Алам, 40 км від м Марса Алам. Відстань до моря: 1 лінія.",
                             RoomsCount = 264,
                             Rate = 4.17,
-                            Price = 47.5m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1118,24 +1035,8 @@ namespace TouristApp.DAL.Entities
                               }
                         });
 
-                    //SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    //   new Hotel
-                    //   {
-                    //       Class = 3,
-                    //       RegionId = region.Id,
-                    //       Name = "Bliss Abo Nawas",
-                    //       NormalizedName = "marsa-alam-bliss-abo-nawas",
-                    //       Description = "Готель оформлений в нубійському стилі. Складається з основної будівлі і 5 корпусів різної поверховості." +
-                    //         " Готель розташований в 110 км від центру міста Ель-Кусейр, на самому березі моря. Підійде для спокійного сімейного відпочинку. " +
-                    //         "Відстань до Марса Алам 20 км, до аеропорту Марса Алам 45 км, до Хургади - 255 км.",
-                    //       RoomsCount = 200,
-                    //       Rate = 4.18,
-                    //       Price = 48.0m,
-                    //       HotelFoodId = hotelFood.Id
-                    //   });
-
                     hotelName = "Bliss Abo Nawas";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 3,
@@ -1147,7 +1048,6 @@ namespace TouristApp.DAL.Entities
                              "Відстань до Марса Алам 20 км, до аеропорту Марса Алам 45 км, до Хургади - 255 км.",
                             RoomsCount = 200,
                             Rate = 4.18,
-                            Price = 48.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1176,25 +1076,8 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
-                    //  new Hotel
-                    //  {
-                    //      Class = 5,
-                    //      RegionId = region.Id,
-                    //      Name = "Calimera Habiba Beach Resort",
-                    //      NormalizedName = "marsa-alam-calimera-habiba-beach-resort",
-                    //      Description = "Готель розташований на березі моря, поряд з власним кораловим пляжем." +
-                    //         " Побудований в 2006 році і має мавританську архітектуру. Готель ідеально підійде для активного відпочинку," +
-                    //         " сімейного відпочинку з дітьми і вивчення підводного світу Червоного моря. 22 км від центру м Марса Алам." +
-                    //         " 38 км від аеропорту м Марса Алам.",
-                    //      RoomsCount = 334,
-                    //      Rate = 4.49,
-                    //      Price = 50.0m,
-                    //      HotelFoodId = hotelFood.Id
-                    //  });
-
                     hotelName = "Calimera Habiba Beach Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -1207,7 +1090,6 @@ namespace TouristApp.DAL.Entities
                                      " 38 км від аеропорту м Марса Алам.",
                             RoomsCount = 334,
                             Rate = 4.49,
-                            Price = 50.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1261,7 +1143,7 @@ namespace TouristApp.DAL.Entities
 
                     regionName = "Хургада";
                     hotelName = "Al Mas Red Sea Palace";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodNoFood, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -1277,7 +1159,6 @@ namespace TouristApp.DAL.Entities
                                                 "молодіжного або романтичного відпочинку. У 12 км від аеропорту, в 23 км від Хургади, на березі моря.",
                             RoomsCount = 434,
                             Rate = 3.88,
-                            Price = 52.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1316,32 +1197,9 @@ namespace TouristApp.DAL.Entities
                                 Price = 100.5m,
                              }
                         });
-                    //        region = context.Regions.FirstOrDefault(f => f.Name == regionName);
-
-                    //        if (region != null)
-                    //        {
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood,
-                    //               new Hotel
-                    //               {
-                    //                   Class = 5,
-                    //                   RegionId = region.Id,
-                    //                   Name = "Al Mas Red Sea Palace",
-                    //                   NormalizedName = "hurgada-al-mas-red-sea-palace",
-                    //                   Description = "Готель розташований в 17 км від м Хургада." +
-                    //                    " Входить в мережу River Rock Hotels & Resorts." +
-                    //                    " Побудований в 2001 році, а останній ремонт проведений в 2011 р." +
-                    //                    " Гості мають можливість користуватися всією інфраструктурою готелів Diamond Red Sea Resort і" +
-                    //                    " Paradise Red Sea Resort - барами, басейнами, пляжем, аквапарком, дайвінг-центром, оздоровчим центром," +
-                    //                    " тенісними кортами, центром водних видів спорту і т.д. Підійде для активного сімейного, " +
-                    //                    "молодіжного або романтичного відпочинку. У 12 км від аеропорту, в 23 км від Хургади, на березі моря.",
-                    //                   RoomsCount = 434,
-                    //                   Rate = 3.88,
-                    //                   Price = 52.0m,
-                    //                   HotelFoodId = hotelFood.Id
-                    //               });
 
                     hotelName = "Aladdin Beach Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -1354,7 +1212,6 @@ namespace TouristApp.DAL.Entities
                                                 " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря. Відстань до торгового центру Senzo Mall: 1,5 км.",
                             RoomsCount = 99,
                             Rate = 4.02,
-                            Price = 47.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1394,25 +1251,8 @@ namespace TouristApp.DAL.Entities
                              }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
-                    //               new Hotel
-                    //               {
-                    //                   Class = 4,
-                    //                   RegionId = region.Id,
-                    //                   Name = "Aladdin Beach Resort",
-                    //                   NormalizedName = "hurgada-aladdin-beach-resort",
-                    //                   Description = "Готель розташований на першій лінії, має власний пляж. Тут запропоновано великий вибір розваг і способів активного відпочинку." +
-                    //                    " Відкритий в 1995 році, регулярно проводиться часткова реновація. Складається з основного 2-поверхової будівлі (лише рецепшн)," +
-                    //                    " двох 2-поверхових корпусів і комплексу 1-поверхових бунгало. Готель орієнтований на сімейний відпочинок з дітьми." +
-                    //                    " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря. Відстань до торгового центру Senzo Mall: 1,5 км.",
-                    //                   RoomsCount = 99,
-                    //                   Rate = 4.02,
-                    //                   Price = 47.0m,
-                    //                   HotelFoodId = hotelFood.Id
-                    //               });
-
                     hotelName = "Albatros Aqua Park";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -1425,7 +1265,6 @@ namespace TouristApp.DAL.Entities
                                                 " Готель розташований в 7 км від аеропорту Хургади.",
                             RoomsCount = 246,
                             Rate = 4.43,
-                            Price = 47.5m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1454,25 +1293,9 @@ namespace TouristApp.DAL.Entities
                              }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    //               new Hotel
-                    //               {
-                    //                   Class = 4,
-                    //                   RegionId = region.Id,
-                    //                   Name = "Albatros Aqua Park",
-                    //                   NormalizedName = "hurgada-albatros-aqua-park",
-                    //                   Description = "Готель розташований в самому початку туристичної зони Хургади, в 15 км від центру міста." +
-                    //                    " Входить до складу мережі готелів Pickalbatros Hotels." +
-                    //                    " Відкритий в 2000 році, останній ремонт проведений в 2016 р Готель прекрасно підійде для сімейного відпочинку з дітьми." +
-                    //                    " Готель розташований в 7 км від аеропорту Хургади.",
-                    //                   RoomsCount = 246,
-                    //                   Rate = 4.43,
-                    //                   Price = 47.5m,
-                    //                   HotelFoodId = hotelFood.Id
-                    //               });
 
                     hotelName = "Albatros Aqua Vista Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -1486,7 +1309,6 @@ namespace TouristApp.DAL.Entities
                                                 " в 15 км від центру Хургади",
                             RoomsCount = 273,
                             Rate = 4.54,
-                            Price = 50.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1515,26 +1337,8 @@ namespace TouristApp.DAL.Entities
                              }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
-                    //                new Hotel
-                    //                {
-                    //                    Class = 4,
-                    //                    RegionId = region.Id,
-                    //                    Name = "Albatros Aqua Vista Resort",
-                    //                    NormalizedName = "hurgada-albatros-aqua-vista-resort",
-                    //                    Description = "Готель входить до мережі Pickalbatros, знаходиться на другій лінії за готелем Beach Albatros 4 *." +
-                    //                    " Справа знаходяться готелі - Pickalbatros Sea World 4 * і Albatros Garden 4 *, на їх територіях є дитячий і дорослий аквапарки," +
-                    //                    " гості готелю Albatros Aqua Vista Resort & Spa 4 * можуть абсолютно безкоштовно ними користуватися." +
-                    //                    " Відкритий в 2008 році. Готель прекрасно підійде для сімейного відпочинку з дітьми. У 7 км від міжнародного аеропорту Хургади," +
-                    //                    " в 15 км від центру Хургади",
-                    //                    RoomsCount = 273,
-                    //                    Rate = 4.54,
-                    //                    Price = 50.0m,
-                    //                    HotelFoodId = hotelFood.Id
-                    //                });
-
                     hotelName = "Ali Baba Palace";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfast, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -1547,7 +1351,6 @@ namespace TouristApp.DAL.Entities
                                                 " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря.",
                             RoomsCount = 646,
                             Rate = 4.15,
-                            Price = 40.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1598,27 +1401,10 @@ namespace TouristApp.DAL.Entities
                              }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
-                    //               new Hotel
-                    //               {
-                    //                   Class = 3,
-                    //                   RegionId = region.Id,
-                    //                   Name = "Ali Baba Palace",
-                    //                   NormalizedName = "hurgada-ali-baba-palace",
-                    //                   Description = "Готель розташований в Хургаді. Відкритий в 2000 році, остання часткова реновація пройшла в 2009 році. " +
-                    //                    "Гості можуть користуватися послугами готелів Jasmine Village і Aladdin Beach Resort. " +
-                    //                    "Готель підійде для сімейного, молодіжного або романтичного відпочинку." +
-                    //                    " Готель розташований в 8 км від аеропорту Хургади, в 15 км від центру міста, на самому березі моря.",
-                    //                   RoomsCount = 646,
-                    //                   Rate = 4.15,
-                    //                   Price = 40.0m,
-                    //                   HotelFoodId = hotelFood.Id
-                    //               });
-                    //        }
 
                     regionName = "Шарм Ель Шейх";
                     hotelName = "Aloha Sharm Hotel";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfastAndDinner, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfastAndDinner, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -1629,7 +1415,6 @@ namespace TouristApp.DAL.Entities
                                                " молодіжного або романтичного відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх, 7 км від Наама Бей, в Ом Ель Сід.",
                             RoomsCount = 206,
                             Rate = 4.45,
-                            Price = 42.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1658,28 +1443,8 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //        regionName = "Шарм Ель Шейх";
-                    //        region = context.Regions.FirstOrDefault(f => f.Name == regionName);
-
-                    //        if (region != null)
-                    //        {
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfastAndDinner,
-                    //             new Hotel
-                    //             {
-                    //                 Class = 4,
-                    //                 RegionId = region.Id,
-                    //                 Name = "Aloha Sharm Hotel",
-                    //                 NormalizedName = "sharm-el-sheikh-aloha-sharm-hotel",
-                    //                 Description = "Готель розташований в 7 км від Наама Бей, в Ом Ель Сід. Відкритий в 2004 році, останній ремонт проведений в 2015 р Готель підійде для сімейного," +
-                    //                   " молодіжного або романтичного відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх, 7 км від Наама Бей, в Ом Ель Сід.",
-                    //                 RoomsCount = 206,
-                    //                 Rate = 4.45,
-                    //                 Price = 42.0m,
-                    //                 HotelFoodId = hotelFood.Id
-                    //             });
-
                     hotelName = "Amar Sina";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 3,
@@ -1690,7 +1455,6 @@ namespace TouristApp.DAL.Entities
                                                 " Готель вперше відчинила свої двері гостям в 1999 році. Готель підійде для молодіжного, романтичного або індивідуального відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх.",
                             RoomsCount = 98,
                             Rate = 3.59,
-                            Price = 37.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1719,23 +1483,8 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    //            new Hotel
-                    //            {
-                    //                Class = 3,
-                    //                RegionId = region.Id,
-                    //                Name = "Amar Sina",
-                    //                NormalizedName = "sharm-el-sheikh-amar-sina",
-                    //                Description = "Готель знаходиться в районі Рас Умм Елсід в Шарм-ель-Шейху. У 8 км розташована набережна Наама-Бей з безліччю ресторанів і магазинів." +
-                    //                    " Готель вперше відчинила свої двері гостям в 1999 році. Готель підійде для молодіжного, романтичного або індивідуального відпочинку. У 18 км від аеропорту м Шарм-ель-Шейх.",
-                    //                RoomsCount = 98,
-                    //                Rate = 3.59,
-                    //                Price = 37.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
-
                     hotelName = "Amwaj Oyoun Hotel";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -1747,7 +1496,6 @@ namespace TouristApp.DAL.Entities
                                                 " Готель розташований в 15 км від аеропорту міста Шарм ель Шейх.",
                             RoomsCount = 465,
                             Rate = 3.92,
-                            Price = 40.5m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1809,41 +1557,8 @@ namespace TouristApp.DAL.Entities
                             },
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
-                    //            new Hotel
-                    //            {
-                    //                Class = 5,
-                    //                RegionId = region.Id,
-                    //                Name = "Amwaj Oyoun Hotel",
-                    //                NormalizedName = "sharm-el-sheikh-amwaj-oyoun-hotel",
-                    //                Description = "Готель розташований в районі Набк Бей. Був відкритий в 2007 році. При в'їзді в готель є казино VEGAS." +
-                    //                    " Готель прекрасно підійде для сімейного або індивідуального відпочинку, а також для подорожі з друзями або для бізнес-поїздок." +
-                    //                    " Готель розташований в 15 км від аеропорту міста Шарм ель Шейх.",
-                    //                RoomsCount = 465,
-                    //                Rate = 3.92,
-                    //                Price = 40.5m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
-
-
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood,
-                    //            new Hotel
-                    //            {
-                    //                Class = 4,
-                    //                RegionId = region.Id,
-                    //                Name = "Aqua Hotel Resort",
-                    //                NormalizedName = "sharm-el-sheikh-aqua-hotel-resort",
-                    //                Description = "Готель розташований в туристичному районі Шарм-еш-Шейха - Nabq Bay." +
-                    //                    " Був побудований в 2005 році. Остання реновація була в 2014 році." +
-                    //                    " Готель прекрасно підійде для сімейного відпочинку, романтичної подорожі і для поїздки з друзями." +
-                    //                    " Готель розташований в 15 км від аеропорту і в 20 км від центру міста Шарм ель Шейх.",
-                    //                RoomsCount = 127,
-                    //                Rate = 3.43,
-                    //                Price = 40.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
                     hotelName = "Aqua Hotel Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodNoFood, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodNoFood, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -1856,7 +1571,6 @@ namespace TouristApp.DAL.Entities
                                                 " Готель розташований в 15 км від аеропорту і в 20 км від центру міста Шарм ель Шейх.",
                             RoomsCount = 127,
                             Rate = 3.43,
-                            Price = 40.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1885,24 +1599,8 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    //            new Hotel
-                    //            {
-                    //                Class = 5,
-                    //                RegionId = region.Id,
-                    //                Name = "Aurora Oriental Resort",
-                    //                NormalizedName = "sharm-el-sheikh-aurora-oriental-resort",
-                    //                Description = "Готель розташований на пляжній території і орієнтований фасадною стороною на острів Тиран," +
-                    //                    " до якого всього 20 хвилин їзди від курортного району Наама-бей. Готель вперше відчинила свої двері гостям в 2001 році." +
-                    //                    " Готель прекрасно підійде для сімейного відпочинку. Відстань до міжнародного аеропорту Шарм-еш-Шейха - 10 км.",
-                    //                RoomsCount = 264,
-                    //                Rate = 4.05,
-                    //                Price = 46.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
-                    //        }
                     hotelName = "Aurora Oriental Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -1914,7 +1612,6 @@ namespace TouristApp.DAL.Entities
                                                 " Готель прекрасно підійде для сімейного відпочинку. Відстань до міжнародного аеропорту Шарм-еш-Шейха - 10 км.",
                             RoomsCount = 264,
                             Rate = 4.05,
-                            Price = 46.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -1954,29 +1651,10 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //        regionName = "Сафага";
-                    //        region = context.Regions.FirstOrDefault(f => f.Name == regionName);
-
-                    //        if (region != null)
-                    //        {
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
-                    //            new Hotel
-                    //            {
-                    //                Class = 4,
-                    //                RegionId = region.Id,
-                    //                Name = "Coral Sun Beach",
-                    //                NormalizedName = "safaga-coral-sun-beach",
-                    //                Description = "Готель розташований в 22 км від м Сафага. Готель вперше розкрив свої двері гостям в 2011 році, останній ремонт був проведений в 2015 році. " +
-                    //                    "Готель підійде для сімейного відпочинку, романтичних подорожей або для поїздки з друзями. Готель розташований в 80 км від аеропорту м Хургада.",
-                    //                RoomsCount = 110,
-                    //                Rate = 4.45,
-                    //                Price = 43.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
 
                     regionName = "Сафага";
                     hotelName = "Coral Sun Beach";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -1987,7 +1665,6 @@ namespace TouristApp.DAL.Entities
                                                 "Готель підійде для сімейного відпочинку, романтичних подорожей або для поїздки з друзями. Готель розташований в 80 км від аеропорту м Хургада.",
                             RoomsCount = 110,
                             Rate = 4.45,
-                            Price = 43.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -2016,26 +1693,8 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
-                    //            new Hotel
-                    //            {
-                    //                Class = 4,
-                    //                RegionId = region.Id,
-                    //                Name = "Menaville",
-                    //                NormalizedName = "safaga-menaville",
-                    //                Description = "Готель розташований прямо на березі Червоного моря. " +
-                    //                    "Відкритий в 1991 році, остання часткова реновація пройшла в 2010 році. " +
-                    //                    "Підійде для сімейного, романтичного або молодіжного відпочинку. " +
-                    //                    "Готель розташований в 45 км від аеропорту Хургади, в 8 км від міста Сафага і в 180 км від великого міста Луксора.",
-                    //                RoomsCount = 301,
-                    //                Rate = 4.08,
-                    //                Price = 44.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
-                    //        }
-
                     hotelName = "Menaville";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 4,
@@ -2048,7 +1707,6 @@ namespace TouristApp.DAL.Entities
                                                 "Готель розташований в 45 км від аеропорту Хургади, в 8 км від міста Сафага і в 180 км від великого міста Луксора.",
                             RoomsCount = 301,
                             Rate = 4.08,
-                            Price = 44.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -2077,32 +1735,10 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //        regionName = "Сахл Хашиш";
-                    //        region = context.Regions.FirstOrDefault(f => f.Name == regionName);
-
-                    //        if (region != null)
-                    //        {
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast,
-                    //            new Hotel
-                    //            {
-                    //                Class = 5,
-                    //                RegionId = region.Id,
-                    //                Name = "Oberoi",
-                    //                NormalizedName = "sahl-hasheesh-oberoi",
-                    //                Description = "Розташований на узбережжі Червоного моря The Oberoi, " +
-                    //                    "Sahl Hasheesh являє собою ексклюзивний люкс-курорт. Готель розташовується на території в 48 акрів. " +
-                    //                    "Торговий центр знаходяться в 25 хвилинах їзди від курортного готелю Oberoi Sahl Hasheesh. " +
-                    //                    "Готель підійде для пляжного відпочинку з сім'єю. Готель розташований в 17 км від аеропорту, в 20 км від центру Хургади, " +
-                    //                    "на самому березі моря.",
-                    //                RoomsCount = 102,
-                    //                Rate = 4.67,
-                    //                Price = 47.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
 
                     regionName = "Сахл Хашиш";
                     hotelName = "Oberoi";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodBreakfast, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodBreakfast, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -2116,7 +1752,6 @@ namespace TouristApp.DAL.Entities
                                                 "на самому березі моря.",
                             RoomsCount = 102,
                             Rate = 4.67,
-                            Price = 47.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -2167,24 +1802,8 @@ namespace TouristApp.DAL.Entities
                             },
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard,
-                    //            new Hotel
-                    //            {
-                    //                Class = 4,
-                    //                RegionId = region.Id,
-                    //                Name = "Ocean Breeze",
-                    //                NormalizedName = "sahl-hasheesh-ocean-breeze",
-                    //                Description = "Апартаменти Ocean Breeze з власним пляжем і відкритим басейном розташовані на морському узбережжі в районі" +
-                    //                    " Сахл-Хашіш міста Хургада в 17 км від зони для дайвінгу Малек-Дішан і в 23 км від зони для дайвінгу Абу-Хашиш. Готель був відкритий в 2018 році." +
-                    //                    " Всього в готелі 439 номерів які розташовані в головній 6-ти поверховій будівлі, віллах і бунгало. У 23 км знаходиться затока Джетт-Макаді-Бей " +
-                    //                    "і Центр дайвінгу Субаква Санрайз. Відстань до Міжнародного аеропорту Хургада становить 3 км",
-                    //                RoomsCount = 98,
-                    //                Rate = 3.99,
-                    //                Price = 39.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
                     hotelName = "Ocean Breeze";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodFoolBoard, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -2197,7 +1816,6 @@ namespace TouristApp.DAL.Entities
                                                 "і Центр дайвінгу Субаква Санрайз. Відстань до Міжнародного аеропорту Хургада становить 3 км",
                             RoomsCount = 98,
                             Rate = 3.99,
-                            Price = 39.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -2237,24 +1855,8 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    //             new Hotel
-                    //             {
-                    //                 Class = 5,
-                    //                 RegionId = region.Id,
-                    //                 Name = "Old Palace Resort",
-                    //                 NormalizedName = "sahl-hasheesh-old-palace-resort",
-                    //                 Description = "Готель розташований в Хургаді, в районі Саль-Хашиш, за Порожніми горами на приватному піщаному пляжі. Дата відкриття - 2008 рік, " +
-                    //                    "дата останньої реставрації - 2011 р Недалеко від готелю розташований променад з магазинами та ресторанами. Готель підійде для сімейного, романтичного" +
-                    //                    " або молодіжного відпочинку. Готель розташований в 23 км від аеропорту, в 25 км від центру Хургади.",
-                    //                 RoomsCount = 292,
-                    //                 Rate = 4.5,
-                    //                 Price = 50.5m,
-                    //                 HotelFoodId = hotelFood.Id
-                    //             });
-
                     hotelName = "Old Palace Resort";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -2266,7 +1868,6 @@ namespace TouristApp.DAL.Entities
                                                 " або молодіжного відпочинку. Готель розташований в 23 км від аеропорту, в 25 км від центру Хургади.",
                             RoomsCount = 292,
                             Rate = 4.5,
-                            Price = 50.5m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -2339,29 +1940,8 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive,
-                    //            new Hotel
-                    //            {
-                    //                Class = 5,
-                    //                RegionId = region.Id,
-                    //                Name = "Pyramisa",
-                    //                NormalizedName = "sahl-hasheesh-pyramisa",
-                    //                Description = "Готель розташований на піщаному пляжі в бухті Сахл Хашіш. " +
-                    //                    "Побудований в 2007 році, остання реставрація проведена в 2014 році. " +
-                    //                    "Складається з основного 2-, 3- і 4-поверхової будівлі (каскадом), додаткового 2-," +
-                    //                    " 3- і 4-поверхового корпусу (каскадом) і трьох 2-поверхових вілл. Готель з сучасними і" +
-                    //                    " стильними номерами пропонує своїм гостям чудовий пляж, ресторани на будь-який смак, " +
-                    //                    "а також численні розважальні заходи. Підходить для сімейного відпочинку з дітьми, " +
-                    //                    "а також для проведення конференцій. Готель розташований в 21 км від аеропорту, " +
-                    //                    "в 24 км від центру Хургади, в 200 км від м Луксор, на самому березі моря.",
-                    //                RoomsCount = 127,
-                    //                Rate = 4.41,
-                    //                Price = 55.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
-
                     hotelName = "Pyramisa";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodUltraAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -2378,7 +1958,6 @@ namespace TouristApp.DAL.Entities
                                                 "в 24 км від центру Хургади, в 200 км від м Луксор, на самому березі моря.",
                             RoomsCount = 127,
                             Rate = 4.41,
-                            Price = 55.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -2418,25 +1997,8 @@ namespace TouristApp.DAL.Entities
                             }
                         });
 
-                    //            SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive,
-                    //            new Hotel
-                    //            {
-                    //                Class = 5,
-                    //                RegionId = region.Id,
-                    //                Name = "Sensimar Premier Le Reve Hotel",
-                    //                NormalizedName = "sahl-hasheesh-sensimar-premier-le-reve-hotel",
-                    //                Description = "Готель розташований в районі Сахл Хашіш на Єгипетському узбережжі Червоного моря. " +
-                    //                    "Відкритий в 2009 році, останній ремонт проведений в 2015 р. Готель приймає гостей старше 16 років. " +
-                    //                    "Підійде для романтичного відпочинку, поїздки з друзями або для індивідуального подорожі. " +
-                    //                    "У 22 км від аеропорту м Хургада, 25 км від м Хургада, в Сал Хашиш.",
-                    //                RoomsCount = 339,
-                    //                Rate = 4.82,
-                    //                Price = 56.0m,
-                    //                HotelFoodId = hotelFood.Id
-                    //            });
-
                     hotelName = "Sensimar Premier Le Reve Hotel";
-                    SeedHotelsHelper3(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
+                    SeedHotelsHelper(context, region, hotelFood = hotelFoodAllInclusive, hotelName,
                         new Hotel
                         {
                             Class = 5,
@@ -2449,7 +2011,6 @@ namespace TouristApp.DAL.Entities
                                                 "У 22 км від аеропорту м Хургада, 25 км від м Хургада, в Сал Хашиш.",
                             RoomsCount = 339,
                             Rate = 4.82,
-                            Price = 56.0m,
                             HotelFoodId = hotelFood.Id
                         },
                         new RoomType[]
@@ -2492,19 +2053,7 @@ namespace TouristApp.DAL.Entities
             }
         }
 
-        public static void SeedToursHelper(EFContext context, Tour[] tours)
-        {
-            foreach (var t in tours)
-            {
-                if (context.Tours.FirstOrDefault(f => f.CityDepartureId == t.CityDepartureId && f.HotelId == t.HotelId && f.DaysCount == t.DaysCount && f.FromData == t.FromData && f.Price == t.Price) == null)
-                {
-                    context.Tours.Add(t);
-                    context.SaveChanges();
-                }
-            }
-        }
-
-        public static void SeedToursHelper2(EFContext context, string regionName, string hotelName, string roomTypename, Tour tour)
+        public static void SeedToursHelper(EFContext context, string regionName, string hotelName, string roomTypename, Tour tour)
         {
             var hotel = context
                 .Hotels
@@ -2516,176 +2065,132 @@ namespace TouristApp.DAL.Entities
             if (hotel != null)
             {
                 var roomType = context.RoomTypes.FirstOrDefault(r => r.HotelId == hotel.Id && r.Name == roomTypename);
-
-                if (roomType!=null)
+                if (roomType != null)
                 {
-                    if (context.Tours.FirstOrDefault(f => f.CityDepartureId == tour.CityDepartureId && f.HotelId == tour.HotelId && f.DaysCount == tour.DaysCount && f.FromData == tour.FromData && f.Price == tour.Price) == null)
+                    tour.Price = roomType.Price * tour.DaysCount;
+                    tour.RoomTypeId = roomType.Id;
+                    if (context.Tours.FirstOrDefault(f => f.CityDepartureId == tour.CityDepartureId && f.RoomTypeId == roomType.Id && f.DaysCount == tour.DaysCount && f.FromData == tour.FromData && f.Price == tour.Price) == null)
                     {
                         context.Tours.Add(tour);
                         context.SaveChanges();
                     }
                 }
-            }           
+            }
         }
 
         public static void SeedTours(EFContext context)
         {
-            string regionName = "Марса Алам";
-            string hotelName = "Akassia Club Calimera Swiss Resort";
-            var hotel = context
-                .Hotels
-                .Where(p => p.Name == hotelName)
-                .Include(s => s.Region)
-                .Where(p => p.Region.Name == regionName)
-                .SingleOrDefault();
-            //string roomTypename = "Standard Room";
-            //var roomType = context.RoomTypes.FirstOrDefault(r => r.HotelId == hotel.Id && r.Name == roomTypename);
+            var kyiv = context.CityDepartures.FirstOrDefault(c => c.Name == "Київ");
+            var lviv = context.CityDepartures.FirstOrDefault(c => c.Name == "Львів");
+            var odesa = context.CityDepartures.FirstOrDefault(c => c.Name == "Одеса");
 
-            if (hotel != null)
+            if (kyiv != null && lviv != null && odesa != null)
             {
-                SeederDB.SeedToursHelper(context, new Tour[]
+                string regionName = "Марса Алам";
+                string hotelName = "Akassia Club Calimera Swiss Resort";
+                string roomType = "Standard Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
-                     new Tour
-                     {
-                         CityDepartureId=1,
-                         HotelId=hotel.Id,
-                         DaysCount=6,
-                         Price=hotel.Price*6,
-                         FromData=new DateTime(2020, 05, 25, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     },
-                     new Tour
-                     {
-                         CityDepartureId=2,
-                         HotelId=hotel.Id,
-                         DaysCount=8,
-                         Price=hotel.Price*8,
-                         FromData=new DateTime(2020, 05, 24, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     },
-                     new Tour
-                     {
-                         CityDepartureId=3,
-                         HotelId=hotel.Id,
-                         DaysCount=10,
-                         Price=hotel.Price*10,
-                         FromData=new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     }
+                    CityDepartureId = kyiv.Id,
+                    DaysCount = 6,
+                    FromData = new DateTime(2020, 05, 25, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                 });
-            }
 
-            hotelName = "Aurora Bay Resort";
-            hotel = context
-                    .Hotels
-                    .Where(p => p.Name == hotelName)
-                    .Include(s => s.Region)
-                    .Where(p => p.Region.Name == regionName)
-                    .SingleOrDefault();
-
-            if (hotel != null)
-            {
-                SeederDB.SeedToursHelper(context, new Tour[]
+                roomType = "Beach Front Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
-                     new Tour
-                     {
-                         CityDepartureId=1,
-                         HotelId=hotel.Id,
-                         DaysCount=6,
-                         Price=hotel.Price*6,
-                         FromData=new DateTime(2020, 05, 26, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     },
-                     new Tour
-                     {
-                         CityDepartureId=2,
-                         HotelId=hotel.Id,
-                         DaysCount=8,
-                         Price=hotel.Price*8,
-                         FromData=new DateTime(2020, 05, 27, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     },
-                     new Tour
-                     {
-                         CityDepartureId=3,
-                         HotelId=hotel.Id,
-                         DaysCount=10,
-                         Price=hotel.Price *10,
-                         FromData=new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     }
+                    CityDepartureId = lviv.Id,
+                    DaysCount = 8,
+                    FromData = new DateTime(2020, 05, 24, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                 });
-            }
 
-            hotelName = "Aurora Nada Resort";
-            hotel = context
-                    .Hotels
-                    .Where(p => p.Name == hotelName)
-                    .Include(s => s.Region)
-                    .Where(p => p.Region.Name == regionName)
-                    .SingleOrDefault();
-
-            if (hotel != null)
-            {
-                SeederDB.SeedToursHelper(context, new Tour[]
+                roomType = "Family Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
-                     new Tour
-                     {
-                         CityDepartureId=1,
-                         HotelId=hotel.Id,
-                         DaysCount=6,
-                         Price=hotel.Price*6,
-                         FromData=new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     },
-                     new Tour
-                     {
-                         CityDepartureId=2,
-                         HotelId=hotel.Id,
-                         DaysCount=8,
-                         Price=hotel.Price*8,
-                         FromData=new DateTime(2020, 05, 29, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     },
-                     new Tour
-                     {
-                         CityDepartureId=3,
-                         HotelId=hotel.Id,
-                         DaysCount=10,
-                         Price=hotel.Price *10,
-                         FromData=new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     }
+                    CityDepartureId = odesa.Id,
+                    DaysCount = 10,
+                    FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                 });
-            }
 
-            hotelName = "Bliss Abo Nawas";
-            hotel = context
-                    .Hotels
-                    .Where(p => p.Name == hotelName)
-                    .Include(s => s.Region)
-                    .Where(p => p.Region.Name == regionName)
-                    .SingleOrDefault();
 
-            if (hotel != null)
-            {
-                SeederDB.SeedToursHelper(context, new Tour[]
+
+                hotelName = "Aurora Bay Resort";
+                roomType = "Classic Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
-                     new Tour
-                     {
-                         CityDepartureId=1,
-                         HotelId=hotel.Id,
-                         DaysCount=6,
-                         Price=hotel.Price*6,
-                         FromData=new DateTime(2020, 05, 20, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     },
-                     new Tour
-                     {
-                         CityDepartureId=2,
-                         HotelId=hotel.Id,
-                         DaysCount=8,
-                         Price=hotel.Price*8,
-                         FromData=new DateTime(2020, 05, 21, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     },
-                     new Tour
-                     {
-                         CityDepartureId=3,
-                         HotelId=hotel.Id,
-                         DaysCount=10,
-                         Price=hotel.Price *10,
-                         FromData=new DateTime(2020, 05, 22, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
-                     }
+                    CityDepartureId = kyiv.Id,
+                    DaysCount = 6,
+                    FromData = new DateTime(2020, 05, 26, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
+                });
+
+                roomType = "Superior Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
+                {
+                    CityDepartureId = lviv.Id,
+                    DaysCount = 8,
+                    FromData = new DateTime(2020, 05, 27, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
+                });
+
+                roomType = "Family Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
+                {
+                    CityDepartureId = odesa.Id,
+                    DaysCount = 10,
+                    FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
+                });
+
+
+
+                hotelName = "Aurora Nada Resort";
+                roomType = "Standard Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
+                {
+                    CityDepartureId = kyiv.Id,
+                    DaysCount = 6,
+                    FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
+                });
+
+                roomType = "Family Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
+                {
+                    CityDepartureId = lviv.Id,
+                    DaysCount = 8,
+                    FromData = new DateTime(2020, 05, 29, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
+                });
+
+                roomType = "Suite";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
+                {
+                    CityDepartureId = odesa.Id,
+                    DaysCount = 10,
+                    FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
+                });
+
+
+
+                hotelName = "Bliss Abo Nawas";
+                roomType = "Standard Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
+                {
+                    CityDepartureId = kyiv.Id,
+                    DaysCount = 6,
+                    FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
+                });
+
+                roomType = "Suite";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
+                {
+                    CityDepartureId = lviv.Id,
+                    DaysCount = 8,
+                    FromData = new DateTime(2020, 05, 29, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
+                });
+
+                roomType = "Standard Room";
+                SeedToursHelper(context, regionName, hotelName, roomType, new Tour
+                {
+                    CityDepartureId = odesa.Id,
+                    DaysCount = 10,
+                    FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
                 });
             }
         }

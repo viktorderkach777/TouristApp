@@ -345,9 +345,6 @@ namespace TouristApp.Migrations
                         .IsRequired()
                         .HasMaxLength(250);
 
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(5,2)");
-
                     b.Property<double?>("Rate");
 
                     b.Property<long>("RegionId");
@@ -496,7 +493,7 @@ namespace TouristApp.Migrations
                     b.Property<int>("PlacesCount");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(7,2)");
 
                     b.Property<int?>("RoomsCount");
 
@@ -521,16 +518,16 @@ namespace TouristApp.Migrations
 
                     b.Property<DateTime?>("FromData");
 
-                    b.Property<long>("HotelId");
-
                     b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(7,2)");
+
+                    b.Property<long>("RoomTypeId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CityDepartureId");
 
-                    b.HasIndex("HotelId");
+                    b.HasIndex("RoomTypeId");
 
                     b.ToTable("Tours");
                 });
@@ -701,9 +698,9 @@ namespace TouristApp.Migrations
                         .HasForeignKey("CityDepartureId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TouristApp.DAL.Entities.Hotel", "Hotel")
+                    b.HasOne("TouristApp.DAL.Entities.RoomType", "RoomType")
                         .WithMany("Tours")
-                        .HasForeignKey("HotelId")
+                        .HasForeignKey("RoomTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

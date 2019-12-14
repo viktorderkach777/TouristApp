@@ -30,7 +30,7 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
                      " Sid. Расстояние до Naama Bay: 7 км; Расстояние до Old Market (Старый Город): 4 км; Расстояние до Soho Square: 20 км.",
                      RoomsCount=286,
                      Rate=5.0,
-                     Price=550
+                     //Price=550
                  },
                  new Hotel
                  {
@@ -44,7 +44,7 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
                      " В 18 км от аэропорта г. Шарм-эль-Шейх.",
                      RoomsCount=98,
                      Rate=3.61,
-                     Price=572
+                     //Price=572
                  },
                  new Hotel
                  {
@@ -58,7 +58,7 @@ namespace TouristApp.DAL.Configuration.InitialDataConfiguration
                      " романтического или молодежного отдыха. Отель расположен в 17 км от аэропорта города Шарм Эль Шейх.",
                      RoomsCount=318,
                      Rate=4.52,
-                     Price=675
+                     //Price=675
                  }
                 };
             builder.HasData(hotels);

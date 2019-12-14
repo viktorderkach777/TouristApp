@@ -103,8 +103,7 @@ class Hotel extends Component {
             return <CentralPageSpinner loading={isKursLoading} />
         }
         let param = tour.hotelParametries;
-        //console.log('-----tour------ ', param);
-
+        //console.log('-----tour------ ', tour);
 
         return (
             <React.Fragment>
@@ -138,8 +137,16 @@ class Hotel extends Component {
                                                 <b>  2AD</b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Номер: </span>
-                                                <b>Standard Room</b>
+                                                <span className="skin-color hidden-xs"> Номер: </span>                                                
+                                                <b>{tour.roomType}</b>
+                                            </li>
+                                            <li>
+                                                <span className="skin-color hidden-xs"> Площа номеру: </span>                                               
+                                                <b>{tour.totalArea} m<sup>2</sup></b>
+                                            </li>
+                                            <li>
+                                                <span className="skin-color hidden-xs"> Кількість кімнат: </span>                                               
+                                                <b>{tour.roomsNumber}</b>
                                             </li>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Переліт туди: </span>
@@ -148,6 +155,10 @@ class Hotel extends Component {
                                             <li>
                                                 <span className="skin-color hidden-xs"> Переліт назад: </span>
                                                 <b>{Moment(tour.date).add(tour.daysCount, 'days').format('DD/MM/YYYY')}</b>
+                                            </li>
+                                            <li>
+                                                <span className="skin-color hidden-xs"> Опис кімнати: </span>                                               
+                                                <b>{tour.roomDescription}</b>
                                             </li>
                                         </CardText>
                                     </Col>

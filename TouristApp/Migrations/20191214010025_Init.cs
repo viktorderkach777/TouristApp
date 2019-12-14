@@ -301,7 +301,6 @@ namespace TouristApp.Migrations
                     Description = table.Column<string>(maxLength: 1000, nullable: false),
                     RegionId = table.Column<long>(nullable: false),
                     Rate = table.Column<double>(nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
                     RoomsCount = table.Column<int>(nullable: true),
                     Class = table.Column<int>(nullable: false),
                     Longtitude = table.Column<double>(nullable: true),
@@ -386,7 +385,7 @@ namespace TouristApp.Migrations
                     PlacesCount = table.Column<int>(nullable: false),
                     ExtraPlacesCount = table.Column<int>(nullable: true),
                     ExtraBedType = table.Column<string>(nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(7,2)", nullable: false),
                     HotelId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -435,8 +434,8 @@ namespace TouristApp.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    HotelId = table.Column<long>(nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
+                    RoomTypeId = table.Column<long>(nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(7,2)", nullable: true),
                     DaysCount = table.Column<int>(nullable: true),
                     FromData = table.Column<DateTime>(nullable: true),
                     CityDepartureId = table.Column<long>(nullable: false)
@@ -451,9 +450,9 @@ namespace TouristApp.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tours_Hotels_HotelId",
-                        column: x => x.HotelId,
-                        principalTable: "Hotels",
+                        name: "FK_Tours_RoomTypes_RoomTypeId",
+                        column: x => x.RoomTypeId,
+                        principalTable: "RoomTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -621,9 +620,9 @@ namespace TouristApp.Migrations
                 column: "CityDepartureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tours_HotelId",
+                name: "IX_Tours_RoomTypeId",
                 table: "Tours",
-                column: "HotelId");
+                column: "RoomTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -651,9 +650,6 @@ namespace TouristApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "RoomTypes");
 
             migrationBuilder.DropTable(
                 name: "tblFilterNameGroups");
@@ -684,6 +680,9 @@ namespace TouristApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "CityDepartures");
+
+            migrationBuilder.DropTable(
+                name: "RoomTypes");
 
             migrationBuilder.DropTable(
                 name: "Hotels");

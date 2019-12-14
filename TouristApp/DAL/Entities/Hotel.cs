@@ -10,8 +10,7 @@ namespace TouristApp.DAL.Entities
         public Hotel()
         {
             Comments= new HashSet<Comment>();
-            HotelImages = new HashSet<HotelImage>();           
-            Tours = new HashSet<Tour>();
+            HotelImages = new HashSet<HotelImage>();         
             RoomTypes = new HashSet<RoomType>();
         }
 
@@ -26,10 +25,7 @@ namespace TouristApp.DAL.Entities
         [Required, StringLength(maximumLength: 1000)]
         public string Description { get; set; }
         public long RegionId { get; set; }
-        public double? Rate { get; set; }
-
-        [Column(TypeName = "decimal(5,2)")]
-        public decimal? Price { get; set; }
+        public double? Rate { get; set; }       
         public int? RoomsCount { get; set; }
 
         [Required]
@@ -41,8 +37,7 @@ namespace TouristApp.DAL.Entities
         public virtual HotelFood HotelFood { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<HotelImage> HotelImages { get; set; }        
-        public virtual ICollection<Parameter> Parameters { get; set; }
-        public virtual ICollection<Tour> Tours { get; set; }
+        public virtual ICollection<Parameter> Parameters { get; set; }       
         public virtual ICollection<RoomType> RoomTypes { get; set; }
     }
 }

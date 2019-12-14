@@ -13,10 +13,10 @@ namespace TouristApp.DAL.Entities
         }
 
         public long Id { get; set; }
+       
+        public long RoomTypeId { get; set; }
 
-        public long HotelId { get; set; }
-
-        [Column(TypeName = "decimal(5,2)")]
+        [Column(TypeName = "decimal(7,2)")]
         public decimal? Price { get; set; }
 
         public int? DaysCount { get; set; }
@@ -26,8 +26,8 @@ namespace TouristApp.DAL.Entities
         public long CityDepartureId { get; set; }
 
         public virtual CityDeparture CityDeparture { get; set; }
-
-        public virtual Hotel Hotel { get; set; }
+       
+        public virtual RoomType RoomType { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
 

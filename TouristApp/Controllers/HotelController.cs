@@ -76,7 +76,7 @@ namespace TouristApp.Controllers
                 Name = model.Name,
                 Description = model.Description,
                 Class = model.Class,
-                Price = model.Price,
+                //Price = model.Price,
                 RoomsCount = model.RoomsCount,
                 RegionId = model.RegionId
             });

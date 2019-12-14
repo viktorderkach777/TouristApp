@@ -98,7 +98,7 @@ namespace TouristApp.ViewModels
         public string Description { get; set; }
         public long RegionId { get; set; }
         public double? Rate { get; set; }
-        public decimal? Price { get; set; }
+        //public decimal? Price { get; set; }
         public int? RoomsCount { get; set; }
         public int Class { get; set; }
         public double? Longtitude { get; set; }
@@ -151,6 +151,10 @@ namespace TouristApp.ViewModels
         public DateTime? FromData { get; set; }
         public string Date { get; set; }
         public int? DaysCount { get; set; }
+        public string RoomType { get; set; }
+        public int? RoomsNumber { get; set; }
+        public double? TotalArea { get; set; }
+        public string RoomDescription { get; set; }
         public List<HotelPhotoViewModel> Images { get; set; }
         public List<ParametersViewModel> HotelParametries { get; set; }
     }
