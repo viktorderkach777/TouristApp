@@ -156,10 +156,10 @@ class Hotel extends Component {
                                                 <span className="skin-color hidden-xs"> Переліт назад: </span>
                                                 <b>{Moment(tour.date).add(tour.daysCount, 'days').format('DD/MM/YYYY')}</b>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                                 <span className="skin-color hidden-xs"> Опис кімнати: </span>                                               
                                                 <b>{tour.roomDescription}</b>
-                                            </li>
+                                            </li> */}
                                         </CardText>
                                     </Col>
                                     <Col sm="3">

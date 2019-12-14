@@ -814,16 +814,7 @@ namespace TouristApp.DAL.Entities
                     context.SaveChanges();
                 }
             }
-        }
-
-        public static void SeedHotelsHelper(EFContext context, Region region, HotelFood hotelFood, Hotel hotel)
-        {
-            if (context.Hotels.FirstOrDefault(f => f.Name == hotel.Name && f.RegionId == region.Id) == null)
-            {
-                context.Hotels.Add(hotel);
-                context.SaveChanges();
-            }
-        }
+        }       
 
         public static void SeedHotelsHelper(EFContext context, Region region, HotelFood hotelFood, string hotelName, Hotel hotel, RoomType[] roomTypes)
         {
