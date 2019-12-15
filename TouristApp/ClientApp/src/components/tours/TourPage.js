@@ -15,9 +15,16 @@ const TabWidjet = React.lazy(() => import('../tours/Tabs'));
 
 
 class Hotel extends Component {
-    state = {
-        tour: {}
-    };
+    constructor() {
+        super();
+
+        this.state = {
+            tour: {}
+        };
+        this._isMounted = false;
+    }
+
+
 
     toggle(tab) {
         if (this.state.activeTab !== tab) {
@@ -26,14 +33,16 @@ class Hotel extends Component {
             });
         }
     }
-    searchDataFetched=(hotelId)=> {
+    searchDataFetched = (hotelId) => {
         const url2 = `${serverUrl}api/tour/single/` + hotelId;
         axios.get(url2)
             .then(
                 result => {
-                    //console.log('--result--', result.data);
-                    let z = { ...result.data }
-                    this.setState({ tour: z });
+                    if (this._isMounted) {
+                        let z = { ...result.data }
+                        this.setState({ tour: z });
+                    }
+                    //console.log('--result--', result.data);                   
                 },
                 err => {
                     //console.log('--problem--', err);
@@ -42,29 +51,35 @@ class Hotel extends Component {
     }
 
     componentDidMount() {
+        this._isMounted = true;
+        //console.log("componentDidMount")
         const hotelId = parseInt(this.props.match.params.id, 10) || 1;
         this.searchDataFetched(hotelId);
     }
 
-    componentDidUpdate() {
-        const hotelId = parseInt(this.props.match.params.id, 10) || 1;
-        if(this.props.hotelId!==hotelId)
-        {
-          this.searchDataFetched(hotelId);
-        }
-        // This method is called when the route parameters change
-      }
+    // componentDidUpdate() {
+    //     console.log("componentDidUpdate")
+    //     //this._isMounted = true;
+    //     const hotelId = parseInt(this.props.match.params.id, 10) || 1;
+    //     if (this.props.hotelId !== hotelId) {
+    //         this.searchDataFetched(hotelId);
+    //     }
+    //     // This method is called when the route parameters change
+    // }
 
-
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
 
     onClickImage = (e, img_index) => {
         e.preventDefault();
         this.setState({ photoIndex: img_index, isOpen: true });
     }
 
-    setPrice = (price, currency, kurs, isListLoading, errors) => {
+    setPrice = (price, currency, kurs, isListLoading, errors, discountPrice) => {
         let newPrice = price;
-
+        discountPrice === null ? newPrice = price : newPrice = discountPrice;
+       
         if (errors && errors.length > 0) {
             return <><span className="mr-4">"Помилка!"</span></>;
         }
@@ -76,13 +91,13 @@ class Hotel extends Component {
 
             switch (currency) {
                 case 'UAH':
-                    newPrice = (price * usdSale).toFixed(0)
+                    newPrice = (price * usdSale).toFixed(0)                   
                     break;
                 case 'RUB':
-                    newPrice = (price * usdSale / rurSale).toFixed(0)
+                    newPrice = (price * usdSale / rurSale).toFixed(0)                    
                     break;
                 case 'EUR':
-                    newPrice = (price * eurSale / usdSale).toFixed(1)
+                    newPrice = (price * eurSale / usdSale).toFixed(1)                    
                     break;
                 default:
                     break;
@@ -137,15 +152,15 @@ class Hotel extends Component {
                                                 <b>  2AD</b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Номер: </span>                                                
+                                                <span className="skin-color hidden-xs"> Номер: </span>
                                                 <b>{tour.roomType}</b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Площа номеру: </span>                                               
+                                                <span className="skin-color hidden-xs"> Площа номеру: </span>
                                                 <b>{tour.totalArea} m<sup>2</sup></b>
                                             </li>
                                             <li>
-                                                <span className="skin-color hidden-xs"> Кількість кімнат: </span>                                               
+                                                <span className="skin-color hidden-xs"> Кількість кімнат: </span>
                                                 <b>{tour.roomsNumber}</b>
                                             </li>
                                             <li>
@@ -164,7 +179,7 @@ class Hotel extends Component {
                                     </Col>
                                     <Col sm="3">
                                         <CardText className="skin-color hidden-xs" tag="h3" >Найкраща ціна: </CardText>
-                                        <CardText className="GreenColor" tag="h2" >{this.setPrice(tour.price, currency, kurs, isKursLoading, errors)}</CardText>
+                                        <CardText className="GreenColor" tag="h2" >{this.setPrice(tour.price, currency, kurs, isKursLoading, errors, tour.discountPrice)}</CardText>
                                         <Button size="lg" className="buttonHotel">Потрібна консультація</Button>
                                         <Button size="lg" className="buttonHotel">Замовлення</Button>
                                         {/* <CardText className="skin-color hidden-xs" tag="h3" >{errors}</CardText> */}

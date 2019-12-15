@@ -172,8 +172,9 @@ class ToursContainer extends Component {
     }
 
     //currency, kurs,
-    setPrice = (price, currency, kurs, isListLoading, errors) => {
+    setPrice = (price, currency, kurs, isListLoading, errors, discountPrice) => {
         let newPrice = price;
+        let newDiscountPrice = discountPrice;
         if (errors && errors.length > 0) {
             return <><p className="mr-4">"Помилка!"</p></>;
         }
@@ -186,28 +187,41 @@ class ToursContainer extends Component {
             switch (currency) {
                 case 'UAH':
                     newPrice = (price * usdSale).toFixed(0)
+                    discountPrice !== null ? newDiscountPrice = (discountPrice * usdSale).toFixed(0) : null
                     break;
                 case 'RUB':
                     newPrice = (price * usdSale / rurSale).toFixed(0)
+                    discountPrice !== null ? newDiscountPrice = (discountPrice * usdSale / rurSale).toFixed(0) : null
                     break;
                 case 'EUR':
                     newPrice = (price * eurSale / usdSale).toFixed(1)
+                    discountPrice !== null ? newDiscountPrice = (discountPrice * eurSale / usdSale).toFixed(1) : null
                     break;
                 default:
                     break;
             }
         };
         //console.log('---currency', currency);
-        return <><h5 className="mr-4">{newPrice} {currency === undefined ? "USD" : currency}</h5></>;
+        if (discountPrice === null) {
+            return <>
+                <h5 className="mr-3">{newPrice} {currency === undefined ? "USD" : currency}</h5>
+            </>
+        }
+
+        return (
+            <>
+                <p className="mr-2" style={{ textDecoration: "line-through", color: "tomato" }}>{newPrice}</p>
+                <h5 className="mr-3">{newDiscountPrice} {currency === undefined ? "USD" : currency}</h5>
+            </>);
     }
 
 
     render() {
         // console.log('----State Tours -----', this.state);
-         console.log('----Props Tours-----', this.props);
-         const {location}=this.props;
-         const parsed = queryString.parse(location.search);
-         console.log(parsed);
+        //console.log('----Props Tours-----', this.props);
+        const { location } = this.props;
+        const parsed = queryString.parse(location.search);
+        //console.log(parsed);
         const { roles, totalPages, currentPage, countTours } = this.props;
         const { deleteDialog_isOpen, chatDialog_isOpen, id_delete, currency, kurs, isListLoading, errors } = this.state;
 
@@ -230,6 +244,26 @@ class ToursContainer extends Component {
             </Modal>
         );
 
+        // const discount = (discount && 
+        //     div className="discount">
+        //                             <span className="discount-title">
+        //                             {item.discount}  
+        //           </span>
+        //                         </div>)
+
+        const discount = ((disc) => {
+            if (disc === null) {
+                return null;
+            }
+            return (
+                <div className="discount">
+                    <span className="discount-title">
+                        Знижка {disc}%
+                    </span>
+                </div>
+            );
+        });
+
         const toursList = (
 
             this.props.list.map(item => (
@@ -238,11 +272,12 @@ class ToursContainer extends Component {
                         <Col sm="12" md="4">
                             <Link to={`/tours/${item.countryNormalizedName}/${item.hotelNormalizedName}/${item.id}`}>
                                 <CardImg left="true" height="100%" className="CardImg p-2" src={!!item.imagePath ? serverUrl + item.imagePath : ''} alt="Card image cap" />
-                                <div className="discount">
+                                {/* <div className="discount">
                                     <span className="discount-title">
-                                        знижка 15%
-                  </span>
-                                </div>
+                                        {item.discount}
+                                    </span>
+                                </div> */}
+                                {discount(item.discount)}
                             </Link>
                             <CardLink href="#">
                                 <div className="Heart">
@@ -291,7 +326,7 @@ class ToursContainer extends Component {
                         </Col>
                         <Col sm="12" md="2" className="d-flex  justify-content-center align-items-center">
                             <Row>
-                                {isListLoading ? null : this.setPrice(item.price, currency, kurs, isListLoading, errors)}
+                                {isListLoading ? null : this.setPrice(item.price, currency, kurs, isListLoading, errors, item.discountPrice)}
                                 {/* ₴ */}
                                 <Link to={`/tours/${item.countryNormalizedName}/${item.hotelNormalizedName}/${item.id}`}>
                                     <Button className="buttonHotel">Дивитись тур</Button>

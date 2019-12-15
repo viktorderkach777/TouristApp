@@ -438,6 +438,8 @@ namespace TouristApp.Migrations
                     Price = table.Column<decimal>(type: "decimal(7,2)", nullable: true),
                     DaysCount = table.Column<int>(nullable: true),
                     FromData = table.Column<DateTime>(nullable: true),
+                    Discount = table.Column<double>(nullable: true),
+                    DiscountPrice = table.Column<decimal>(type: "decimal(7,2)", nullable: true),
                     CityDepartureId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>

@@ -23,6 +23,11 @@ namespace TouristApp.DAL.Entities
 
         public DateTime? FromData { get; set; }
 
+        public double? Discount { get; set; }
+
+        [Column(TypeName = "decimal(7,2)")]
+        public decimal? DiscountPrice { get; set; }
+
         public long CityDepartureId { get; set; }
 
         public virtual CityDeparture CityDeparture { get; set; }

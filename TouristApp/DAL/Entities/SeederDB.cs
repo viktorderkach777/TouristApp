@@ -2060,6 +2060,12 @@ namespace TouristApp.DAL.Entities
                 {
                     tour.Price = roomType.Price * tour.DaysCount;
                     tour.RoomTypeId = roomType.Id;
+
+                    if (tour.Discount!=null)
+                    {
+                        tour.DiscountPrice = tour.Price * (decimal)((100 - tour.Discount) * 0.01) ;
+                    }
+
                     if (context.Tours.FirstOrDefault(f => f.CityDepartureId == tour.CityDepartureId && f.RoomTypeId == roomType.Id && f.DaysCount == tour.DaysCount && f.FromData == tour.FromData && f.Price == tour.Price) == null)
                     {
                         context.Tours.Add(tour);
@@ -2082,6 +2088,7 @@ namespace TouristApp.DAL.Entities
                 string roomType = "Standard Room";
                 SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
+                    Discount=10,
                     CityDepartureId = kyiv.Id,
                     DaysCount = 6,
                     FromData = new DateTime(2020, 05, 25, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
@@ -2098,6 +2105,7 @@ namespace TouristApp.DAL.Entities
                 roomType = "Family Room";
                 SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
+                    Discount = 20,
                     CityDepartureId = odesa.Id,
                     DaysCount = 10,
                     FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
@@ -2117,6 +2125,7 @@ namespace TouristApp.DAL.Entities
                 roomType = "Superior Room";
                 SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
+                    Discount = 30,
                     CityDepartureId = lviv.Id,
                     DaysCount = 8,
                     FromData = new DateTime(2020, 05, 27, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
@@ -2136,6 +2145,7 @@ namespace TouristApp.DAL.Entities
                 roomType = "Standard Room";
                 SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
+                    Discount = 11,
                     CityDepartureId = kyiv.Id,
                     DaysCount = 6,
                     FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
@@ -2144,6 +2154,7 @@ namespace TouristApp.DAL.Entities
                 roomType = "Family Room";
                 SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
+                    Discount = 19,
                     CityDepartureId = lviv.Id,
                     DaysCount = 8,
                     FromData = new DateTime(2020, 05, 29, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
@@ -2152,6 +2163,7 @@ namespace TouristApp.DAL.Entities
                 roomType = "Suite";
                 SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
+                    Discount = 3,
                     CityDepartureId = odesa.Id,
                     DaysCount = 10,
                     FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
@@ -2163,6 +2175,7 @@ namespace TouristApp.DAL.Entities
                 roomType = "Standard Room";
                 SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
+                    Discount = 15,
                     CityDepartureId = kyiv.Id,
                     DaysCount = 6,
                     FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)
@@ -2179,6 +2192,7 @@ namespace TouristApp.DAL.Entities
                 roomType = "Standard Room";
                 SeedToursHelper(context, regionName, hotelName, roomType, new Tour
                 {
+                    Discount = 21,
                     CityDepartureId = odesa.Id,
                     DaysCount = 10,
                     FromData = new DateTime(2020, 05, 28, 22, 35, 5, new CultureInfo("uk-UA", false).Calendar)

@@ -10,7 +10,7 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20191214010025_Init")]
+    [Migration("20191214183207_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -517,6 +517,11 @@ namespace TouristApp.Migrations
                     b.Property<long>("CityDepartureId");
 
                     b.Property<int?>("DaysCount");
+
+                    b.Property<double?>("Discount");
+
+                    b.Property<decimal?>("DiscountPrice")
+                        .HasColumnType("decimal(7,2)");
 
                     b.Property<DateTime?>("FromData");
 

@@ -264,6 +264,8 @@ namespace TouristApp.Controllers
                 FromData = u.FromData,
                 Date = u.FromData.ToString(),
                 DaysCount = u.DaysCount,
+                Discount=u.Discount,
+                DiscountPrice=u.DiscountPrice,
                 ImagePath = u.RoomType.Hotel.HotelImages.FirstOrDefault(f => f.HotelId == u.RoomType.HotelId) == null
                             ? Path.Combine(_url, "no-photo.jpg")
                             : Path.Combine(_url, u.RoomType.Hotel.NormalizedName, "1200_" + u.RoomType.Hotel.HotelImages.FirstOrDefault(
@@ -353,6 +355,8 @@ namespace TouristApp.Controllers
                     RoomDescription=u.RoomType.Description,
                     RoomsNumber=u.RoomType.RoomsCount,
                     TotalArea=u.RoomType.TotalArea,
+                    Discount = u.Discount,
+                    DiscountPrice = u.DiscountPrice,
                     Images = u.RoomType.Hotel.HotelImages.Where(
                         f => f.HotelId == u.RoomType.HotelId).Select(x => new HotelPhotoViewModel
                         {
