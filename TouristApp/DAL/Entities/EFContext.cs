@@ -104,7 +104,9 @@ namespace TouristApp.DAL.Entities
             builder.Entity<Parameter>()
             .HasOne(ur => ur.Parent)
             .WithMany(r => r.Children)
-            .HasForeignKey(ur => ur.ParentId);            
+            .HasForeignKey(ur => ur.ParentId);
+
+            builder.Entity<Tour>().Property(u => u.Discount).HasDefaultValue(0);
         }
     }
 }

@@ -244,15 +244,8 @@ class ToursContainer extends Component {
             </Modal>
         );
 
-        // const discount = (discount && 
-        //     div className="discount">
-        //                             <span className="discount-title">
-        //                             {item.discount}  
-        //           </span>
-        //                         </div>)
-
         const discount = ((disc) => {
-            if (disc === null) {
+            if (disc === 0) {
                 return null;
             }
             return (
@@ -272,11 +265,6 @@ class ToursContainer extends Component {
                         <Col sm="12" md="4">
                             <Link to={`/tours/${item.countryNormalizedName}/${item.hotelNormalizedName}/${item.id}`}>
                                 <CardImg left="true" height="100%" className="CardImg p-2" src={!!item.imagePath ? serverUrl + item.imagePath : ''} alt="Card image cap" />
-                                {/* <div className="discount">
-                                    <span className="discount-title">
-                                        {item.discount}
-                                    </span>
-                                </div> */}
                                 {discount(item.discount)}
                             </Link>
                             <CardLink href="#">
@@ -318,7 +306,7 @@ class ToursContainer extends Component {
                                     <li>
                                         <i className="fa fa-credit-card iconColor" aria-hidden="true"></i>
                                         <span className="skin-color hidden-xs"> Ціна за: </span>
-                                        2-ох дорослих
+                                        {item.placeCount}-ох дорослих
                                     </li>
                                 </CardText>
                             </CardBody>

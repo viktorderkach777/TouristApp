@@ -21,8 +21,9 @@ namespace TouristApp.DAL.Entities
             const string FILTER_NAME_CITY = "Місто вильоту";
             const string FILTER_NAME_HOTEL_CLASS = "Клас готелю";
             const string FILTER_NAME_HOTEL_FOOD = "Харчування";
+            const string FILTER_NAME_TOUR_ADULTS = "Кількість туристів";
 
-            string[] filterNames = { FILTER_NAME_HOTEL_COUNTRY, FILTER_NAME_CITY, FILTER_NAME_HOTEL_CLASS, FILTER_NAME_HOTEL_FOOD };
+            string[] filterNames = { FILTER_NAME_HOTEL_COUNTRY, FILTER_NAME_CITY, FILTER_NAME_HOTEL_CLASS, FILTER_NAME_HOTEL_FOOD, FILTER_NAME_TOUR_ADULTS };
             foreach (var type in filterNames)
             {
                 if (context.FilterNames.SingleOrDefault(f => f.Name == type) == null)
@@ -49,9 +50,17 @@ namespace TouristApp.DAL.Entities
                     "Повний пансіон",
                     "Усе включено",
                     "Ультра все включено"
+                },
+                new string [] {
+                    "1 AD",
+                    "2 AD",
+                    "3 AD",
+                    "4 AD",
+                    "5 AD",
+                    "6 AD"
                 }
             };
-            //string t=filterNames[0];
+           
             foreach (var items in filterValues)
             {
                 foreach (var value in items)
@@ -101,13 +110,16 @@ namespace TouristApp.DAL.Entities
             Hotel hotel = null;
             Country country = null;
             HotelFood food = null;
-
+            RoomType roomType = null;
+           
             var filterNameHotelClass = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_CLASS);
             var filterNameHotelCountry = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_COUNTRY);
             var filterNameCity = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_CITY);
             var filterNameHotelFood = context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_HOTEL_FOOD);
+            var filterNameTourAdults= context.FilterNames.SingleOrDefault(f => f.Name == FILTER_NAME_TOUR_ADULTS);
 
-            if (filterNameHotelClass != null && filterNameHotelCountry != null && filterNameCity != null && filterNameHotelFood != null)
+            if (filterNameHotelClass != null && filterNameHotelCountry != null && filterNameCity != null
+                && filterNameHotelFood != null && filterNameTourAdults != null)
             {
                 foreach (var tour in context.Tours)
                 {
@@ -115,13 +127,15 @@ namespace TouristApp.DAL.Entities
                     hotel = context.Hotels.FirstOrDefault(h => h.Id == tour.RoomType.HotelId);
                     country = context.Countries.FirstOrDefault(c => c.Id == tour.RoomType.Hotel.Region.CountryId);
                     food = context.HotelFoods.FirstOrDefault(f => f.Id == tour.RoomType.Hotel.HotelFood.Id);
+                    roomType = context.RoomTypes.FirstOrDefault(r => r.Id == tour.RoomTypeId);
 
-                    if (city != null && hotel != null && country != null && food != null)
+                    if (city != null && hotel != null && country != null && food != null && roomType != null)
                     {
                         var filvalCity = context.FilterValues.FirstOrDefault(f => f.Name == city.Name);
                         var filvalHotelClass = context.FilterValues.FirstOrDefault(f => f.Name == hotel.Class.ToString() + "*");
                         var filvalHotelCountry = context.FilterValues.FirstOrDefault(f => f.Name == country.Name);
                         var filvalHotelFood = context.FilterValues.FirstOrDefault(f => f.Name == food.Name);
+                        var filvalTourAdults = context.FilterValues.FirstOrDefault(f => f.Name == roomType.PlacesCount.ToString() + " AD");
 
                         if (filvalHotelClass != null && filvalHotelCountry != null && filvalCity != null && filvalHotelFood != null)
                         {
@@ -130,7 +144,8 @@ namespace TouristApp.DAL.Entities
                                 new Filter { FilterNameId = filterNameHotelClass.Id, FilterValueId = filvalHotelClass.Id, TourId = tour.Id },  //клас готелю
                                 new Filter { FilterNameId = filterNameHotelCountry.Id, FilterValueId = filvalHotelCountry.Id, TourId = tour.Id },  // країна
                                 new Filter { FilterNameId = filterNameCity.Id, FilterValueId = filvalCity.Id, TourId = tour.Id }, // місто вильоту
-                                new Filter { FilterNameId = filterNameHotelFood.Id, FilterValueId = filvalHotelFood.Id, TourId = tour.Id } // харчування
+                                new Filter { FilterNameId = filterNameHotelFood.Id, FilterValueId = filvalHotelFood.Id, TourId = tour.Id }, // харчування
+                                new Filter { FilterNameId = filterNameTourAdults.Id, FilterValueId = filvalTourAdults.Id, TourId = tour.Id } // кількість дорослих
                             };
 
                             fils.AddRange(filts);
@@ -2058,10 +2073,10 @@ namespace TouristApp.DAL.Entities
                 var roomType = context.RoomTypes.FirstOrDefault(r => r.HotelId == hotel.Id && r.Name == roomTypename);
                 if (roomType != null)
                 {
-                    tour.Price = roomType.Price * tour.DaysCount;
+                    tour.Price = roomType.Price * tour.DaysCount * roomType.PlacesCount;
                     tour.RoomTypeId = roomType.Id;
 
-                    if (tour.Discount!=null)
+                    if (tour.Discount!=0)
                     {
                         tour.DiscountPrice = tour.Price * (decimal)((100 - tour.Discount) * 0.01) ;
                     }

@@ -79,7 +79,7 @@ class Hotel extends Component {
     setPrice = (price, currency, kurs, isListLoading, errors, discountPrice) => {
         let newPrice = price;
         discountPrice === null ? newPrice = price : newPrice = discountPrice;
-       
+
         if (errors && errors.length > 0) {
             return <><span className="mr-4">"Помилка!"</span></>;
         }
@@ -91,13 +91,13 @@ class Hotel extends Component {
 
             switch (currency) {
                 case 'UAH':
-                    newPrice = (price * usdSale).toFixed(0)                   
+                    newPrice = (price * usdSale).toFixed(0)
                     break;
                 case 'RUB':
-                    newPrice = (price * usdSale / rurSale).toFixed(0)                    
+                    newPrice = (price * usdSale / rurSale).toFixed(0)
                     break;
                 case 'EUR':
-                    newPrice = (price * eurSale / usdSale).toFixed(1)                    
+                    newPrice = (price * eurSale / usdSale).toFixed(1)
                     break;
                 default:
                     break;
@@ -145,12 +145,12 @@ class Hotel extends Component {
                                             </li>
                                             <li>
                                                 <span className="skin-color hidden-xs"> Ціна за: </span>
-                                                <b>   2-ох дорослих</b>
+                                                <b>   {tour.placeCount}-ох дорослих</b>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                                 <span className="skin-color hidden-xs"> Розміщення: </span>
                                                 <b>  2AD</b>
-                                            </li>
+                                            </li> */}
                                             <li>
                                                 <span className="skin-color hidden-xs"> Номер: </span>
                                                 <b>{tour.roomType}</b>

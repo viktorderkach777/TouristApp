@@ -516,7 +516,9 @@ namespace TouristApp.Migrations
 
                     b.Property<int?>("DaysCount");
 
-                    b.Property<double?>("Discount");
+                    b.Property<double>("Discount")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0.0);
 
                     b.Property<decimal?>("DiscountPrice")
                         .HasColumnType("decimal(7,2)");

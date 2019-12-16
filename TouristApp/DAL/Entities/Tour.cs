@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 
@@ -23,7 +24,8 @@ namespace TouristApp.DAL.Entities
 
         public DateTime? FromData { get; set; }
 
-        public double? Discount { get; set; }
+        [Range(0, 100, ErrorMessage = "Недопустима знижка")]
+        public double Discount { get; set; }
 
         [Column(TypeName = "decimal(7,2)")]
         public decimal? DiscountPrice { get; set; }
