@@ -171,7 +171,6 @@ class ToursContainer extends Component {
         this.props.setCurrentPage(data);
     }
 
-    //currency, kurs,
     setPrice = (price, currency, kurs, isListLoading, errors, discount, discountPrice) => {
         let newPrice = price;
         let newDiscountPrice = discountPrice;
@@ -183,7 +182,6 @@ class ToursContainer extends Component {
             const usdSale = parseFloat(kurs[0].sale);
             const eurSale = parseFloat(kurs[1].sale);
             const rurSale = parseFloat(kurs[2].sale);
-            //discountPrice = 100;
 
             switch (currency) {
                 case 'UAH':
@@ -191,39 +189,43 @@ class ToursContainer extends Component {
                     if (discount !== 0) {
                         newDiscountPrice = (discountPrice * usdSale).toFixed(0)
                     }
-
                     break;
                 case 'RUB':
                     newPrice = (price * usdSale / rurSale).toFixed(0)
                     if (discount !== 0) {
                         newDiscountPrice = (discountPrice * usdSale / rurSale).toFixed(0)
                     }
-                    //discount !== 0 ? newDiscountPrice = (discountPrice * usdSale / rurSale).toFixed(0) : null
                     break;
                 case 'EUR':
                     newPrice = (price * eurSale / usdSale).toFixed(1)
                     if (discount !== 0) {
-                        //newDiscountPrice = (discountPrice * usdSale / rurSale).toFixed(0)
                         newDiscountPrice = (discountPrice * eurSale / usdSale).toFixed(1)
                     }
-                    //discount !== 0 ? newDiscountPrice = (discountPrice * eurSale / usdSale).toFixed(1) : null
+
                     break;
                 default:
                     break;
             }
         };
-        //console.log('---currency', currency);
-        if (discount === 0) {
-            return <>
-                <h5 className="mr-3">{newPrice} {currency === undefined ? "USD" : currency}</h5>
-            </>
+
+        if (discount === 0) {            
+            return (
+                <>
+                    <div className="container">
+                        <div className="row">
+                        </div>
+                        <div className="row">
+                            <h5 className="mr-3">{newPrice} {currency === undefined ? "USD" : currency}</h5>
+                        </div>
+                    </div>
+                </>);
         }
 
         return (
             <>
                 <div className="container">
                     <div className="row">
-                        <p className="mr-2" style={{ textDecoration: "line-through", color: "tomato" }}>{newPrice}</p>
+                        <p className="mr-3" style={{ textDecoration: "line-through", color: "tomato" }}>{newPrice} {currency === undefined ? "USD" : currency}</p>
                     </div>
                     <div className="row">
                         <h5 className="mr-3">{newDiscountPrice} {currency === undefined ? "USD" : currency}</h5>
