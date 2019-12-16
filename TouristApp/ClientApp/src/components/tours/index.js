@@ -172,7 +172,7 @@ class ToursContainer extends Component {
     }
 
     //currency, kurs,
-    setPrice = (price, currency, kurs, isListLoading, errors, discountPrice) => {
+    setPrice = (price, currency, kurs, isListLoading, errors, discount, discountPrice) => {
         let newPrice = price;
         let newDiscountPrice = discountPrice;
         if (errors && errors.length > 0) {
@@ -183,26 +183,37 @@ class ToursContainer extends Component {
             const usdSale = parseFloat(kurs[0].sale);
             const eurSale = parseFloat(kurs[1].sale);
             const rurSale = parseFloat(kurs[2].sale);
+            //discountPrice = 100;
 
             switch (currency) {
                 case 'UAH':
                     newPrice = (price * usdSale).toFixed(0)
-                    discountPrice !== null ? newDiscountPrice = (discountPrice * usdSale).toFixed(0) : null
+                    if (discount !== 0) {
+                        newDiscountPrice = (discountPrice * usdSale).toFixed(0)
+                    }
+
                     break;
                 case 'RUB':
                     newPrice = (price * usdSale / rurSale).toFixed(0)
-                    discountPrice !== null ? newDiscountPrice = (discountPrice * usdSale / rurSale).toFixed(0) : null
+                    if (discount !== 0) {
+                        newDiscountPrice = (discountPrice * usdSale / rurSale).toFixed(0)
+                    }
+                    //discount !== 0 ? newDiscountPrice = (discountPrice * usdSale / rurSale).toFixed(0) : null
                     break;
                 case 'EUR':
                     newPrice = (price * eurSale / usdSale).toFixed(1)
-                    discountPrice !== null ? newDiscountPrice = (discountPrice * eurSale / usdSale).toFixed(1) : null
+                    if (discount !== 0) {
+                        //newDiscountPrice = (discountPrice * usdSale / rurSale).toFixed(0)
+                        newDiscountPrice = (discountPrice * eurSale / usdSale).toFixed(1)
+                    }
+                    //discount !== 0 ? newDiscountPrice = (discountPrice * eurSale / usdSale).toFixed(1) : null
                     break;
                 default:
                     break;
             }
         };
         //console.log('---currency', currency);
-        if (discountPrice === null) {
+        if (discount === 0) {
             return <>
                 <h5 className="mr-3">{newPrice} {currency === undefined ? "USD" : currency}</h5>
             </>
@@ -210,8 +221,14 @@ class ToursContainer extends Component {
 
         return (
             <>
-                <p className="mr-2" style={{ textDecoration: "line-through", color: "tomato" }}>{newPrice}</p>
-                <h5 className="mr-3">{newDiscountPrice} {currency === undefined ? "USD" : currency}</h5>
+                <div className="container">
+                    <div className="row">
+                        <p className="mr-2" style={{ textDecoration: "line-through", color: "tomato" }}>{newPrice}</p>
+                    </div>
+                    <div className="row">
+                        <h5 className="mr-3">{newDiscountPrice} {currency === undefined ? "USD" : currency}</h5>
+                    </div>
+                </div>
             </>);
     }
 
@@ -314,7 +331,7 @@ class ToursContainer extends Component {
                         </Col>
                         <Col sm="12" md="2" className="d-flex  justify-content-center align-items-center">
                             <Row>
-                                {isListLoading ? null : this.setPrice(item.price, currency, kurs, isListLoading, errors, item.discountPrice)}
+                                {isListLoading ? null : this.setPrice(item.price, currency, kurs, isListLoading, errors, item.discount, item.discountPrice)}
                                 {/* ₴ */}
                                 <Link to={`/tours/${item.countryNormalizedName}/${item.hotelNormalizedName}/${item.id}`}>
                                     <Button className="buttonHotel">Дивитись тур</Button>

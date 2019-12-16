@@ -10,7 +10,7 @@ using TouristApp.DAL.Entities;
 namespace TouristApp.Migrations
 {
     [DbContext(typeof(EFContext))]
-    [Migration("20191216002857_Init")]
+    [Migration("20191216120310_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
