@@ -14,7 +14,7 @@ const defaultProps = {};
 const FilterCheckBox = (props) => {
     // console.log('--FilterCheckBox props----', props);
     return (
-        <FormGroup check className='align-text-bottom' >
+        <FormGroup check className='align-text-bottom squaredFour' >
             <Label check>
                 <Input key={props.id}
                        checked = {props.isChecked}

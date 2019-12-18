@@ -235,8 +235,17 @@ namespace TouristApp.Controllers
                 case "rate":
                     query = query.OrderBy(c => c.RoomType.Hotel.Rate);
                     break;
+
                 case "rate_desc":
                     query = query.OrderByDescending(c => c.RoomType.Hotel.Rate);
+                    break;
+
+                case "price":
+                    query = query.OrderBy(c => c.Price);
+                    break;
+
+                case "price_desc":
+                    query = query.OrderByDescending(c => c.Price);
                     break;
 
                 default:

@@ -16,7 +16,12 @@ import {
 
 class SortToolbar extends Component {
     state = {
-        list: [{ value: 'по імені від А до Я', data: 'name' }, { value: 'по імені від Я до А', data: 'name_desc' }, { value: 'по рейтингу ↑', data: 'rate' }, { value: 'по рейтингу ↓', data: 'rate_desc' }],
+        list: [{ value: 'по імені від А до Я', data: 'name' },
+                { value: 'по імені від Я до А', data: 'name_desc' },
+                { value: 'по рейтингу ↑', data: 'rate' },
+                { value: 'по рейтингу ↓', data: 'rate_desc' },
+                { value: 'від дешевих до дорогих', data: 'price' },
+                { value: 'від дорогих до дешевих', data: 'price_desc' }],
         modal: true,
         dropdownOpen: false,
         dropDownValue: 'по імені від А до Я',
