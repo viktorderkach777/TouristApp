@@ -12,7 +12,7 @@
     "apexcharts": "^3.8.5",
     "axios": "^0.19.0",
     "babel-eslint": "10.0.3",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.6.1",

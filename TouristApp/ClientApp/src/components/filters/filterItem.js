@@ -14,19 +14,36 @@ const defaultProps = {};
 const FilterCheckBox = (props) => {
     // console.log('--FilterCheckBox props----', props);
     return (
-        <FormGroup check className='align-text-bottom squaredFour' >
-            <Label check>
-                <Input key={props.id}
-                       checked = {props.isChecked}
-                       type="checkbox"
-                       onChange={props.handleCheckChieldElement}
-                       id={props.id}
-                       value={props.value} />
-                       {' '}
-                       <h5> {props.value} </h5>
-            </Label>
-        </FormGroup>)
-}
+        // <FormGroup check className='align-text-bottom custom-control custom-checkbox' >
+        //     <Label check className="custom-control-label" for={props.id}>
+        //         <Input key={props.id}
+        //                checked = {props.isChecked}
+        //                type="checkbox"
+        //                className="custom-control-input"
+        //                onChange={props.handleCheckChieldElement}
+        //                id={props.id}
+        //                value={props.value} />
+        //                {' '}
+        //                <h5> {props.value} </h5>
+        //     </Label>
+        // </FormGroup>
+        <div class="form-group my-1">
+        <div className="custom-control custom-checkbox">
+            <input
+            key={props.id}
+            type="checkbox"
+            className="custom-control-input "
+            onChange={props.handleCheckChieldElement}
+            id={props.id}
+            value={props.value}
+            />
+            <label className="custom-control-label" for={props.id}>
+            {' '} 
+            {props.value}
+            </label>
+        </div>
+    </div>
+    )}
 const FilterHeader = (props) => {
     return (
         <Button
